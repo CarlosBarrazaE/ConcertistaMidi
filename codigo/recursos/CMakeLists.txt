@@ -1,0 +1,10 @@
+set(recursos
+	${CMAKE_CURRENT_SOURCE_DIR}/sombreador.c++
+	${CMAKE_CURRENT_SOURCE_DIR}/textura_2d.c++
+	${CMAKE_CURRENT_SOURCE_DIR}/administrador_recursos.c++
+	${CMAKE_CURRENT_SOURCE_DIR}/figura.c++
+	${CMAKE_CURRENT_SOURCE_DIR}/rectangulo.c++
+	${CMAKE_CURRENT_SOURCE_DIR}/texto.c++
+	${CMAKE_CURRENT_SOURCE_DIR}/color.c++
+	PARENT_SCOPE
+)
