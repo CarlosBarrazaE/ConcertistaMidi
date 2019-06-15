@@ -28,12 +28,14 @@ private:
 public:
 	Controlador_Juego(Administrador_Recursos *recursos);
 	~Controlador_Juego();
+	Administrador_Recursos *obtener_administrador_recursos();
 	bool es_pantalla_completa();
 	bool terminar();
 	void actualizar();
 
 	Raton *eventos_raton();
 	void eventos_teclado(Tecla tecla, bool estado);
+	void evento_salir();
 };
 
 #endif

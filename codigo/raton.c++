@@ -4,6 +4,7 @@ Raton::Raton()
 {
 	this->posicion_x = 0;
 	this->posicion_y = 0;
+	this->desplazamiento_x = 0;
 	this->desplazamiento_y = 0;
 	this->boton_izquierdo = false;
 	this->boton_central = false;
@@ -19,17 +20,19 @@ void Raton::actualizar_boton(BotonRaton boton, bool estado)
 	else if(boton == BotonDerecho)
 		this->boton_derecho = estado;
 
+	this->desplazamiento_x = 0;
 	this->desplazamiento_y = 0;
 }
 
-void Raton::actualizar_posicion(double x, double y)
+void Raton::actualizar_posicion(int x, int y)
 {
 	this->posicion_x = x;
 	this->posicion_y = y;
 }
 
-void Raton::actualizar_desplazamiento(double desplazamiento_y)
+void Raton::actualizar_desplazamiento(int desplazamiento_x, int desplazamiento_y)
 {
+	this->desplazamiento_x = desplazamiento_x;
 	this->desplazamiento_y = desplazamiento_y;
 }
 
@@ -44,19 +47,26 @@ bool Raton::activado(BotonRaton boton)
 	return false;
 }
 
-double Raton::x()
+int Raton::x()
 {
 	return this->posicion_x;
 }
 
-double Raton::y()
+int Raton::y()
 {
 	return this->posicion_y;
 }
 
-double Raton::dy()
+int Raton::dx()
 {
-	double desplazamiento = this->desplazamiento_y;
+	int desplazamiento = this->desplazamiento_x;
+	this->desplazamiento_x = 0;
+	return desplazamiento;
+}
+
+int Raton::dy()
+{
+	int desplazamiento = this->desplazamiento_y;
 	this->desplazamiento_y = 0;
 	return desplazamiento;
 }
