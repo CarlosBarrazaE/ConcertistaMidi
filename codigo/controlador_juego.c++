@@ -35,7 +35,17 @@ void Controlador_Juego::actualizar()
 		this->recursos->mostrar_texto(10, 20, LetraChica, texto_fps);
 	}
 
-	if(ventana_actual->obtener_accion() == Salir)
+	if(ventana_actual->obtener_accion() == CambiarATitulo)
+	{
+		delete ventana_actual;
+		ventana_actual = new VentanaTitulo(this->recursos);
+	}
+	else if(ventana_actual->obtener_accion() == CambiarAConfiguracion)
+	{
+		delete ventana_actual;
+		ventana_actual = new VentanaConfiguracion(this->recursos);
+	}
+	else if(ventana_actual->obtener_accion() == Salir)
 		this->finalizar = true;
 }
 
