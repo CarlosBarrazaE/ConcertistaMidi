@@ -40,7 +40,6 @@ class Texto : public Figura
 {
 private:
 	static Color ultimo_color;
-	static unsigned int ultimo_objeto;
 
 	FT_Library libreria;
 	FT_Face tipografia;

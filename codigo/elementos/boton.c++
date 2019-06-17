@@ -75,7 +75,6 @@ void Boton::actualizar(Raton *raton)
 
 void Boton::dibujar()
 {
-
 	fondo->dibujar_rectangulo(this->x, this->y, this->ancho, this->alto, color_boton);
 	imprimir->dibujar_texto(this->x+this->ancho / 2.0, this->y+this->alto/2.0 + 7, this->texto_boton, color_texto, true);
 }

@@ -1,7 +1,6 @@
 #include "texto.h++"
 
 Color Texto::ultimo_color;
-unsigned int Texto::ultimo_objeto = 0;
 
 Texto::Texto(Formato formato, int tamanno_letra, Sombreador *sombreador) : Figura(sombreador)
 {
@@ -34,7 +33,6 @@ Texto::Texto(Formato formato, int tamanno_letra, Sombreador *sombreador) : Figur
 
 	glGenBuffers(1, &this->indice_objeto);
 	glBindBuffer(GL_ARRAY_BUFFER, this->indice_objeto);
-	Texto::ultimo_objeto = this->indice_objeto;
 	glBufferData(GL_ARRAY_BUFFER, 0, NULL, GL_DYNAMIC_DRAW);
 
 	glVertexAttribPointer(0, 4, GL_FLOAT, GL_FALSE, 4 * sizeof(float), 0);
@@ -154,11 +152,7 @@ int Texto::imprimir_texto(int x, int y, icu::UnicodeString texto, Color color, b
 		Figura::ultimo_indice_seleccionado = this->indice_figura;
 	}
 
-	if(Texto::ultimo_objeto != this->indice_objeto)
-	{
-		glBindBuffer(GL_ARRAY_BUFFER, this->indice_objeto);
-		Texto::ultimo_objeto = this->indice_objeto;
-	}
+	glBindBuffer(GL_ARRAY_BUFFER, this->indice_objeto);
 
 	if(largo_ultimo_texto < texto.length())
 	{
