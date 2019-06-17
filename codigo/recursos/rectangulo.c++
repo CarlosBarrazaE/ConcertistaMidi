@@ -1,11 +1,38 @@
 #include "rectangulo.h++"
 
-Rectangulo::Rectangulo(Sombreador *sombreador, bool textura) : Figura(sombreador)
+Rectangulo::Rectangulo(Sombreador *sombreador, Color color) : Figura(sombreador)
+{
+	this->color = color;
+	this->tiene_textura = false;
+	inicializar();
+}
+
+Rectangulo::Rectangulo(Sombreador *sombreador, Textura2D *textura) : Figura(sombreador)
+{
+	this->color = Color(1.0, 1.0, 1.0);
+	this->textura = textura;
+	this->tiene_textura = true;
+	inicializar();
+}
+
+Rectangulo::Rectangulo(Sombreador *sombreador, Textura2D *textura, Color color) : Figura(sombreador)
+{
+	this->color = color;
+	this->textura = textura;
+	this->tiene_textura = true;
+	inicializar();
+}
+
+Rectangulo::~Rectangulo()
+{
+}
+
+void Rectangulo::inicializar()
 {
 	int tamanno = 0;
 	float *puntos;
 
-	if(textura)
+	if(this->tiene_textura)
 	{
 		puntos = new float[16] {//XYZ
 			//Posicion		Textura
@@ -38,7 +65,7 @@ Rectangulo::Rectangulo(Sombreador *sombreador, bool textura) : Figura(sombreador
 	glBindBuffer(GL_ARRAY_BUFFER, vto);
 	glBufferData(GL_ARRAY_BUFFER, tamanno * sizeof(float), puntos, GL_STATIC_DRAW);
 
-	if(textura)
+	if(this->tiene_textura)
 	{
 		glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, 4 * sizeof(float), (void*)0);
 		glEnableVertexAttribArray(0);
@@ -53,16 +80,20 @@ Rectangulo::Rectangulo(Sombreador *sombreador, bool textura) : Figura(sombreador
 	}
 
 	glBindBuffer(GL_ARRAY_BUFFER, 0);
-	glBindVertexArray(0);
 }
 
-Rectangulo::~Rectangulo()
+void Rectangulo::dibujar_rectangulo(float x, float y, float ancho, float alto, Color color)
 {
+	this->color = color;
+	dibujar_rectangulo(x, y, ancho, alto);
 }
 
 void Rectangulo::dibujar_rectangulo(float x, float y, float ancho, float alto)
 {
-	this->sombreador->activar();
+	sombreador->e_vector4f("color", this->color.o_rojo(), this->color.o_verde(), this->color.o_azul(), 1.0f);
+
+	if(this->tiene_textura)
+		textura->activar();
 
 	glm::mat4 modelo = glm::mat4(1.0);
 	modelo = glm::translate(modelo, glm::vec3(x, y, 0.0));

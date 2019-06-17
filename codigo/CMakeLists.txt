@@ -1,11 +1,16 @@
 add_subdirectory(archivos)
+add_subdirectory(elementos)
 add_subdirectory(recursos)
+add_subdirectory(ventanas)
 
 set(codigo
 	${archivos}
+	${elementos}
 	${recursos}
+	${ventanas}
 	${CMAKE_CURRENT_SOURCE_DIR}/principal.c++
 	${CMAKE_CURRENT_SOURCE_DIR}/controlador_juego.c++
+	${CMAKE_CURRENT_SOURCE_DIR}/pantalla.c++
 	${CMAKE_CURRENT_SOURCE_DIR}/raton.c++
 	${CMAKE_CURRENT_SOURCE_DIR}/fps.c++
 	${CMAKE_CURRENT_SOURCE_DIR}/registro.c++

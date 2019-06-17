@@ -4,8 +4,8 @@ Administrador_Recursos::Administrador_Recursos()
 {
 	matriz_proyeccion = glm::ortho(0.0f, (float)this->ancho, (float)this->alto, 0.0f, -1.0f, 1.0f);
 
-	archivo_texturas[Caja] = "../texturas/contenedor.tga";
-	archivo_texturas[Cara_feliz] = "../texturas/caraincreible.tga";
+	archivo_texturas[T_Titulo] = "../texturas/titulo.tga";
+	archivo_texturas[T_Boton] = "../texturas/boton.tga";
 
 	archivo_sombreador_vertice[Rectangulo_Textura] = "../sombreadores/rectangulo_textura_sv.glsl";
 	archivo_sombreador_fragmento[Rectangulo_Textura] = "../sombreadores/rectangulo_textura_sf.glsl";

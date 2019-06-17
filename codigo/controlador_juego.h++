@@ -6,6 +6,9 @@
 #include "raton.h++"
 #include "fps.h++"
 
+#include "ventanas/ventana.h++"
+#include "ventanas/ventana_titulo.h++"
+
 class Controlador_Juego
 {
 private:
@@ -17,11 +20,12 @@ private:
 	//Control
 	bool mostrar_fps;
 	bool pantalla_completa;
+	bool modo_alambre;
 	bool finalizar;
 
 	//Eventos
 	Raton raton;
-	//Ventana Actual
+	Ventana *ventana_actual;
 	//Configuracion bd
 	//Usuario
 	//Midis
@@ -29,9 +33,11 @@ public:
 	Controlador_Juego(Administrador_Recursos *recursos);
 	~Controlador_Juego();
 	Administrador_Recursos *obtener_administrador_recursos();
-	bool es_pantalla_completa();
-	bool terminar();
 	void actualizar();
+
+	bool es_pantalla_completa();
+	bool modo_alambre_activado();
+	bool terminar();
 
 	Raton *eventos_raton();
 	void eventos_teclado(Tecla tecla, bool estado);

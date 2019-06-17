@@ -17,8 +17,8 @@
 
 enum Textura
 {
-	Caja,
-	Cara_feliz
+	T_Titulo,
+	T_Boton
 };
 
 enum SombreadorVF

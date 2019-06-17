@@ -49,7 +49,8 @@ enum Tecla
 	TECLA_PAUSA,
 	TECLA_ESCAPE,
 	TECLA_F10,
-	TECLA_F11
+	TECLA_F11,
+	TECLA_F12
 };
 
 #endif

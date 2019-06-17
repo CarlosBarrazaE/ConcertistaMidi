@@ -1,6 +1,7 @@
 cmake
 pkg-config
 
+libglew-dev			//Opengl
 libsdl2-dev			//Sdl2 para OpenGl
 libglm-dev			//Libreria de matematica para opengl
 libfreetype6-dev	//Tipografias

@@ -83,6 +83,30 @@ Color::~Color()
 {
 }
 
+void Color::e_color(double rojo, double verde, double azul)
+{
+	if(rojo < 0)
+		this->rojo = 0;
+	else if(rojo > 1.0)
+		this->rojo = 1.0;
+	else
+		this->rojo = rojo;
+
+	if(verde < 0)
+		this->verde = 0;
+	else if(verde > 1.0)
+		this->verde = 1.0;
+	else
+		this->verde = verde;
+
+	if(azul < 0)
+		this->azul = 0;
+	else if(azul > 1.0)
+		this->azul = 1.0;
+	else
+		this->azul = azul;
+}
+
 float Color::o_rojo()
 {
 	return this->rojo;
@@ -106,4 +130,15 @@ bool Color::operator == (const Color &c) const
 bool Color::operator != (const Color &c) const
 {
 	return this->rojo != c.rojo || this->verde != c.verde || this->azul != c.azul;
+}
+
+Color& Color::operator = (const Color &c)
+{
+	if(this != &c)
+	{
+		this->rojo = c.rojo;
+		this->verde = c.verde;
+		this->azul = c.azul;
+	}
+	return *this;
 }

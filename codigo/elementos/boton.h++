@@ -1,0 +1,48 @@
+#ifndef BOTON_H
+#define BOTON_H
+
+#include "elemento.h++"
+#include "../raton.h++"
+#include "../recursos/textura_2d.h++"
+#include "../recursos/sombreador.h++"
+#include "../recursos/rectangulo.h++"
+
+//TODO Agregar animacion al cambiar de color
+class Boton : public Elemento
+{
+private:
+	Texto *imprimir;
+	Sombreador *sombreador;
+
+	Textura2D *textura_boton;
+	Rectangulo *fondo;
+
+	Color color_boton;
+	Color color_boton_normal;
+	Color color_boton_sobre;
+	Color color_boton_activo;
+	Color color_texto;
+
+	int x;
+	int y;
+	int ancho;
+	int alto;
+	bool centrado;
+	std::string texto_boton;
+
+	bool sobre_boton;
+	bool boton_pre_activado;
+	bool boton_activado;
+
+public:
+	Boton(int x, int y, int ancho, int alto, std::string texto, Textura2D *textura, Color color, bool centrado, Administrador_Recursos *recursos);
+	~Boton();
+	void posicion_x(int x);
+	void posicion_y(int y);
+	void actualizar(Raton *raton);
+	void dibujar();
+
+	bool esta_activado();
+};
+
+#endif
