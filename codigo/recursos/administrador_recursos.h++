@@ -66,9 +66,7 @@ public:
 
 	Texto *obtener_tipografia(ModeloLetra tipo);
 	int mostrar_texto(int x, int y, ModeloLetra tipo, std::string texto);
-	int mostrar_texto(int x, int y, ModeloLetra tipo, std::string texto, bool centrado);
 	int mostrar_texto(int x, int y, ModeloLetra tipo, std::string texto, Color color);
-	int mostrar_texto(int x, int y, ModeloLetra tipo, std::string texto, Color color, bool centrado);
 
 	void actualizar_pantalla(int ancho, int alto);
 };

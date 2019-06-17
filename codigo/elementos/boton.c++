@@ -26,6 +26,7 @@ Boton::Boton(int x, int y, int ancho, int alto, std::string texto, Textura2D *te
 	imprimir = recursos->obtener_tipografia(LetraMediana);
 	sombreador = recursos->obtener_sombreador(Rectangulo_Textura);
 	fondo = new Rectangulo(sombreador, textura_boton, color_boton);
+	this->ajuste_texto = imprimir->ancho_texto(texto) / 2;
 }
 
 Boton::~Boton()
@@ -76,7 +77,7 @@ void Boton::actualizar(Raton *raton)
 void Boton::dibujar()
 {
 	fondo->dibujar_rectangulo(this->x, this->y, this->ancho, this->alto, color_boton);
-	imprimir->dibujar_texto(this->x+this->ancho / 2.0, this->y+this->alto/2.0 + 7, this->texto_boton, color_texto, true);
+	imprimir->dibujar_texto(this->x+this->ancho / 2 - this->ajuste_texto, this->y+this->alto/2.0 + 7, this->texto_boton, color_texto);
 }
 
 bool Boton::esta_activado()

@@ -54,14 +54,12 @@ private:
 
 	void generar_caracteres();
 	Caracter *obtener_caracter(unsigned int caracter);
-	int imprimir_texto(int x, int y, icu::UnicodeString texto, Color color, bool centrado);
+	int imprimir_texto(int x, int y, icu::UnicodeString texto, Color color);
 	int ancho_texto_unicode(icu::UnicodeString texto);
 public:
 	Texto(Formato formato, int tamanno_letra, Sombreador *sombreador);
 	int dibujar_texto(int x, int y, std::string texto);
-	int dibujar_texto(int x, int y, std::string texto, bool centrado);
 	int dibujar_texto(int x, int y, std::string texto, Color color);
-	int dibujar_texto(int x, int y, std::string texto, Color color, bool centrado);
 	int ancho_texto(std::string texto);
 };
 #endif

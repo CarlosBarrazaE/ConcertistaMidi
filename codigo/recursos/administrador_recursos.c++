@@ -98,22 +98,10 @@ int Administrador_Recursos::mostrar_texto(int x, int y, ModeloLetra tipo, std::s
 	return texto_actual->dibujar_texto(x, y, texto);
 }
 
-int Administrador_Recursos::mostrar_texto(int x, int y, ModeloLetra tipo, std::string texto, bool centrado)
-{
-	Texto *texto_actual = formato_letras[tipo];
-	return texto_actual->dibujar_texto(x, y, texto, centrado);
-}
-
 int Administrador_Recursos::mostrar_texto(int x, int y, ModeloLetra tipo, std::string texto, Color color)
 {
 	Texto *texto_actual = formato_letras[tipo];
 	return texto_actual->dibujar_texto(x, y, texto, color);
-}
-
-int Administrador_Recursos::mostrar_texto(int x, int y, ModeloLetra tipo, std::string texto, Color color, bool centrado)
-{
-	Texto *texto_actual = formato_letras[tipo];
-	return texto_actual->dibujar_texto(x, y, texto, color, centrado);
 }
 
 void Administrador_Recursos::actualizar_pantalla(int nuevo_ancho, int nuevo_alto)

@@ -29,6 +29,7 @@ private:
 	int alto;
 	bool centrado;
 	std::string texto_boton;
+	int ajuste_texto;
 
 	bool sobre_boton;
 	bool boton_pre_activado;

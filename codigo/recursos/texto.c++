@@ -129,14 +129,8 @@ Caracter *Texto::obtener_caracter(unsigned int caracter)
 	return caracteres[caracter];
 }
 
-int Texto::imprimir_texto(int x, int y, icu::UnicodeString texto, Color color, bool centrado)
+int Texto::imprimir_texto(int x, int y, icu::UnicodeString texto, Color color)
 {
-	if(centrado)
-	{
-		int ancho = ancho_texto_unicode(texto);
-		x = x - ancho / 2.0;
-	}
-
 	int x_inicial = x;
 
 	sombreador->activar();
@@ -248,23 +242,12 @@ int Texto::imprimir_texto(int x, int y, icu::UnicodeString texto, Color color, b
 int Texto::dibujar_texto(int x, int y, std::string texto)
 {
 	Color negro(0.0, 0.0, 0.0);
-	return imprimir_texto(x, y, texto.c_str(), negro, false);
-}
-
-int Texto::dibujar_texto(int x, int y, std::string texto, bool centrado)
-{
-	Color negro(0.0, 0.0, 0.0);
-	return imprimir_texto(x, y, texto.c_str(), negro, centrado);
+	return imprimir_texto(x, y, texto.c_str(), negro);
 }
 
 int Texto::dibujar_texto(int x, int y, std::string texto, Color color)
 {
-	return imprimir_texto(x, y, texto.c_str(), color, false);
-}
-
-int Texto::dibujar_texto(int x, int y, std::string texto, Color color, bool centrado)
-{
-	return imprimir_texto(x, y, texto.c_str(), color, centrado);
+	return imprimir_texto(x, y, texto.c_str(), color);
 }
 
 int Texto::ancho_texto_unicode(icu::UnicodeString texto)
