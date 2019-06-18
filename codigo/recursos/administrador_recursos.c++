@@ -4,6 +4,7 @@ Administrador_Recursos::Administrador_Recursos()
 {
 	matriz_proyeccion = glm::ortho(0.0f, (float)this->ancho, (float)this->alto, 0.0f, -1.0f, 1.0f);
 
+	archivo_texturas[T_FondoTitulo] = "../texturas/fondo_titulo.tga";
 	archivo_texturas[T_Titulo] = "../texturas/titulo.tga";
 	archivo_texturas[T_Boton] = "../texturas/boton.tga";
 
@@ -20,8 +21,8 @@ Administrador_Recursos::Administrador_Recursos()
 	sombreador_letras->e_int("textura_texto", 0);
 	sombreador_letras->e_vector3f("color_texto", 0.0, 0.0, 0.0);
 
-	formato_letras[LetraTitulo] = new Texto(Normal, 16, sombreador_letras);
-	formato_letras[LetraGrande] = new Texto(Normal, 26, sombreador_letras);
+	formato_letras[LetraTitulo] = new Texto(Normal, 20, sombreador_letras);
+	formato_letras[LetraGrande] = new Texto(Normal, 16, sombreador_letras);
 	formato_letras[LetraMediana] = new Texto(Normal, 14, sombreador_letras);
 	formato_letras[LetraChica] = new Texto(Normal, 12, sombreador_letras);
 	formato_letras[LetraMuyChica] = new Texto(Normal, 8, sombreador_letras);

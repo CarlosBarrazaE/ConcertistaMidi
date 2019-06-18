@@ -55,7 +55,7 @@ int main (int n, char **argumentos)
 void configurar_gl()
 {
 	glEnable (GL_CULL_FACE);
-	glClearColor(0.3, 0.3, 0.3, 1.0);
+	glClearColor(0.95, 0.95, 0.95, 1.0);
 	glActiveTexture(GL_TEXTURE0);
 	glEnable(GL_BLEND);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);

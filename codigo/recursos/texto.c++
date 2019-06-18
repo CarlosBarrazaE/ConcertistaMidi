@@ -24,6 +24,7 @@ Texto::Texto(Formato formato, int tamanno_letra, Sombreador *sombreador) : Figur
 		tamanno_letra = 50;
 	else if(tamanno_letra < 5)
 		tamanno_letra = 5;
+	this->tamanno_letra = tamanno_letra;
 
 	FT_Set_Char_Size(this->tipografia, 0, tamanno_letra*64, 91.79, 91.79);
 
@@ -276,4 +277,9 @@ int Texto::ancho_texto_unicode(icu::UnicodeString texto)
 int Texto::ancho_texto(std::string texto)
 {
 	return ancho_texto_unicode(texto.c_str());
+}
+
+int Texto::alto_texto()
+{
+	return this->tamanno_letra;
 }

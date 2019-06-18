@@ -40,6 +40,11 @@ void Controlador_Juego::actualizar()
 		delete ventana_actual;
 		ventana_actual = new VentanaTitulo(this->recursos);
 	}
+	else if(ventana_actual->obtener_accion() == CambiarASeleccionMidi)
+	{
+		delete ventana_actual;
+		ventana_actual = new VentanaSeleccionMusica(this->recursos);
+	}
 	else if(ventana_actual->obtener_accion() == CambiarAConfiguracion)
 	{
 		delete ventana_actual;

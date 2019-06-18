@@ -17,8 +17,9 @@
 
 enum Textura
 {
+	T_FondoTitulo,
 	T_Titulo,
-	T_Boton
+	T_Boton,
 };
 
 enum SombreadorVF

@@ -51,6 +51,7 @@ private:
 
 	unsigned int indice_objeto;
 	unsigned int largo_ultimo_texto;
+	int tamanno_letra;
 
 	void generar_caracteres();
 	Caracter *obtener_caracter(unsigned int caracter);
@@ -61,5 +62,6 @@ public:
 	int dibujar_texto(int x, int y, std::string texto);
 	int dibujar_texto(int x, int y, std::string texto, Color color);
 	int ancho_texto(std::string texto);
+	int alto_texto();
 };
 #endif
