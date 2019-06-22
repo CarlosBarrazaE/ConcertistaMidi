@@ -10,7 +10,7 @@ enum Accion
 	CambiarAConfiguracion,
 	CambiarASeleccionMidi,
 	CambiarASeleccionPista,
-	CambiarAPiano,
+	CambiarAOrgano,
 	Salir
 };
 

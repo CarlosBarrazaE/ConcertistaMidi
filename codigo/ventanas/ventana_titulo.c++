@@ -48,7 +48,7 @@ void VentanaTitulo::actualizar(Raton *raton)
 	if(boton_tocar->esta_activado())
 		this->accion = CambiarASeleccionMidi;
 	else if(boton_practicar->esta_activado())
-		this->accion = CambiarAPiano;
+		this->accion = CambiarAOrgano;
 	else if(boton_configurar->esta_activado())
 		this->accion = CambiarAConfiguracion;
 	else if(boton_salir->esta_activado())

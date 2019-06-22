@@ -82,6 +82,12 @@ void Rectangulo::inicializar()
 	glBindBuffer(GL_ARRAY_BUFFER, 0);
 }
 
+void Rectangulo::seleccionar_color(Color color)
+{
+	this->color = color;
+	sombreador->e_vector4f("color", this->color.o_rojo(), this->color.o_verde(), this->color.o_azul(), 1.0f);
+}
+
 void Rectangulo::dibujar_rectangulo(float x, float y, float ancho, float alto, Color color)
 {
 	this->color = color;
@@ -95,6 +101,11 @@ void Rectangulo::dibujar_rectangulo(float x, float y, float ancho, float alto)
 	if(this->tiene_textura)
 		textura->activar();
 
+	this->dibujar(x, y, ancho, alto);
+}
+
+void Rectangulo::dibujar(float x, float y, float ancho, float alto)
+{
 	glm::mat4 modelo = glm::mat4(1.0);
 	modelo = glm::translate(modelo, glm::vec3(x, y, 0.0));
 	modelo = glm::scale(modelo, glm::vec3(ancho, alto, 1.0));

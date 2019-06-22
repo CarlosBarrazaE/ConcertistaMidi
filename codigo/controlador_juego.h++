@@ -9,6 +9,7 @@
 #include "ventanas/ventana.h++"
 #include "ventanas/ventana_titulo.h++"
 #include "ventanas/ventana_seleccion_midi.h++"
+#include "ventanas/ventana_organo.h++"
 #include "ventanas/ventana_configuracion.h++"
 
 class Controlador_Juego

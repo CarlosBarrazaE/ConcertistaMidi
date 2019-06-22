@@ -22,8 +22,11 @@ public:
 	Rectangulo(Sombreador *sombreador, Textura2D *textura, Color color);
 	~Rectangulo();
 
-	void dibujar_rectangulo(float x, float y, float ancho, float alto);
+	void seleccionar_color(Color color);
+
 	void dibujar_rectangulo(float x, float y, float ancho, float alto, Color color);
+	void dibujar_rectangulo(float x, float y, float ancho, float alto);
+	void dibujar(float x, float y, float ancho, float alto);
 };
 
 #endif

@@ -20,6 +20,10 @@ enum Textura
 	T_FondoTitulo,
 	T_Titulo,
 	T_Boton,
+	T_TeclaBlanca,
+	T_TeclaNegra,
+	T_BordeOrganoRojo,
+	T_BordeOrganoNegro,
 };
 
 enum SombreadorVF
