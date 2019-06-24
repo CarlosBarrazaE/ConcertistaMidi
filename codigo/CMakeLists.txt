@@ -1,11 +1,13 @@
 add_subdirectory(archivos)
 add_subdirectory(elementos)
+add_subdirectory(libmidi)
 add_subdirectory(recursos)
 add_subdirectory(ventanas)
 
 set(codigo
 	${archivos}
 	${elementos}
+	${libmidi}
 	${recursos}
 	${ventanas}
 	${CMAKE_CURRENT_SOURCE_DIR}/principal.c++

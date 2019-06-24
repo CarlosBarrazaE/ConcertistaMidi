@@ -1,0 +1,8 @@
+set(libmidi
+	${CMAKE_CURRENT_SOURCE_DIR}/Midi.c++
+	${CMAKE_CURRENT_SOURCE_DIR}/MidiEvent.c++
+	${CMAKE_CURRENT_SOURCE_DIR}/MidiTrack.c++
+	${CMAKE_CURRENT_SOURCE_DIR}/MidiUtil.c++
+	${CMAKE_CURRENT_SOURCE_DIR}/MidiComm.c++
+	PARENT_SCOPE
+)
