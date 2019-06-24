@@ -24,14 +24,14 @@ Administrador_Recursos *Controlador_Juego::obtener_administrador_recursos()
 
 void Controlador_Juego::actualizar()
 {
+	fps = Fps::tiempo_fotograma();
 	ventana_actual->actualizar(&this->raton);
 	ventana_actual->dibujar();
 
 	if(this->mostrar_fps)
 	{
-		fps = contador_fps.obtener_fps(SDL_GetTicks() / 1000.0);
-		if(contador_fps.nuevo_fps())
-			texto_fps = "FPS: " + std::to_string((int)fps);
+		if(Fps::actualizar_fps())
+			texto_fps = "FPS: " + std::to_string((int)fps) + " - Tiempo dibujo: " + std::to_string((int)Fps::tiempo_dibujo()) + " ms";
 		this->recursos->mostrar_texto(10, 20, LetraChica, texto_fps);
 	}
 

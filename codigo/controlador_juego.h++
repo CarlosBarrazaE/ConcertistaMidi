@@ -16,7 +16,6 @@ class Controlador_Juego
 {
 private:
 	Administrador_Recursos *recursos;
-	Fps contador_fps;
 	double fps;
 	std::string texto_fps;
 

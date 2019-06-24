@@ -1,35 +1,41 @@
 #include "fps.h++"
 
-Fps::Fps()
-{
-	this->tiempo_anterior = 0;
-	this->fotogramas = 0;
-	this->fotograma_anterior = 0;
-	this->contador_fotogramas = 0;
-	this->cambio_fps = false;
-}
+int Fps::nanosegundos = 0;
+bool Fps::mostrar_fps = true;
+int Fps::contador_fps = 0;
 
-double Fps::obtener_fps(double tiempo_actual)
+Tiempo Fps::tiempo_actual = Reloj::now();
+Tiempo Fps::tiempo_anterior = Reloj::now();
+
+int Fps::tiempo_fotograma()
 {
-	double tiempo_transcurrido = tiempo_actual - tiempo_anterior;
-	if(tiempo_transcurrido > 0.1)
+	Fps::tiempo_actual = Reloj::now();
+	Fps::nanosegundos = std::chrono::duration_cast<std::chrono::nanoseconds>(Fps::tiempo_actual - Fps::tiempo_anterior).count();
+	Fps::tiempo_anterior = tiempo_actual;
+	if(Fps::contador_fps > 10)
 	{
-		tiempo_anterior = tiempo_actual;
-		fotogramas = contador_fotogramas / tiempo_transcurrido;
-		contador_fotogramas = 0;
-		if(fotograma_anterior != fotogramas)
-		{
-			fotograma_anterior = fotogramas;
-			cambio_fps = true;
-		}
+		Fps::mostrar_fps = true;
+		Fps::contador_fps = 0;
 	}
 	else
-		cambio_fps = false;
-	contador_fotogramas++;
-	return fotogramas;
+		Fps::mostrar_fps = false;
+	Fps::contador_fps++;
+	return 1000000000.0/Fps::nanosegundos;//Retorna FPS
 }
 
-bool Fps::nuevo_fps()
+double Fps::tiempo_dibujo()
 {
-	return cambio_fps;
+	Tiempo tiempo_dibujo = Reloj::now();
+	int ns = std::chrono::duration_cast<std::chrono::nanoseconds>(tiempo_dibujo - Fps::tiempo_actual).count();
+	return 1000000.0 / ns;//Retorna milisegundos
+}
+
+bool Fps::actualizar_fps()
+{
+	return Fps::mostrar_fps;
+}
+
+int Fps::obtener_nanosegundos()
+{
+	return Fps::nanosegundos;
 }
