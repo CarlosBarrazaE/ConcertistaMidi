@@ -24,6 +24,8 @@ enum Textura
 	T_TeclaNegra,
 	T_BordeOrganoRojo,
 	T_BordeOrganoNegro,
+	T_Nota,
+	T_Sombra_Nota,
 };
 
 enum SombreadorVF

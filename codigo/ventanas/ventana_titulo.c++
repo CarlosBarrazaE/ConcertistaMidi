@@ -35,11 +35,6 @@ VentanaTitulo::~VentanaTitulo()
 
 void VentanaTitulo::actualizar(Raton *raton)
 {
-	boton_tocar->posicion_x(Pantalla::centro_h());
-	boton_practicar->posicion_x(Pantalla::centro_h());
-	boton_configurar->posicion_x(Pantalla::centro_h());
-	boton_salir->posicion_x(Pantalla::centro_h());
-
 	boton_tocar->actualizar(raton);
 	boton_practicar->actualizar(raton);
 	boton_configurar->actualizar(raton);
@@ -65,4 +60,16 @@ void VentanaTitulo::dibujar()
 	boton_configurar->dibujar();
 	boton_salir->dibujar();
 	texto_version->dibujar_texto(20, Pantalla::alto - 15, "Versión: " + std::string(VERSION), Color(1.0, 1.0, 1.0));
+}
+
+void VentanaTitulo::evento_teclado(Tecla tecla, bool estado)
+{
+}
+
+void VentanaTitulo::evento_pantalla(int ancho, int alto)
+{
+	boton_tocar->posicion_x(Pantalla::centro_h());
+	boton_practicar->posicion_x(Pantalla::centro_h());
+	boton_configurar->posicion_x(Pantalla::centro_h());
+	boton_salir->posicion_x(Pantalla::centro_h());
 }

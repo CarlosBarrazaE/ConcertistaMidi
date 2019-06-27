@@ -2,20 +2,12 @@
 
 Organo::Organo(int x, int y, int ancho, Teclado tamanno, Administrador_Recursos *recursos) : Elemento()
 {
+	//El origen del organo esta abajo a la izquierda
 	this->x = x;
 	this->y = y;
 	this->ancho = ancho;
 	this->tammano_teclado = tamanno;
-
-	this->ancho_tecla_blanca = (this->ancho / this->n_blancas[this->tammano_teclado]);//52 Teclas blancas
-	this->alto_tecla_blanca = this->ancho_tecla_blanca * PROPORCION_BLANCA;
-	if(this->alto_tecla_blanca > 250)
-		this->alto_tecla_blanca = 250;
-
-	this->ancho_tecla_negra = this->ancho_tecla_blanca * PROPORCION_ANCHO_NEGRA;
-	this->alto_tecla_negra = this->alto_tecla_blanca * PROPORCION_NEGRA;
-
-	this->alto = this->alto_tecla_blanca + 11;
+	this->calcular_tamannos();
 
 	sombreador = recursos->obtener_sombreador(Rectangulo_SinTextura);
 	sombreador2 = recursos->obtener_sombreador(Rectangulo_Textura);
@@ -33,14 +25,8 @@ Organo::~Organo()
 
 }
 
-void Organo::actualizar_y(int y)
+void Organo::calcular_tamannos()
 {
-	this->y = y;
-}
-
-void Organo::actualizar_ancho(int ancho)
-{
-	this->ancho = ancho;
 	this->ancho_tecla_blanca = (this->ancho / this->n_blancas[this->tammano_teclado]);
 	this->alto_tecla_blanca = this->ancho_tecla_blanca * PROPORCION_BLANCA;
 	if(this->alto_tecla_blanca > 250)
@@ -50,11 +36,46 @@ void Organo::actualizar_ancho(int ancho)
 	this->alto_tecla_negra = this->alto_tecla_blanca * PROPORCION_NEGRA;
 
 	this->alto = this->alto_tecla_blanca + 11;
+
+	//Diferencia producida porque no se puede dibujar menos de un pixel
+	this->ancho_real = this->ancho_tecla_blanca * this->n_blancas[this->tammano_teclado];
+	this->ajuste_x = (this->ancho - this->ancho_real) / 2;
 }
 
-int Organo::obtener_alto()
+void Organo::e_y(int valor)
+{
+	this->y = valor;
+}
+
+void Organo::e_ancho(int valor)
+{
+	this->ancho = valor;
+	this->calcular_tamannos();
+}
+
+int Organo::o_alto()
 {
 	return this->alto;
+}
+
+int Organo::o_ancho_real()
+{
+	return this->ancho_real;
+}
+
+int Organo::o_ajuste_x()
+{
+	return this->ajuste_x;
+}
+
+int Organo::o_ancho_blancas()
+{
+	return this->ancho_tecla_blanca;
+}
+
+int Organo::o_ancho_negras()
+{
+	return this->ancho_tecla_negra;
 }
 
 void Organo::actualizar(Raton *raton)
@@ -64,23 +85,20 @@ void Organo::actualizar(Raton *raton)
 
 void Organo::dibujar()
 {
-	int ancho_real = this->ancho_tecla_blanca * this->n_blancas[this->tammano_teclado];
-	float ajuste_x = (this->ancho - ancho_real) / 2;
-
 	fondo->dibujar_rectangulo(this->x, this->y - this->alto, this->ancho, this->alto, Color(0.0, 0.0, 0.0));
 
 	tecla_blanca->activar();
 	teclas->seleccionar_color(Color(1.0, 1.0, 1.0));
-	this->dibujar_blancas(this->x + ajuste_x, this->y - this->alto + 10, this->n_blancas[this->tammano_teclado]);
+	this->dibujar_blancas(this->x + this->ajuste_x, this->y - this->alto + 10, this->n_blancas[this->tammano_teclado]);
 
 	tecla_negra->activar();
-	this->dibujar_negras(this->x + ajuste_x, this->y - this->alto + 10, this->n_negras[this->tammano_teclado]);
+	this->dibujar_negras(this->x + this->ajuste_x, this->y - this->alto + 10, this->n_negras[this->tammano_teclado]);
 
 	borde_negro->activar();
 	teclas->dibujar(this->x, this->y - this->alto, this->ancho, 5);
 
 	borde_rojo->activar();
-	teclas->dibujar(this->x + ajuste_x, this->y - this->alto + 5, ancho_real-1, 5);
+	teclas->dibujar(this->x + this->ajuste_x, this->y - this->alto + 5, this->ancho_real-1, 5);
 }
 
 void Organo::dibujar_blancas(int x, int y, int numero_teclas)
@@ -115,6 +133,7 @@ void Organo::dibujar_negras(int x, int y, int numero_teclas)
 		if(n_negra == 5)
 			n_negra = 0;
 
+		//El ancho de la tecla mas el ancho de la sombra
 		teclas->dibujar(desplazamiento, y, this->ancho_tecla_negra + this->ancho_tecla_negra * 0.22, this->alto_tecla_negra);
 	}
 }

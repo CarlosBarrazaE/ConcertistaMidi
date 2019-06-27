@@ -87,9 +87,7 @@ void controlar_eventos(SDL_Window *ventana, Controlador_Juego *controlador, SDL_
 void ajustar_ventana(Controlador_Juego *controlador, int ancho_nuevo, int alto_nuevo)
 {
 	glViewport(0, 0, ancho_nuevo, alto_nuevo);
-	controlador->obtener_administrador_recursos()->actualizar_pantalla(ancho_nuevo, alto_nuevo);
-	Pantalla::ancho = ancho_nuevo;
-	Pantalla::alto = alto_nuevo;
+	controlador->evento_ventana(ancho_nuevo, alto_nuevo);
 }
 
 void eventos_raton_botones(Controlador_Juego *controlador, int boton, int accion)

@@ -15,5 +15,7 @@ public:
 
 	void actualizar(Raton *raton);
 	void dibujar();
+	void evento_teclado(Tecla tecla, bool estado);
+	void evento_pantalla(int ancho, int alto);
 };
 #endif

@@ -11,6 +11,8 @@ Administrador_Recursos::Administrador_Recursos()
 	archivo_texturas[T_TeclaNegra] = "../texturas/tecla_negra.tga";
 	archivo_texturas[T_BordeOrganoRojo] = "../texturas/borde_organo_rojo.tga";
 	archivo_texturas[T_BordeOrganoNegro] = "../texturas/borde_organo_negro.tga";
+	archivo_texturas[T_Nota] = "../texturas/nota.tga";
+	archivo_texturas[T_Sombra_Nota] = "../texturas/sombra_nota.tga";
 
 	archivo_sombreador_vertice[Rectangulo_Textura] = "../sombreadores/rectangulo_textura_sv.glsl";
 	archivo_sombreador_fragmento[Rectangulo_Textura] = "../sombreadores/rectangulo_textura_sf.glsl";

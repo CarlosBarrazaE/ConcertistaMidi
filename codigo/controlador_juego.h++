@@ -5,6 +5,7 @@
 #include "teclas.h++"
 #include "raton.h++"
 #include "fps.h++"
+#include "pantalla.h++"
 
 #include "ventanas/ventana.h++"
 #include "ventanas/ventana_titulo.h++"
@@ -43,6 +44,7 @@ public:
 
 	Raton *eventos_raton();
 	void eventos_teclado(Tecla tecla, bool estado);
+	void evento_ventana(int ancho, int alto);
 	void evento_salir();
 };
 

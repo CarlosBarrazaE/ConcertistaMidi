@@ -29,11 +29,7 @@ VentanaSeleccionMusica::~VentanaSeleccionMusica()
 
 void VentanaSeleccionMusica::actualizar(Raton *raton)
 {
-	boton_atras->posicion_y(Pantalla::alto - 32);
 	boton_atras->actualizar(raton);
-
-	boton_continuar->posicion_x(Pantalla::ancho - 130);
-	boton_continuar->posicion_y(Pantalla::alto - 32);
 	boton_continuar->actualizar(raton);
 	if(boton_atras->esta_activado())
 		this->accion = CambiarATitulo;
@@ -46,4 +42,16 @@ void VentanaSeleccionMusica::dibujar()
 	texto->dibujar_texto(Pantalla::centro_h() - ajuste_titulo, 30, "Seleccione un archivo para tocar", Color(1.0, 1.0, 1.0));
 	boton_atras->dibujar();
 	boton_continuar->dibujar();
+}
+
+void VentanaSeleccionMusica::evento_teclado(Tecla tecla, bool estado)
+{
+}
+
+void VentanaSeleccionMusica::evento_pantalla(int ancho, int alto)
+{
+	boton_atras->posicion_y(alto - 32);
+
+	boton_continuar->posicion_x(ancho - 130);
+	boton_continuar->posicion_y(alto - 32);
 }

@@ -24,3 +24,11 @@ void VentanaConfiguracion::dibujar()
 {
 	boton_atras->dibujar();
 }
+
+void VentanaConfiguracion::evento_teclado(Tecla tecla, bool estado)
+{
+}
+
+void VentanaConfiguracion::evento_pantalla(int ancho, int alto)
+{
+}

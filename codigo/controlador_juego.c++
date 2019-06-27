@@ -89,6 +89,16 @@ void Controlador_Juego::eventos_teclado(Tecla tecla, bool estado)
 		this->finalizar = true;
 	else if(tecla == TECLA_F12 && estado)
 		this->modo_alambre = !this->modo_alambre;
+	else
+		this->ventana_actual->evento_teclado(tecla, estado);
+}
+
+void Controlador_Juego::evento_ventana(int ancho, int alto)
+{
+	Pantalla::ancho = ancho;
+	Pantalla::alto = alto;
+	recursos->actualizar_pantalla(ancho, alto);
+	this->ventana_actual->evento_pantalla(ancho, alto);
 }
 
 void Controlador_Juego::evento_salir()
