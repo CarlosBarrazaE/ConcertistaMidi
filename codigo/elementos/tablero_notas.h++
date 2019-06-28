@@ -6,15 +6,15 @@
 #include "../recursos/sombreador.h++"
 #include "../recursos/rectangulo.h++"
 #include "../libmidi/Midi.h"
-#include "octava.h++"
+#include "../octava.h++"
 #include "../pista.h++"
 
 class Tablero_Notas : public Elemento
 {
 private:
-	Sombreador *sombreador;
+	Sombreador *sombreador, *sombreador_solido;
 	Textura2D *textura_nota_blanca, *textura_nota_negra, *textura_sombra_nota;
-	Rectangulo *estructura_nota;
+	Rectangulo *fondo, *estructura_nota;
 	Texto *texto;
 
 	int x, y, ancho, alto;
@@ -23,8 +23,11 @@ private:
 	int ajuste_x;
 	int velocidad_caida;
 	TranslatedNoteSet notas;
+	MidiEventMicrosecondList lineas;
 	std::map<int, Pista*> *pistas;
 
+	void dibujar_lineas_horizontales();
+	void dibujar_lineas_verticales();
 	void dibujar_notas(Textura2D *textura_nota_blanca, Textura2D *textura_nota_negra);
 public:
 	Tablero_Notas(int x, int y, int alto, int ancho, Administrador_Recursos *recursos);
@@ -32,6 +35,7 @@ public:
 
 	void e_tiempo(int tiempo);
 	void e_notas(TranslatedNoteSet notas);
+	void e_lineas(MidiEventMicrosecondList lineas);
 	void e_pistas(std::map<int, Pista*> *pistas);
 	void e_dimension(int ancho, int alto);
 	void e_ancho_blanca(int valor);

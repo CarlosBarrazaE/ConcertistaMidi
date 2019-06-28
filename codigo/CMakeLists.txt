@@ -18,5 +18,6 @@ set(codigo
 	${CMAKE_CURRENT_SOURCE_DIR}/raton.c++
 	${CMAKE_CURRENT_SOURCE_DIR}/fps.c++
 	${CMAKE_CURRENT_SOURCE_DIR}/registro.c++
+	${CMAKE_CURRENT_SOURCE_DIR}/octava.c++
 	PARENT_SCOPE
 )

@@ -54,10 +54,10 @@ VentanaOrgano::VentanaOrgano(Administrador_Recursos *recursos) : Ventana()
 	pistas[18] = new Pista(Color(0.0, 0.348, 1.0), Automatico);
 	pistas[19] = new Pista(Color(0.0, 0.348, 0.0), Automatico);
 
-	notas = musica->Notes();
-	tablero->e_notas(notas);
+	tablero->e_notas(musica->Notes());
 	tablero->e_pistas(&pistas);
-	organo->e_notas(notas);
+	tablero->e_lineas(musica->GetBarLines());
+	organo->e_notas(musica->Notes());
 	organo->e_pistas(&pistas);
 }
 

@@ -23,7 +23,6 @@ private:
 	MidiCommIn *midi_entrada;
 	MidiCommOut *midi_salida;
 
-	TranslatedNoteSet notas;
 	std::map<int, Pista*> pistas;
 	double velocidad_musica;
 
