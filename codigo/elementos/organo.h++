@@ -5,7 +5,13 @@
 #include "../recursos/textura_2d.h++"
 #include "../recursos/sombreador.h++"
 #include "../recursos/rectangulo.h++"
+#include "../libmidi/Midi.h"
 #include "tipo_teclado.h++"
+#include "octava.h++"
+#include "../pista.h++"
+#include "../nota.h++"
+
+#include <map>
 
 class Organo : public Elemento
 {
@@ -24,14 +30,21 @@ private:
 
 	Textura2D *tecla_blanca;
 	Textura2D *tecla_negra;
+	Textura2D *tecla_negra_presionada;
 	Textura2D *borde_negro;
 	Textura2D *borde_rojo;
 
 	int x, y, ancho, alto;
+	int tiempo_actual_midi;
 	int ancho_real, ajuste_x;
 	int ancho_tecla_blanca, ancho_tecla_negra;
 	int alto_tecla_blanca, alto_tecla_negra;
 	Teclado tammano_teclado;
+	TranslatedNoteSet notas;
+	std::map<int, Pista*> *pistas;
+
+	std::map<int, Nota> notas_activas_blancas;
+	std::map<int, Nota> notas_activas_negras;
 
 	//Metodos
 	void dibujar_blancas(int x, int y, int numero_teclas);
@@ -44,6 +57,9 @@ public:
 
 	void e_y(int valor);
 	void e_ancho(int valor);
+	void e_tiempo(int tiempo);
+	void e_notas(TranslatedNoteSet notas);
+	void e_pistas(std::map<int, Pista*> *pistas);
 
 	int o_alto();
 	int o_ancho_real();

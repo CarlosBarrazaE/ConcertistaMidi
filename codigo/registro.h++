@@ -14,7 +14,7 @@ namespace
 	{
 		Error = 0,
 		Aviso = 1,
-		Nota = 2,
+		Dato = 2,
 		Depurar = 3
 	};
 }

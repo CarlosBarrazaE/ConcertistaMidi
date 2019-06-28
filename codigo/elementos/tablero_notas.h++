@@ -7,12 +7,13 @@
 #include "../recursos/rectangulo.h++"
 #include "../libmidi/Midi.h"
 #include "octava.h++"
+#include "../pista.h++"
 
 class Tablero_Notas : public Elemento
 {
 private:
 	Sombreador *sombreador;
-	Textura2D *textura_nota, *textura_sombra_nota;
+	Textura2D *textura_nota_blanca, *textura_nota_negra, *textura_sombra_nota;
 	Rectangulo *estructura_nota;
 	Texto *texto;
 
@@ -22,15 +23,17 @@ private:
 	int ajuste_x;
 	int velocidad_caida;
 	TranslatedNoteSet notas;
+	std::map<int, Pista*> *pistas;
 
-	void dibujar_notas(Textura2D *textura);
+	void dibujar_notas(Textura2D *textura_nota_blanca, Textura2D *textura_nota_negra);
 public:
 	Tablero_Notas(int x, int y, int alto, int ancho, Administrador_Recursos *recursos);
 	~Tablero_Notas();
 
 	void e_tiempo(int tiempo);
-	void e_dimension(int ancho, int alto);
 	void e_notas(TranslatedNoteSet notas);
+	void e_pistas(std::map<int, Pista*> *pistas);
+	void e_dimension(int ancho, int alto);
 	void e_ancho_blanca(int valor);
 	void e_ancho_negra(int valor);
 	void e_ajuste_x(int valor);

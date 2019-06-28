@@ -22,10 +22,12 @@ enum Textura
 	T_Boton,
 	T_TeclaBlanca,
 	T_TeclaNegra,
+	T_TeclaNegraPresionada,
 	T_BordeOrganoRojo,
 	T_BordeOrganoNegro,
-	T_Nota,
-	T_Sombra_Nota,
+	T_NotaBlanca,
+	T_NotaNegra,
+	T_SombraNota,
 };
 
 enum SombreadorVF

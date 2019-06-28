@@ -11,6 +11,8 @@ set(codigo
 	${recursos}
 	${ventanas}
 	${CMAKE_CURRENT_SOURCE_DIR}/principal.c++
+	${CMAKE_CURRENT_SOURCE_DIR}/pista.c++
+	${CMAKE_CURRENT_SOURCE_DIR}/nota.c++
 	${CMAKE_CURRENT_SOURCE_DIR}/controlador_juego.c++
 	${CMAKE_CURRENT_SOURCE_DIR}/pantalla.c++
 	${CMAKE_CURRENT_SOURCE_DIR}/raton.c++

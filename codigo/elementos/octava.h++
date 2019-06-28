@@ -5,6 +5,7 @@ namespace Octava
 {
 	bool es_negra(int id_nota);
 	int prosicion_nota(int id_nota);
+	int prosicion_nota_negra(int id_nota);
 	int numero_negra(int id_nota);
 }
 

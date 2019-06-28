@@ -13,8 +13,8 @@ VentanaOrgano::VentanaOrgano(Administrador_Recursos *recursos) : Ventana()
 	//musica = new Midi(Midi::ReadFromFile("../musica/Ven Señor no tardes propia.midi"));
 	musica = new Midi(Midi::ReadFromFile("../musica/Banjo Kazooie -  Treasure Trove Cove.midi"));
 	//musica = new Midi(Midi::ReadFromFile("../musica/Escala_musícal.midi"));
-	dispositivos_entrada = MidiCommIn::GetDeviceList();
-	dispositivos_salida = MidiCommOut::GetDeviceList();
+	MidiCommDescriptionList dispositivos_entrada = MidiCommIn::GetDeviceList();
+	MidiCommDescriptionList dispositivos_salida = MidiCommOut::GetDeviceList();
 
 	Registro::aviso("Dispositivos de entrada:");
 	for(int x=0; x<dispositivos_entrada.size(); x++)
@@ -35,8 +35,32 @@ VentanaOrgano::VentanaOrgano(Administrador_Recursos *recursos) : Ventana()
 	const microseconds_t PreviewLeadOut = 0;
 	musica->Reset(PreviewLeadIn, PreviewLeadOut);
 
+	pistas[0] = new Pista(Color(0.0, 0.598, 0.0), Automatico);
+	pistas[1] = new Pista(Color(0.0, 0.598, 1.0), Automatico);
+	pistas[2] = new Pista(Color(1.0, 0.598, 1.0), Automatico);
+	pistas[3] = new Pista(Color(1.0, 0.424, 0.0), Automatico);
+	pistas[4] = new Pista(Color(1.0, 0.0, 0.467), Automatico);
+	pistas[5] = new Pista(Color(0.587, 0.0, 0.467), Automatico);
+	pistas[6] = new Pista(Color(0.261, 0.0, 0.467), Automatico);
+	pistas[7] = new Pista(Color(0.0, 0.0, 0.467), Automatico);
+	pistas[8] = new Pista(Color(0.0, 0.761, 0.467), Automatico);
+	pistas[9] = new Pista(Color(0.0, 0.761, 1.0), Automatico);
+	pistas[10] = new Pista(Color(1.0, 0.761, 0.609), Automatico);
+	pistas[11] = new Pista(Color(1.0, 0.761, 0.0), Automatico);
+	pistas[12] = new Pista(Color(0.489, 0.587, 0.489), Automatico);
+	pistas[13] = new Pista(Color(0.489, 0.0, 0.489), Automatico);
+	pistas[14] = new Pista(Color(1.0, 0.0, 0.489), Automatico);
+	pistas[15] = new Pista(Color(0.407, 0.348, 0.408), Automatico);
+	pistas[16] = new Pista(Color(0.407, 0.348, 0.0), Automatico);
+	pistas[17] = new Pista(Color(0.407, 0.348, 1.0), Automatico);
+	pistas[18] = new Pista(Color(0.0, 0.348, 1.0), Automatico);
+	pistas[19] = new Pista(Color(0.0, 0.348, 0.0), Automatico);
+
 	notas = musica->Notes();
 	tablero->e_notas(notas);
+	tablero->e_pistas(&pistas);
+	organo->e_notas(notas);
+	organo->e_pistas(&pistas);
 }
 
 VentanaOrgano::~VentanaOrgano()
@@ -55,10 +79,11 @@ void VentanaOrgano::actualizar(Raton *raton)
 		midi_salida->Write(i->second);
 	}
 
-	tablero->e_tiempo(musica->GetSongPositionInMicroseconds());//3250000
+	tablero->e_tiempo(musica->GetSongPositionInMicroseconds());
+	organo->e_tiempo(musica->GetSongPositionInMicroseconds());
 
-	organo->actualizar(raton);
 	tablero->actualizar(raton);
+	organo->actualizar(raton);
 }
 
 void VentanaOrgano::dibujar()

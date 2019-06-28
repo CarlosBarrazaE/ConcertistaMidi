@@ -9,6 +9,8 @@
 #include "../libmidi/Midi.h"
 #include "../libmidi/MidiComm.h"
 #include "../fps.h++"
+#include "../pista.h++"
+#include <map>
 
 class VentanaOrgano : public Ventana
 {
@@ -21,11 +23,8 @@ private:
 	MidiCommIn *midi_entrada;
 	MidiCommOut *midi_salida;
 
-	MidiCommDescriptionList dispositivos_entrada;
-	MidiCommDescriptionList dispositivos_salida;
-
-
 	TranslatedNoteSet notas;
+	std::map<int, Pista*> pistas;
 	double velocidad_musica;
 
 	/*

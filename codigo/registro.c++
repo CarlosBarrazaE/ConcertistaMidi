@@ -2,14 +2,14 @@
 #include <GL/glew.h>
 void Registro::escribir_registro(CodigoEstado estado, std::string texto)
 {
-	//TODO agregar despues de un \n la etiqueta que corresponda [Error / Aviso / Nota]
+	//TODO agregar despues de un \n la etiqueta que corresponda [Error / Aviso / Dato]
 	std::ofstream archivo;
 	archivo.open(ARCHIVO_REGISTRO, std::ios::app);
 	if(estado == Error)
 		archivo << "[ERROR] " << texto << "\n";
 	else if(estado == Aviso && NIVEL_REGISTRO >= 1)
 		archivo << "[AVISO] " << texto << "\n";
-	else if(estado == Nota && NIVEL_REGISTRO >= 2)
+	else if(estado == Dato && NIVEL_REGISTRO >= 2)
 		archivo << "[NOTA] " << texto << "\n";
 	else if(estado == Depurar && NIVEL_REGISTRO >= 3)
 		archivo << "[DEPURAR] " << texto << "\n";
@@ -20,7 +20,7 @@ void Registro::escribir_registro(CodigoEstado estado, std::string texto)
 			std::cout << "\033[31m[ERROR]\033[0m " << texto << "\n";
 		else if(estado == Aviso && NIVEL_REGISTRO >= 1)
 			std::cout << "\033[33m[AVISO]\033[0m " << texto << "\n";
-		else if(estado == Nota && NIVEL_REGISTRO >= 2)
+		else if(estado == Dato && NIVEL_REGISTRO >= 2)
 			std::cout << "\033[32m[NOTA]\033[0m " << texto << "\n";
 		else if(estado == Depurar && NIVEL_REGISTRO >= 3)
 			std::cout << "\033[34m[DEPURAR]\033[0m " << texto << "\n";
@@ -39,7 +39,7 @@ void Registro::aviso(std::string texto)
 
 void Registro::nota(std::string texto)
 {
-	escribir_registro(Nota, texto);
+	escribir_registro(Dato, texto);
 }
 
 void Registro::depurar(std::string texto)

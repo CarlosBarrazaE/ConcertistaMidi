@@ -6,13 +6,14 @@ Tablero_Notas::Tablero_Notas(int x, int y, int ancho, int alto, Administrador_Re
 	this->y = y;
 	this->ancho = ancho;
 	this->alto = alto;
-	this->velocidad_caida = 10000;
+	this->velocidad_caida = 6500;
 
 	this->sombreador = recursos->obtener_sombreador(Rectangulo_Textura);
-	this->textura_nota = recursos->obtener_textura(T_Nota);
-	this->textura_sombra_nota = recursos->obtener_textura(T_Sombra_Nota);
+	this->textura_nota_blanca = recursos->obtener_textura(T_NotaBlanca);
+	this->textura_nota_negra = recursos->obtener_textura(T_NotaNegra);
+	this->textura_sombra_nota = recursos->obtener_textura(T_SombraNota);
 
-	this->estructura_nota = new Rectangulo(sombreador, textura_nota, Color(0.2, 0.7, 0.3));
+	this->estructura_nota = new Rectangulo(sombreador, textura_nota_blanca, Color(0.2, 0.7, 0.3));
 	this->texto = recursos->obtener_tipografia(LetraMuyChica);
 }
 
@@ -25,15 +26,20 @@ void Tablero_Notas::e_tiempo(int tiempo)
 	this->tiempo_actual_midi = tiempo;
 }
 
+void Tablero_Notas::e_notas(TranslatedNoteSet notas)
+{
+	this->notas = notas;
+}
+
+void Tablero_Notas::e_pistas(std::map<int, Pista*> *pistas)
+{
+	this->pistas = pistas;
+}
+
 void Tablero_Notas::e_dimension(int ancho, int alto)
 {
 	this->ancho = ancho;
 	this->alto = alto;
-}
-
-void Tablero_Notas::e_notas(TranslatedNoteSet notas)
-{
-	this->notas = notas;
 }
 
 void Tablero_Notas::e_ancho_blanca(int valor)
@@ -58,8 +64,8 @@ void Tablero_Notas::c_velocidad_caida(int valor)
 	else
 		this->velocidad_caida = this->velocidad_caida + 100;
 
-	if(this->velocidad_caida < 3500)
-		this->velocidad_caida = 3500;
+	if(this->velocidad_caida < 1500)
+		this->velocidad_caida = 1500;
 	else if(this->velocidad_caida > 14000)
 		this->velocidad_caida = 14000;
 }
@@ -70,13 +76,14 @@ void Tablero_Notas::actualizar(Raton *raton)
 
 void Tablero_Notas::dibujar()
 {
-	this->dibujar_notas(this->textura_sombra_nota);//Dibuja la sombra de la nota
-	this->dibujar_notas(this->textura_nota);//Dibuja la nota
+	this->dibujar_notas(this->textura_sombra_nota, NULL);//Dibuja la sombra de la nota
+	this->dibujar_notas(this->textura_nota_blanca, this->textura_nota_negra);//Dibuja la nota
 }
 
-void Tablero_Notas::dibujar_notas(Textura2D *textura)
+void Tablero_Notas::dibujar_notas(Textura2D *textura_nota_blanca, Textura2D *textura_nota_negra)
 {
-	textura->activar();
+	if(textura_nota_negra == NULL)
+		textura_nota_blanca->activar();
 	int ajuste_negra = 0;
 	int ancho_tecla = 0;
 	int posicion = 0;
@@ -84,27 +91,6 @@ void Tablero_Notas::dibujar_notas(Textura2D *textura)
 	int largo_final = 0;
 	int posicion_y = 0;
 
-	Color colores[20];
-	colores[0] = Color(0.0, 0.598, 0.0);
-	colores[1] = Color(0.0, 0.598, 1.0);
-	colores[2] = Color(1.0, 0.598, 1.0);
-	colores[3] = Color(1.0, 0.424, 0.0);
-	colores[4] = Color(1.0, 0.0, 0.467);
-	colores[5] = Color(0.587, 0.0, 0.467);
-	colores[6] = Color(0.261, 0.0, 0.467);
-	colores[7] = Color(0.0, 0.0, 0.467);
-	colores[8] = Color(0.0, 0.761, 0.467);
-	colores[9] = Color(0.0, 0.761, 1.0);
-	colores[10] = Color(1.0, 0.761, 0.609);
-	colores[11] = Color(1.0, 0.761, 0.0);
-	colores[12] = Color(0.489, 0.587, 0.489);
-	colores[13] = Color(0.489, 0.0, 0.489);
-	colores[14] = Color(1.0, 0.0, 0.489);
-	colores[15] = Color(0.407, 0.348, 0.408);
-	colores[16] = Color(0.407, 0.348, 0.0);
-	colores[17] = Color(0.407, 0.348, 1.0);
-	colores[18] = Color(0.0, 0.348, 1.0);
-	colores[19] = Color(0.0, 0.348, 0.0);
 	for(TranslatedNoteSet::const_iterator nota = notas.begin(); nota != notas.end(); ++nota)
 	{
 		posicion_y = (tiempo_actual_midi - nota->start) / this->velocidad_caida;
@@ -117,7 +103,7 @@ void Tablero_Notas::dibujar_notas(Textura2D *textura)
 
 		posicion = Octava::prosicion_nota(nota->note_id);
 
-		this->estructura_nota->seleccionar_color(colores[nota->track_id]);
+		this->estructura_nota->seleccionar_color(pistas->at(nota->track_id)->o_color());
 		if(Octava::es_negra(nota->note_id))
 		{
 			ancho_tecla = this->ancho_negra;
@@ -128,11 +114,18 @@ void Tablero_Notas::dibujar_notas(Textura2D *textura)
 				ajuste_negra = this->ancho_blanca - (this->ancho_negra * 0.333);
 			else if(negra==4)
 				ajuste_negra = this->ancho_blanca - (this->ancho_negra * 0.5);
+
+			//textura_nota_negra es NULL cuando solo se dibujan sombras
+			if(textura_nota_negra != NULL)
+				textura_nota_negra->activar();
 		}
 		else
 		{
 			ancho_tecla = this->ancho_blanca;
 			ajuste_negra = 0;
+			//Cuando se dibujan las sombras no es necesario volver a activar la textura
+			if(textura_nota_negra != NULL)
+				textura_nota_blanca->activar();
 		}
 
 		//Recorta la parte de la nota que no se ve
@@ -141,6 +134,6 @@ void Tablero_Notas::dibujar_notas(Textura2D *textura)
 		else
 			largo_final = largo_nota;
 
-		this->estructura_nota->dibujar(ajuste_x + posicion * this->ancho_blanca + ajuste_negra - 2, this->alto + posicion_y-largo_nota - 2, ancho_tecla + 4, largo_final + 4);
+		this->estructura_nota->dibujar(ajuste_x + posicion * this->ancho_blanca + ajuste_negra, this->alto + posicion_y-largo_nota, ancho_tecla, largo_final);
 	}
 }
