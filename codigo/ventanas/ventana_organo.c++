@@ -11,7 +11,7 @@ VentanaOrgano::VentanaOrgano(Administrador_Recursos *recursos) : Ventana()
 	this->texto = recursos->obtener_tipografia(LetraChica);
 
 	//musica = new Midi(Midi::ReadFromFile("../musica/Ven Señor no tardes propia.midi"));
-	musica = new Midi(Midi::ReadFromFile("../musica/Banjo Kazooie -  Treasure Trove Cove.midi"));
+	musica = new Midi(Midi::ReadFromFile("../musica/Ave_Maria.midi"));
 	//musica = new Midi(Midi::ReadFromFile("../musica/Escala_musícal.midi"));
 	MidiCommDescriptionList dispositivos_entrada = MidiCommIn::GetDeviceList();
 	MidiCommDescriptionList dispositivos_salida = MidiCommOut::GetDeviceList();
@@ -31,9 +31,7 @@ VentanaOrgano::VentanaOrgano(Administrador_Recursos *recursos) : Ventana()
 	midi_entrada = new MidiCommIn(3);//Deberia seleccionarse el id del dispositivo (Teclado)
 	midi_salida = new MidiCommOut(1);//Deberia seleccionarse el id del dispositivo (Timidity 0)
 
-	const microseconds_t PreviewLeadIn  = 0;
-	const microseconds_t PreviewLeadOut = 0;
-	musica->Reset(PreviewLeadIn, PreviewLeadOut);
+	musica->Reset(3000000, 3000000);
 
 	pistas[0] = new Pista(Color(0.0, 0.598, 0.0), Automatico);
 	pistas[1] = new Pista(Color(0.0, 0.598, 1.0), Automatico);
@@ -72,6 +70,8 @@ VentanaOrgano::~VentanaOrgano()
 
 void VentanaOrgano::actualizar(Raton *raton)
 {
+	if(musica->IsSongOver())
+		musica->Reset(3000000, 3000000);
 	MidiEventListWithTrackId evs = musica->Update((Fps::obtener_nanosegundos() / 1000.0) * velocidad_musica);
 
 	for (MidiEventListWithTrackId::const_iterator i = evs.begin(); i != evs.end(); ++i)
@@ -91,6 +91,7 @@ void VentanaOrgano::dibujar()
 	tablero->dibujar();
 	organo->dibujar();
 	this->texto->dibujar_texto(10, 40, "Velocidad: " + std::to_string((int)(velocidad_musica*100)) + "%", Color(0.0, 0.0, 0.0));
+	this->texto->dibujar_texto(10, 60, "Completado: " + std::to_string((int)(musica->GetSongPercentageComplete() * 100)) + "%");
 }
 
 void VentanaOrgano::evento_teclado(Tecla tecla, bool estado)

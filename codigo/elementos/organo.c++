@@ -98,12 +98,14 @@ void Organo::actualizar(Raton *raton)
 {
 	int inicio = 0;
 	int fin = 0;
-	for(TranslatedNoteSet::const_iterator nota = notas.begin(); nota != notas.end(); ++nota)
+	for(TranslatedNoteSet::const_iterator nota = notas.begin(); nota != notas.end(); nota++)
 	{
 		inicio = (tiempo_actual_midi - nota->start);
 		fin = (tiempo_actual_midi - nota->end);
+		if(inicio < 0)
+			break;
 
-		if(inicio > 0)
+		if(inicio > 0 && fin < 0)
 		{
 			//Nota tocada
 			if(Octava::es_negra(nota->note_id))
@@ -117,7 +119,7 @@ void Organo::actualizar(Raton *raton)
 					notas_activas_blancas[Octava::prosicion_nota(nota->note_id)].e_tiempo_y_pista(nota->end, nota->track_id);
 			}
 		}
-		if(fin >= 0)
+		else if(fin >= 0)
 		{
 			if(Octava::es_negra(nota->note_id))
 			{
