@@ -4,7 +4,6 @@
 #include <glm/glm.hpp>
 
 #include "figura.h++"
-#include "sombreador.h++"
 #include "textura_2d.h++"
 #include "color.h++"
 

@@ -23,13 +23,6 @@ int Fps::tiempo_fotograma()
 	return 1000000000.0/Fps::nanosegundos;//Retorna FPS
 }
 
-double Fps::tiempo_dibujo()
-{
-	Tiempo tiempo_dibujo = Reloj::now();
-	int ns = std::chrono::duration_cast<std::chrono::nanoseconds>(tiempo_dibujo - Fps::tiempo_actual).count();
-	return 1000000.0 / ns;//Retorna milisegundos
-}
-
 bool Fps::actualizar_fps()
 {
 	return Fps::mostrar_fps;

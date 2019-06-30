@@ -1,5 +1,5 @@
-#ifndef TECLADO_H
-#define TECLADO_H
+#ifndef TECLAS_H
+#define TECLAS_H
 
 enum Tecla
 {
@@ -48,6 +48,11 @@ enum Tecla
 	TECLA_BORRAR,
 	TECLA_PAUSA,
 	TECLA_ESCAPE,
+	TECLA_F5,
+	TECLA_F6,
+	TECLA_F7,
+	TECLA_F8,
+	TECLA_F9,
 	TECLA_F10,
 	TECLA_F11,
 	TECLA_F12

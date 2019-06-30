@@ -5,8 +5,7 @@
 #include "../recursos/rectangulo.h++"
 #include "../recursos/textura_2d.h++"
 #include "../recursos/sombreador.h++"
-#include "../elementos/boton.h++"
-#include "../pantalla.h++"
+#include "../elementos_graficos/boton.h++"
 
 class VentanaSeleccionMusica : public Ventana
 {

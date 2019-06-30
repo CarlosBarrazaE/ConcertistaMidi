@@ -2,8 +2,8 @@
 #include <SDL2/SDL.h>
 
 #include "recursos/administrador_recursos.h++"
+#include "dispositivos/pantalla.h++"
 #include "controlador_juego.h++"
-#include "pantalla.h++"
 
 #include "registro.h++"
 
@@ -168,6 +168,11 @@ void eventos_taclado(SDL_Window *ventana, Controlador_Juego *controlador, int te
 		case SDLK_BACKSPACE: controlador->eventos_teclado(TECLA_BORRAR, estado); break;
 		case SDLK_PAUSE: controlador->eventos_teclado(TECLA_PAUSA, estado); break;
 		case SDLK_ESCAPE: controlador->eventos_teclado(TECLA_ESCAPE, estado); break;
+		case SDLK_F5: controlador->eventos_teclado(TECLA_F5, estado); break;
+		case SDLK_F6: controlador->eventos_teclado(TECLA_F6, estado); break;
+		case SDLK_F7: controlador->eventos_teclado(TECLA_F7, estado); break;
+		case SDLK_F8: controlador->eventos_teclado(TECLA_F8, estado); break;
+		case SDLK_F9: controlador->eventos_teclado(TECLA_F9, estado); break;
 		case SDLK_F10: controlador->eventos_teclado(TECLA_F10, estado); break;
 		case SDLK_F11:
 			controlador->eventos_teclado(TECLA_F11, estado);

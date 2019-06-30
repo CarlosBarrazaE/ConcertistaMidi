@@ -2,7 +2,7 @@
 #define VENTANACONFIGURACION_H
 
 #include "ventana.h++"
-#include "../elementos/boton.h++"
+#include "../elementos_graficos/boton.h++"
 #include "../recursos/textura_2d.h++"
 
 class VentanaConfiguracion : public Ventana

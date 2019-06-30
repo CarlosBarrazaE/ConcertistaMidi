@@ -18,7 +18,6 @@ private:
 
 public:
 	static int tiempo_fotograma();
-	static double tiempo_dibujo();
 	static bool actualizar_fps();
 	static int obtener_nanosegundos();
 };

@@ -2,7 +2,7 @@
 #define ELEMENTO_H
 
 #include "../recursos/administrador_recursos.h++"
-#include "../raton.h++"
+#include "../dispositivos/raton.h++"
 
 class Elemento
 {

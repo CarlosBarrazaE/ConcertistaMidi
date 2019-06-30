@@ -2,10 +2,10 @@
 #define CONTROLADOR_JUEGO_H
 
 #include "recursos/administrador_recursos.h++"
-#include "teclas.h++"
-#include "raton.h++"
+#include "dispositivos/teclas.h++"
+#include "dispositivos/raton.h++"
+#include "dispositivos/pantalla.h++"
 #include "fps.h++"
-#include "pantalla.h++"
 
 #include "ventanas/ventana.h++"
 #include "ventanas/ventana_titulo.h++"

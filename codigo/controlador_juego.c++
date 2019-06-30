@@ -31,7 +31,7 @@ void Controlador_Juego::actualizar()
 	if(this->mostrar_fps)
 	{
 		if(Fps::actualizar_fps())
-			texto_fps = "FPS: " + std::to_string((int)fps) + " - Tiempo dibujo: " + std::to_string((int)Fps::tiempo_dibujo()) + " ms";
+			texto_fps = "FPS: " + std::to_string((int)fps);
 		this->recursos->mostrar_texto(10, 20, LetraChica, texto_fps);
 	}
 

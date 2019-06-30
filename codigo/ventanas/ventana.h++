@@ -1,8 +1,9 @@
 #ifndef VENTANA_H
 #define VENTANA_H
 
-#include "../teclas.h++"
-#include "../raton.h++"
+#include "../dispositivos/pantalla.h++"
+#include "../dispositivos/teclas.h++"
+#include "../dispositivos/raton.h++"
 
 enum Accion
 {

@@ -6,8 +6,9 @@
 #include "../recursos/sombreador.h++"
 #include "../recursos/rectangulo.h++"
 #include "../libmidi/Midi.h"
-#include "../octava.h++"
-#include "../pista.h++"
+#include "../elementos/octava.h++"
+#include "../elementos/pista.h++"
+#include "../elementos/teclado.h++"
 
 class Tablero_Notas : public Elemento
 {
@@ -17,6 +18,7 @@ private:
 	Rectangulo *fondo, *estructura_nota;
 	Texto *texto;
 
+	Teclado *teclado;
 	int x, y, ancho, alto;
 	int tiempo_actual_midi;
 	int ancho_blanca, ancho_negra;
@@ -26,11 +28,12 @@ private:
 	MidiEventMicrosecondList lineas;
 	std::map<int, Pista*> *pistas;
 
+	void calcular_tamannos();
 	void dibujar_lineas_horizontales();
 	void dibujar_lineas_verticales();
 	void dibujar_notas(Textura2D *textura_nota_blanca, Textura2D *textura_nota_negra);
 public:
-	Tablero_Notas(int x, int y, int alto, int ancho, Administrador_Recursos *recursos);
+	Tablero_Notas(int x, int y, int alto, int ancho, Teclado *teclado, Administrador_Recursos *recursos);
 	~Tablero_Notas();
 
 	void e_tiempo(int tiempo);
@@ -38,10 +41,8 @@ public:
 	void e_lineas(MidiEventMicrosecondList lineas);
 	void e_pistas(std::map<int, Pista*> *pistas);
 	void e_dimension(int ancho, int alto);
-	void e_ancho_blanca(int valor);
-	void e_ancho_negra(int valor);
-	void e_ajuste_x(int valor);
 	void c_velocidad_caida(int valor);
+	void c_teclado(Teclado *teclado);
 
 	void actualizar(Raton *raton);
 	void dibujar();

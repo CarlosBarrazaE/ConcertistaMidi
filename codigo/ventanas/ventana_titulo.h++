@@ -2,12 +2,10 @@
 #define VENTANATITULO_H
 
 #include "ventana.h++"
-#include "../elementos/boton.h++"
-#include "../raton.h++"
+#include "../elementos_graficos/boton.h++"
 #include "../recursos/textura_2d.h++"
 #include "../recursos/sombreador.h++"
 #include "../recursos/rectangulo.h++"
-#include "../pantalla.h++"
 #include "../version.h++"
 
 class VentanaTitulo : public Ventana

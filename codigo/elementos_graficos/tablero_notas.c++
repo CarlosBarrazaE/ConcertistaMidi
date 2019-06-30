@@ -1,12 +1,14 @@
 #include "tablero_notas.h++"
 
-Tablero_Notas::Tablero_Notas(int x, int y, int ancho, int alto, Administrador_Recursos *recursos) : Elemento()
+Tablero_Notas::Tablero_Notas(int x, int y, int ancho, int alto, Teclado *teclado, Administrador_Recursos *recursos) : Elemento()
 {
 	this->x = x;
 	this->y = y;
 	this->ancho = ancho;
 	this->alto = alto;
 	this->velocidad_caida = 6500;
+	this->teclado = teclado;
+	this->calcular_tamannos();
 
 	this->sombreador_solido = recursos->obtener_sombreador(Rectangulo_SinTextura);
 	this->sombreador = recursos->obtener_sombreador(Rectangulo_Textura);
@@ -49,21 +51,7 @@ void Tablero_Notas::e_dimension(int ancho, int alto)
 {
 	this->ancho = ancho;
 	this->alto = alto;
-}
-
-void Tablero_Notas::e_ancho_blanca(int valor)
-{
-	this->ancho_blanca = valor;
-}
-
-void Tablero_Notas::e_ancho_negra(int valor)
-{
-	this->ancho_negra = valor;
-}
-
-void Tablero_Notas::e_ajuste_x(int valor)
-{
-	this->ajuste_x = valor;
+	this->calcular_tamannos();
 }
 
 void Tablero_Notas::c_velocidad_caida(int valor)
@@ -77,6 +65,12 @@ void Tablero_Notas::c_velocidad_caida(int valor)
 		this->velocidad_caida = 1500;
 	else if(this->velocidad_caida > 14000)
 		this->velocidad_caida = 14000;
+}
+
+void Tablero_Notas::c_teclado(Teclado *teclado)
+{
+	this->teclado = teclado;
+	this->calcular_tamannos();
 }
 
 void Tablero_Notas::actualizar(Raton *raton)
@@ -94,6 +88,15 @@ void Tablero_Notas::dibujar()
 	this->dibujar_notas(this->textura_nota_blanca, this->textura_nota_negra);//Dibuja la nota
 }
 
+void Tablero_Notas::calcular_tamannos()
+{
+	this->ancho_blanca = (this->ancho / this->teclado->o_numero_blancas());
+	this->ancho_negra = this->ancho_blanca * PROPORCION_ANCHO_NEGRA;
+
+	//Diferencia producida porque no se puede dibujar menos de un pixel
+	this->ajuste_x = (this->ancho - (this->ancho_blanca * this->teclado->o_numero_blancas())) / 2;
+}
+
 void Tablero_Notas::dibujar_lineas_horizontales()
 {
 	int numero_linea = 0;
@@ -109,16 +112,19 @@ void Tablero_Notas::dibujar_lineas_horizontales()
 			continue;
 
 		this->fondo->dibujar(0, posicion_y, this->ancho, 1);
-		this->texto->dibujar_texto(5, posicion_y, std::to_string(numero_linea));
+		this->texto->dibujar_texto(10, posicion_y, std::to_string(numero_linea));
 	}
 }
 
 void Tablero_Notas::dibujar_lineas_verticales()
 {
-	int posicion_x = this->ajuste_x + this->ancho_blanca * 2;
-	bool en_do = true;
-	for(int x=0; x<14; x++)
+	int posicion_x = this->ajuste_x + this->ancho_blanca * this->teclado->o_primera_barra();
+	bool en_do = this->teclado->o_en_do_primera_barra();
+	for(int x=0; x<15; x++)
 	{
+		if(posicion_x > this->ancho)
+			break;
+
 		this->fondo->dibujar(posicion_x, 0, 1, this->alto);
 		if(en_do)
 			posicion_x += this->ancho_blanca * 3;
@@ -149,7 +155,13 @@ void Tablero_Notas::dibujar_notas(Textura2D *textura_nota_blanca, Textura2D *tex
 		if(posicion_y-largo_nota > 0)
 			continue;//No se dibujan las notas que ya salieron de la pantalla
 
-		posicion = Octava::prosicion_nota(nota->note_id);
+		posicion = Octava::prosicion_nota(nota->note_id) - this->teclado->o_desplazamiento_blancas();
+
+		//No dinuja las notas fuera de la pantalla
+		if((this->ajuste_x + posicion * this->ancho_blanca) > this->ancho)
+			continue;
+		if(this->ajuste_x + posicion * this->ancho_blanca < 0)
+			continue;
 
 		this->estructura_nota->seleccionar_color(pistas->at(nota->track_id)->o_color());
 		if(Octava::es_negra(nota->note_id))

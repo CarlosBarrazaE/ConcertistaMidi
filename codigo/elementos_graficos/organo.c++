@@ -1,12 +1,12 @@
 #include "organo.h++"
 
-Organo::Organo(int x, int y, int ancho, Teclado tamanno, Administrador_Recursos *recursos) : Elemento()
+Organo::Organo(int x, int y, int ancho, Teclado *teclado, Administrador_Recursos *recursos) : Elemento()
 {
 	//El origen del organo esta abajo a la izquierda
 	this->x = x;
 	this->y = y;
 	this->ancho = ancho;
-	this->tammano_teclado = tamanno;
+	this->teclado = teclado;
 	this->calcular_tamannos();
 
 	sombreador = recursos->obtener_sombreador(Rectangulo_SinTextura);
@@ -28,7 +28,7 @@ Organo::~Organo()
 
 void Organo::calcular_tamannos()
 {
-	this->ancho_tecla_blanca = (this->ancho / this->n_blancas[this->tammano_teclado]);
+	this->ancho_tecla_blanca = (this->ancho / this->teclado->o_numero_blancas());
 	this->alto_tecla_blanca = this->ancho_tecla_blanca * PROPORCION_BLANCA;
 	if(this->alto_tecla_blanca > 250)
 		this->alto_tecla_blanca = 250;
@@ -39,7 +39,7 @@ void Organo::calcular_tamannos()
 	this->alto = this->alto_tecla_blanca + 11;
 
 	//Diferencia producida porque no se puede dibujar menos de un pixel
-	this->ancho_real = this->ancho_tecla_blanca * this->n_blancas[this->tammano_teclado];
+	this->ancho_real = this->ancho_tecla_blanca * this->teclado->o_numero_blancas();
 	this->ajuste_x = (this->ancho - this->ancho_real) / 2;
 }
 
@@ -74,30 +74,20 @@ int Organo::o_alto()
 	return this->alto;
 }
 
-int Organo::o_ancho_real()
+void Organo::c_teclado(Teclado *teclado)
 {
-	return this->ancho_real;
-}
-
-int Organo::o_ajuste_x()
-{
-	return this->ajuste_x;
-}
-
-int Organo::o_ancho_blancas()
-{
-	return this->ancho_tecla_blanca;
-}
-
-int Organo::o_ancho_negras()
-{
-	return this->ancho_tecla_negra;
+	this->teclado = teclado;
+	this->calcular_tamannos();
+	notas_activas_blancas.clear();
+	notas_activas_negras.clear();
 }
 
 void Organo::actualizar(Raton *raton)
 {
 	int inicio = 0;
 	int fin = 0;
+	int posicion_negra = 0;
+	int posicion_blanca = 0;
 	for(TranslatedNoteSet::const_iterator nota = notas.begin(); nota != notas.end(); nota++)
 	{
 		inicio = (tiempo_actual_midi - nota->start);
@@ -105,31 +95,35 @@ void Organo::actualizar(Raton *raton)
 		if(inicio < 0)
 			break;
 
+		posicion_blanca = Octava::prosicion_nota(nota->note_id) - this->teclado->o_desplazamiento_blancas();
+		posicion_negra = Octava::prosicion_nota_negra(nota->note_id) - this->teclado->o_desplazamiento_negras();
 		if(inicio > 0 && fin < 0)
 		{
 			//Nota tocada
 			if(Octava::es_negra(nota->note_id))
 			{
-				if(notas_activas_negras[Octava::prosicion_nota_negra(nota->note_id)].o_tiempo_final() < nota->end)
-					notas_activas_negras[Octava::prosicion_nota_negra(nota->note_id)].e_tiempo_y_pista(nota->end, nota->track_id);
+
+				if(notas_activas_negras[posicion_negra].o_tiempo_final() < nota->end)
+					notas_activas_negras[posicion_negra].e_tiempo_y_pista(nota->end, nota->track_id);
 			}
 			else
 			{
-				if(notas_activas_blancas[Octava::prosicion_nota(nota->note_id)].o_tiempo_final() < nota->end)
-					notas_activas_blancas[Octava::prosicion_nota(nota->note_id)].e_tiempo_y_pista(nota->end, nota->track_id);
+				if(notas_activas_blancas[posicion_blanca].o_tiempo_final() < nota->end)
+					notas_activas_blancas[posicion_blanca].e_tiempo_y_pista(nota->end, nota->track_id);
 			}
 		}
 		else if(fin >= 0)
 		{
+			//Fin de la nota
 			if(Octava::es_negra(nota->note_id))
 			{
-				if(notas_activas_negras[Octava::prosicion_nota_negra(nota->note_id)].o_tiempo_final() == nota->end)
-					notas_activas_negras[Octava::prosicion_nota_negra(nota->note_id)].e_tiempo_final(0);
+				if(notas_activas_negras[posicion_negra].o_tiempo_final() == nota->end)
+					notas_activas_negras[posicion_negra].e_tiempo_final(0);
 			}
 			else
 			{
-				if(notas_activas_blancas[Octava::prosicion_nota(nota->note_id)].o_tiempo_final() == nota->end)
-					notas_activas_blancas[Octava::prosicion_nota(nota->note_id)].e_tiempo_final(0);
+				if(notas_activas_blancas[posicion_blanca].o_tiempo_final() == nota->end)
+					notas_activas_blancas[posicion_blanca].e_tiempo_final(0);
 			}
 		}
 	}
@@ -141,10 +135,10 @@ void Organo::dibujar()
 
 	tecla_blanca->activar();
 	teclas->seleccionar_color(Color(1.0, 1.0, 1.0));
-	this->dibujar_blancas(this->x + this->ajuste_x, this->y - this->alto + 10, this->n_blancas[this->tammano_teclado]);
+	this->dibujar_blancas(this->x + this->ajuste_x, this->y - this->alto + 10, this->teclado->o_numero_blancas());
 
 	tecla_negra->activar();
-	this->dibujar_negras(this->x + this->ajuste_x, this->y - this->alto + 10, this->n_negras[this->tammano_teclado]);
+	this->dibujar_negras(this->x + this->ajuste_x, this->y - this->alto + 10, this->teclado->o_numero_negras());
 
 	borde_negro->activar();
 	teclas->seleccionar_color(Color(1.0, 1.0, 1.0));
@@ -171,8 +165,8 @@ void Organo::dibujar_blancas(int x, int y, int numero_teclas)
 void Organo::dibujar_negras(int x, int y, int numero_teclas)
 {
 	int desplazamiento = 0;
-	int n_blanca = this->blanca_inicio[this->tammano_teclado];
-	int n_negra = this->negra_inicio[this->tammano_teclado];
+	int n_blanca = this->teclado->o_inicio_blancas();
+	int n_negra = this->teclado->o_inicio_negras();
 	for(int n=0; n<numero_teclas; n++)
 	{
 		if(notas_activas_negras[n].o_tiempo_final() > 0)

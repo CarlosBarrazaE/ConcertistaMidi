@@ -11,7 +11,6 @@
 
 #include "figura.h++"
 #include "textura_2d.h++"
-#include "sombreador.h++"
 #include "color.h++"
 
 #include "../registro.h++"

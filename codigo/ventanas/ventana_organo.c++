@@ -2,16 +2,14 @@
 
 VentanaOrgano::VentanaOrgano(Administrador_Recursos *recursos) : Ventana()
 {
-	organo = new Organo(0, Pantalla::alto, Pantalla::ancho, Teclas88, recursos);
-	tablero = new Tablero_Notas(0, 0, Pantalla::ancho, Pantalla::alto - organo->o_alto(), recursos);
-	tablero->e_ajuste_x(organo->o_ajuste_x());
-	tablero->e_ancho_blanca(organo->o_ancho_blancas());
-	tablero->e_ancho_negra(organo->o_ancho_negras());
+	Teclado *teclado = Tipo_Teclado::obtener_teclado(Teclas88);
+	organo = new Organo(0, Pantalla::alto, Pantalla::ancho, teclado, recursos);
+	tablero = new Tablero_Notas(0, 0, Pantalla::ancho, Pantalla::alto - organo->o_alto(), teclado, recursos);
 	this->velocidad_musica = 1.0;
 	this->texto = recursos->obtener_tipografia(LetraChica);
 
 	//musica = new Midi(Midi::ReadFromFile("../musica/Ven Señor no tardes propia.midi"));
-	musica = new Midi(Midi::ReadFromFile("../musica/Ave_Maria.midi"));
+	musica = new Midi(Midi::ReadFromFile("../musica/Himno de Chile.midi"));
 	//musica = new Midi(Midi::ReadFromFile("../musica/Escala_musícal.midi"));
 	MidiCommDescriptionList dispositivos_entrada = MidiCommIn::GetDeviceList();
 	MidiCommDescriptionList dispositivos_salida = MidiCommOut::GetDeviceList();
@@ -112,15 +110,41 @@ void VentanaOrgano::evento_teclado(Tecla tecla, bool estado)
 		if(velocidad_musica > 2)
 			velocidad_musica = 2;
 	}
+	else if(tecla == TECLA_F5 && estado)
+	{
+		tablero->c_teclado(Tipo_Teclado::obtener_teclado(Teclas37));
+		organo->c_teclado(Tipo_Teclado::obtener_teclado(Teclas37));
+		tablero->e_dimension(Pantalla::ancho, Pantalla::alto - organo->o_alto());
+	}
+	else if(tecla == TECLA_F6 && estado)
+	{
+		tablero->c_teclado(Tipo_Teclado::obtener_teclado(Teclas49));
+		organo->c_teclado(Tipo_Teclado::obtener_teclado(Teclas49));
+		tablero->e_dimension(Pantalla::ancho, Pantalla::alto - organo->o_alto());
+	}
+	else if(tecla == TECLA_F7 && estado)
+	{
+		tablero->c_teclado(Tipo_Teclado::obtener_teclado(Teclas61));
+		organo->c_teclado(Tipo_Teclado::obtener_teclado(Teclas61));
+		tablero->e_dimension(Pantalla::ancho, Pantalla::alto - organo->o_alto());
+	}
+	else if(tecla == TECLA_F8 && estado)
+	{
+		tablero->c_teclado(Tipo_Teclado::obtener_teclado(Teclas76));
+		organo->c_teclado(Tipo_Teclado::obtener_teclado(Teclas76));
+		tablero->e_dimension(Pantalla::ancho, Pantalla::alto - organo->o_alto());
+	}
+	else if(tecla == TECLA_F9 && estado)
+	{
+		tablero->c_teclado(Tipo_Teclado::obtener_teclado(Teclas88));
+		organo->c_teclado(Tipo_Teclado::obtener_teclado(Teclas88));
+		tablero->e_dimension(Pantalla::ancho, Pantalla::alto - organo->o_alto());
+	}
 }
 
 void VentanaOrgano::evento_pantalla(int ancho, int alto)
 {
 	organo->e_y(Pantalla::alto);
 	organo->e_ancho(Pantalla::ancho);
-
-	tablero->e_ajuste_x(organo->o_ajuste_x());
-	tablero->e_ancho_blanca(organo->o_ancho_blancas());
-	tablero->e_ancho_negra(organo->o_ancho_negras());
 	tablero->e_dimension(Pantalla::ancho, Pantalla::alto - organo->o_alto());
 }

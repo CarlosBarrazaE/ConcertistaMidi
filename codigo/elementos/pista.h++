@@ -1,7 +1,7 @@
 #ifndef PISTA_H
 #define PISTA_H
 
-#include "recursos/color.h++"
+#include "../recursos/color.h++"
 
 enum Modo
 {

@@ -3,13 +3,13 @@
 
 #include "ventana.h++"
 #include "../recursos/textura_2d.h++"
-#include "../elementos/tablero_notas.h++"
-#include "../elementos/organo.h++"
-#include "../pantalla.h++"
+#include "../elementos_graficos/tablero_notas.h++"
+#include "../elementos_graficos/organo.h++"
 #include "../libmidi/Midi.h"
 #include "../libmidi/MidiComm.h"
+#include "../elementos/pista.h++"
+#include "../elementos/tipo_teclados.h++"
 #include "../fps.h++"
-#include "../pista.h++"
 #include <map>
 
 class VentanaOrgano : public Ventana
