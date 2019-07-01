@@ -2,13 +2,11 @@
 #define TABLERO_NOTAS_H
 
 #include "elemento.h++"
-#include "../recursos/textura_2d.h++"
-#include "../recursos/sombreador.h++"
 #include "../recursos/rectangulo.h++"
-#include "../libmidi/Midi.h"
 #include "../elementos/octava.h++"
 #include "../elementos/pista.h++"
 #include "../elementos/teclado.h++"
+#include "../libmidi/Midi.h"
 
 class Tablero_Notas : public Elemento
 {
@@ -20,7 +18,7 @@ private:
 
 	Teclado *teclado;
 	int x, y, ancho, alto;
-	int tiempo_actual_midi;
+	microseconds_t tiempo_actual_midi;
 	int ancho_blanca, ancho_negra;
 	int ajuste_x;
 	int velocidad_caida;
@@ -36,7 +34,7 @@ public:
 	Tablero_Notas(int x, int y, int alto, int ancho, Teclado *teclado, Administrador_Recursos *recursos);
 	~Tablero_Notas();
 
-	void e_tiempo(int tiempo);
+	void e_tiempo(microseconds_t tiempo);
 	void e_notas(TranslatedNoteSet notas);
 	void e_lineas(MidiEventMicrosecondList lineas);
 	void e_pistas(std::map<int, Pista*> *pistas);

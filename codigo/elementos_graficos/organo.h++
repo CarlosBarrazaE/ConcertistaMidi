@@ -2,14 +2,12 @@
 #define ORGANO_H
 
 #include "elemento.h++"
-#include "../recursos/textura_2d.h++"
-#include "../recursos/sombreador.h++"
 #include "../recursos/rectangulo.h++"
-#include "../libmidi/Midi.h"
 #include "../elementos/octava.h++"
 #include "../elementos/pista.h++"
 #include "../elementos/nota.h++"
 #include "../elementos/teclado.h++"
+#include "../libmidi/Midi.h"
 
 #include <map>
 
@@ -31,7 +29,7 @@ private:
 
 	Teclado *teclado;
 	int x, y, ancho, alto;
-	int tiempo_actual_midi;
+	microseconds_t tiempo_actual_midi;
 	int ancho_real, ajuste_x;
 	int ancho_tecla_blanca, ancho_tecla_negra;
 	int alto_tecla_blanca, alto_tecla_negra;
@@ -52,10 +50,11 @@ public:
 
 	void e_y(int valor);
 	void e_ancho(int valor);
-	void e_tiempo(int tiempo);
+	void e_tiempo(microseconds_t tiempo);
 	void e_notas(TranslatedNoteSet notas);
 	void e_pistas(std::map<int, Pista*> *pistas);
 	void c_teclado(Teclado *teclado);
+	void limpiar_teclado();
 
 	int o_alto();
 

@@ -15,6 +15,7 @@ Administrador_Recursos::Administrador_Recursos()
 	archivo_texturas[T_NotaBlanca] = "../texturas/nota_blanca.tga";
 	archivo_texturas[T_NotaNegra] = "../texturas/nota_negra.tga";
 	archivo_texturas[T_SombraNota] = "../texturas/sombra_nota.tga";
+	archivo_texturas[T_FrenteBarraProgreso] = "../texturas/frente_barra_progreso.tga";
 
 	archivo_sombreador_vertice[Rectangulo_Textura] = "../sombreadores/rectangulo_textura_sv.glsl";
 	archivo_sombreador_fragmento[Rectangulo_Textura] = "../sombreadores/rectangulo_textura_sf.glsl";

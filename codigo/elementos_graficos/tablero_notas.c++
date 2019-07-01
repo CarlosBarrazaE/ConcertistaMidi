@@ -27,7 +27,7 @@ Tablero_Notas::~Tablero_Notas()
 	delete estructura_nota;
 }
 
-void Tablero_Notas::e_tiempo(int tiempo)
+void Tablero_Notas::e_tiempo(microseconds_t tiempo)
 {
 	this->tiempo_actual_midi = tiempo;
 }
@@ -80,7 +80,7 @@ void Tablero_Notas::actualizar(Raton *raton)
 void Tablero_Notas::dibujar()
 {
 	this->fondo->seleccionar_color(Color(0.95, 0.95, 0.95));
-	this->fondo->dibujar(0, 0, this->ancho, this->alto);
+	this->fondo->dibujar(this->x, this->y, this->ancho, this->alto);
 	this->fondo->seleccionar_color(Color(0.7, 0.7, 0.7));
 	this->dibujar_lineas_horizontales();
 	this->dibujar_lineas_verticales();
@@ -111,8 +111,8 @@ void Tablero_Notas::dibujar_lineas_horizontales()
 		else if(posicion_y > this->alto)
 			continue;
 
-		this->fondo->dibujar(0, posicion_y, this->ancho, 1);
-		this->texto->dibujar_texto(10, posicion_y, std::to_string(numero_linea));
+		this->fondo->dibujar(this->x, this->y+posicion_y, this->ancho, 1);
+		this->texto->dibujar_texto(this->x+10, this->y+posicion_y, std::to_string(numero_linea));
 	}
 }
 
@@ -125,7 +125,7 @@ void Tablero_Notas::dibujar_lineas_verticales()
 		if(posicion_x > this->ancho)
 			break;
 
-		this->fondo->dibujar(posicion_x, 0, 1, this->alto);
+		this->fondo->dibujar(this->x+posicion_x, this->y, 1, this->alto);
 		if(en_do)
 			posicion_x += this->ancho_blanca * 3;
 		else
@@ -194,6 +194,6 @@ void Tablero_Notas::dibujar_notas(Textura2D *textura_nota_blanca, Textura2D *tex
 		else
 			largo_final = largo_nota;
 
-		this->estructura_nota->dibujar(this->ajuste_x + posicion * this->ancho_blanca + ajuste_negra, this->alto + posicion_y-largo_nota, ancho_tecla, largo_final);
+		this->estructura_nota->dibujar(this->x+this->ajuste_x + posicion * this->ancho_blanca + ajuste_negra, this->y+this->alto + posicion_y-largo_nota, ancho_tecla, largo_final);
 	}
 }

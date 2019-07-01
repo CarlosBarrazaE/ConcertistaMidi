@@ -54,7 +54,7 @@ void Organo::e_ancho(int valor)
 	this->calcular_tamannos();
 }
 
-void Organo::e_tiempo(int tiempo)
+void Organo::e_tiempo(microseconds_t tiempo)
 {
 	this->tiempo_actual_midi = tiempo;
 }
@@ -78,14 +78,19 @@ void Organo::c_teclado(Teclado *teclado)
 {
 	this->teclado = teclado;
 	this->calcular_tamannos();
+	this->limpiar_teclado();
+}
+
+void Organo::limpiar_teclado()
+{
 	notas_activas_blancas.clear();
 	notas_activas_negras.clear();
 }
 
 void Organo::actualizar(Raton *raton)
 {
-	int inicio = 0;
-	int fin = 0;
+	microseconds_t inicio = 0;
+	microseconds_t fin = 0;
 	int posicion_negra = 0;
 	int posicion_blanca = 0;
 	for(TranslatedNoteSet::const_iterator nota = notas.begin(); nota != notas.end(); nota++)

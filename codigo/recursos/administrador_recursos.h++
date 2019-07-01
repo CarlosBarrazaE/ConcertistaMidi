@@ -28,6 +28,7 @@ enum Textura
 	T_NotaBlanca,
 	T_NotaNegra,
 	T_SombraNota,
+	T_FrenteBarraProgreso,
 };
 
 enum SombreadorVF

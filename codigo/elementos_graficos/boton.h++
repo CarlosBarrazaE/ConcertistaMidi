@@ -2,9 +2,6 @@
 #define BOTON_H
 
 #include "elemento.h++"
-#include "../dispositivos/raton.h++"
-#include "../recursos/textura_2d.h++"
-#include "../recursos/sombreador.h++"
 #include "../recursos/rectangulo.h++"
 
 //TODO Agregar animacion al cambiar de color

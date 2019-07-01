@@ -3,35 +3,31 @@
 
 #include "ventana.h++"
 #include "../recursos/textura_2d.h++"
+#include "../elementos_graficos/barra_progreso.h++"
 #include "../elementos_graficos/tablero_notas.h++"
 #include "../elementos_graficos/organo.h++"
-#include "../libmidi/Midi.h"
-#include "../libmidi/MidiComm.h"
 #include "../elementos/pista.h++"
 #include "../elementos/tipo_teclados.h++"
 #include "../fps.h++"
+#include "../libmidi/Midi.h"
+#include "../libmidi/MidiComm.h"
 #include <map>
 
 class VentanaOrgano : public Ventana
 {
 private:
+	Barra_Progreso *barra;
 	Tablero_Notas *tablero;
 	Organo *organo;
 	Texto *texto;
+
+	std::map<int, Pista*> pistas;
+	double velocidad_musica;
 
 	Midi *musica;
 	MidiCommIn *midi_entrada;
 	MidiCommOut *midi_salida;
 
-	std::map<int, Pista*> pistas;
-	double velocidad_musica;
-
-	/*
-unsigned int id;
-std::string name;
-int client;
-int port;
-	 */
 public:
 	VentanaOrgano(Administrador_Recursos *recursos);
 	~VentanaOrgano();
