@@ -3,7 +3,7 @@
 VentanaOrgano::VentanaOrgano(Administrador_Recursos *recursos) : Ventana()
 {
 	//musica = new Midi(Midi::ReadFromFile("../musica/Ven Señor no tardes propia.midi"));
-	musica = new Midi(Midi::ReadFromFile("../musica/prtytime.midi"));
+	musica = new Midi(Midi::ReadFromFile("../musica/Navidad_Jingle_Bells_1.midi"));
 	//musica = new Midi(Midi::ReadFromFile("../musica/Escala_musícal.midi"));
 	musica->Reset(3000000, 3000000);
 	MidiCommDescriptionList dispositivos_entrada = MidiCommIn::GetDeviceList();

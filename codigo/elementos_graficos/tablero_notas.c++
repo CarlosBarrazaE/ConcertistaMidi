@@ -12,19 +12,20 @@ Tablero_Notas::Tablero_Notas(int x, int y, int ancho, int alto, Teclado *teclado
 
 	this->sombreador_solido = recursos->obtener_sombreador(Rectangulo_SinTextura);
 	this->sombreador = recursos->obtener_sombreador(Rectangulo_Textura);
+	this->textura_sombra = recursos->obtener_textura(T_Sombra);
 	this->textura_nota_blanca = recursos->obtener_textura(T_NotaBlanca);
 	this->textura_nota_negra = recursos->obtener_textura(T_NotaNegra);
 	this->textura_sombra_nota = recursos->obtener_textura(T_SombraNota);
 
 	this->fondo = new Rectangulo(sombreador_solido, Color(0.5, 0.5, 0.5));
-	this->estructura_nota = new Rectangulo(sombreador, textura_nota_blanca, Color(0.2, 0.7, 0.3));
+	this->figura_textura = new Rectangulo(sombreador, textura_nota_blanca, Color(0.2, 0.7, 0.3));
 	this->texto = recursos->obtener_tipografia(LetraMuyChica);
 }
 
 Tablero_Notas::~Tablero_Notas()
 {
 	delete fondo;
-	delete estructura_nota;
+	delete figura_textura;
 }
 
 void Tablero_Notas::e_tiempo(microseconds_t tiempo)
@@ -84,6 +85,10 @@ void Tablero_Notas::dibujar()
 	this->fondo->seleccionar_color(Color(0.7, 0.7, 0.7));
 	this->dibujar_lineas_horizontales();
 	this->dibujar_lineas_verticales();
+
+	this->textura_sombra->activar();
+	this->figura_textura->dibujar(this->x, this->y, this->ancho, 20);
+
 	this->dibujar_notas(this->textura_sombra_nota, NULL);//Dibuja la sombra de la nota
 	this->dibujar_notas(this->textura_nota_blanca, this->textura_nota_negra);//Dibuja la nota
 }
@@ -163,7 +168,7 @@ void Tablero_Notas::dibujar_notas(Textura2D *textura_nota_blanca, Textura2D *tex
 		if(this->ajuste_x + posicion * this->ancho_blanca < 0)
 			continue;
 
-		this->estructura_nota->seleccionar_color(pistas->at(nota->track_id)->o_color());
+		this->figura_textura->seleccionar_color(pistas->at(nota->track_id)->o_color());
 		if(Octava::es_negra(nota->note_id))
 		{
 			ancho_tecla = this->ancho_negra;
@@ -194,6 +199,6 @@ void Tablero_Notas::dibujar_notas(Textura2D *textura_nota_blanca, Textura2D *tex
 		else
 			largo_final = largo_nota;
 
-		this->estructura_nota->dibujar(this->x+this->ajuste_x + posicion * this->ancho_blanca + ajuste_negra, this->y+this->alto + posicion_y-largo_nota, ancho_tecla, largo_final);
+		this->figura_textura->dibujar(this->x+this->ajuste_x + posicion * this->ancho_blanca + ajuste_negra, this->y+this->alto + posicion_y-largo_nota, ancho_tecla, largo_final);
 	}
 }

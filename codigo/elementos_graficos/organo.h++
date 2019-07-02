@@ -27,6 +27,8 @@ private:
 	Textura2D *borde_negro;
 	Textura2D *borde_rojo;
 
+	TranslatedNoteSet::const_iterator ultimo_elemento;
+
 	Teclado *teclado;
 	int x, y, ancho, alto;
 	microseconds_t tiempo_actual_midi;

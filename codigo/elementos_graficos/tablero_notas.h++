@@ -12,9 +12,11 @@ class Tablero_Notas : public Elemento
 {
 private:
 	Sombreador *sombreador, *sombreador_solido;
-	Textura2D *textura_nota_blanca, *textura_nota_negra, *textura_sombra_nota;
-	Rectangulo *fondo, *estructura_nota;
+	Textura2D *textura_sombra, *textura_nota_blanca, *textura_nota_negra, *textura_sombra_nota;
+	Rectangulo *fondo, *figura_textura;
 	Texto *texto;
+
+	TranslatedNoteSet::const_iterator ultimo_elemento;
 
 	Teclado *teclado;
 	int x, y, ancho, alto;
