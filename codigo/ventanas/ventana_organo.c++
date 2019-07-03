@@ -3,7 +3,7 @@
 VentanaOrgano::VentanaOrgano(Administrador_Recursos *recursos) : Ventana()
 {
 	//musica = new Midi(Midi::ReadFromFile("../musica/Ven Señor no tardes propia.midi"));
-	musica = new Midi(Midi::ReadFromFile("../musica/Minutos2.midi"));
+	musica = new Midi(Midi::ReadFromFile("../musica/Navidad_Jingle_Bells_1.midi"));
 	//musica = new Midi(Midi::ReadFromFile("../musica/Escala_musícal.midi"));
 	musica->Reset(3000000, 3000000);
 	MidiCommDescriptionList dispositivos_entrada = MidiCommIn::GetDeviceList();
@@ -116,8 +116,8 @@ void VentanaOrgano::evento_teclado(Tecla tecla, bool estado)
 	else if(tecla == TECLA_FLECHA_IZQUIERDA && estado)
 	{
 		velocidad_musica-=0.01;
-		if(velocidad_musica < 0.1)
-			velocidad_musica = 0.1;
+		if(velocidad_musica < 0.01)
+			velocidad_musica = 0.01;
 	}
 	else if(tecla == TECLA_FLECHA_DERECHA && estado)
 	{

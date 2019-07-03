@@ -185,7 +185,6 @@ void Tablero_Notas::dibujar_notas(int pista, Textura2D *textura_nota_blanca, Tex
 	posicion_blanca = Octava::prosicion_nota(nota->note_id) - this->teclado->o_desplazamiento_blancas();
 	posicion_negra = Octava::prosicion_nota_negra(nota->note_id) - this->teclado->o_desplazamiento_negras();
 	 */
-
 	for(int n=this->ultima_nota[pista]; n<notas[pista].size(); n++)
 	{
 		posicion_y = (this->tiempo_actual_midi - notas[pista][n].start) / this->velocidad_caida;
@@ -193,21 +192,33 @@ void Tablero_Notas::dibujar_notas(int pista, Textura2D *textura_nota_blanca, Tex
 		if(posicion_y < -this->alto)
 			break;//No se dibujan las notas que aun no entran en la pantalla
 		largo_nota = (notas[pista][n].end - notas[pista][n].start) / this->velocidad_caida;
-		if(posicion_y-largo_nota > 0)
+
+		if(posicion_y-largo_nota > 0 || largo_nota == 0)//La nota n salio de la pantalla
 		{
-			this->ultima_nota[pista] = n;
-			continue;//No se dibujan las notas que ya salieron de la pantalla
+			if(n == this->ultima_nota[pista])
+				this->ultima_nota[pista] = n+1;
+			else if(n == this->ultima_nota[pista]+1)//Comprueba que la nota anterior haya terminado
+			{
+				int posicion_y_anterior = (this->tiempo_actual_midi - notas[pista][this->ultima_nota[pista]].start) / this->velocidad_caida;
+				int largo_nota_anterior = (notas[pista][this->ultima_nota[pista]].end - notas[pista][this->ultima_nota[pista]].start) / this->velocidad_caida;
+				if(posicion_y_anterior-largo_nota_anterior > 0)
+				{
+					this->ultima_nota[pista] = n+1;
+				}
+			}
+			continue;//No se dibujan las notas que ya salieron de la pantalla o son invisibles (largo igual a cero)
 		}
 
 		posicion_blanca = Octava::prosicion_nota(notas[pista][n].note_id) - this->teclado->o_desplazamiento_blancas();
 
-		//No dinuja las notas fuera de la pantalla
+		//No dibuja las notas fuera de la pantalla hacia los lados
 		if((this->ajuste_x + posicion_blanca * this->ancho_blanca) > this->ancho)
 			continue;
 		if(this->ajuste_x + posicion_blanca * this->ancho_blanca < 0)
 			continue;
 
 		this->figura_textura->seleccionar_color(pistas->at(notas[pista][n].track_id)->o_color());
+
 		if(Octava::es_negra(notas[pista][n].note_id))
 		{
 			ancho_tecla = this->ancho_negra;
@@ -224,7 +235,6 @@ void Tablero_Notas::dibujar_notas(int pista, Textura2D *textura_nota_blanca, Tex
 			{
 				posicion_negra = Octava::prosicion_nota_negra(notas[pista][n].note_id) - this->teclado->o_desplazamiento_negras();
 				teclas_activas_negras[posicion_negra] = pistas->at(notas[pista][n].track_id)->o_color();
-				//texto->dibujar_texto(this->x+this->ajuste_x + posicion_blanca * this->ancho_blanca + ajuste_negra, this->y+this->alto + posicion_y-largo_nota, std::to_string(posicion_negra));
 			}
 		}
 		else
@@ -236,7 +246,6 @@ void Tablero_Notas::dibujar_notas(int pista, Textura2D *textura_nota_blanca, Tex
 			if(posicion_y >= 0)
 			{
 				teclas_activas_blancas[posicion_blanca] = pistas->at(notas[pista][n].track_id)->o_color();
-				//texto->dibujar_texto(this->x+this->ajuste_x + posicion_blanca * this->ancho_blanca + ajuste_negra, this->y+this->alto + posicion_y-largo_nota, std::to_string(posicion_blanca));
 			}
 		}
 
