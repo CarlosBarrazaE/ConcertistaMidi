@@ -8,6 +8,7 @@
 #define __MIDI_NOTE_H
 
 #include <set>
+#include <vector>
 #include "MidiTypes.h"
 
 // Range of all 128 MIDI notes possible
@@ -44,6 +45,23 @@ struct GenericNote
 		return false;
 	}
 
+	bool operator<(const GenericNote<T> &rhs) const
+	{
+		if (start < rhs.start) return true;
+		if (start > rhs.start) return false;
+
+		if (end < rhs.end) return true;
+		if (end > rhs.end) return false;
+
+		if (note_id < rhs.note_id) return true;
+		if (note_id > rhs.note_id) return false;
+
+		if (track_id < rhs.track_id) return true;
+		if (track_id > rhs.track_id) return false;
+
+		return false;
+	}
+
 	T start;
 	T end;
 	NoteId note_id;
@@ -67,6 +85,7 @@ typedef GenericNote<unsigned long> Note;
 typedef GenericNote<microseconds_t> TranslatedNote;
 
 typedef std::set<Note, Note> NoteSet;
-typedef std::set<TranslatedNote, TranslatedNote> TranslatedNoteSet;
+typedef std::vector<TranslatedNote> TranslatedNoteVector;
+typedef std::vector<TranslatedNoteVector> NotasPistas;
 
 #endif

@@ -10,6 +10,7 @@
 #include "../libmidi/Midi.h"
 
 #include <map>
+#include <vector>
 
 class Organo : public Elemento
 {
@@ -27,19 +28,14 @@ private:
 	Textura2D *borde_negro;
 	Textura2D *borde_rojo;
 
-	TranslatedNoteSet::const_iterator ultimo_elemento;
-
 	Teclado *teclado;
 	int x, y, ancho, alto;
-	microseconds_t tiempo_actual_midi;
 	int ancho_real, ajuste_x;
 	int ancho_tecla_blanca, ancho_tecla_negra;
 	int alto_tecla_blanca, alto_tecla_negra;
-	TranslatedNoteSet notas;
-	std::map<int, Pista*> *pistas;
 
-	std::map<int, Nota> notas_activas_blancas;
-	std::map<int, Nota> notas_activas_negras;
+	std::array<Color, 52> *teclas_activas_blancas;
+	std::array<Color, 36> *teclas_activas_negras;
 
 	//Metodos
 	void dibujar_blancas(int x, int y, int numero_teclas);
@@ -50,15 +46,14 @@ public:
 	Organo(int x, int y, int ancho, Teclado *teclado, Administrador_Recursos *recursos);
 	~Organo();
 
+	int o_alto();
+
 	void e_y(int valor);
 	void e_ancho(int valor);
-	void e_tiempo(microseconds_t tiempo);
-	void e_notas(TranslatedNoteSet notas);
-	void e_pistas(std::map<int, Pista*> *pistas);
 	void c_teclado(Teclado *teclado);
-	void limpiar_teclado();
 
-	int o_alto();
+	void e_blancas_presionadas(std::array<Color, 52> *teclas_blancas);
+	void e_negras_presionadas(std::array<Color, 36> *teclas_negras);
 
 	void actualizar(Raton *raton);
 	void dibujar();

@@ -151,7 +151,17 @@ Midi Midi::ReadFromStream(std::istream &stream)
 	m.m_initialized = true;
 
 	// Just grab the end of the last note to find out how long the song is
-	m.m_microsecond_base_song_length = m.m_translated_notes.rbegin()->end;
+	microseconds_t largo_final = 0;
+	for(int x=0; x<m.m_translated_notes.size(); x++)
+	{
+		if(m.m_translated_notes[x].size() > 0)
+		{
+			microseconds_t largo_actual = m.m_translated_notes[x].at(m.m_translated_notes[x].size()-1).end;
+			if(largo_final < largo_actual)
+				largo_final = largo_actual;
+		}
+	}
+	m.m_microsecond_base_song_length = largo_final;
 
 	// Eat everything up until *just* before the first note event
 	m.m_microsecond_dead_start_air = m.GetEventPulseInMicroseconds(m.FindFirstNotePulse(), pulses_per_quarter_note) - 1;
@@ -177,7 +187,7 @@ const std::vector<MidiTrack> &Midi::Tracks() const
 	return m_tracks;
 }
 
-const TranslatedNoteSet &Midi::Notes() const
+const NotasPistas &Midi::Notes() const
 {
 	return m_translated_notes;
 }
@@ -404,6 +414,7 @@ void Midi::Reset(microseconds_t lead_in_microseconds, microseconds_t lead_out_mi
 
 void Midi::TranslateNotes(const NoteSet &notes, unsigned short pulses_per_quarter_note)
 {
+	TranslatedNoteVector pista_actual;
 	for (NoteSet::const_iterator i = notes.begin(); i != notes.end(); ++i)
 	{
 		TranslatedNote trans;
@@ -415,8 +426,10 @@ void Midi::TranslateNotes(const NoteSet &notes, unsigned short pulses_per_quarte
 		trans.start = GetEventPulseInMicroseconds(i->start, pulses_per_quarter_note);
 		trans.end = GetEventPulseInMicroseconds(i->end, pulses_per_quarter_note);
 
-		m_translated_notes.insert(trans);
+		pista_actual.push_back(trans);
 	}
+	std::sort(pista_actual.begin(), pista_actual.end());
+	m_translated_notes.push_back(pista_actual);
 }
 
 MidiEventListWithTrackId Midi::Update(microseconds_t delta_microseconds)

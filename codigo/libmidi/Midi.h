@@ -13,6 +13,8 @@
 #include <map>
 
 #include "MidiTrack.h"
+#include <algorithm>
+#include "../registro.h++"
 
 class MidiError;
 class MidiEvent;
@@ -32,7 +34,7 @@ public:
 	static Midi ReadFromStream(std::istream &stream);
 
 	const std::vector<MidiTrack> &Tracks() const;
-	const TranslatedNoteSet &Notes() const;
+	const NotasPistas &Notes() const;
 
 	MidiEventListWithTrackId Update(microseconds_t delta_microseconds);
 	void GoTo(microseconds_t microsecond_song_position);
@@ -83,7 +85,7 @@ private:
 
 	bool m_initialized;
 
-	TranslatedNoteSet m_translated_notes;
+	NotasPistas m_translated_notes;
 
 	// Position can be negative (for lead-in).
 	microseconds_t m_microsecond_song_position;

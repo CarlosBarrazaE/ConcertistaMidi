@@ -3,7 +3,7 @@
 VentanaOrgano::VentanaOrgano(Administrador_Recursos *recursos) : Ventana()
 {
 	//musica = new Midi(Midi::ReadFromFile("../musica/Ven Señor no tardes propia.midi"));
-	musica = new Midi(Midi::ReadFromFile("../musica/Navidad_Jingle_Bells_1.midi"));
+	musica = new Midi(Midi::ReadFromFile("../musica/Minutos2.midi"));
 	//musica = new Midi(Midi::ReadFromFile("../musica/Escala_musícal.midi"));
 	musica->Reset(3000000, 3000000);
 	MidiCommDescriptionList dispositivos_entrada = MidiCommIn::GetDeviceList();
@@ -57,8 +57,8 @@ VentanaOrgano::VentanaOrgano(Administrador_Recursos *recursos) : Ventana()
 	tablero->e_notas(musica->Notes());
 	tablero->e_pistas(&pistas);
 	tablero->e_lineas(musica->GetBarLines());
-	organo->e_notas(musica->Notes());
-	organo->e_pistas(&pistas);
+	organo->e_blancas_presionadas(tablero->o_blancas_presionadas());
+	organo->e_negras_presionadas(tablero->o_negras_presionadas());
 }
 
 VentanaOrgano::~VentanaOrgano()
@@ -74,7 +74,10 @@ VentanaOrgano::~VentanaOrgano()
 void VentanaOrgano::actualizar(Raton *raton)
 {
 	if(musica->IsSongOver())
+	{
 		musica->Reset(3000000, 3000000);
+		tablero->reiniciar();
+	}
 	MidiEventListWithTrackId evs = musica->Update((Fps::obtener_nanosegundos() / 1000.0) * velocidad_musica);
 
 	for (MidiEventListWithTrackId::const_iterator i = evs.begin(); i != evs.end(); ++i)
@@ -85,12 +88,11 @@ void VentanaOrgano::actualizar(Raton *raton)
 	if(barra->o_tiempo_seleccionado() > 0)
 	{
 		musica->GoTo(barra->o_tiempo_seleccionado());
-		organo->limpiar_teclado();
+		tablero->reiniciar();
 	}
 
 	barra->e_tiempo(musica->GetSongPositionInMicroseconds());
 	tablero->e_tiempo(musica->GetSongPositionInMicroseconds());
-	organo->e_tiempo(musica->GetSongPositionInMicroseconds());
 
 	barra->actualizar(raton);
 	tablero->actualizar(raton);
