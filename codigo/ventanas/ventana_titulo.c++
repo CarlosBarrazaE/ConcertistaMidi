@@ -59,7 +59,7 @@ void VentanaTitulo::dibujar()
 	boton_configurar->dibujar();
 	boton_salir->dibujar();
 
-	texto_version->dibujar_texto(20, Pantalla::alto - 15, "Versión: " + std::string(VERSION), Color(1.0, 1.0, 1.0));
+	texto_version->imprimir(20, Pantalla::alto - 15, "Versión: " + std::string(VERSION), Color(1.0, 1.0, 1.0));
 }
 
 void VentanaTitulo::evento_teclado(Tecla tecla, bool estado)

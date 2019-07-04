@@ -220,17 +220,6 @@ int Texto::imprimir_texto(int x, int y, icu::UnicodeString texto, Color color)
 		vertices[posicion_arreglo][2] = letra->textura_x / (float)this->ancho_atlas;
 		vertices[posicion_arreglo][3] = 0.0;
 		posicion_arreglo++;
-/*
-		float vertices[6][4] = {
-			{xpos + an,	ypos,		1.0,	0.0},
-			{xpos + an,	ypos + al,	1.0,	1.0},
-			{xpos,		ypos,		0.0,	0.0},
-
-			{xpos,		ypos + al,	0.0,	1.0},
-			{xpos + an,	ypos + al,	1.0,	1.0},
-			{xpos,		ypos,		0.0,	0.0}
-		};
-*/
 
 		x += letra->avance_x >> 6;
 		letra_anterior = letra->codigo_unicode;
@@ -240,13 +229,13 @@ int Texto::imprimir_texto(int x, int y, icu::UnicodeString texto, Color color)
 	return x - x_inicial;
 }
 
-int Texto::dibujar_texto(int x, int y, std::string texto)
+int Texto::imprimir(int x, int y, std::string texto)
 {
 	Color negro(0.0, 0.0, 0.0);
 	return imprimir_texto(x, y, texto.c_str(), negro);
 }
 
-int Texto::dibujar_texto(int x, int y, std::string texto, Color color)
+int Texto::imprimir(int x, int y, std::string texto, Color color)
 {
 	return imprimir_texto(x, y, texto.c_str(), color);
 }

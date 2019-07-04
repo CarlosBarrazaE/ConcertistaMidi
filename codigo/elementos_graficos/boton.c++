@@ -83,7 +83,7 @@ void Boton::dibujar()
 {
 	this->textura_boton->activar();
 	rectangulo->dibujar(this->x, this->y, this->ancho, this->alto, color_boton);
-	this->texto->dibujar_texto(this->x+this->ancho/2 - this->ajuste_texto, this->y+this->alto/2 + this->texto->alto_texto()/2, this->texto_boton, color_texto);
+	this->texto->imprimir(this->x+this->ancho/2 - this->ajuste_texto, this->y+this->alto/2 + this->texto->alto_texto()/2, this->texto_boton, color_texto);
 }
 
 bool Boton::esta_activado()

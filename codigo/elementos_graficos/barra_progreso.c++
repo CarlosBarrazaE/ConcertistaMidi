@@ -105,8 +105,8 @@ void Barra_Progreso::dibujar()
 	t_frente->activar();
 	rectangulo->dibujar(this->x, this->y, this->ancho, this->alto, Color(1.0, 1.0, 1.0), true);
 
-	this->texto->dibujar_texto(this->x+4, this->y + this->alto-4, Funciones::milisegundos_a_texto(this->tiempo_actual), Color(0.0, 0.0, 0.0));
-	this->texto->dibujar_texto(this->x+this->ancho - (4 + this->largo_texto), this->y + this->alto-4, this->duracion_total, Color(0.0, 0.0, 0.0));
+	this->texto->imprimir(this->x+4, this->y + this->alto-4, Funciones::milisegundos_a_texto(this->tiempo_actual), Color(0.0, 0.0, 0.0));
+	this->texto->imprimir(this->x+this->ancho - (4 + this->largo_texto), this->y + this->alto-4, this->duracion_total, Color(0.0, 0.0, 0.0));
 
 
 }

@@ -38,7 +38,7 @@ void VentanaSeleccionMusica::dibujar()
 	textura_fondo->activar();
 	rectangulo->dibujar(0, 0, Pantalla::ancho, 40);
 	//rectangulo->dibujar(0, Pantalla::alto - 40, Pantalla::ancho, 40);
-	texto->dibujar_texto(Pantalla::centro_h() - ajuste_titulo, 30, "Seleccione un archivo para tocar", Color(1.0, 1.0, 1.0));
+	texto->imprimir(Pantalla::centro_h() - ajuste_titulo, 30, "Seleccione un archivo para tocar", Color(1.0, 1.0, 1.0));
 	boton_atras->dibujar();
 	boton_continuar->dibujar();
 }

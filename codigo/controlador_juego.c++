@@ -33,7 +33,7 @@ void Controlador_Juego::actualizar()
 	{
 		if(Fps::actualizar_fps())
 			texto_fps = "FPS: " + std::to_string((int)fps);
-		this->texto->dibujar_texto(10, 20, texto_fps);
+		this->texto->imprimir(10, 20, texto_fps);
 	}
 
 	if(ventana_actual->obtener_accion() == CambiarATitulo)

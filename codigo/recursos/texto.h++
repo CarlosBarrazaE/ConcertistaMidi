@@ -58,8 +58,8 @@ private:
 	int ancho_texto_unicode(icu::UnicodeString texto);
 public:
 	Texto(Formato formato, int tamanno_letra, Sombreador *sombreador);
-	int dibujar_texto(int x, int y, std::string texto);
-	int dibujar_texto(int x, int y, std::string texto, Color color);
+	int imprimir(int x, int y, std::string texto);
+	int imprimir(int x, int y, std::string texto, Color color);
 	int ancho_texto(std::string texto);
 	int alto_texto();
 };

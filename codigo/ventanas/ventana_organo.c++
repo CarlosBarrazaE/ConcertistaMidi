@@ -104,7 +104,7 @@ void VentanaOrgano::dibujar()
 	tablero->dibujar();
 	barra->dibujar();
 	organo->dibujar();
-	this->texto->dibujar_texto(10, 80, "Velocidad: " + std::to_string((int)(velocidad_musica*100)) + "%", Color(0.0, 0.0, 0.0));
+	this->texto->imprimir(10, 80, "Velocidad: " + std::to_string((int)(velocidad_musica*100)) + "%", Color(0.0, 0.0, 0.0));
 }
 
 void VentanaOrgano::evento_teclado(Tecla tecla, bool estado)

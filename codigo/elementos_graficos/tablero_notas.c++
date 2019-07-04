@@ -145,7 +145,7 @@ void Tablero_Notas::dibujar_lineas_horizontales()
 			continue;
 
 		this->rectangulo->dibujar(this->x, this->y+posicion_y, this->ancho, 1);
-		this->texto->dibujar_texto(this->x+10, this->y+posicion_y, std::to_string(numero_linea));
+		this->texto->imprimir(this->x+10, this->y+posicion_y, std::to_string(numero_linea));
 	}
 }
 
