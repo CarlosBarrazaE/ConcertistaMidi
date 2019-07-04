@@ -9,6 +9,7 @@ Controlador_Juego::Controlador_Juego(Administrador_Recursos *recursos)
 	this->pantalla_completa = false;
 	this->modo_alambre = false;
 	this->finalizar = false;
+	this->texto = recursos->obtener_tipografia(LetraChica);
 
 	ventana_actual = new VentanaTitulo(recursos);
 }
@@ -32,7 +33,7 @@ void Controlador_Juego::actualizar()
 	{
 		if(Fps::actualizar_fps())
 			texto_fps = "FPS: " + std::to_string((int)fps);
-		this->recursos->mostrar_texto(10, 20, LetraChica, texto_fps);
+		this->texto->dibujar_texto(10, 20, texto_fps);
 	}
 
 	if(ventana_actual->obtener_accion() == CambiarATitulo)

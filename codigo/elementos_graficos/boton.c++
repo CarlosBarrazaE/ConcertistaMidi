@@ -23,14 +23,12 @@ Boton::Boton(int x, int y, int ancho, int alto, std::string texto, Textura2D *te
 	color_boton = color_boton_normal;
 
 	this->texto = recursos->obtener_tipografia(LetraMediana);
-	sombreador = recursos->obtener_sombreador(Rectangulo_Textura);
-	fondo = new Rectangulo(sombreador, textura_boton, color_boton);
+	rectangulo = recursos->obtener_figura(F_Rectangulo);
 	this->ajuste_texto = this->texto->ancho_texto(texto) / 2;
 }
 
 Boton::~Boton()
 {
-	delete fondo;
 }
 
 void Boton::e_color_texto(Color color)
@@ -83,7 +81,8 @@ void Boton::actualizar(Raton *raton)
 
 void Boton::dibujar()
 {
-	fondo->dibujar_rectangulo(this->x, this->y, this->ancho, this->alto, color_boton);
+	this->textura_boton->activar();
+	rectangulo->dibujar(this->x, this->y, this->ancho, this->alto, color_boton);
 	this->texto->dibujar_texto(this->x+this->ancho/2 - this->ajuste_texto, this->y+this->alto/2 + this->texto->alto_texto()/2, this->texto_boton, color_texto);
 }
 

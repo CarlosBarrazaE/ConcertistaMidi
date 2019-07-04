@@ -1,59 +1,15 @@
 #include "rectangulo.h++"
 
-Rectangulo::Rectangulo(Sombreador *sombreador, Color color) : Figura(sombreador)
-{
-	this->color = color;
-	this->tiene_textura = false;
-	inicializar();
-}
-
-Rectangulo::Rectangulo(Sombreador *sombreador, Textura2D *textura) : Figura(sombreador)
-{
-	this->color = Color(1.0, 1.0, 1.0);
-	this->textura = textura;
-	this->tiene_textura = true;
-	inicializar();
-}
-
-Rectangulo::Rectangulo(Sombreador *sombreador, Textura2D *textura, Color color) : Figura(sombreador)
-{
-	this->color = color;
-	this->textura = textura;
-	this->tiene_textura = true;
-	inicializar();
-}
-
-Rectangulo::~Rectangulo()
-{
-}
-
-void Rectangulo::inicializar()
+Rectangulo::Rectangulo(Sombreador *sombreador) : Figura(sombreador)
 {
 	int tamanno = 0;
-	float *puntos;
-
-	if(this->tiene_textura)
-	{
-		puntos = new float[16] {//XYZ
-			//Posicion		Textura
-			1.0,	1.0,	1.0,	1.0,	//Arriba Derecha
-			1.0,	0.0,	1.0,	0.0,	//Abajo Derecha
-			0.0,	1.0,	0.0,	1.0,	//Arriba Izquierda
-			0.0,	0.0,	0.0,	0.0		//Abajo Izquierda
-		};
-		tamanno = 16;
-	}
-	else
-	{
-		puntos = new float[8] {//XYZ
-			//Posicion
-			1.0,	1.0,	//Arriba Derecha
-			1.0,	0.0,	//Abajo Derecha
-			0.0,	1.0,	//Arriba Izquierda
-			0.0,	0.0		//Abajo Izquierda
-		};
-		tamanno = 8;
-	}
+	float puntos[16] = {
+		//Posicion		Textura
+		1.0,	1.0,	1.0,	1.0,	//Arriba Derecha
+		1.0,	0.0,	1.0,	0.0,	//Abajo Derecha
+		0.0,	1.0,	0.0,	1.0,	//Arriba Izquierda
+		0.0,	0.0,	0.0,	0.0		//Abajo Izquierda
+	};
 
 	this->indice_figura = 0;//Matriz de vertice de objeto
 	glGenVertexArrays(1, &this->indice_figura);
@@ -63,44 +19,54 @@ void Rectangulo::inicializar()
 	unsigned int vto = 0; //Vertice temporal de objeto
 	glGenBuffers(1, &vto);
 	glBindBuffer(GL_ARRAY_BUFFER, vto);
-	glBufferData(GL_ARRAY_BUFFER, tamanno * sizeof(float), puntos, GL_STATIC_DRAW);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(puntos), puntos, GL_STATIC_DRAW);
 
-	if(this->tiene_textura)
-	{
-		glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, 4 * sizeof(float), (void*)0);
-		glEnableVertexAttribArray(0);
+	glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, 4 * sizeof(float), (void*)0);
+	glEnableVertexAttribArray(0);
 
-		glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 4 * sizeof(float), (void*)(2 * sizeof(float)));
-		glEnableVertexAttribArray(1);
-	}
-	else
-	{
-		glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, 2 * sizeof(float), (void*)0);
-		glEnableVertexAttribArray(0);
-	}
-
+	glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 4 * sizeof(float), (void*)(2 * sizeof(float)));
+	glEnableVertexAttribArray(1);
 	glBindBuffer(GL_ARRAY_BUFFER, 0);
+
+	this->color_rectangulo = Color(1.0, 1.0, 1.0);
+	this->textura_activada = true;
+
+	sombreador->e_vector4f("color", this->color_rectangulo.o_rojo(), this->color_rectangulo.o_verde(), this->color_rectangulo.o_azul(), 1.0f);
+	sombreador->e_bool("textura_activada", this->textura_activada);
 }
 
-void Rectangulo::seleccionar_color(Color color)
+Rectangulo::~Rectangulo()
 {
-	this->color = color;
-	sombreador->e_vector4f("color", this->color.o_rojo(), this->color.o_verde(), this->color.o_azul(), 1.0f);
 }
 
-void Rectangulo::dibujar_rectangulo(float x, float y, float ancho, float alto, Color color)
+void Rectangulo::color(Color color_nuevo)
 {
-	this->color = color;
-	dibujar_rectangulo(x, y, ancho, alto);
+	if(this->color_rectangulo != color_nuevo)
+	{
+		this->color_rectangulo = color_nuevo;
+		sombreador->e_vector4f("color", this->color_rectangulo.o_rojo(), this->color_rectangulo.o_verde(), this->color_rectangulo.o_azul(), 1.0f);
+	}
 }
 
-void Rectangulo::dibujar_rectangulo(float x, float y, float ancho, float alto)
+void Rectangulo::textura(bool estado)
 {
-	sombreador->e_vector4f("color", this->color.o_rojo(), this->color.o_verde(), this->color.o_azul(), 1.0f);
+	if(this->textura_activada != estado)
+	{
+		this->textura_activada = estado;
+		sombreador->e_bool("textura_activada", this->textura_activada);
+	}
+}
 
-	if(this->tiene_textura)
-		textura->activar();
+void Rectangulo::dibujar(float x, float y, float ancho, float alto, Color color, bool textura)
+{
+	this->textura(textura);
+	this->color(color);
+	this->dibujar(x, y, ancho, alto);
+}
 
+void Rectangulo::dibujar(float x, float y, float ancho, float alto, Color color)
+{
+	this->color(color);
 	this->dibujar(x, y, ancho, alto);
 }
 

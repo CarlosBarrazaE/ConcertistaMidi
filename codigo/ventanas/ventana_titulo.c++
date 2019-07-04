@@ -11,26 +11,20 @@ VentanaTitulo::VentanaTitulo(Administrador_Recursos *recursos) : Ventana()
 	boton_configurar = new Boton(Pantalla::centro_h(), 340, 250, 50, "Configuración", textura, color, true, recursos);
 	boton_salir = new Boton(Pantalla::centro_h(), 400, 250, 50, "Salir", textura, color, true, recursos);
 
-	Textura2D *textura_fondo = recursos->obtener_textura(T_FondoTitulo);
-	Textura2D *textura_titulo = recursos->obtener_textura(T_Titulo);
+	textura_fondo = recursos->obtener_textura(T_FondoTitulo);
+	textura_titulo = recursos->obtener_textura(T_Titulo);
 
-	Sombreador *sombreador = recursos->obtener_sombreador(Rectangulo_Textura);
-
-	fondo = new Rectangulo(sombreador, textura_fondo);
-	titulo = new Rectangulo(sombreador, textura_titulo);
+	rectangulo = recursos->obtener_figura(F_Rectangulo);
 
 	texto_version = recursos->obtener_tipografia(LetraChica);
 }
 
 VentanaTitulo::~VentanaTitulo()
 {
-	delete fondo;
-	delete titulo;
 	delete boton_tocar;
 	delete boton_practicar;
 	delete boton_configurar;
 	delete boton_salir;
-	delete texto_version;
 }
 
 void VentanaTitulo::actualizar(Raton *raton)
@@ -52,13 +46,19 @@ void VentanaTitulo::actualizar(Raton *raton)
 
 void VentanaTitulo::dibujar()
 {
-	fondo->dibujar_rectangulo(0, 0, Pantalla::ancho, 150);
-	fondo->dibujar_rectangulo(0, Pantalla::alto - 40, Pantalla::ancho, 40);
-	titulo->dibujar_rectangulo(Pantalla::centro_h() - 256, 30, 512, 128);
+	textura_fondo->activar();
+	rectangulo->color(Color(1.0, 1.0, 1.0));
+	rectangulo->dibujar(0, 0, Pantalla::ancho, 150);
+	rectangulo->dibujar(0, Pantalla::alto - 40, Pantalla::ancho, 40);
+
+	textura_titulo->activar();
+	rectangulo->dibujar(Pantalla::centro_h() - 256, 30, 512, 128);
+
 	boton_tocar->dibujar();
 	boton_practicar->dibujar();
 	boton_configurar->dibujar();
 	boton_salir->dibujar();
+
 	texto_version->dibujar_texto(20, Pantalla::alto - 15, "Versión: " + std::string(VERSION), Color(1.0, 1.0, 1.0));
 }
 

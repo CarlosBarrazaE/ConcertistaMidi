@@ -18,16 +18,15 @@ Administrador_Recursos::Administrador_Recursos()
 	archivo_texturas[T_Sombra] = "../texturas/sombra.tga";
 	archivo_texturas[T_FrenteBarraProgreso] = "../texturas/frente_barra_progreso.tga";
 
-	archivo_sombreador_vertice[Rectangulo_Textura] = "../sombreadores/rectangulo_textura_sv.glsl";
-	archivo_sombreador_fragmento[Rectangulo_Textura] = "../sombreadores/rectangulo_textura_sf.glsl";
+	archivo_sombreador_vertice[S_Rectangulo] = "../sombreadores/rectangulo_sv.glsl";
+	archivo_sombreador_fragmento[S_Rectangulo] = "../sombreadores/rectangulo_sf.glsl";
 
-	archivo_sombreador_vertice[Rectangulo_SinTextura] = "../sombreadores/rectangulo_sin_textura_sv.glsl";
-	archivo_sombreador_fragmento[Rectangulo_SinTextura] = "../sombreadores/rectangulo_sin_textura_sf.glsl";
+	archivo_sombreador_vertice[S_Texto] = "../sombreadores/texto_sv.glsl";
+	archivo_sombreador_fragmento[S_Texto] = "../sombreadores/texto_sf.glsl";
 
-	archivo_sombreador_vertice[Rectangulo_Texto] = "../sombreadores/texto_sv.glsl";
-	archivo_sombreador_fragmento[Rectangulo_Texto] = "../sombreadores/texto_sf.glsl";
+	lista_figuras[F_Rectangulo] = new Rectangulo(this->obtener_sombreador(S_Rectangulo));
 
-	Sombreador *sombreador_letras = obtener_sombreador(Rectangulo_Texto);
+	Sombreador *sombreador_letras = this->obtener_sombreador(S_Texto);
 	sombreador_letras->e_int("textura_texto", 0);
 	sombreador_letras->e_vector3f("color_texto", 0.0, 0.0, 0.0);
 
@@ -63,12 +62,6 @@ Textura2D *Administrador_Recursos::obtener_textura(Textura valor)
 	return temporal;
 }
 
-void Administrador_Recursos::activar_textura(Textura valor)
-{
-	Textura2D *temporal = obtener_textura(valor);
-	temporal->activar();
-}
-
 Sombreador *Administrador_Recursos::obtener_sombreador(SombreadorVF valor)
 {
 	Sombreador *temporal = lista_sombreadores[valor];
@@ -92,27 +85,14 @@ Sombreador *Administrador_Recursos::obtener_sombreador(SombreadorVF valor)
 	return temporal;
 }
 
-void Administrador_Recursos::activar_sombreador(SombreadorVF valor)
+Rectangulo *Administrador_Recursos::obtener_figura(FiguraGeometrica valor)
 {
-	Sombreador *temporal = obtener_sombreador(valor);
-	temporal->activar();
+	return lista_figuras[F_Rectangulo];
 }
 
 Texto *Administrador_Recursos::obtener_tipografia(ModeloLetra tipo)
 {
 	return formato_letras[tipo];
-}
-
-int Administrador_Recursos::mostrar_texto(int x, int y, ModeloLetra tipo, std::string texto)
-{
-	Texto *texto_actual = formato_letras[tipo];
-	return texto_actual->dibujar_texto(x, y, texto);
-}
-
-int Administrador_Recursos::mostrar_texto(int x, int y, ModeloLetra tipo, std::string texto, Color color)
-{
-	Texto *texto_actual = formato_letras[tipo];
-	return texto_actual->dibujar_texto(x, y, texto, color);
 }
 
 void Administrador_Recursos::actualizar_pantalla(int nuevo_ancho, int nuevo_alto)

@@ -12,17 +12,15 @@ VentanaSeleccionMusica::VentanaSeleccionMusica(Administrador_Recursos *recursos)
 	boton_atras->e_letra(texto_boton);
 	boton_continuar->e_letra(texto_boton);
 
-	Textura2D *textura_fondo = recursos->obtener_textura(T_FondoTitulo);
-	Sombreador *sombreador = recursos->obtener_sombreador(Rectangulo_Textura);
+	textura_fondo = recursos->obtener_textura(T_FondoTitulo);
 
-	fondo = new Rectangulo(sombreador, textura_fondo);
+	rectangulo = recursos->obtener_figura(F_Rectangulo);
 	texto = recursos->obtener_tipografia(LetraTitulo);
 	ajuste_titulo = texto->ancho_texto("Seleccione un archivo para tocar") / 2;
 }
 
 VentanaSeleccionMusica::~VentanaSeleccionMusica()
 {
-	delete fondo;
 	delete boton_atras;
 	delete boton_continuar;
 }
@@ -37,8 +35,9 @@ void VentanaSeleccionMusica::actualizar(Raton *raton)
 
 void VentanaSeleccionMusica::dibujar()
 {
-	fondo->dibujar_rectangulo(0, 0, Pantalla::ancho, 40);
-	//fondo->dibujar_rectangulo(0, Pantalla::alto - 40, Pantalla::ancho, 40);
+	textura_fondo->activar();
+	rectangulo->dibujar(0, 0, Pantalla::ancho, 40);
+	//rectangulo->dibujar(0, Pantalla::alto - 40, Pantalla::ancho, 40);
 	texto->dibujar_texto(Pantalla::centro_h() - ajuste_titulo, 30, "Seleccione un archivo para tocar", Color(1.0, 1.0, 1.0));
 	boton_atras->dibujar();
 	boton_continuar->dibujar();

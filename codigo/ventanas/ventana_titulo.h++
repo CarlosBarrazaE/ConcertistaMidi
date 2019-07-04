@@ -3,17 +3,14 @@
 
 #include "ventana.h++"
 #include "../elementos_graficos/boton.h++"
-#include "../recursos/textura_2d.h++"
-#include "../recursos/sombreador.h++"
-#include "../recursos/rectangulo.h++"
 #include "../version.h++"
 
 class VentanaTitulo : public Ventana
 {
 private:
-	Rectangulo *fondo;
-	Rectangulo *titulo;
+	Rectangulo *rectangulo;
 
+	Textura2D *textura_fondo, *textura_titulo;
 	Boton *boton_practicar;
 	Boton *boton_tocar;
 	Boton *boton_configurar;

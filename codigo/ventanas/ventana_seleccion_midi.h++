@@ -2,15 +2,14 @@
 #define VENTANASELECCIONMIDI_H
 
 #include "ventana.h++"
-#include "../recursos/rectangulo.h++"
-#include "../recursos/textura_2d.h++"
-#include "../recursos/sombreador.h++"
 #include "../elementos_graficos/boton.h++"
 
 class VentanaSeleccionMusica : public Ventana
 {
 private:
-	Rectangulo *fondo;
+	Rectangulo *rectangulo;
+	Textura2D *textura_fondo;
+
 	Boton *boton_atras;
 	Boton *boton_continuar;
 

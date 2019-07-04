@@ -14,9 +14,8 @@
 class Tablero_Notas : public Elemento
 {
 private:
-	Sombreador *sombreador, *sombreador_solido;
 	Textura2D *textura_sombra, *textura_nota_blanca, *textura_nota_negra, *textura_sombra_nota;
-	Rectangulo *fondo, *figura_textura;
+	Rectangulo *rectangulo;
 	Texto *texto;
 
 	Teclado *teclado;

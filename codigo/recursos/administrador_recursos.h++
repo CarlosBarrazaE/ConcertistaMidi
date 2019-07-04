@@ -9,6 +9,7 @@
 #include "textura_2d.h++"
 #include "texto.h++"
 #include "color.h++"
+#include "rectangulo.h++"
 
 #include "../archivos/archivo.h++"
 #include "../archivos/imagen_tga.h++"
@@ -34,9 +35,13 @@ enum Textura
 
 enum SombreadorVF
 {
-	Rectangulo_Textura,
-	Rectangulo_SinTextura,
-	Rectangulo_Texto
+	S_Rectangulo,
+	S_Texto
+};
+
+enum FiguraGeometrica
+{
+	F_Rectangulo,
 };
 
 enum ModeloLetra
@@ -46,21 +51,20 @@ enum ModeloLetra
 	LetraMediana,
 	LetraChica,
 	LetraMuyChica,
-	NumeroElementos
 };
 
 class Administrador_Recursos
 {
 private:
 	std::map<Textura, Textura2D*> lista_texturas;
-	std::map<unsigned int, Textura2D*> lista_caracteres;
 	std::map<SombreadorVF, Sombreador*> lista_sombreadores;
+	std::map<FiguraGeometrica, Rectangulo*> lista_figuras;
 
 	std::map<Textura, const char*> archivo_texturas;
 	std::map<SombreadorVF, const char*> archivo_sombreador_vertice;
 	std::map<SombreadorVF, const char*> archivo_sombreador_fragmento;
 
-	Texto *formato_letras[NumeroElementos];//Una por cada Modelo de letra
+	std::map<ModeloLetra, Texto*> formato_letras;
 
 	int ancho = 800;
 	int alto = 600;
@@ -70,14 +74,9 @@ public:
 	~Administrador_Recursos();
 
 	Textura2D *obtener_textura(Textura valor);
-	void activar_textura(Textura valor);
-
 	Sombreador *obtener_sombreador(SombreadorVF valor);
-	void activar_sombreador(SombreadorVF valor);
-
+	Rectangulo *obtener_figura(FiguraGeometrica valor);
 	Texto *obtener_tipografia(ModeloLetra tipo);
-	int mostrar_texto(int x, int y, ModeloLetra tipo, std::string texto);
-	int mostrar_texto(int x, int y, ModeloLetra tipo, std::string texto, Color color);
 
 	void actualizar_pantalla(int ancho, int alto);
 };

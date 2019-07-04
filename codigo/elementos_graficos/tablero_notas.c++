@@ -10,22 +10,17 @@ Tablero_Notas::Tablero_Notas(int x, int y, int ancho, int alto, Teclado *teclado
 	this->teclado = teclado;
 	this->calcular_tamannos();
 
-	this->sombreador_solido = recursos->obtener_sombreador(Rectangulo_SinTextura);
-	this->sombreador = recursos->obtener_sombreador(Rectangulo_Textura);
 	this->textura_sombra = recursos->obtener_textura(T_Sombra);
 	this->textura_nota_blanca = recursos->obtener_textura(T_NotaBlanca);
 	this->textura_nota_negra = recursos->obtener_textura(T_NotaNegra);
 	this->textura_sombra_nota = recursos->obtener_textura(T_SombraNota);
 
-	this->fondo = new Rectangulo(sombreador_solido, Color(0.5, 0.5, 0.5));
-	this->figura_textura = new Rectangulo(sombreador, textura_nota_blanca, Color(0.2, 0.7, 0.3));
+	this->rectangulo = recursos->obtener_figura(F_Rectangulo);
 	this->texto = recursos->obtener_tipografia(LetraMuyChica);
 }
 
 Tablero_Notas::~Tablero_Notas()
 {
-	delete fondo;
-	delete figura_textura;
 }
 
 std::array<Color, 52> *Tablero_Notas::o_blancas_presionadas()
@@ -102,14 +97,15 @@ void Tablero_Notas::actualizar(Raton *raton)
 
 void Tablero_Notas::dibujar()
 {
-	this->fondo->seleccionar_color(Color(0.95, 0.95, 0.95));
-	this->fondo->dibujar(this->x, this->y, this->ancho, this->alto);
-	this->fondo->seleccionar_color(Color(0.7, 0.7, 0.7));
+	this->rectangulo->dibujar(this->x, this->y, this->ancho, this->alto, Color(0.95, 0.95, 0.95), false);
+
+	this->rectangulo->color(Color(0.7, 0.7, 0.7));
 	this->dibujar_lineas_horizontales();
 	this->dibujar_lineas_verticales();
 
+	this->rectangulo->textura(true);
 	this->textura_sombra->activar();
-	this->figura_textura->dibujar(this->x, this->y, this->ancho, 20);
+	this->rectangulo->dibujar(this->x, this->y, this->ancho, 20);
 /*
 	for(int pista=0; pista<notas.size(); pista++)
 	{
@@ -148,7 +144,7 @@ void Tablero_Notas::dibujar_lineas_horizontales()
 		else if(posicion_y > this->alto)
 			continue;
 
-		this->fondo->dibujar(this->x, this->y+posicion_y, this->ancho, 1);
+		this->rectangulo->dibujar(this->x, this->y+posicion_y, this->ancho, 1);
 		this->texto->dibujar_texto(this->x+10, this->y+posicion_y, std::to_string(numero_linea));
 	}
 }
@@ -162,7 +158,7 @@ void Tablero_Notas::dibujar_lineas_verticales()
 		if(posicion_x > this->ancho)
 			break;
 
-		this->fondo->dibujar(this->x+posicion_x, this->y, 1, this->alto);
+		this->rectangulo->dibujar(this->x+posicion_x, this->y, 1, this->alto);
 		if(en_do)
 			posicion_x += this->ancho_blanca * 3;
 		else
@@ -217,8 +213,6 @@ void Tablero_Notas::dibujar_notas(int pista, Textura2D *textura_nota_blanca, Tex
 		if(this->ajuste_x + posicion_blanca * this->ancho_blanca < 0)
 			continue;
 
-		this->figura_textura->seleccionar_color(pistas->at(notas[pista][n].track_id)->o_color());
-
 		if(Octava::es_negra(notas[pista][n].note_id))
 		{
 			ancho_tecla = this->ancho_negra;
@@ -255,6 +249,7 @@ void Tablero_Notas::dibujar_notas(int pista, Textura2D *textura_nota_blanca, Tex
 		else
 			largo_final = largo_nota;
 
-		this->figura_textura->dibujar(this->x+this->ajuste_x + posicion_blanca * this->ancho_blanca + ajuste_negra, this->y+this->alto + posicion_y-largo_nota, ancho_tecla, largo_final);
+		this->rectangulo->color(pistas->at(notas[pista][n].track_id)->o_color());
+		this->rectangulo->dibujar(this->x+this->ajuste_x + posicion_blanca * this->ancho_blanca + ajuste_negra, this->y+this->alto + posicion_y-largo_nota, ancho_tecla, largo_final);
 	}
 }

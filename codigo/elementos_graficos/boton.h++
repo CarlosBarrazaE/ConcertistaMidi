@@ -2,17 +2,15 @@
 #define BOTON_H
 
 #include "elemento.h++"
-#include "../recursos/rectangulo.h++"
 
 //TODO Agregar animacion al cambiar de color
 class Boton : public Elemento
 {
 private:
 	Texto *texto;
-	Sombreador *sombreador;
 
 	Textura2D *textura_boton;
-	Rectangulo *fondo;
+	Rectangulo *rectangulo;
 
 	Color color_boton;
 	Color color_boton_normal;

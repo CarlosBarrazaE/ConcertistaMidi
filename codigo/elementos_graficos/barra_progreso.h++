@@ -3,7 +3,6 @@
 
 #include "elemento.h++"
 #include "../elementos/funciones.h++"
-#include "../recursos/rectangulo.h++"
 #include "../libmidi/Midi.h"
 
 class Barra_Progreso : Elemento
@@ -20,8 +19,7 @@ private:
 
 	Textura2D *t_frente;
 	Texto *texto;
-	Rectangulo *fondo;
-	Rectangulo *frente;
+	Rectangulo *rectangulo;
 	std::string duracion_total;
 	int largo_texto;
 

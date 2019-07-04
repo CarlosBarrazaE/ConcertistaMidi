@@ -15,12 +15,7 @@
 class Organo : public Elemento
 {
 private:
-	Sombreador *sombreador;
-	Sombreador *sombreador2;
-	//Textura2D *textura_boton;
-	//Texto *texto;
-	Rectangulo *fondo;
-	Rectangulo *teclas;
+	Rectangulo *rectangulo;
 
 	Textura2D *tecla_blanca;
 	Textura2D *tecla_negra;

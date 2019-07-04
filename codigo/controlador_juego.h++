@@ -19,6 +19,7 @@ private:
 	Administrador_Recursos *recursos;
 	double fps;
 	std::string texto_fps;
+	Texto *texto;
 
 	//Control
 	bool mostrar_fps;

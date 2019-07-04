@@ -9,21 +9,17 @@ Organo::Organo(int x, int y, int ancho, Teclado *teclado, Administrador_Recursos
 	this->teclado = teclado;
 	this->calcular_tamannos();
 
-	sombreador = recursos->obtener_sombreador(Rectangulo_SinTextura);
-	sombreador2 = recursos->obtener_sombreador(Rectangulo_Textura);
-	fondo = new Rectangulo(sombreador, Color(0.2, 0.7, 0.3));
-
 	tecla_blanca = recursos->obtener_textura(T_TeclaBlanca);
 	tecla_negra = recursos->obtener_textura(T_TeclaNegra);
 	tecla_negra_presionada = recursos->obtener_textura(T_TeclaNegraPresionada);
 	borde_negro = recursos->obtener_textura(T_BordeOrganoNegro);
 	borde_rojo = recursos->obtener_textura(T_BordeOrganoRojo);
-	teclas = new Rectangulo(sombreador2, tecla_blanca, Color(1.0, 1.0, 1.0));
+
+	rectangulo = recursos->obtener_figura(F_Rectangulo);
 }
 
 Organo::~Organo()
 {
-
 }
 
 void Organo::calcular_tamannos()
@@ -82,21 +78,22 @@ void Organo::actualizar(Raton *raton)
 
 void Organo::dibujar()
 {
-	fondo->dibujar_rectangulo(this->x, this->y - this->alto, this->ancho, this->alto, Color(0.0, 0.0, 0.0));
+	rectangulo->dibujar(this->x, this->y - this->alto, this->ancho, this->alto, Color(0.0, 0.0, 0.0), false);
 
 	tecla_blanca->activar();
-	teclas->seleccionar_color(Color(1.0, 1.0, 1.0));
+	rectangulo->textura(true);
+	rectangulo->color(Color(1.0, 1.0, 1.0));
 	this->dibujar_blancas(this->x + this->ajuste_x, this->y - this->alto + 10, this->teclado->o_numero_blancas());
 
 	tecla_negra->activar();
 	this->dibujar_negras(this->x + this->ajuste_x, this->y - this->alto + 10, this->teclado->o_numero_negras());
 
 	borde_negro->activar();
-	teclas->seleccionar_color(Color(1.0, 1.0, 1.0));
-	teclas->dibujar(this->x, this->y - this->alto, this->ancho, 5);
+	rectangulo->color(Color(1.0, 1.0, 1.0));
+	rectangulo->dibujar(this->x, this->y - this->alto, this->ancho, 5);
 
 	borde_rojo->activar();
-	teclas->dibujar(this->x + this->ajuste_x, this->y - this->alto + 5, this->ancho_real-1, 5);
+	rectangulo->dibujar(this->x + this->ajuste_x, this->y - this->alto + 5, this->ancho_real-1, 5);
 }
 
 void Organo::dibujar_blancas(int x, int y, int numero_teclas)
@@ -107,12 +104,13 @@ void Organo::dibujar_blancas(int x, int y, int numero_teclas)
 	{
 		if(teclas_activas_blancas->at(n) != negro)
 		{
-			teclas->seleccionar_color(teclas_activas_blancas->at(n));
+			rectangulo->color(teclas_activas_blancas->at(n));
 			teclas_activas_blancas->at(n) = negro;
 		}
 		else
-			teclas->seleccionar_color(Color(1.0, 1.0, 1.0));
-		teclas->dibujar(desplazamiento, y, this->ancho_tecla_blanca - 1, this->alto_tecla_blanca);
+			rectangulo->color(Color(1.0, 1.0, 1.0));
+
+		rectangulo->dibujar(desplazamiento, y, this->ancho_tecla_blanca - 1, this->alto_tecla_blanca);
 		desplazamiento += this->ancho_tecla_blanca;
 	}
 }
@@ -127,13 +125,13 @@ void Organo::dibujar_negras(int x, int y, int numero_teclas)
 	{
 		if(teclas_activas_negras->at(n) != negro)
 		{
-			teclas->seleccionar_color(teclas_activas_negras->at(n));
+			rectangulo->color(teclas_activas_negras->at(n));
 			teclas_activas_negras->at(n) = negro;
 			tecla_negra_presionada->activar();
 		}
 		else
 		{
-			teclas->seleccionar_color(Color(1.0, 1.0, 1.0));
+			rectangulo->color(Color(1.0, 1.0, 1.0));
 			tecla_negra->activar();
 		}
 		if(n_negra==0 || n_negra == 2)
@@ -152,6 +150,6 @@ void Organo::dibujar_negras(int x, int y, int numero_teclas)
 			n_negra = 0;
 
 		//El ancho de la tecla mas el ancho de la sombra
-		teclas->dibujar(desplazamiento, y, this->ancho_tecla_negra + this->ancho_tecla_negra * 0.22, this->alto_tecla_negra);
+		rectangulo->dibujar(desplazamiento, y, this->ancho_tecla_negra + this->ancho_tecla_negra * 0.22, this->alto_tecla_negra);
 	}
 }

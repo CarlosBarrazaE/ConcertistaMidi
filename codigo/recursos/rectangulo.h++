@@ -12,19 +12,17 @@ class Rectangulo : public Figura
 private:
 	void inicializar();
 
-	Color color;
-	Textura2D *textura;
-	bool tiene_textura;
+	Color color_rectangulo;
+	bool textura_activada;
 public:
-	Rectangulo(Sombreador *sombreador, Color color);
-	Rectangulo(Sombreador *sombreador, Textura2D *textura);
-	Rectangulo(Sombreador *sombreador, Textura2D *textura, Color color);
+	Rectangulo(Sombreador *sombreador);
 	~Rectangulo();
 
-	void seleccionar_color(Color color);
+	void color(Color color);
+	void textura(bool estado);
 
-	void dibujar_rectangulo(float x, float y, float ancho, float alto, Color color);
-	void dibujar_rectangulo(float x, float y, float ancho, float alto);
+	void dibujar(float x, float y, float ancho, float alto, Color color, bool textura);
+	void dibujar(float x, float y, float ancho, float alto, Color color);
 	void dibujar(float x, float y, float ancho, float alto);
 };
 

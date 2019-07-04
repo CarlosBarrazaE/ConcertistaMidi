@@ -14,11 +14,8 @@ Barra_Progreso::Barra_Progreso(int x, int y, int ancho, int alto, microseconds_t
 	this->x_anterior = 0;
 	this->duracion_total = Funciones::milisegundos_a_texto(tiempo_total);
 
-	Sombreador *sombreador = recursos->obtener_sombreador(Rectangulo_Textura);
-	Sombreador *sombreador_st = recursos->obtener_sombreador(Rectangulo_SinTextura);
 	t_frente = recursos->obtener_textura(T_FrenteBarraProgreso);
-	fondo = new Rectangulo(sombreador_st, Color(0.0, 0.0, 0.0));
-	frente = new Rectangulo(sombreador, t_frente, Color(1.0, 1.0, 1.0));
+	rectangulo = recursos->obtener_figura(F_Rectangulo);
 	this->texto = recursos->obtener_tipografia(LetraMuyChica);
 	this->largo_texto = this->texto->ancho_texto(this->duracion_total);
 
@@ -28,8 +25,6 @@ Barra_Progreso::Barra_Progreso(int x, int y, int ancho, int alto, microseconds_t
 
 Barra_Progreso::~Barra_Progreso()
 {
-	delete fondo;
-	delete frente;
 	delete color_fondo;
 	delete color_progreso;
 }
@@ -94,23 +89,21 @@ void Barra_Progreso::actualizar(Raton *raton)
 
 void Barra_Progreso::dibujar()
 {
-	fondo->seleccionar_color(*this->color_progreso);
-	fondo->dibujar(this->x, this->y, this->progreso, this->alto);
-	fondo->seleccionar_color(*this->color_fondo);
-	fondo->dibujar(this->x+this->progreso, this->y, this->ancho - this->progreso, this->alto);
+	rectangulo->textura(false);
+	rectangulo->dibujar(this->x, this->y, this->progreso, this->alto, *this->color_progreso);
+	rectangulo->dibujar(this->x+this->progreso, this->y, this->ancho - this->progreso, this->alto, *this->color_fondo);
 
-	fondo->seleccionar_color(Color(0.7, 0.7, 0.7));
+	rectangulo->color(Color(0.7, 0.7, 0.7));
 	for(int i=0; i<this->lineas.size(); i++)
 	{
-		fondo->dibujar(((double)lineas[i] / (double)this->tiempo_total) * this->ancho, this->y, 1, this->alto);
+		rectangulo->dibujar(((double)lineas[i] / (double)this->tiempo_total) * this->ancho, this->y, 1, this->alto);
 	}
 
-	fondo->dibujar(this->x, this->y, this->ancho, 1);
-	fondo->dibujar(this->x, this->y+this->alto-1, this->ancho, 1);
+	rectangulo->dibujar(this->x, this->y, this->ancho, 1);
+	rectangulo->dibujar(this->x, this->y+this->alto-1, this->ancho, 1);
 
 	t_frente->activar();
-	frente->seleccionar_color(Color(1.0, 1.0, 1.0));
-	frente->dibujar(this->x, this->y, this->ancho, this->alto);
+	rectangulo->dibujar(this->x, this->y, this->ancho, this->alto, Color(1.0, 1.0, 1.0), true);
 
 	this->texto->dibujar_texto(this->x+4, this->y + this->alto-4, Funciones::milisegundos_a_texto(this->tiempo_actual), Color(0.0, 0.0, 0.0));
 	this->texto->dibujar_texto(this->x+this->ancho - (4 + this->largo_texto), this->y + this->alto-4, this->duracion_total, Color(0.0, 0.0, 0.0));

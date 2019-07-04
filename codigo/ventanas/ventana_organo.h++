@@ -2,7 +2,6 @@
 #define VENTANAORGANO_H
 
 #include "ventana.h++"
-#include "../recursos/textura_2d.h++"
 #include "../elementos_graficos/barra_progreso.h++"
 #include "../elementos_graficos/tablero_notas.h++"
 #include "../elementos_graficos/organo.h++"
