@@ -20,6 +20,7 @@ private:
 	Textura2D *t_frente;
 	Texto *texto;
 	Rectangulo *rectangulo;
+
 	std::string duracion_total;
 	int largo_texto;
 

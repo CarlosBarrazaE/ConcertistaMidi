@@ -9,11 +9,11 @@ class VentanaSeleccionMusica : public Ventana
 private:
 	Rectangulo *rectangulo;
 	Textura2D *textura_fondo;
+	Texto *texto;
 
 	Boton *boton_atras;
 	Boton *boton_continuar;
 
-	Texto *texto;
 	int ajuste_titulo;
 public:
 	VentanaSeleccionMusica(Administrador_Recursos *recursos);

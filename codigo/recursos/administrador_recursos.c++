@@ -39,6 +39,18 @@ Administrador_Recursos::Administrador_Recursos()
 
 Administrador_Recursos::~Administrador_Recursos()
 {
+	for(std::map<Textura, Textura2D*>::iterator i = lista_texturas.begin(); i != lista_texturas.end(); i++)
+		delete i->second;
+	lista_texturas.clear();
+
+	for(std::map<SombreadorVF, Sombreador*>::iterator i = lista_sombreadores.begin(); i != lista_sombreadores.end(); i++)
+		delete i->second;
+	lista_sombreadores.clear();
+
+	for(std::map<FiguraGeometrica, Rectangulo*>::iterator i = lista_figuras.begin(); i != lista_figuras.end(); i++)
+		delete i->second;
+	lista_figuras.clear();
+
 	//glDeleteTextures(1, &indice);
 	//glDeleteProgram(indice);
 }
@@ -56,7 +68,7 @@ Textura2D *Administrador_Recursos::obtener_textura(Textura valor)
 
 		lista_texturas[valor] = temporal;
 
-		Registro::nota("Se cargo la textura del archivo: " + std::string(archivo_texturas[valor]));
+		Registro::depurar("Se cargo la textura del archivo: " + std::string(archivo_texturas[valor]));
 	}
 
 	return temporal;
@@ -78,8 +90,8 @@ Sombreador *Administrador_Recursos::obtener_sombreador(SombreadorVF valor)
 
 		lista_sombreadores[valor] = temporal;
 
-		Registro::nota("Se cargo el sombreador de vertices del archivo: " + std::string(archivo_sombreador_vertice[valor]));
-		Registro::nota("Se cargo el sombreador de fragmentos del archivo: " + std::string(archivo_sombreador_fragmento[valor]));
+		Registro::depurar("Se cargo el sombreador de vertices del archivo: " + std::string(archivo_sombreador_vertice[valor]));
+		Registro::depurar("Se cargo el sombreador de fragmentos del archivo: " + std::string(archivo_sombreador_fragmento[valor]));
 	}
 
 	return temporal;

@@ -9,8 +9,8 @@ class VentanaTitulo : public Ventana
 {
 private:
 	Rectangulo *rectangulo;
-
 	Textura2D *textura_fondo, *textura_titulo;
+
 	Boton *boton_practicar;
 	Boton *boton_tocar;
 	Boton *boton_configurar;

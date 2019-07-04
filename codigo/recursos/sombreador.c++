@@ -50,6 +50,8 @@ Sombreador::Sombreador(const char* codigo_vertice, const char* codigo_fragmento)
 
 Sombreador::~Sombreador()
 {
+	glUseProgram(0);
+	glDeleteProgram(this->indice_programa);
 }
 
 void Sombreador::activar()

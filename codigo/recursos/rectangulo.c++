@@ -16,9 +16,9 @@ Rectangulo::Rectangulo(Sombreador *sombreador) : Figura(sombreador)
 	glBindVertexArray(this->indice_figura);
 	Figura::ultimo_indice_seleccionado = this->indice_figura;
 
-	unsigned int vto = 0; //Vertice temporal de objeto
-	glGenBuffers(1, &vto);
-	glBindBuffer(GL_ARRAY_BUFFER, vto);
+	this->indice_objeto = 0; //Vertice temporal de objeto
+	glGenBuffers(1, &this->indice_objeto);
+	glBindBuffer(GL_ARRAY_BUFFER, this->indice_objeto);
 	glBufferData(GL_ARRAY_BUFFER, sizeof(puntos), puntos, GL_STATIC_DRAW);
 
 	glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, 4 * sizeof(float), (void*)0);
@@ -37,6 +37,10 @@ Rectangulo::Rectangulo(Sombreador *sombreador) : Figura(sombreador)
 
 Rectangulo::~Rectangulo()
 {
+	glBindVertexArray(0);
+	glBindBuffer(GL_ARRAY_BUFFER, 0);
+	glDeleteVertexArrays(1, &this->indice_figura);
+	glDeleteBuffers(1, &this->indice_objeto);
 }
 
 void Rectangulo::color(Color color_nuevo)

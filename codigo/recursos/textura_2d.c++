@@ -1,5 +1,5 @@
 #include "textura_2d.h++"
-#include <iostream>
+
 unsigned int Textura2D::ultimo_indice_seleccionado = 0;
 
 Textura2D::Textura2D()
@@ -17,6 +17,8 @@ Textura2D::Textura2D()
 
 Textura2D::~Textura2D()
 {
+	glBindTexture(GL_TEXTURE_2D, 0);
+	glDeleteTextures(1, &this->indice_textura);
 }
 
 unsigned int Textura2D::o_indice()

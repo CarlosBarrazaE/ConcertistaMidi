@@ -43,6 +43,17 @@ Texto::Texto(Formato formato, int tamanno_letra, Sombreador *sombreador) : Figur
 	largo_ultimo_texto = 0;
 }
 
+Texto::~Texto()
+{
+	glBindTexture(GL_TEXTURE_2D, 0);
+	glBindVertexArray(0);
+	glBindBuffer(GL_ARRAY_BUFFER, 0);
+
+	glDeleteTextures(1, &this->indice_atlas);
+	glDeleteVertexArrays(1, &this->indice_figura);
+	glDeleteBuffers(1, &this->indice_objeto);
+}
+
 void Texto::generar_caracteres()
 {
 	icu::UnicodeString idioma_espannol = "0123456789 ⁰¹²³⁴⁵⁶⁷⁸⁹ABCDEFGHIJKLMNÑOPQRSTUVWXYZabcdefghijklmnñopqrstuvwxyzÁÉÍÓÚáéíóúÄËÏÖÜäëïöü,.-;:'·#$€%&@\"\\()[]{}+-*/=¿?¡!<>ºªḉḈçÇ^";

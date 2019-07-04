@@ -15,10 +15,11 @@
 class VentanaOrgano : public Ventana
 {
 private:
+	Texto *texto;
+
 	Barra_Progreso *barra;
 	Tablero_Notas *tablero;
 	Organo *organo;
-	Texto *texto;
 
 	std::map<int, Pista*> pistas;
 	double velocidad_musica;

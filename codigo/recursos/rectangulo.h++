@@ -10,8 +10,7 @@
 class Rectangulo : public Figura
 {
 private:
-	void inicializar();
-
+	unsigned int indice_objeto;
 	Color color_rectangulo;
 	bool textura_activada;
 public:

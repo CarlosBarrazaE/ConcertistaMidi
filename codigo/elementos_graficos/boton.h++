@@ -8,7 +8,6 @@ class Boton : public Elemento
 {
 private:
 	Texto *texto;
-
 	Textura2D *textura_boton;
 	Rectangulo *rectangulo;
 
