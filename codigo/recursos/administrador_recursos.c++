@@ -2,6 +2,8 @@
 
 Administrador_Recursos::Administrador_Recursos()
 {
+	this->ancho = 800;
+	this->alto = 600;
 	matriz_proyeccion = glm::ortho(0.0f, (float)this->ancho, (float)this->alto, 0.0f, -1.0f, 1.0f);
 
 	archivo_texturas[T_FondoTitulo] = "../texturas/fondo_titulo.tga";

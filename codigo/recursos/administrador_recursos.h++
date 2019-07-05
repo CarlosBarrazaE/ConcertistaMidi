@@ -66,8 +66,8 @@ private:
 
 	std::map<ModeloLetra, Texto*> formato_letras;
 
-	int ancho = 800;
-	int alto = 600;
+	int ancho;
+	int alto;
 	glm::mat4 matriz_proyeccion;
 public:
 	Administrador_Recursos();

@@ -30,9 +30,11 @@ Rectangulo::Rectangulo(Sombreador *sombreador) : Figura(sombreador)
 
 	this->color_rectangulo = Color(1.0, 1.0, 1.0);
 	this->textura_activada = true;
+	this->textura_estirable = false;
 
 	sombreador->e_vector4f("color", this->color_rectangulo.o_rojo(), this->color_rectangulo.o_verde(), this->color_rectangulo.o_azul(), 1.0f);
 	sombreador->e_bool("textura_activada", this->textura_activada);
+	sombreador->e_bool("textura_estirable", this->textura_estirable);
 }
 
 Rectangulo::~Rectangulo()
@@ -58,6 +60,15 @@ void Rectangulo::textura(bool estado)
 	{
 		this->textura_activada = estado;
 		sombreador->e_bool("textura_activada", this->textura_activada);
+	}
+}
+
+void Rectangulo::extremos_fijos(bool estado)
+{
+	if(this->textura_estirable != estado)
+	{
+		this->textura_estirable = estado;
+		sombreador->e_bool("textura_estirable", this->textura_estirable);
 	}
 }
 
@@ -88,3 +99,28 @@ void Rectangulo::dibujar(float x, float y, float ancho, float alto)
 	}
 	glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
 }
+
+void Rectangulo::dibujar_estirable(float x, float y, float ancho, float alto, float borde_vertical)
+{
+	//Dibuja un rectangulo con textura fija arriba y abajo de alto variable en el centro.
+
+	//Requiere activar el uso de textura_estirable y establecer un valor mayor que 0 para el borde
+	if(!this->textura_estirable || borde_vertical <= 0)//Si no cumple las condiciones se dibuja un rectangulo normal
+		this->dibujar(x, y, ancho, alto);
+	else
+	{
+		int alto_nuevo = borde_vertical*2;//Es el tamaño minimo para la nota
+		if(alto_nuevo < alto)
+			alto_nuevo = alto;
+
+		if(this->borde_vertical != borde_vertical / alto_nuevo)
+		{
+			this->borde_vertical = borde_vertical / alto_nuevo;
+			sombreador->e_float("borde", this->borde_vertical);
+		}
+
+		//x, y es el punto base comenzando de abajo hacia arriba
+		this->dibujar(x, y-alto_nuevo, ancho, alto_nuevo);
+	}
+}
+
