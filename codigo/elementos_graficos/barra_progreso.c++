@@ -19,8 +19,8 @@ Barra_Progreso::Barra_Progreso(int x, int y, int ancho, int alto, microseconds_t
 	this->texto = recursos->obtener_tipografia(LetraMuyChica);
 	this->largo_texto = this->texto->ancho_texto(this->duracion_total);
 
-	color_fondo = new Color(0.9, 0.9, 0.9);
-	color_progreso = new Color(1.0, 0.424, 0.0);
+	color_fondo = new Color(0.2, 0.2, 0.2);
+	color_progreso = new Color(0.0, 0.1, 0.7);
 }
 
 Barra_Progreso::~Barra_Progreso()
@@ -93,20 +93,21 @@ void Barra_Progreso::dibujar()
 	rectangulo->dibujar(this->x, this->y, this->progreso, this->alto, *this->color_progreso);
 	rectangulo->dibujar(this->x+this->progreso, this->y, this->ancho - this->progreso, this->alto, *this->color_fondo);
 
-	rectangulo->color(Color(0.7, 0.7, 0.7));
+	rectangulo->color(Color(0.3, 0.3, 0.3));
 	for(int i=0; i<this->lineas.size(); i++)
 	{
 		rectangulo->dibujar(((double)lineas[i] / (double)this->tiempo_total) * this->ancho, this->y, 1, this->alto);
 	}
 
+	rectangulo->color(Color(0.15, 0.15, 0.15));
 	rectangulo->dibujar(this->x, this->y, this->ancho, 1);
 	rectangulo->dibujar(this->x, this->y+this->alto-1, this->ancho, 1);
 
 	t_frente->activar();
 	rectangulo->dibujar(this->x, this->y, this->ancho, this->alto, Color(1.0, 1.0, 1.0), true);
 
-	this->texto->imprimir(this->x+4, this->y + this->alto-4, Funciones::milisegundos_a_texto(this->tiempo_actual), Color(0.0, 0.0, 0.0));
-	this->texto->imprimir(this->x+this->ancho - (4 + this->largo_texto), this->y + this->alto-4, this->duracion_total, Color(0.0, 0.0, 0.0));
+	this->texto->imprimir(this->x+4, this->y + this->alto-4, Funciones::milisegundos_a_texto(this->tiempo_actual), Color(1.0, 1.0, 1.0));
+	this->texto->imprimir(this->x+this->ancho - (4 + this->largo_texto), this->y + this->alto-4, this->duracion_total, Color(1.0, 1.0, 1.0));
 
 
 }
