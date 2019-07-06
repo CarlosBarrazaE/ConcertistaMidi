@@ -19,6 +19,8 @@ private:
 
 	Textura2D *tecla_blanca;
 	Textura2D *tecla_negra;
+	Textura2D *tecla_blanca_presionada;
+	Textura2D *tecla_blanca_presionada_doble;
 	Textura2D *tecla_negra_presionada;
 	Textura2D *borde_negro;
 	Textura2D *borde_rojo;

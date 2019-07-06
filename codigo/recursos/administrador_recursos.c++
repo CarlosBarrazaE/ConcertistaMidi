@@ -11,6 +11,8 @@ Administrador_Recursos::Administrador_Recursos()
 	archivo_texturas[T_Boton] = "../texturas/boton.tga";
 	archivo_texturas[T_TeclaBlanca] = "../texturas/tecla_blanca.tga";
 	archivo_texturas[T_TeclaNegra] = "../texturas/tecla_negra.tga";
+	archivo_texturas[T_TeclaBlancaPresionada] = "../texturas/tecla_blanca_presionada.tga";
+	archivo_texturas[T_TeclaBlancaPresionadaDoble] = "../texturas/tecla_blanca_presionada_doble.tga";
 	archivo_texturas[T_TeclaNegraPresionada] = "../texturas/tecla_negra_presionada.tga";
 	archivo_texturas[T_BordeOrganoRojo] = "../texturas/borde_organo_rojo.tga";
 	archivo_texturas[T_BordeOrganoNegro] = "../texturas/borde_organo_negro.tga";

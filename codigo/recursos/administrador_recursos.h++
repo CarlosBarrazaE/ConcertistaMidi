@@ -23,6 +23,8 @@ enum Textura
 	T_Boton,
 	T_TeclaBlanca,
 	T_TeclaNegra,
+	T_TeclaBlancaPresionada,
+	T_TeclaBlancaPresionadaDoble,
 	T_TeclaNegraPresionada,
 	T_BordeOrganoRojo,
 	T_BordeOrganoNegro,

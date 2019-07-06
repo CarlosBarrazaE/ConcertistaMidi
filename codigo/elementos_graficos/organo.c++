@@ -11,7 +11,11 @@ Organo::Organo(int x, int y, int ancho, Teclado *teclado, Administrador_Recursos
 
 	tecla_blanca = recursos->obtener_textura(T_TeclaBlanca);
 	tecla_negra = recursos->obtener_textura(T_TeclaNegra);
+
+	tecla_blanca_presionada = recursos->obtener_textura(T_TeclaBlancaPresionada);
+	tecla_blanca_presionada_doble = recursos->obtener_textura(T_TeclaBlancaPresionadaDoble);
 	tecla_negra_presionada = recursos->obtener_textura(T_TeclaNegraPresionada);
+
 	borde_negro = recursos->obtener_textura(T_BordeOrganoNegro);
 	borde_rojo = recursos->obtener_textura(T_BordeOrganoRojo);
 
@@ -100,15 +104,25 @@ void Organo::dibujar_blancas(int x, int y, int numero_teclas)
 {
 	int desplazamiento = x;
 	Color negro = Color(0.0, 0.0, 0.0);
+	bool tecla_presionada_anterior = false;
 	for(int n=0; n<numero_teclas; n++)
 	{
 		if(teclas_activas_blancas->at(n) != negro)
 		{
 			rectangulo->color(teclas_activas_blancas->at(n));
 			teclas_activas_blancas->at(n) = negro;
+			if(tecla_presionada_anterior)
+				tecla_blanca_presionada_doble->activar();
+			else
+				tecla_blanca_presionada->activar();
+			tecla_presionada_anterior = true;
 		}
 		else
+		{
+			tecla_blanca->activar();
 			rectangulo->color(Color(1.0, 1.0, 1.0));
+			tecla_presionada_anterior = false;
+		}
 
 		rectangulo->dibujar(desplazamiento, y, this->ancho_tecla_blanca - 1, this->alto_tecla_blanca);
 		desplazamiento += this->ancho_tecla_blanca;
