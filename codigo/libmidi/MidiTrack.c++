@@ -4,7 +4,7 @@
 // Adaptation to GNU/Linux by Oscar Aceña
 // See COPYING for license information
 
-#include "MidiTrack.h"
+#include "MidiTrack.h++"
 
 MidiTrack MidiTrack::ReadFromStream(std::istream &stream)
 {

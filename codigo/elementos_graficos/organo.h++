@@ -8,7 +8,7 @@
 #include "../elementos/pista.h++"
 #include "../elementos/nota.h++"
 #include "../elementos/teclado.h++"
-#include "../libmidi/Midi.h"
+#include "../libmidi/Midi.h++"
 
 #include <map>
 #include <vector>

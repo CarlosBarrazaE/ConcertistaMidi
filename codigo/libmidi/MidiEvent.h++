@@ -10,8 +10,8 @@
 #include <iostream>
 #include <string>
 
-#include "Note.h"
-#include "MidiUtil.h"
+#include "Note.h++"
+#include "MidiUtil.h++"
 
 struct MidiEventSimple
 {

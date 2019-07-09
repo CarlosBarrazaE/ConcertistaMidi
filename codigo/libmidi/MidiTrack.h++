@@ -11,7 +11,7 @@
 #include <string>
 #include <map>
 
-#include "MidiEvent.h"
+#include "MidiEvent.h++"
 
 class MidiEvent;
 

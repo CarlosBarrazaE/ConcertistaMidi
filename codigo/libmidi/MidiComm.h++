@@ -12,7 +12,7 @@
 #include <vector>
 #include <alsa/asoundlib.h>
 
-#include "MidiEvent.h"
+#include "MidiEvent.h++"
 #include "../registro.h++"
 
 struct MidiCommDescription

@@ -6,7 +6,7 @@
 #include "../elementos/octava.h++"
 #include "../elementos/pista.h++"
 #include "../elementos/teclado.h++"
-#include "../libmidi/Midi.h"
+#include "../libmidi/Midi.h++"
 
 #include <vector>
 #include <array>

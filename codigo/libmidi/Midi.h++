@@ -12,7 +12,7 @@
 #include <fstream>
 #include <map>
 
-#include "MidiTrack.h"
+#include "MidiTrack.h++"
 #include <algorithm>
 #include "../registro.h++"
 

@@ -9,7 +9,7 @@
 
 #include <set>
 #include <vector>
-#include "MidiTypes.h"
+#include "MidiTypes.h++"
 
 // Range of all 128 MIDI notes possible
 typedef unsigned int NoteId;

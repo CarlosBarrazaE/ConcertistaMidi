@@ -4,7 +4,7 @@
 // Adaptation to GNU/Linux by Oscar Aceña
 // See COPYING for license information
 
-#include "MidiComm.h"
+#include "MidiComm.h++"
 
 // ALSA sequencer descriptor
 static bool midi_initiated = false;

@@ -4,7 +4,7 @@
 // Adaptation to GNU/Linux by Oscar Aceña
 // See COPYING for license information
 
-#include "MidiUtil.h"
+#include "MidiUtil.h++"
 
 MidiError::MidiError(MidiErrorCode error) : m_error(error)
 {

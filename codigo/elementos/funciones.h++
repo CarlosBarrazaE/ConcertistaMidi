@@ -1,7 +1,7 @@
 #ifndef TIEMPO_H
 #define TIEMPO_H
 
-#include "../libmidi/MidiTypes.h"
+#include "../libmidi/MidiTypes.h++"
 #include <string>
 
 namespace Funciones

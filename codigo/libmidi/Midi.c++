@@ -4,7 +4,7 @@
 // Adaptation to GNU/Linux by Oscar Aceña
 // See COPYING for license information
 
-#include "Midi.h"
+#include "Midi.h++"
 
 Midi Midi::ReadFromFile(const std::string &filename)
 {

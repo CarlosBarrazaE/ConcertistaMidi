@@ -3,7 +3,7 @@
 
 #include "elemento.h++"
 #include "../elementos/funciones.h++"
-#include "../libmidi/Midi.h"
+#include "../libmidi/Midi.h++"
 
 class Barra_Progreso : Elemento
 {

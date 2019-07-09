@@ -7,9 +7,8 @@
 #include "../elementos_graficos/organo.h++"
 #include "../elementos/pista.h++"
 #include "../elementos/tipo_teclados.h++"
-#include "../fps.h++"
-#include "../libmidi/Midi.h"
-#include "../libmidi/MidiComm.h"
+#include "../libmidi/Midi.h++"
+#include "../libmidi/MidiComm.h++"
 #include <map>
 
 class VentanaOrgano : public Ventana

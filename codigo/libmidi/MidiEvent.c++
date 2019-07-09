@@ -4,7 +4,7 @@
 // Adaptation to GNU/Linux by Oscar Aceña
 // See COPYING for license information
 
-#include "MidiEvent.h"
+#include "MidiEvent.h++"
 
 MidiEventSimple::MidiEventSimple() : status(0), byte1(0), byte2(0)
 {
