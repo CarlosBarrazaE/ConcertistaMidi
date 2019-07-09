@@ -3,7 +3,7 @@
 VentanaOrgano::VentanaOrgano(Administrador_Recursos *recursos) : Ventana()
 {
 	//musica = new Midi(Midi::ReadFromFile("../musica/Ven Señor no tardes propia.midi"));
-	musica = new Midi(Midi::ReadFromFile("../musica/Trouble Cold play.midi"));
+	musica = new Midi(Midi::ReadFromFile("../musica/Minutos.midi"));
 	//musica = new Midi(Midi::ReadFromFile("../musica/Escala_musícal.midi"));
 	musica->Reset(3000000, 3000000);
 	MidiCommDescriptionList dispositivos_entrada = MidiCommIn::GetDeviceList();
@@ -80,9 +80,13 @@ void VentanaOrgano::actualizar(unsigned int diferencia_tiempo)
 	}
 	MidiEventListWithTrackId evs = musica->Update((diferencia_tiempo / 1000.0) * velocidad_musica);
 
-	for (MidiEventListWithTrackId::const_iterator i = evs.begin(); i != evs.end(); ++i)
+	for (MidiEventListWithTrackId::const_iterator i = evs.begin(); i != evs.end(); i++)
 	{
 		midi_salida->Write(i->second);
+		if(this->texto_evento.size() < 100)
+			this->texto_evento += i->second.Text();
+		else
+			this->texto_evento = i->second.Text();
 	}
 
 	if(barra->o_tiempo_seleccionado() > 0)
@@ -105,6 +109,7 @@ void VentanaOrgano::dibujar()
 	barra->dibujar();
 	organo->dibujar();
 	this->texto->imprimir(10, 80, "Velocidad: " + std::to_string((int)(velocidad_musica*100)) + "%", Color(0.0f, 0.0f, 0.0f));
+	this->texto->imprimir(10, 100, this->texto_evento, Color(0.0f, 0.0f, 0.0f));
 }
 
 void VentanaOrgano::evento_raton(Raton *raton)

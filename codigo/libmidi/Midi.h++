@@ -14,7 +14,6 @@
 
 #include "MidiTrack.h++"
 #include <algorithm>
-#include "../registro.h++"
 
 class MidiError;
 class MidiEvent;

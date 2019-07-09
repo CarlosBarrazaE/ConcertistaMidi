@@ -21,6 +21,7 @@ private:
 	Organo *organo;
 
 	std::map<int, Pista*> pistas;
+	std::string texto_evento;
 	double velocidad_musica;
 
 	Midi *musica;
