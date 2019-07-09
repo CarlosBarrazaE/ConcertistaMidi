@@ -59,7 +59,11 @@ microseconds_t Barra_Progreso::o_tiempo_seleccionado()
 
 void Barra_Progreso::actualizar(unsigned int diferencia_tiempo)
 {
-	progreso = ((double)this->tiempo_actual / (double)this->tiempo_total) * this->ancho;
+	this->progreso = ((double)this->tiempo_actual / (double)this->tiempo_total) * this->ancho;
+	if(progreso > this->ancho)
+		this->progreso = this->ancho;
+	else if(progreso < 0)
+		this->progreso = 0;
 }
 
 void Barra_Progreso::dibujar()
