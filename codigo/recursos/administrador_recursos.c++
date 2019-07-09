@@ -21,12 +21,16 @@ Administrador_Recursos::Administrador_Recursos()
 	archivo_texturas[T_SombraNota] = "../texturas/sombra_nota.tga";
 	archivo_texturas[T_Sombra] = "../texturas/sombra.tga";
 	archivo_texturas[T_FrenteBarraProgreso] = "../texturas/frente_barra_progreso.tga";
+	archivo_texturas[T_ParticulaNota] = "../texturas/particula_nota.tga";
 
 	archivo_sombreador_vertice[S_Rectangulo] = "../sombreadores/rectangulo_sv.glsl";
 	archivo_sombreador_fragmento[S_Rectangulo] = "../sombreadores/rectangulo_sf.glsl";
 
 	archivo_sombreador_vertice[S_Texto] = "../sombreadores/texto_sv.glsl";
 	archivo_sombreador_fragmento[S_Texto] = "../sombreadores/texto_sf.glsl";
+
+	archivo_sombreador_vertice[S_Particula] = "../sombreadores/particula_sv.glsl";
+	archivo_sombreador_fragmento[S_Particula] = "../sombreadores/particula_sf.glsl";
 
 	lista_figuras[F_Rectangulo] = new Rectangulo(this->obtener_sombreador(S_Rectangulo));
 

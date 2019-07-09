@@ -36,8 +36,10 @@ public:
 
 	void posicion_x(int x);
 	void posicion_y(int y);
-	void actualizar(Raton *raton);
+	void actualizar(unsigned int diferencia_tiempo);
 	void dibujar();
+
+	void evento_raton(Raton *raton);
 
 	bool esta_activado();
 };

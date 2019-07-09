@@ -2,6 +2,7 @@
 #define ORGANO_H
 
 #include "elemento.h++"
+#include "../recursos/generador_particulas.h++"
 #include "../recursos/rectangulo.h++"
 #include "../elementos/octava.h++"
 #include "../elementos/pista.h++"
@@ -24,6 +25,8 @@ private:
 	Textura2D *tecla_negra_presionada;
 	Textura2D *borde_negro;
 	Textura2D *borde_rojo;
+
+	Generador_Particulas *generador_particulas;
 
 	Teclado *teclado;
 	int x, y, ancho, alto;
@@ -52,8 +55,10 @@ public:
 	void e_blancas_presionadas(std::array<Color, 52> *teclas_blancas);
 	void e_negras_presionadas(std::array<Color, 36> *teclas_negras);
 
-	void actualizar(Raton *raton);
+	void actualizar(unsigned int diferencia_tiempo);
 	void dibujar();
+
+	void evento_raton(Raton *raton);
 };
 
 #endif

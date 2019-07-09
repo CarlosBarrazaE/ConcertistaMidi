@@ -37,8 +37,10 @@ public:
 	int o_ancho();
 	microseconds_t o_tiempo_seleccionado();
 
-	void actualizar(Raton *raton);
+	void actualizar(unsigned int diferencia_tiempo);
 	void dibujar();
+
+	void evento_raton(Raton *raton);
 };
 
 #endif

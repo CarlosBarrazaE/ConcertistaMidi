@@ -3,7 +3,7 @@
 VentanaConfiguracion::VentanaConfiguracion(Administrador_Recursos *recursos) : Ventana()
 {
 	Textura2D *textura = recursos->obtener_textura(T_Boton);
-	Color color(0.8, 0.9, 1.0);
+	Color color(0.8f, 0.9f, 1.0f);
 
 	boton_atras = new Boton(10, 10, 100, 40, "Atras", textura, color, false, recursos);
 }
@@ -13,16 +13,21 @@ VentanaConfiguracion::~VentanaConfiguracion()
 	delete boton_atras;
 }
 
-void VentanaConfiguracion::actualizar(Raton *raton)
+void VentanaConfiguracion::actualizar(unsigned int diferencia_tiempo)
 {
-	boton_atras->actualizar(raton);
-	if(boton_atras->esta_activado())
-		this->accion = CambiarATitulo;
+	boton_atras->actualizar(diferencia_tiempo);
 }
 
 void VentanaConfiguracion::dibujar()
 {
 	boton_atras->dibujar();
+}
+
+void VentanaConfiguracion::evento_raton(Raton *raton)
+{
+	boton_atras->evento_raton(raton);
+	if(boton_atras->esta_activado())
+		this->accion = CambiarATitulo;
 }
 
 void VentanaConfiguracion::evento_teclado(Tecla tecla, bool estado)

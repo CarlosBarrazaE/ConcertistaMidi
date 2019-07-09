@@ -3,10 +3,10 @@
 VentanaTitulo::VentanaTitulo(Administrador_Recursos *recursos) : Ventana()
 {
 	Textura2D *textura = recursos->obtener_textura(T_Boton);
-	Color color(0.9, 0.9, 0.9);
+	Color color(0.9f, 0.9f, 0.9f);
 
-	boton_tocar = new Boton(Pantalla::centro_h(), 220, 250, 50, "Tocar una canción", textura, Color(0.145, 0.707, 1.0), true, recursos);
-	boton_tocar->e_color_texto(Color(1.0, 1.0, 1.0));
+	boton_tocar = new Boton(Pantalla::centro_h(), 220, 250, 50, "Tocar una canción", textura, Color(0.145f, 0.707f, 1.0f), true, recursos);
+	boton_tocar->e_color_texto(Color(1.0f, 1.0f, 1.0f));
 	boton_practicar = new Boton(Pantalla::centro_h(), 280, 250, 50, "Practicar", textura, color, true, recursos);
 	boton_configurar = new Boton(Pantalla::centro_h(), 340, 250, 50, "Configuración", textura, color, true, recursos);
 	boton_salir = new Boton(Pantalla::centro_h(), 400, 250, 50, "Salir", textura, color, true, recursos);
@@ -27,27 +27,18 @@ VentanaTitulo::~VentanaTitulo()
 	delete boton_salir;
 }
 
-void VentanaTitulo::actualizar(Raton *raton)
+void VentanaTitulo::actualizar(unsigned int diferencia_tiempo)
 {
-	boton_tocar->actualizar(raton);
-	boton_practicar->actualizar(raton);
-	boton_configurar->actualizar(raton);
-	boton_salir->actualizar(raton);
-
-	if(boton_tocar->esta_activado())
-		this->accion = CambiarASeleccionMidi;
-	else if(boton_practicar->esta_activado())
-		this->accion = CambiarAOrgano;
-	else if(boton_configurar->esta_activado())
-		this->accion = CambiarAConfiguracion;
-	else if(boton_salir->esta_activado())
-		this->accion = Salir;
+	boton_tocar->actualizar(diferencia_tiempo);
+	boton_practicar->actualizar(diferencia_tiempo);
+	boton_configurar->actualizar(diferencia_tiempo);
+	boton_salir->actualizar(diferencia_tiempo);
 }
 
 void VentanaTitulo::dibujar()
 {
 	textura_fondo->activar();
-	rectangulo->color(Color(1.0, 1.0, 1.0));
+	rectangulo->color(Color(1.0f, 1.0f, 1.0f));
 	rectangulo->dibujar(0, 0, Pantalla::ancho, 150);
 	rectangulo->dibujar(0, Pantalla::alto - 40, Pantalla::ancho, 40);
 
@@ -59,7 +50,24 @@ void VentanaTitulo::dibujar()
 	boton_configurar->dibujar();
 	boton_salir->dibujar();
 
-	texto_version->imprimir(20, Pantalla::alto - 15, "Versión: " + std::string(VERSION), Color(1.0, 1.0, 1.0));
+	texto_version->imprimir(20, Pantalla::alto - 15, "Versión: " + std::string(VERSION), Color(1.0f, 1.0f, 1.0f));
+}
+
+void VentanaTitulo::evento_raton(Raton *raton)
+{
+	boton_tocar->evento_raton(raton);
+	boton_practicar->evento_raton(raton);
+	boton_configurar->evento_raton(raton);
+	boton_salir->evento_raton(raton);
+
+	if(boton_tocar->esta_activado())
+		this->accion = CambiarASeleccionMidi;
+	else if(boton_practicar->esta_activado())
+		this->accion = CambiarAOrgano;
+	else if(boton_configurar->esta_activado())
+		this->accion = CambiarAConfiguracion;
+	else if(boton_salir->esta_activado())
+		this->accion = Salir;
 }
 
 void VentanaTitulo::evento_teclado(Tecla tecla, bool estado)

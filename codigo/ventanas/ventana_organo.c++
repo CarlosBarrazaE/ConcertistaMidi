@@ -3,7 +3,7 @@
 VentanaOrgano::VentanaOrgano(Administrador_Recursos *recursos) : Ventana()
 {
 	//musica = new Midi(Midi::ReadFromFile("../musica/Ven Señor no tardes propia.midi"));
-	musica = new Midi(Midi::ReadFromFile("../musica/lagos.midi"));
+	musica = new Midi(Midi::ReadFromFile("../musica/Por que te vas.midi"));
 	//musica = new Midi(Midi::ReadFromFile("../musica/Escala_musícal.midi"));
 	musica->Reset(3000000, 3000000);
 	MidiCommDescriptionList dispositivos_entrada = MidiCommIn::GetDeviceList();
@@ -33,26 +33,26 @@ VentanaOrgano::VentanaOrgano(Administrador_Recursos *recursos) : Ventana()
 	midi_entrada = new MidiCommIn(3);//Deberia seleccionarse el id del dispositivo (Teclado)
 	midi_salida = new MidiCommOut(1);//Deberia seleccionarse el id del dispositivo (Timidity 0)
 
-	pistas[0] = new Pista(Color(0.0, 0.598, 0.0), Automatico);
-	pistas[1] = new Pista(Color(0.0, 0.598, 1.0), Automatico);
-	pistas[2] = new Pista(Color(1.0, 0.598, 1.0), Automatico);
-	pistas[3] = new Pista(Color(1.0, 0.424, 0.0), Automatico);
-	pistas[4] = new Pista(Color(1.0, 0.0, 0.467), Automatico);
-	pistas[5] = new Pista(Color(0.587, 0.0, 0.467), Automatico);
-	pistas[6] = new Pista(Color(0.261, 0.0, 0.467), Automatico);
-	pistas[7] = new Pista(Color(0.0, 0.0, 0.467), Automatico);
-	pistas[8] = new Pista(Color(0.0, 0.761, 0.467), Automatico);
-	pistas[9] = new Pista(Color(0.0, 0.761, 1.0), Automatico);
-	pistas[10] = new Pista(Color(1.0, 0.761, 0.609), Automatico);
-	pistas[11] = new Pista(Color(1.0, 0.761, 0.0), Automatico);
-	pistas[12] = new Pista(Color(0.489, 0.587, 0.489), Automatico);
-	pistas[13] = new Pista(Color(0.489, 0.0, 0.489), Automatico);
-	pistas[14] = new Pista(Color(1.0, 0.0, 0.489), Automatico);
-	pistas[15] = new Pista(Color(0.407, 0.348, 0.408), Automatico);
-	pistas[16] = new Pista(Color(0.407, 0.348, 0.0), Automatico);
-	pistas[17] = new Pista(Color(0.407, 0.348, 1.0), Automatico);
-	pistas[18] = new Pista(Color(0.0, 0.348, 1.0), Automatico);
-	pistas[19] = new Pista(Color(0.0, 0.348, 0.0), Automatico);
+	pistas[0] = new Pista(Color(0.0f, 0.598f, 0.0f), Automatico);
+	pistas[1] = new Pista(Color(0.0f, 0.598f, 1.0f), Automatico);
+	pistas[2] = new Pista(Color(1.0f, 0.598f, 1.0f), Automatico);
+	pistas[3] = new Pista(Color(1.0f, 0.424f, 0.0f), Automatico);
+	pistas[4] = new Pista(Color(1.0f, 0.0f, 0.467f), Automatico);
+	pistas[5] = new Pista(Color(0.587f, 0.0f, 0.467f), Automatico);
+	pistas[6] = new Pista(Color(0.261f, 0.0f, 0.467f), Automatico);
+	pistas[7] = new Pista(Color(0.0f, 0.0f, 0.467f), Automatico);
+	pistas[8] = new Pista(Color(0.0f, 0.761f, 0.467f), Automatico);
+	pistas[9] = new Pista(Color(0.0f, 0.761f, 1.0f), Automatico);
+	pistas[10] = new Pista(Color(1.0f, 0.761f, 0.609f), Automatico);
+	pistas[11] = new Pista(Color(1.0f, 0.761f, 0.0f), Automatico);
+	pistas[12] = new Pista(Color(0.489f, 0.587f, 0.489f), Automatico);
+	pistas[13] = new Pista(Color(0.489f, 0.0f, 0.489f), Automatico);
+	pistas[14] = new Pista(Color(1.0f, 0.0f, 0.489f), Automatico);
+	pistas[15] = new Pista(Color(0.407f, 0.348f, 0.408f), Automatico);
+	pistas[16] = new Pista(Color(0.407f, 0.348f, 0.0f), Automatico);
+	pistas[17] = new Pista(Color(0.407f, 0.348f, 1.0f), Automatico);
+	pistas[18] = new Pista(Color(0.0f, 0.348f, 1.0f), Automatico);
+	pistas[19] = new Pista(Color(0.0f, 0.348f, 0.0f), Automatico);
 
 	tablero->e_notas(musica->Notes());
 	tablero->e_pistas(&pistas);
@@ -71,14 +71,14 @@ VentanaOrgano::~VentanaOrgano()
 	delete midi_salida;
 }
 
-void VentanaOrgano::actualizar(Raton *raton)
+void VentanaOrgano::actualizar(unsigned int diferencia_tiempo)
 {
 	if(musica->IsSongOver())
 	{
 		musica->Reset(3000000, 3000000);
 		tablero->reiniciar();
 	}
-	MidiEventListWithTrackId evs = musica->Update((Fps::obtener_nanosegundos() / 1000.0) * velocidad_musica);
+	MidiEventListWithTrackId evs = musica->Update((diferencia_tiempo / 1000.0) * velocidad_musica);
 
 	for (MidiEventListWithTrackId::const_iterator i = evs.begin(); i != evs.end(); ++i)
 	{
@@ -91,12 +91,12 @@ void VentanaOrgano::actualizar(Raton *raton)
 		tablero->reiniciar();
 	}
 
+	barra->actualizar(diferencia_tiempo);
+	tablero->actualizar(diferencia_tiempo);
+	organo->actualizar(diferencia_tiempo);
+
 	barra->e_tiempo(musica->GetSongPositionInMicroseconds());
 	tablero->e_tiempo(musica->GetSongPositionInMicroseconds());
-
-	barra->actualizar(raton);
-	tablero->actualizar(raton);
-	organo->actualizar(raton);
 }
 
 void VentanaOrgano::dibujar()
@@ -104,7 +104,14 @@ void VentanaOrgano::dibujar()
 	tablero->dibujar();
 	barra->dibujar();
 	organo->dibujar();
-	this->texto->imprimir(10, 80, "Velocidad: " + std::to_string((int)(velocidad_musica*100)) + "%", Color(0.0, 0.0, 0.0));
+	this->texto->imprimir(10, 80, "Velocidad: " + std::to_string((int)(velocidad_musica*100)) + "%", Color(0.0f, 0.0f, 0.0f));
+}
+
+void VentanaOrgano::evento_raton(Raton *raton)
+{
+	barra->evento_raton(raton);
+	tablero->evento_raton(raton);
+	organo->evento_raton(raton);
 }
 
 void VentanaOrgano::evento_teclado(Tecla tecla, bool estado)

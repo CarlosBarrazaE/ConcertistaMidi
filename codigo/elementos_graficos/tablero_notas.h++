@@ -52,8 +52,10 @@ public:
 	void c_teclado(Teclado *teclado);
 	void reiniciar();
 
-	void actualizar(Raton *raton);
+	void actualizar(unsigned int diferencia_tiempo);
 	void dibujar();
+
+	void evento_raton(Raton *raton);
 };
 
 #endif

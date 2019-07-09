@@ -11,15 +11,15 @@ private:
 	static Tiempo tiempo_actual;
 	static Tiempo tiempo_anterior;
 
-	static int nanosegundos;
+	static unsigned int nanosegundos;
 
 	static bool mostrar_fps;
-	static int contador_fps;
+	static unsigned int contador_fps;
 
 public:
-	static int tiempo_fotograma();
+	static unsigned int tiempo_fotograma();
 	static bool actualizar_fps();
-	static int obtener_nanosegundos();
+	static unsigned int obtener_nanosegundos();
 };
 
 #endif

@@ -23,8 +23,9 @@ protected:
 public:
 	Ventana();
 
-	virtual void actualizar(Raton *raton) = 0;
+	virtual void actualizar(unsigned int diferencia_tiempo) = 0;
 	virtual void dibujar() = 0;
+	virtual void evento_raton(Raton *raton) = 0;
 	virtual void evento_teclado(Tecla tecla, bool estado) = 0;
 	virtual void evento_pantalla(int ancho, int alto) = 0;
 

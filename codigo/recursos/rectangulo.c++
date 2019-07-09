@@ -2,13 +2,12 @@
 
 Rectangulo::Rectangulo(Sombreador *sombreador) : Figura(sombreador)
 {
-	int tamanno = 0;
 	float puntos[16] = {
 		//Posicion		Textura
-		1.0,	1.0,	1.0,	1.0,	//Arriba Derecha
-		1.0,	0.0,	1.0,	0.0,	//Abajo Derecha
-		0.0,	1.0,	0.0,	1.0,	//Arriba Izquierda
-		0.0,	0.0,	0.0,	0.0		//Abajo Izquierda
+		1.0f,	1.0f,	1.0f,	1.0f,	//Arriba Derecha
+		1.0f,	0.0f,	1.0f,	0.0f,	//Abajo Derecha
+		0.0f,	1.0f,	0.0f,	1.0f,	//Arriba Izquierda
+		0.0f,	0.0f,	0.0f,	0.0f		//Abajo Izquierda
 	};
 
 	this->indice_figura = 0;//Matriz de vertice de objeto
@@ -28,7 +27,7 @@ Rectangulo::Rectangulo(Sombreador *sombreador) : Figura(sombreador)
 	glEnableVertexAttribArray(1);
 	glBindBuffer(GL_ARRAY_BUFFER, 0);
 
-	this->color_rectangulo = Color(1.0, 1.0, 1.0);
+	this->color_rectangulo = Color(1.0f, 1.0f, 1.0f);
 	this->textura_activada = true;
 	this->textura_estirable = false;
 
@@ -87,9 +86,9 @@ void Rectangulo::dibujar(float x, float y, float ancho, float alto, Color color)
 
 void Rectangulo::dibujar(float x, float y, float ancho, float alto)
 {
-	glm::mat4 modelo = glm::mat4(1.0);
-	modelo = glm::translate(modelo, glm::vec3(x, y, 0.0));
-	modelo = glm::scale(modelo, glm::vec3(ancho, alto, 1.0));
+	glm::mat4 modelo = glm::mat4(1.0f);
+	modelo = glm::translate(modelo, glm::vec3(x, y, 0.0f));
+	modelo = glm::scale(modelo, glm::vec3(ancho, alto, 1.0f));
 	this->sombreador->e_matriz4("modelo", modelo);
 
 	if(Figura::ultimo_indice_seleccionado != this->indice_figura)

@@ -21,8 +21,10 @@ public:
 	VentanaTitulo(Administrador_Recursos *recursos);
 	~VentanaTitulo();
 
-	void actualizar(Raton *raton);
+	void actualizar(unsigned int diferencia_tiempo);
 	void dibujar();
+
+	void evento_raton(Raton *raton);
 	void evento_teclado(Tecla tecla, bool estado);
 	void evento_pantalla(int ancho, int alto);
 };

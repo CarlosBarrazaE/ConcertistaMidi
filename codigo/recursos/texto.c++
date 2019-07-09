@@ -199,13 +199,13 @@ int Texto::imprimir_texto(int x, int y, icu::UnicodeString texto, Color color)
 		vertices[posicion_arreglo][0] = xpos + an;
 		vertices[posicion_arreglo][1] = ypos;
 		vertices[posicion_arreglo][2] = (letra->textura_x + an) / (float)this->ancho_atlas;//mi valor / total
-		vertices[posicion_arreglo][3] = 0.0;
+		vertices[posicion_arreglo][3] = 0.0f;
 		posicion_arreglo++;
 
 		vertices[posicion_arreglo][0] = xpos;
 		vertices[posicion_arreglo][1] = ypos;
 		vertices[posicion_arreglo][2] = letra->textura_x / (float)this->ancho_atlas;
-		vertices[posicion_arreglo][3] = 0.0;
+		vertices[posicion_arreglo][3] = 0.0f;
 		posicion_arreglo++;
 
 		vertices[posicion_arreglo][0] = xpos + an;
@@ -229,7 +229,7 @@ int Texto::imprimir_texto(int x, int y, icu::UnicodeString texto, Color color)
 		vertices[posicion_arreglo][0] = xpos;
 		vertices[posicion_arreglo][1] = ypos;
 		vertices[posicion_arreglo][2] = letra->textura_x / (float)this->ancho_atlas;
-		vertices[posicion_arreglo][3] = 0.0;
+		vertices[posicion_arreglo][3] = 0.0f;
 		posicion_arreglo++;
 
 		x += letra->avance_x >> 6;
@@ -242,7 +242,7 @@ int Texto::imprimir_texto(int x, int y, icu::UnicodeString texto, Color color)
 
 int Texto::imprimir(int x, int y, std::string texto)
 {
-	Color negro(0.0, 0.0, 0.0);
+	Color negro(0.0f, 0.0f, 0.0f);
 	return imprimir_texto(x, y, texto.c_str(), negro);
 }
 

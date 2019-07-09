@@ -33,12 +33,14 @@ enum Textura
 	T_SombraNota,
 	T_Sombra,
 	T_FrenteBarraProgreso,
+	T_ParticulaNota,
 };
 
 enum SombreadorVF
 {
 	S_Rectangulo,
-	S_Texto
+	S_Texto,
+	S_Particula,
 };
 
 enum FiguraGeometrica

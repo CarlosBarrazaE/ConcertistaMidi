@@ -91,15 +91,15 @@ void Tablero_Notas::reiniciar()
 	}
 }
 
-void Tablero_Notas::actualizar(Raton *raton)
+void Tablero_Notas::actualizar(unsigned int diferencia_tiempo)
 {
 }
 
 void Tablero_Notas::dibujar()
 {
-	this->rectangulo->dibujar(this->x, this->y, this->ancho, this->alto, Color(0.95, 0.95, 0.95), false);
+	this->rectangulo->dibujar(this->x, this->y, this->ancho, this->alto, Color(0.95f, 0.95f, 0.95f), false);
 
-	this->rectangulo->color(Color(0.7, 0.7, 0.7));
+	this->rectangulo->color(Color(0.7f, 0.7f, 0.7f));
 	this->dibujar_lineas_horizontales();
 	this->dibujar_lineas_verticales();
 
@@ -121,6 +121,10 @@ void Tablero_Notas::dibujar()
 			this->dibujar_notas(pista, this->textura_nota_blanca, this->textura_nota_negra);//Dibuja la nota
 	}
 	this->rectangulo->extremos_fijos(false);
+}
+
+void Tablero_Notas::evento_raton(Raton *raton)
+{
 }
 
 void Tablero_Notas::calcular_tamannos()

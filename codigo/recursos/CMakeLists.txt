@@ -5,6 +5,8 @@ set(recursos
 	${CMAKE_CURRENT_SOURCE_DIR}/figura.c++
 	${CMAKE_CURRENT_SOURCE_DIR}/rectangulo.c++
 	${CMAKE_CURRENT_SOURCE_DIR}/texto.c++
+	${CMAKE_CURRENT_SOURCE_DIR}/particula.c++
+	${CMAKE_CURRENT_SOURCE_DIR}/generador_particulas.c++
 	${CMAKE_CURRENT_SOURCE_DIR}/color.c++
 	PARENT_SCOPE
 )

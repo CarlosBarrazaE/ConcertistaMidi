@@ -19,8 +19,8 @@ Barra_Progreso::Barra_Progreso(int x, int y, int ancho, int alto, microseconds_t
 	this->texto = recursos->obtener_tipografia(LetraMuyChica);
 	this->largo_texto = this->texto->ancho_texto(this->duracion_total);
 
-	color_fondo = new Color(0.2, 0.2, 0.2);
-	color_progreso = new Color(0.0, 0.1, 0.7);
+	color_fondo = new Color(0.2f, 0.2f, 0.2f);
+	color_progreso = new Color(0.0f, 0.1f, 0.7f);
 }
 
 Barra_Progreso::~Barra_Progreso()
@@ -57,10 +57,36 @@ microseconds_t Barra_Progreso::o_tiempo_seleccionado()
 	return this->tiempo_nuevo;
 }
 
-void Barra_Progreso::actualizar(Raton *raton)
+void Barra_Progreso::actualizar(unsigned int diferencia_tiempo)
 {
 	progreso = ((double)this->tiempo_actual / (double)this->tiempo_total) * this->ancho;
+}
 
+void Barra_Progreso::dibujar()
+{
+	rectangulo->textura(false);
+	rectangulo->dibujar(this->x, this->y, this->progreso, this->alto, *this->color_progreso);
+	rectangulo->dibujar(this->x+this->progreso, this->y, this->ancho - this->progreso, this->alto, *this->color_fondo);
+
+	rectangulo->color(Color(0.3f, 0.3f, 0.3f));
+	for(int i=0; i<this->lineas.size(); i++)
+	{
+		rectangulo->dibujar(((double)lineas[i] / (double)this->tiempo_total) * this->ancho, this->y, 1, this->alto);
+	}
+
+	rectangulo->color(Color(0.15f, 0.15f, 0.15f));
+	rectangulo->dibujar(this->x, this->y, this->ancho, 1);
+	rectangulo->dibujar(this->x, this->y+this->alto-1, this->ancho, 1);
+
+	t_frente->activar();
+	rectangulo->dibujar(this->x, this->y, this->ancho, this->alto, Color(1.0f, 1.0f, 1.0f), true);
+
+	this->texto->imprimir(this->x+4, this->y + this->alto-4, Funciones::milisegundos_a_texto(this->tiempo_actual), Color(1.0f, 1.0f, 1.0f));
+	this->texto->imprimir(this->x+this->ancho - (4 + this->largo_texto), this->y + this->alto-4, this->duracion_total, Color(1.0f, 1.0f, 1.0f));
+}
+
+void Barra_Progreso::evento_raton(Raton *raton)
+{
 	if(raton->x() >= this->x && raton->x() <= this->x + this->ancho &&
 		raton->y() >= this->y && raton->y() <= this->y + this->alto)
 	{
@@ -85,29 +111,4 @@ void Barra_Progreso::actualizar(Raton *raton)
 		this->sobre_barra = false;
 		this->tiempo_nuevo = -1;
 	}
-}
-
-void Barra_Progreso::dibujar()
-{
-	rectangulo->textura(false);
-	rectangulo->dibujar(this->x, this->y, this->progreso, this->alto, *this->color_progreso);
-	rectangulo->dibujar(this->x+this->progreso, this->y, this->ancho - this->progreso, this->alto, *this->color_fondo);
-
-	rectangulo->color(Color(0.3, 0.3, 0.3));
-	for(int i=0; i<this->lineas.size(); i++)
-	{
-		rectangulo->dibujar(((double)lineas[i] / (double)this->tiempo_total) * this->ancho, this->y, 1, this->alto);
-	}
-
-	rectangulo->color(Color(0.15, 0.15, 0.15));
-	rectangulo->dibujar(this->x, this->y, this->ancho, 1);
-	rectangulo->dibujar(this->x, this->y+this->alto-1, this->ancho, 1);
-
-	t_frente->activar();
-	rectangulo->dibujar(this->x, this->y, this->ancho, this->alto, Color(1.0, 1.0, 1.0), true);
-
-	this->texto->imprimir(this->x+4, this->y + this->alto-4, Funciones::milisegundos_a_texto(this->tiempo_actual), Color(1.0, 1.0, 1.0));
-	this->texto->imprimir(this->x+this->ancho - (4 + this->largo_texto), this->y + this->alto-4, this->duracion_total, Color(1.0, 1.0, 1.0));
-
-
 }

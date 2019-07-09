@@ -93,7 +93,7 @@ void ajustar_ventana(Controlador_Juego *controlador, int ancho_nuevo, int alto_n
 
 void eventos_raton_botones(Controlador_Juego *controlador, int boton, int accion)
 {
-	Raton *raton = controlador->eventos_raton();
+	Raton *raton = controlador->o_raton();
 
 	bool estado = false;
 	if(accion == SDL_PRESSED)
@@ -107,17 +107,20 @@ void eventos_raton_botones(Controlador_Juego *controlador, int boton, int accion
 		raton->actualizar_boton(BotonCentral, estado);
 	else if(boton == SDL_BUTTON_RIGHT)
 		raton->actualizar_boton(BotonDerecho, estado);
+	controlador->eventos_raton();
 }
 void eventos_raton_posicion(Controlador_Juego *controlador, int x, int y)
 {
-	Raton *raton = controlador->eventos_raton();
+	Raton *raton = controlador->o_raton();
 	raton->actualizar_posicion(x, y);
+	controlador->eventos_raton();
 }
 
 void evento_raton_rueda(Controlador_Juego *controlador, int desplazamiento_x, int desplazamiento_y)
 {
-	Raton *raton = controlador->eventos_raton();
+	Raton *raton = controlador->o_raton();
 	raton->actualizar_desplazamiento(desplazamiento_x, desplazamiento_y);
+	controlador->eventos_raton();
 }
 
 void eventos_taclado(SDL_Window *ventana, Controlador_Juego *controlador, int tecla, bool estado)

@@ -26,7 +26,7 @@ Administrador_Recursos *Controlador_Juego::obtener_administrador_recursos()
 void Controlador_Juego::actualizar()
 {
 	fps = Fps::tiempo_fotograma();
-	ventana_actual->actualizar(&this->raton);
+	ventana_actual->actualizar(Fps::obtener_nanosegundos());
 	ventana_actual->dibujar();
 
 	if(this->mostrar_fps)
@@ -75,9 +75,14 @@ bool Controlador_Juego::terminar()
 	return this->finalizar;
 }
 
-Raton *Controlador_Juego::eventos_raton()
+Raton *Controlador_Juego::o_raton()
 {
 	return &this->raton;
+}
+
+void Controlador_Juego::eventos_raton()
+{
+	ventana_actual->evento_raton(&this->raton);
 }
 
 void Controlador_Juego::eventos_teclado(Tecla tecla, bool estado)

@@ -17,8 +17,8 @@ Boton::Boton(int x, int y, int ancho, int alto, std::string texto, Textura2D *te
 	this->boton_activado = false;
 
 	color_boton_normal = color;
-	color_boton_sobre.e_color(color.o_rojo()-0.1, color.o_verde()-0.1, color.o_azul()-0.1);
-	color_texto.e_color(0.2, 0.2, 0.2);
+	color_boton_sobre.e_color(color.o_rojo()-0.1f, color.o_verde()-0.1f, color.o_azul()-0.1f);
+	color_texto.e_color(0.2f, 0.2f, 0.2f);
 
 	color_boton = color_boton_normal;
 
@@ -55,7 +55,18 @@ void Boton::posicion_y(int y)
 	this->y = y;
 }
 
-void Boton::actualizar(Raton *raton)
+void Boton::actualizar(unsigned int diferencia_tiempo)
+{
+}
+
+void Boton::dibujar()
+{
+	this->textura_boton->activar();
+	rectangulo->dibujar(this->x, this->y, this->ancho, this->alto, color_boton);
+	this->texto->imprimir(this->x+this->ancho/2 - this->ajuste_texto, this->y+this->alto/2 + this->texto->alto_texto()/2, this->texto_boton, color_texto);
+}
+
+void Boton::evento_raton(Raton *raton)
 {
 	if(raton->x() >= this->x && raton->x() <= this->x + this->ancho &&
 		raton->y() >= this->y && raton->y() <= this->y + this->alto)
@@ -77,13 +88,6 @@ void Boton::actualizar(Raton *raton)
 		this->boton_pre_activado = false;
 		this->boton_activado = false;
 	}
-}
-
-void Boton::dibujar()
-{
-	this->textura_boton->activar();
-	rectangulo->dibujar(this->x, this->y, this->ancho, this->alto, color_boton);
-	this->texto->imprimir(this->x+this->ancho/2 - this->ajuste_texto, this->y+this->alto/2 + this->texto->alto_texto()/2, this->texto_boton, color_texto);
 }
 
 bool Boton::esta_activado()
