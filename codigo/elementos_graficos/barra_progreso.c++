@@ -19,8 +19,8 @@ Barra_Progreso::Barra_Progreso(int x, int y, int ancho, int alto, microseconds_t
 	this->texto = recursos->obtener_tipografia(LetraMuyChica);
 	this->largo_texto = this->texto->ancho_texto(this->duracion_total);
 
-	color_fondo = new Color(0.2f, 0.2f, 0.2f);
-	color_progreso = new Color(0.0f, 0.1f, 0.7f);
+	color_fondo = new Color(0.8f, 0.8f, 0.8f);
+	color_progreso = new Color(0.145f, 0.707f, 1.0f);
 }
 
 Barra_Progreso::~Barra_Progreso()
@@ -72,7 +72,7 @@ void Barra_Progreso::dibujar()
 	rectangulo->dibujar(this->x, this->y, this->progreso, this->alto, *this->color_progreso);
 	rectangulo->dibujar(this->x+this->progreso, this->y, this->ancho - this->progreso, this->alto, *this->color_fondo);
 
-	rectangulo->color(Color(0.3f, 0.3f, 0.3f));
+	rectangulo->color(Color(0.5f, 0.5f, 0.5f));
 	for(int i=0; i<this->lineas.size(); i++)
 	{
 		rectangulo->dibujar(((double)lineas[i] / (double)this->tiempo_total) * this->ancho, this->y, 1, this->alto);
@@ -83,10 +83,11 @@ void Barra_Progreso::dibujar()
 	rectangulo->dibujar(this->x, this->y+this->alto-1, this->ancho, 1);
 
 	t_frente->activar();
-	rectangulo->dibujar(this->x, this->y, this->ancho, this->alto, Color(1.0f, 1.0f, 1.0f), true);
+	rectangulo->textura(true);
+	rectangulo->dibujar(this->x, this->y, this->ancho, this->alto, Color(1.0f, 1.0f, 1.0f));
 
-	this->texto->imprimir(this->x+4, this->y + this->alto-4, Funciones::milisegundos_a_texto(this->tiempo_actual), Color(1.0f, 1.0f, 1.0f));
-	this->texto->imprimir(this->x+this->ancho - (4 + this->largo_texto), this->y + this->alto-4, this->duracion_total, Color(1.0f, 1.0f, 1.0f));
+	this->texto->imprimir(this->x+4, this->y + this->alto-4, Funciones::milisegundos_a_texto(this->tiempo_actual), Color(0.0f, 0.0f, 0.0f));
+	this->texto->imprimir(this->x+this->ancho - (4 + this->largo_texto), this->y + this->alto-4, this->duracion_total, Color(0.0f, 0.0f, 0.0f));
 }
 
 void Barra_Progreso::evento_raton(Raton *raton)

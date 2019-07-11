@@ -16,9 +16,7 @@ Administrador_Recursos::Administrador_Recursos()
 	archivo_texturas[T_TeclaNegraPresionada] = "../texturas/tecla_negra_presionada.tga";
 	archivo_texturas[T_BordeOrganoRojo] = "../texturas/borde_organo_rojo.tga";
 	archivo_texturas[T_BordeOrganoNegro] = "../texturas/borde_organo_negro.tga";
-	archivo_texturas[T_NotaBlanca] = "../texturas/nota_blanca.tga";
-	archivo_texturas[T_NotaNegra] = "../texturas/nota_negra.tga";
-	archivo_texturas[T_SombraNota] = "../texturas/sombra_nota.tga";
+	archivo_texturas[T_Nota] = "../texturas/nota.tga";
 	archivo_texturas[T_Sombra] = "../texturas/sombra.tga";
 	archivo_texturas[T_FrenteBarraProgreso] = "../texturas/frente_barra_progreso.tga";
 	archivo_texturas[T_ParticulaNota] = "../texturas/particula_nota.tga";

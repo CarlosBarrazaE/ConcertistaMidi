@@ -11,9 +11,7 @@ Tablero_Notas::Tablero_Notas(int x, int y, int ancho, int alto, Teclado *teclado
 	this->calcular_tamannos();
 
 	this->textura_sombra = recursos->obtener_textura(T_Sombra);
-	this->textura_nota_blanca = recursos->obtener_textura(T_NotaBlanca);
-	this->textura_nota_negra = recursos->obtener_textura(T_NotaNegra);
-	//this->textura_sombra_nota = recursos->obtener_textura(T_SombraNota);
+	this->textura_nota = recursos->obtener_textura(T_Nota);
 
 	this->rectangulo = recursos->obtener_figura(F_Rectangulo);
 	this->texto = recursos->obtener_tipografia(LetraMuyChica);
@@ -97,7 +95,8 @@ void Tablero_Notas::actualizar(unsigned int diferencia_tiempo)
 
 void Tablero_Notas::dibujar()
 {
-	this->rectangulo->dibujar(this->x, this->y, this->ancho, this->alto, Color(0.95f, 0.95f, 0.95f), false);
+	this->rectangulo->textura(false);
+	this->rectangulo->dibujar(this->x, this->y, this->ancho, this->alto, Color(0.95f, 0.95f, 0.95f));
 
 	this->rectangulo->color(Color(0.7f, 0.7f, 0.7f));
 	this->dibujar_lineas_horizontales();
@@ -106,21 +105,14 @@ void Tablero_Notas::dibujar()
 	this->rectangulo->textura(true);
 	this->textura_sombra->activar();
 	this->rectangulo->dibujar(this->x, this->y, this->ancho, 20);
-/*
+
+	this->rectangulo->extremos_fijos(false, true);
 	for(int pista=0; pista<notas.size(); pista++)
 	{
 		if(notas[pista].size() > 0)
-			this->dibujar_notas(pista, this->textura_sombra_nota, NULL);//Dibuja la sombra de la nota
+			this->dibujar_notas(pista);//Dibuja la nota
 	}
-	//TODO ¿se podran dibujar las notas en un framebuffer diferente?
-*/
-	this->rectangulo->extremos_fijos(true);
-	for(int pista=0; pista<notas.size(); pista++)
-	{
-		if(notas[pista].size() > 0)
-			this->dibujar_notas(pista, this->textura_nota_blanca, this->textura_nota_negra);//Dibuja la nota
-	}
-	this->rectangulo->extremos_fijos(false);
+	this->rectangulo->extremos_fijos(false, false);
 }
 
 void Tablero_Notas::evento_raton(Raton *raton)
@@ -173,16 +165,16 @@ void Tablero_Notas::dibujar_lineas_verticales()
 	}
 }
 
-void Tablero_Notas::dibujar_notas(int pista, Textura2D *textura_nota_blanca, Textura2D *textura_nota_negra)
+void Tablero_Notas::dibujar_notas(int pista)
 {
 	int ajuste_negra = 0;
 	int ancho_tecla = 0;
 	int posicion_blanca = 0;
 	int posicion_negra = 0;
 	int largo_nota = 0;
-	int largo_final = 0;
-	int ajuste_y = 0;
-	int posicion_y = 0;
+	int largo_final_nota = 0;
+	int posicion_y = 0;//Es negativo hasta que la tota sale de la pantalla
+	bool es_negra = false;
 
 	for(int n=this->ultima_nota[pista]; n<notas[pista].size(); n++)
 	{
@@ -192,7 +184,8 @@ void Tablero_Notas::dibujar_notas(int pista, Textura2D *textura_nota_blanca, Tex
 			break;//No se dibujan las notas que aun no entran en la pantalla
 		largo_nota = (notas[pista][n].end - notas[pista][n].start) / this->velocidad_caida;
 
-		if(posicion_y-largo_nota > 0 && largo_nota >= 10 || posicion_y-10 > 0 && largo_nota < 10|| largo_nota == 0)//La nota n salio de la pantalla
+		//Alto minimo de la nota a mostrar = 20
+		if(posicion_y-largo_nota > 0 && largo_nota >= 20 || posicion_y-20 > 0 && largo_nota < 20 || largo_nota == 0)//La nota n salio de la pantalla
 		{
 			if(n == this->ultima_nota[pista])
 				this->ultima_nota[pista] = n+1;
@@ -227,38 +220,43 @@ void Tablero_Notas::dibujar_notas(int pista, Textura2D *textura_nota_blanca, Tex
 			else if(negra==4)
 				ajuste_negra = this->ancho_blanca - (this->ancho_negra * 0.5);
 
-			textura_nota_negra->activar();
 			if(posicion_y >= 0)
 			{
 				posicion_negra = Octava::prosicion_nota_negra(notas[pista][n].note_id) - this->teclado->o_desplazamiento_negras();
 				teclas_activas_negras[posicion_negra] = pistas->at(notas[pista][n].track_id)->o_color();
 			}
+			es_negra = true;
 		}
 		else
 		{
 			ancho_tecla = this->ancho_blanca;
 			ajuste_negra = 0;
 
-			textura_nota_blanca->activar();
 			if(posicion_y >= 0)
 			{
 				teclas_activas_blancas[posicion_blanca] = pistas->at(notas[pista][n].track_id)->o_color();
 			}
+			es_negra = false;
 		}
 
 		//Recorta la parte de la nota que no se ve
 		if(posicion_y > 20)
-		{
-			ajuste_y = posicion_y - 20;//Para compensar la posicion y de la nota
-			largo_final = largo_nota - (posicion_y-20);//Reduce el alto de la nota
-		}
+			largo_final_nota = largo_nota - (posicion_y-20);//Reduce el alto de la nota
 		else
+			largo_final_nota = largo_nota;
+
+		//20 es le alto minimo alto de la nota, es la suma de los 2 bordes fijos
+		if(largo_final_nota < 20)
 		{
-			ajuste_y = 0;
-			largo_final = largo_nota;
+			largo_nota += 20 - largo_final_nota;
+			largo_final_nota = 20;
 		}
 
-		this->rectangulo->color(pistas->at(notas[pista][n].track_id)->o_color());
-		this->rectangulo->dibujar_estirable(this->x+this->ajuste_x + posicion_blanca * this->ancho_blanca + ajuste_negra, this->y+this->alto + posicion_y-ajuste_y, ancho_tecla, largo_final, 5);
+		if(es_negra)
+			this->rectangulo->color(pistas->at(notas[pista][n].track_id)->o_color()-0.3);
+		else
+			this->rectangulo->color(pistas->at(notas[pista][n].track_id)->o_color());
+		textura_nota->activar();
+		this->rectangulo->dibujar_estirable(this->x+this->ajuste_x + posicion_blanca * this->ancho_blanca + ajuste_negra, this->y+this->alto+posicion_y-largo_nota, ancho_tecla, largo_final_nota, 0, 10);
 	}
 }

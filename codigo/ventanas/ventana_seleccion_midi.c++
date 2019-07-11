@@ -33,10 +33,11 @@ void VentanaSeleccionMusica::actualizar(unsigned int diferencia_tiempo)
 
 void VentanaSeleccionMusica::dibujar()
 {
-	textura_fondo->activar();
-	rectangulo->dibujar(0, 0, Pantalla::ancho, 40);
-	//rectangulo->dibujar(0, Pantalla::alto - 40, Pantalla::ancho, 40);
+	rectangulo->textura(false);
+	rectangulo->dibujar(0, 0, Pantalla::ancho, 40, Color(0.063f, 0.494f, 0.7f));
+	rectangulo->dibujar(0, Pantalla::alto - 40, Pantalla::ancho, 40, Color(0.71f, 0.816f, 0.867f));
 	texto->imprimir(Pantalla::centro_h() - ajuste_titulo, 30, "Seleccione un archivo para tocar", Color(1.0f, 1.0f, 1.0f));
+
 	boton_atras->dibujar();
 	boton_continuar->dibujar();
 }

@@ -29,11 +29,13 @@ Rectangulo::Rectangulo(Sombreador *sombreador) : Figura(sombreador)
 
 	this->color_rectangulo = Color(1.0f, 1.0f, 1.0f);
 	this->textura_activada = true;
-	this->textura_estirable = false;
+	this->textura_estirable_horizontal = false;
+	this->textura_estirable_vertical = false;
 
 	sombreador->e_vector4f("color", this->color_rectangulo.o_rojo(), this->color_rectangulo.o_verde(), this->color_rectangulo.o_azul(), 1.0f);
 	sombreador->e_bool("textura_activada", this->textura_activada);
-	sombreador->e_bool("textura_estirable", this->textura_estirable);
+	sombreador->e_bool("textura_estirable_horizontal", this->textura_estirable_horizontal);
+	sombreador->e_bool("textura_estirable_vertical", this->textura_estirable_vertical);
 }
 
 Rectangulo::~Rectangulo()
@@ -62,20 +64,19 @@ void Rectangulo::textura(bool estado)
 	}
 }
 
-void Rectangulo::extremos_fijos(bool estado)
+void Rectangulo::extremos_fijos(bool horizontal, bool vertical)
 {
-	if(this->textura_estirable != estado)
+	if(this->textura_estirable_horizontal != horizontal)
 	{
-		this->textura_estirable = estado;
-		sombreador->e_bool("textura_estirable", this->textura_estirable);
+		this->textura_estirable_horizontal = horizontal;
+		sombreador->e_bool("textura_estirable_horizontal", this->textura_estirable_horizontal);
 	}
-}
 
-void Rectangulo::dibujar(float x, float y, float ancho, float alto, Color color, bool textura)
-{
-	this->textura(textura);
-	this->color(color);
-	this->dibujar(x, y, ancho, alto);
+	if(this->textura_estirable_vertical != vertical)
+	{
+		this->textura_estirable_vertical = vertical;
+		sombreador->e_bool("textura_estirable_vertical", this->textura_estirable_vertical);
+	}
 }
 
 void Rectangulo::dibujar(float x, float y, float ancho, float alto, Color color)
@@ -99,27 +100,51 @@ void Rectangulo::dibujar(float x, float y, float ancho, float alto)
 	glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
 }
 
-void Rectangulo::dibujar_estirable(float x, float y, float ancho, float alto, float borde_vertical)
+void Rectangulo::dibujar_estirable(float x, float y, float ancho, float alto, float borde_horizontal, float borde_vertical)
 {
 	//Dibuja un rectangulo con textura fija arriba y abajo de alto variable en el centro.
+	bool cambio = false;
 
-	//Requiere activar el uso de textura_estirable y establecer un valor mayor que 0 para el borde
-	if(!this->textura_estirable || borde_vertical <= 0)//Si no cumple las condiciones se dibuja un rectangulo normal
-		this->dibujar(x, y, ancho, alto);
-	else
+	if(borde_horizontal <= 0 && this->textura_estirable_horizontal)
 	{
-		int alto_nuevo = borde_vertical*2;//Es el tamaño minimo para la nota
-		if(alto_nuevo < alto)
-			alto_nuevo = alto;
-
-		if(this->borde_vertical != borde_vertical / alto_nuevo)
-		{
-			this->borde_vertical = borde_vertical / alto_nuevo;
-			sombreador->e_float("borde", this->borde_vertical);
-		}
-
-		//x, y es el punto base comenzando de abajo hacia arriba
-		this->dibujar(x, y-alto_nuevo, ancho, alto_nuevo);
+		this->textura_estirable_horizontal = false;
+		sombreador->e_bool("textura_estirable_horizontal", false);
+		borde_horizontal = 0;
 	}
+
+	if(borde_vertical <= 0 && this->textura_estirable_vertical)
+	{
+		this->textura_estirable_vertical = false;
+		sombreador->e_bool("textura_estirable_vertical", false);
+		borde_vertical = 0;
+	}
+
+	if(borde_horizontal > 0 && !this->textura_estirable_horizontal)
+	{
+		this->textura_estirable_horizontal = true;
+		sombreador->e_bool("textura_estirable_horizontal", true);
+	}
+	if(borde_vertical > 0 && !this->textura_estirable_vertical)
+	{
+		this->textura_estirable_vertical = true;
+		sombreador->e_bool("textura_estirable_vertical", true);
+	}
+
+	if(this->borde_horizontal != borde_horizontal / ancho)
+	{
+		this->borde_horizontal = borde_horizontal / ancho;
+		cambio = true;
+	}
+
+	if(this->borde_vertical != borde_vertical / alto)
+	{
+		this->borde_vertical = borde_vertical / alto;
+		cambio = true;
+	}
+
+	if(cambio)
+		sombreador->e_vector2f("borde", this->borde_horizontal, this->borde_vertical);
+
+	this->dibujar(x, y, ancho, alto);
 }
 

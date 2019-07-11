@@ -14,7 +14,7 @@
 class Tablero_Notas : public Elemento
 {
 private:
-	Textura2D *textura_sombra, *textura_nota_blanca, *textura_nota_negra, *textura_sombra_nota;
+	Textura2D *textura_sombra, *textura_nota;
 	Rectangulo *rectangulo;
 	Texto *texto;
 
@@ -34,7 +34,7 @@ private:
 	void calcular_tamannos();
 	void dibujar_lineas_horizontales();
 	void dibujar_lineas_verticales();
-	void dibujar_notas(int pista, Textura2D *textura_nota_blanca, Textura2D *textura_nota_negra);
+	void dibujar_notas(int pista);
 
 public:
 	Tablero_Notas(int x, int y, int alto, int ancho, Teclado *teclado, Administrador_Recursos *recursos);

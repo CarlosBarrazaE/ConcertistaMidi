@@ -88,7 +88,8 @@ void Organo::actualizar(unsigned int diferencia_tiempo)
 
 void Organo::dibujar()
 {
-	rectangulo->dibujar(this->x, this->y - this->alto, this->ancho, this->alto, Color(0.0f, 0.0f, 0.0f), false);
+	rectangulo->textura(false);
+	rectangulo->dibujar(this->x, this->y - this->alto, this->ancho, this->alto, Color(0.0f, 0.0f, 0.0f));
 
 	tecla_blanca->activar();
 	rectangulo->textura(true);

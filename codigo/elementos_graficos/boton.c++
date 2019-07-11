@@ -62,6 +62,7 @@ void Boton::actualizar(unsigned int diferencia_tiempo)
 void Boton::dibujar()
 {
 	this->textura_boton->activar();
+	rectangulo->textura(true);
 	rectangulo->dibujar(this->x, this->y, this->ancho, this->alto, color_boton);
 	this->texto->imprimir(this->x+this->ancho/2 - this->ajuste_texto, this->y+this->alto/2 + this->texto->alto_texto()/2, this->texto_boton, color_texto);
 }
