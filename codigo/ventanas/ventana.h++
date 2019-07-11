@@ -10,7 +10,7 @@ enum Accion
 	Ninguna,
 	CambiarATitulo,
 	CambiarAConfiguracion,
-	CambiarASeleccionMidi,
+	CambiarASeleccionMusica,
 	CambiarASeleccionPista,
 	CambiarAOrgano,
 	Salir

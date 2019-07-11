@@ -32,6 +32,8 @@ void VentanaConfiguracion::evento_raton(Raton *raton)
 
 void VentanaConfiguracion::evento_teclado(Tecla tecla, bool estado)
 {
+	if(tecla == TECLA_ESCAPE && !estado)
+		this->accion = CambiarATitulo;
 }
 
 void VentanaConfiguracion::evento_pantalla(int ancho, int alto)

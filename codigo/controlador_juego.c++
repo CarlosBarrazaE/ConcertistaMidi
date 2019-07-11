@@ -41,10 +41,15 @@ void Controlador_Juego::actualizar()
 		delete ventana_actual;
 		ventana_actual = new VentanaTitulo(this->recursos);
 	}
-	else if(ventana_actual->obtener_accion() == CambiarASeleccionMidi)
+	else if(ventana_actual->obtener_accion() == CambiarASeleccionMusica)
 	{
 		delete ventana_actual;
 		ventana_actual = new VentanaSeleccionMusica(this->recursos);
+	}
+	else if(ventana_actual->obtener_accion() == CambiarASeleccionPista)
+	{
+		delete ventana_actual;
+		ventana_actual = new VentanaSeleccionPista(this->recursos);
 	}
 	else if(ventana_actual->obtener_accion() == CambiarAOrgano)
 	{
@@ -91,8 +96,6 @@ void Controlador_Juego::eventos_teclado(Tecla tecla, bool estado)
 		this->mostrar_fps = !this->mostrar_fps;
 	else if(tecla == TECLA_F11 && estado)
 		this->pantalla_completa = !this->pantalla_completa;
-	else if(tecla == TECLA_ESCAPE)
-		this->finalizar = true;
 	else if(tecla == TECLA_F12 && estado)
 		this->modo_alambre = !this->modo_alambre;
 	else

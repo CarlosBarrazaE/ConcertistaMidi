@@ -3,7 +3,7 @@
 VentanaOrgano::VentanaOrgano(Administrador_Recursos *recursos) : Ventana()
 {
 	//musica = new Midi(Midi::ReadFromFile("../musica/Ven Señor no tardes propia.midi"));
-	musica = new Midi(Midi::ReadFromFile("../musica/274SantaMariadelCamino.mid"));
+	musica = new Midi(Midi::ReadFromFile("../musica/Click Clock Wood - Sax Quartet.midi"));
 	//musica = new Midi(Midi::ReadFromFile("../musica/Escala_musícal.midi"));
 	musica->Reset(3000000, 3000000);
 	MidiCommDescriptionList dispositivos_entrada = MidiCommIn::GetDeviceList();
@@ -121,7 +121,9 @@ void VentanaOrgano::evento_raton(Raton *raton)
 
 void VentanaOrgano::evento_teclado(Tecla tecla, bool estado)
 {
-	if(tecla == TECLA_FLECHA_ARRIBA && estado)
+	if(tecla == TECLA_ESCAPE && !estado)
+		this->accion = CambiarASeleccionPista;
+	else if(tecla == TECLA_FLECHA_ARRIBA && estado)
 		tablero->c_velocidad_caida(1);
 	else if(tecla == TECLA_FLECHA_ABAJO && estado)
 		tablero->c_velocidad_caida(-1);

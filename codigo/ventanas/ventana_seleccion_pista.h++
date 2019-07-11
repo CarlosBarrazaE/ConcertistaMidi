@@ -1,14 +1,13 @@
-#ifndef VENTANASELECCIONMIDI_H
-#define VENTANASELECCIONMIDI_H
+#ifndef VENTANASELECCIONPISTA_H
+#define VENTANASELECCIONPISTA_H
 
 #include "ventana.h++"
 #include "../elementos_graficos/boton.h++"
 
-class VentanaSeleccionMusica : public Ventana
+class VentanaSeleccionPista : public Ventana
 {
 private:
 	Rectangulo *rectangulo;
-	Textura2D *textura_fondo;
 	Texto *texto;
 
 	Boton *boton_atras;
@@ -16,8 +15,8 @@ private:
 
 	int ajuste_titulo;
 public:
-	VentanaSeleccionMusica(Administrador_Recursos *recursos);
-	~VentanaSeleccionMusica();
+	VentanaSeleccionPista(Administrador_Recursos *recursos);
+	~VentanaSeleccionPista();
 
 	void actualizar(unsigned int diferencia_tiempo);
 	void dibujar();

@@ -61,7 +61,7 @@ void VentanaTitulo::evento_raton(Raton *raton)
 	boton_salir->evento_raton(raton);
 
 	if(boton_tocar->esta_activado())
-		this->accion = CambiarASeleccionMidi;
+		this->accion = CambiarASeleccionMusica;
 	else if(boton_practicar->esta_activado())
 		this->accion = CambiarAOrgano;
 	else if(boton_configurar->esta_activado())
@@ -72,6 +72,8 @@ void VentanaTitulo::evento_raton(Raton *raton)
 
 void VentanaTitulo::evento_teclado(Tecla tecla, bool estado)
 {
+	if(tecla == TECLA_ESCAPE && estado)
+		this->accion = Salir;
 }
 
 void VentanaTitulo::evento_pantalla(int ancho, int alto)

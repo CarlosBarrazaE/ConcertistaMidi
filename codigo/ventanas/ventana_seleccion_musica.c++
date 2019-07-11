@@ -1,4 +1,4 @@
-#include "ventana_seleccion_midi.h++"
+#include "ventana_seleccion_musica.h++"
 
 VentanaSeleccionMusica::VentanaSeleccionMusica(Administrador_Recursos *recursos) : Ventana()
 {
@@ -16,7 +16,7 @@ VentanaSeleccionMusica::VentanaSeleccionMusica(Administrador_Recursos *recursos)
 
 	rectangulo = recursos->obtener_figura(F_Rectangulo);
 	texto = recursos->obtener_tipografia(LetraTitulo);
-	ajuste_titulo = texto->ancho_texto("Seleccione un archivo para tocar") / 2;
+	ajuste_titulo = texto->ancho_texto("Seleccione una canción para tocar") / 2;
 }
 
 VentanaSeleccionMusica::~VentanaSeleccionMusica()
@@ -34,9 +34,9 @@ void VentanaSeleccionMusica::actualizar(unsigned int diferencia_tiempo)
 void VentanaSeleccionMusica::dibujar()
 {
 	rectangulo->textura(false);
-	rectangulo->dibujar(0, 0, Pantalla::ancho, 40, Color(0.063f, 0.494f, 0.7f));
-	rectangulo->dibujar(0, Pantalla::alto - 40, Pantalla::ancho, 40, Color(0.71f, 0.816f, 0.867f));
-	texto->imprimir(Pantalla::centro_h() - ajuste_titulo, 30, "Seleccione un archivo para tocar", Color(1.0f, 1.0f, 1.0f));
+	rectangulo->dibujar(0, 0, Pantalla::ancho, 40, Color(0.141f, 0.624f, 0.933f));
+	rectangulo->dibujar(0, Pantalla::alto - 40, Pantalla::ancho, 40, Color(0.761f, 0.887f, 0.985f));
+	texto->imprimir(Pantalla::centro_h() - ajuste_titulo, 30, "Seleccione una canción para tocar", Color(1.0f, 1.0f, 1.0f));
 
 	boton_atras->dibujar();
 	boton_continuar->dibujar();
@@ -49,10 +49,14 @@ void VentanaSeleccionMusica::evento_raton(Raton *raton)
 
 	if(boton_atras->esta_activado())
 		this->accion = CambiarATitulo;
+	else if(boton_continuar->esta_activado())
+		this->accion = CambiarASeleccionPista;
 }
 
 void VentanaSeleccionMusica::evento_teclado(Tecla tecla, bool estado)
 {
+	if(tecla == TECLA_ESCAPE && !estado)
+		this->accion = CambiarATitulo;
 }
 
 void VentanaSeleccionMusica::evento_pantalla(int ancho, int alto)
