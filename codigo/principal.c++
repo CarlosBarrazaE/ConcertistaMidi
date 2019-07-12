@@ -173,6 +173,7 @@ void eventos_taclado(SDL_Window *ventana, Controlador_Juego *controlador, int te
 		case SDLK_PAUSE: controlador->eventos_teclado(TECLA_PAUSA, estado); break;
 		case SDLK_ESCAPE: controlador->eventos_teclado(TECLA_ESCAPE, estado); break;
 		case SDLK_RETURN: controlador->eventos_teclado(TECLA_ENTRAR, estado); break;
+		case SDLK_KP_ENTER: controlador->eventos_teclado(TECLA_ENTRAR, estado); break;
 		case SDLK_F1: controlador->eventos_teclado(TECLA_F1, estado); break;
 		case SDLK_F2: controlador->eventos_teclado(TECLA_F2, estado); break;
 		case SDLK_F3: controlador->eventos_teclado(TECLA_F3, estado); break;
