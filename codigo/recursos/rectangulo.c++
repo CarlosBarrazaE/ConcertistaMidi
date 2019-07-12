@@ -51,7 +51,7 @@ void Rectangulo::color(Color color_nuevo)
 	if(this->color_rectangulo != color_nuevo)
 	{
 		this->color_rectangulo = color_nuevo;
-		sombreador->e_vector4f("color", this->color_rectangulo.o_rojo(), this->color_rectangulo.o_verde(), this->color_rectangulo.o_azul(), 1.0f);
+		sombreador->e_vector4f("color", this->color_rectangulo.o_rojo(), this->color_rectangulo.o_verde(), this->color_rectangulo.o_azul(), this->color_rectangulo.o_alfa());
 	}
 }
 

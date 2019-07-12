@@ -56,6 +56,8 @@ void VentanaSeleccionPista::evento_teclado(Tecla tecla, bool estado)
 {
 	if(tecla == TECLA_ESCAPE && !estado)
 		this->accion = CambiarASeleccionMusica;
+	else if(tecla == TECLA_ENTRAR && !estado)
+		this->accion = CambiarAOrgano;
 }
 
 void VentanaSeleccionPista::evento_pantalla(int ancho, int alto)

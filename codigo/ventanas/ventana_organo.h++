@@ -14,6 +14,8 @@
 class VentanaOrgano : public Ventana
 {
 private:
+	Rectangulo *rectangulo;
+	Texto *texto_titulo;
 	Texto *texto;
 
 	Barra_Progreso *barra;
@@ -23,6 +25,12 @@ private:
 	std::map<int, Pista*> pistas;
 	std::string texto_evento;
 	double velocidad_musica;
+	bool cambio_velocidad;
+	int ancho_titulo;
+	std::string texto_pausa;
+	int ancho_pausa;
+
+	bool pausa;
 
 	Midi *musica;
 	MidiCommIn *midi_entrada;

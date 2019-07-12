@@ -20,7 +20,7 @@ Barra_Progreso::Barra_Progreso(int x, int y, int ancho, int alto, microseconds_t
 	this->largo_texto = this->texto->ancho_texto(this->duracion_total);
 
 	color_fondo = new Color(0.8f, 0.8f, 0.8f);
-	color_progreso = new Color(0.145f, 0.707f, 1.0f);
+	color_progreso = new Color(0.0f, 0.761f, 0.467f);
 }
 
 Barra_Progreso::~Barra_Progreso()

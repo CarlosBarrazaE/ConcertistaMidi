@@ -74,6 +74,8 @@ void VentanaTitulo::evento_teclado(Tecla tecla, bool estado)
 {
 	if(tecla == TECLA_ESCAPE && estado)
 		this->accion = Salir;
+	else if(tecla == TECLA_ENTRAR && !estado)
+		this->accion = CambiarASeleccionMusica;
 }
 
 void VentanaTitulo::evento_pantalla(int ancho, int alto)
