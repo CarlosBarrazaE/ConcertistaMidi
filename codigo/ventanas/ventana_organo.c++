@@ -5,7 +5,7 @@ VentanaOrgano::VentanaOrgano(Administrador_Recursos *recursos) : Ventana()
 	rectangulo = recursos->obtener_figura(F_Rectangulo);
 
 	//musica = new Midi(Midi::ReadFromFile("../musica/Ven Señor no tardes propia.midi"));
-	musica = new Midi(Midi::ReadFromFile("../musica/Banjo Kazooie -  Opening.midi"));
+	musica = new Midi(Midi::ReadFromFile("../musica/Click Clock Wood - Winter.midi"));
 	//musica = new Midi(Midi::ReadFromFile("../musica/Escala_musícal.midi"));
 	musica->Reset(5500000, 1000000);
 	MidiCommDescriptionList dispositivos_entrada = MidiCommIn::GetDeviceList();
@@ -71,7 +71,6 @@ VentanaOrgano::VentanaOrgano(Administrador_Recursos *recursos) : Ventana()
 
 VentanaOrgano::~VentanaOrgano()
 {
-	midi_salida->Reset();
 	delete barra;
 	delete tablero;
 	delete organo;
@@ -96,10 +95,6 @@ void VentanaOrgano::actualizar(unsigned int diferencia_tiempo)
 	for (MidiEventListWithTrackId::const_iterator i = evs.begin(); i != evs.end(); i++)
 	{
 		midi_salida->Write(i->second);
-		if(this->texto_evento.size() < 100)
-			this->texto_evento += i->second.Text();
-		else
-			this->texto_evento = i->second.Text();
 	}
 
 	if(barra->o_tiempo_seleccionado() > 0)
@@ -131,7 +126,6 @@ void VentanaOrgano::dibujar()
 	rectangulo->textura(false);
 	rectangulo->dibujar(0, 0, Pantalla::ancho, 40, Color(0.141f, 0.624f, 0.933f));
 	this->texto_titulo->imprimir(Pantalla::centro_h() - this->ancho_titulo, 30, std::to_string((int)(velocidad_musica*100)) + "%", Color(1.0f, 1.0f, 1.0f));
-	this->texto->imprimir(10, 100, this->texto_evento, Color(0.0f, 0.0f, 0.0f));
 	if(this->pausa)
 		this->texto_titulo->imprimir(Pantalla::centro_h() - this->ancho_titulo, 200, this->texto_pausa, Color(0.0f, 0.0f, 0.0f));
 }
@@ -146,7 +140,10 @@ void VentanaOrgano::evento_raton(Raton *raton)
 void VentanaOrgano::evento_teclado(Tecla tecla, bool estado)
 {
 	if(tecla == TECLA_ESCAPE && !estado)
+	{
+		midi_salida->Reset();
 		this->accion = CambiarASeleccionPista;
+	}
 	else if(tecla == TECLA_FLECHA_ARRIBA && estado)
 		tablero->c_velocidad_caida(1);
 	else if(tecla == TECLA_FLECHA_ABAJO && estado)

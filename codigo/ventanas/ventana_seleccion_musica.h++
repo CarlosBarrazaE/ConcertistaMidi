@@ -7,13 +7,16 @@
 class VentanaSeleccionMusica : public Ventana
 {
 private:
+	//Recursos
 	Rectangulo *rectangulo;
 	Textura2D *textura_fondo;
 	Texto *texto;
 
+	//Componentes
 	Boton *boton_atras;
 	Boton *boton_continuar;
 
+	//Texto pantalla
 	int ajuste_titulo;
 public:
 	VentanaSeleccionMusica(Administrador_Recursos *recursos);

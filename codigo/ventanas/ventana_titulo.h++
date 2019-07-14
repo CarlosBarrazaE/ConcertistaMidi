@@ -8,15 +8,16 @@
 class VentanaTitulo : public Ventana
 {
 private:
+	//Recursos
 	Rectangulo *rectangulo;
 	Textura2D *textura_fondo, *textura_titulo;
+	Texto *texto_version;
 
+	//Componetes
 	Boton *boton_practicar;
 	Boton *boton_tocar;
 	Boton *boton_configurar;
 	Boton *boton_salir;
-
-	Texto *texto_version;
 public:
 	VentanaTitulo(Administrador_Recursos *recursos);
 	~VentanaTitulo();

@@ -2,7 +2,7 @@
 #define BARRA_PROGRESO_H
 
 #include "elemento.h++"
-#include "../elementos/funciones.h++"
+#include "../util/funciones.h++"
 #include "../libmidi/Midi.h++"
 
 class Barra_Progreso : Elemento

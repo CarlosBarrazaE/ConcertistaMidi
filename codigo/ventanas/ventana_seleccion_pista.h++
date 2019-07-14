@@ -3,16 +3,21 @@
 
 #include "ventana.h++"
 #include "../elementos_graficos/boton.h++"
+#include "../elementos_graficos/configuracion_pista.h++"
 
 class VentanaSeleccionPista : public Ventana
 {
 private:
+	//Recursos
 	Rectangulo *rectangulo;
 	Texto *texto;
 
+	//Componentes
 	Boton *boton_atras;
 	Boton *boton_continuar;
+	Configuracion_Pista *pista_1;
 
+	//Texto pantalla
 	int ajuste_titulo;
 public:
 	VentanaSeleccionPista(Administrador_Recursos *recursos);

@@ -4,10 +4,9 @@
 #include "elemento.h++"
 #include "../recursos/generador_particulas.h++"
 #include "../recursos/rectangulo.h++"
-#include "../elementos/octava.h++"
-#include "../elementos/pista.h++"
-#include "../elementos/nota.h++"
-#include "../elementos/teclado.h++"
+#include "../util/octava.h++"
+#include "../control/pista.h++"
+#include "../control/teclado.h++"
 #include "../libmidi/Midi.h++"
 
 #include <map>

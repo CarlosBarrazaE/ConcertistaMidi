@@ -11,6 +11,7 @@ VentanaSeleccionPista::VentanaSeleccionPista(Administrador_Recursos *recursos) :
 	Texto *texto_boton = recursos->obtener_tipografia(LetraChica);
 	boton_atras->e_letra(texto_boton);
 	boton_continuar->e_letra(texto_boton);
+	pista_1 = new Configuracion_Pista(100, 100, recursos);
 
 	rectangulo = recursos->obtener_figura(F_Rectangulo);
 	texto = recursos->obtener_tipografia(LetraTitulo);
@@ -27,6 +28,7 @@ void VentanaSeleccionPista::actualizar(unsigned int diferencia_tiempo)
 {
 	boton_atras->actualizar(diferencia_tiempo);
 	boton_continuar->actualizar(diferencia_tiempo);
+	pista_1->actualizar(diferencia_tiempo);
 }
 
 void VentanaSeleccionPista::dibujar()
@@ -38,12 +40,15 @@ void VentanaSeleccionPista::dibujar()
 
 	boton_atras->dibujar();
 	boton_continuar->dibujar();
+	pista_1->dibujar();
 }
 
 void VentanaSeleccionPista::evento_raton(Raton *raton)
 {
 	boton_atras->evento_raton(raton);
 	boton_continuar->evento_raton(raton);
+
+	pista_1->evento_raton(raton);
 
 	if(boton_atras->esta_activado())
 		this->accion = CambiarASeleccionMusica;

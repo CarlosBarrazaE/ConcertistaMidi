@@ -1,18 +1,20 @@
 add_subdirectory(archivos)
-add_subdirectory(elementos)
+add_subdirectory(control)
 add_subdirectory(dispositivos)
 add_subdirectory(elementos_graficos)
 add_subdirectory(libmidi)
 add_subdirectory(recursos)
+add_subdirectory(util)
 add_subdirectory(ventanas)
 
 set(codigo
 	${archivos}
-	${elementos}
+	${control}
 	${dispositivos}
 	${elementos_graficos}
 	${libmidi}
 	${recursos}
+	${util}
 	${ventanas}
 	${CMAKE_CURRENT_SOURCE_DIR}/principal.c++
 	${CMAKE_CURRENT_SOURCE_DIR}/controlador_juego.c++

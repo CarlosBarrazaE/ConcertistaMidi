@@ -5,8 +5,8 @@
 #include "../elementos_graficos/barra_progreso.h++"
 #include "../elementos_graficos/tablero_notas.h++"
 #include "../elementos_graficos/organo.h++"
-#include "../elementos/pista.h++"
-#include "../elementos/tipo_teclados.h++"
+#include "../control/pista.h++"
+#include "../control/tipo_teclados.h++"
 #include "../libmidi/Midi.h++"
 #include "../libmidi/MidiComm.h++"
 #include <map>
@@ -14,24 +14,30 @@
 class VentanaOrgano : public Ventana
 {
 private:
+	//Recursos
 	Rectangulo *rectangulo;
 	Texto *texto_titulo;
 	Texto *texto;
 
+	//Componentes
 	Barra_Progreso *barra;
 	Tablero_Notas *tablero;
 	Organo *organo;
 
-	std::map<int, Pista*> pistas;
-	std::string texto_evento;
+	//Controles
 	double velocidad_musica;
 	bool cambio_velocidad;
-	int ancho_titulo;
-	std::string texto_pausa;
-	int ancho_pausa;
-
 	bool pausa;
 
+	//Datos
+	std::map<int, Pista*> pistas;
+
+	//Texto pantalla
+	std::string texto_pausa;
+	int ancho_titulo;
+	int ancho_pausa;
+
+	//Quitar de aqui
 	Midi *musica;
 	MidiCommIn *midi_entrada;
 	MidiCommOut *midi_salida;
