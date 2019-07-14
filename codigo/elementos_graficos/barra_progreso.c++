@@ -1,6 +1,7 @@
 #include "barra_progreso.h++"
 
 Barra_Progreso::Barra_Progreso(int x, int y, int ancho, int alto, microseconds_t tiempo_total, MidiEventMicrosecondList lineas, Administrador_Recursos *recursos)
+: color_fondo(0.8f, 0.8f, 0.8f), color_progreso(0.0f, 0.761f, 0.467f)
 {
 	this->x = x;
 	this->y = y;
@@ -18,15 +19,10 @@ Barra_Progreso::Barra_Progreso(int x, int y, int ancho, int alto, microseconds_t
 	rectangulo = recursos->obtener_figura(F_Rectangulo);
 	this->texto = recursos->obtener_tipografia(LetraMuyChica);
 	this->largo_texto = this->texto->ancho_texto(this->duracion_total);
-
-	color_fondo = new Color(0.8f, 0.8f, 0.8f);
-	color_progreso = new Color(0.0f, 0.761f, 0.467f);
 }
 
 Barra_Progreso::~Barra_Progreso()
 {
-	delete color_fondo;
-	delete color_progreso;
 }
 
 void Barra_Progreso::e_tiempo(microseconds_t tiempo_actual)
@@ -69,8 +65,8 @@ void Barra_Progreso::actualizar(unsigned int diferencia_tiempo)
 void Barra_Progreso::dibujar()
 {
 	rectangulo->textura(false);
-	rectangulo->dibujar(this->x, this->y, this->progreso, this->alto, *this->color_progreso);
-	rectangulo->dibujar(this->x+this->progreso, this->y, this->ancho - this->progreso, this->alto, *this->color_fondo);
+	rectangulo->dibujar(this->x, this->y, this->progreso, this->alto, this->color_progreso);
+	rectangulo->dibujar(this->x+this->progreso, this->y, this->ancho - this->progreso, this->alto, this->color_fondo);
 
 	rectangulo->color(Color(0.5f, 0.5f, 0.5f));
 	for(int i=0; i<this->lineas.size(); i++)

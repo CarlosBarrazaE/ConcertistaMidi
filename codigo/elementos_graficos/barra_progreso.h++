@@ -24,8 +24,8 @@ private:
 	std::string duracion_total;
 	int largo_texto;
 
-	Color *color_fondo;
-	Color *color_progreso;
+	Color color_fondo;
+	Color color_progreso;
 public:
 	Barra_Progreso(int x, int y, int ancho, int alto, microseconds_t tiempo_total, MidiEventMicrosecondList lineas, Administrador_Recursos *recursos);
 	~Barra_Progreso();
