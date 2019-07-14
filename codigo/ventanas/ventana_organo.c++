@@ -71,6 +71,7 @@ VentanaOrgano::VentanaOrgano(Administrador_Recursos *recursos) : Ventana()
 
 VentanaOrgano::~VentanaOrgano()
 {
+	midi_salida->Reset();
 	delete barra;
 	delete tablero;
 	delete organo;
