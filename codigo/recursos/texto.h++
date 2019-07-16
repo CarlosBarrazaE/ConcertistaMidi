@@ -26,10 +26,10 @@ enum Formato
 struct Caracter
 {
 	unsigned int codigo_unicode;
-	unsigned int ancho;
-	unsigned int alto;
-	unsigned int ajuste_izquierda;
-	unsigned int ajuste_arriba;
+	int ancho;
+	int alto;
+	int ajuste_izquierda;
+	int ajuste_arriba;
 	unsigned int avance_x;
 	unsigned int avance_y;
 	unsigned int textura_x;//Posicion dentro del atlas

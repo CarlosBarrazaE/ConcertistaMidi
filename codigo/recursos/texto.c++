@@ -56,7 +56,7 @@ Texto::~Texto()
 
 void Texto::generar_caracteres()
 {
-	icu::UnicodeString idioma_espannol = "0123456789 ⁰¹²³⁴⁵⁶⁷⁸⁹ABCDEFGHIJKLMNÑOPQRSTUVWXYZabcdefghijklmnñopqrstuvwxyzÁÉÍÓÚáéíóúÄËÏÖÜäëïöü,.-_;:'·#$€%&@\"\\()[]{}+-*/=¿?¡!<>ºªḉḈçÇ^�";
+	icu::UnicodeString idioma_espannol = "0123456789 ⁰¹²³⁴⁵⁶⁷⁸⁹ABCDEFGHIJKLMNÑOPQRSTUVWXYZabcdefghijklmnñopqrstuvwxyzÁÉÍÓÚáéíóúÄËÏÖÜäëïöüâêîôû,.-_;:'·#$€%&@\"\\()[]{}+-*/=¿?¡!<>ºªḉḈçÇ^�";
 
 	int contador = 0;
 	this->ancho_atlas = 0;
