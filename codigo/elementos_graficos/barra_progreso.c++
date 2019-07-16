@@ -1,12 +1,8 @@
 #include "barra_progreso.h++"
 
 Barra_Progreso::Barra_Progreso(int x, int y, int ancho, int alto, microseconds_t tiempo_total, MidiEventMicrosecondList lineas, Administrador_Recursos *recursos)
-: color_fondo(0.8f, 0.8f, 0.8f), color_progreso(0.0f, 0.761f, 0.467f)
+: Elemento(x, y, ancho, alto), color_fondo(0.8f, 0.8f, 0.8f), color_progreso(0.0f, 0.761f, 0.467f)
 {
-	this->x = x;
-	this->y = y;
-	this->ancho = ancho;
-	this->alto = alto;
 	this->tiempo_total = tiempo_total;
 	this->tiempo_actual = 0;
 	this->lineas = lineas;
@@ -31,21 +27,6 @@ void Barra_Progreso::e_tiempo(microseconds_t tiempo_actual)
 		this->tiempo_actual = 0;
 	else
 		this->tiempo_actual = tiempo_actual;
-}
-
-void Barra_Progreso::e_ancho(int ancho)
-{
-	this->ancho = ancho;
-}
-
-int Barra_Progreso::o_alto()
-{
-	return this->alto;
-}
-
-int Barra_Progreso::o_ancho()
-{
-	return this->ancho;
 }
 
 microseconds_t Barra_Progreso::o_tiempo_seleccionado()

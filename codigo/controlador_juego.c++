@@ -12,6 +12,27 @@ Controlador_Juego::Controlador_Juego(Administrador_Recursos *recursos)
 	this->texto = recursos->obtener_tipografia(LetraChica);
 
 	ventana_actual = new VentanaTitulo(recursos);
+
+
+	MidiCommDescriptionList dispositivos_entrada = MidiCommIn::GetDeviceList();
+	MidiCommDescriptionList dispositivos_salida = MidiCommOut::GetDeviceList();
+	Registro::aviso("Dispositivos de entrada:");
+	for(int x=0; x<dispositivos_entrada.size(); x++)
+	{
+		Registro::aviso("\tNombre: " + dispositivos_entrada[x].name);
+	}
+
+	Registro::aviso("Dispositivos de salida:");
+	for(int x=0; x<dispositivos_salida.size(); x++)
+	{
+		Registro::aviso("\tNombre: " + dispositivos_salida[x].name);
+	}
+
+	this->configuracion.cambiar_entrada(3);
+	this->configuracion.cambiar_salida(1);
+
+	this->musica.cargar_midi("../musica/prtytime.midi");
+	this->musica.e_nombre_musica("Nombre de la canción");
 }
 
 Controlador_Juego::~Controlador_Juego()
@@ -49,12 +70,12 @@ void Controlador_Juego::actualizar()
 	else if(ventana_actual->obtener_accion() == CambiarASeleccionPista)
 	{
 		delete ventana_actual;
-		ventana_actual = new VentanaSeleccionPista(this->recursos);
+		ventana_actual = new VentanaSeleccionPista(&this->musica, this->recursos);
 	}
 	else if(ventana_actual->obtener_accion() == CambiarAOrgano)
 	{
 		delete ventana_actual;
-		ventana_actual = new VentanaOrgano(this->recursos);
+		ventana_actual = new VentanaOrgano(&this->configuracion, &this->musica, this->recursos);
 	}
 	else if(ventana_actual->obtener_accion() == CambiarAConfiguracion)
 	{

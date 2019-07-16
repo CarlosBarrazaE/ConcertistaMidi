@@ -1,19 +1,14 @@
 #include "ventana_organo.h++"
 
-VentanaOrgano::VentanaOrgano(Administrador_Recursos *recursos) : Ventana()
+VentanaOrgano::VentanaOrgano(Configuracion *configuracion, Datos_Musica *musica, Administrador_Recursos *recursos) : Ventana()
 {
+	this->configuracion = configuracion;
+	this->musica = musica;
+
 	rectangulo = recursos->obtener_figura(F_Rectangulo);
-
-	//musica = new Midi(Midi::ReadFromFile("../musica/Ven Señor no tardes propia.midi"));
-	musica = new Midi(Midi::ReadFromFile("../musica/Click Clock Wood - Winter.midi"));
-	//musica = new Midi(Midi::ReadFromFile("../musica/Escala_musícal.midi"));
-	musica->Reset(5500000, 1000000);
-	MidiCommDescriptionList dispositivos_entrada = MidiCommIn::GetDeviceList();
-	MidiCommDescriptionList dispositivos_salida = MidiCommOut::GetDeviceList();
-
 	Teclado *teclado = Tipo_Teclado::obtener_teclado(Teclas88);
 
-	barra = new Barra_Progreso(0, 40, Pantalla::ancho, 40, musica->GetSongLengthInMicroseconds(), musica->GetBarLines(), recursos);
+	barra = new Barra_Progreso(0, 40, Pantalla::ancho, 40, musica->o_musica()->GetSongLengthInMicroseconds(), musica->o_musica()->GetBarLines(), recursos);
 	organo = new Organo(0, Pantalla::alto, Pantalla::ancho, teclado, recursos);
 	tablero = new Tablero_Notas(0, barra->o_alto()+40, Pantalla::ancho, Pantalla::alto - (organo->o_alto() + barra->o_alto() + 40), teclado, recursos);
 
@@ -21,45 +16,9 @@ VentanaOrgano::VentanaOrgano(Administrador_Recursos *recursos) : Ventana()
 	this->texto_titulo = recursos->obtener_tipografia(LetraTitulo);
 	this->texto = recursos->obtener_tipografia(LetraChica);
 
-	Registro::aviso("Dispositivos de entrada:");
-	for(int x=0; x<dispositivos_entrada.size(); x++)
-	{
-		Registro::aviso("\tNombre: " + dispositivos_entrada[x].name);
-	}
-
-	Registro::aviso("Dispositivos de salida:");
-	for(int x=0; x<dispositivos_salida.size(); x++)
-	{
-		Registro::aviso("\tNombre: " + dispositivos_salida[x].name);
-	}
-
-	midi_entrada = new MidiCommIn(3);//Deberia seleccionarse el id del dispositivo (Teclado)
-	midi_salida = new MidiCommOut(1);//Deberia seleccionarse el id del dispositivo (Timidity 0)
-
-	pistas[0] = new Pista(Color(0.0f, 0.598f, 0.0f), Automatico);//Verde
-	pistas[1] = new Pista(Color(0.0f, 0.598f, 1.0f), Automatico);//Azul
-	pistas[2] = new Pista(Color(1.0f, 0.598f, 1.0f), Automatico);//Rosado
-	pistas[3] = new Pista(Color(1.0f, 0.424f, 0.0f), Automatico);//Salmon
-	pistas[4] = new Pista(Color(1.0f, 0.0f, 0.467f), Automatico);
-	pistas[5] = new Pista(Color(0.587f, 0.0f, 0.467f), Automatico);
-	pistas[6] = new Pista(Color(0.261f, 0.0f, 0.467f), Automatico);
-	pistas[7] = new Pista(Color(0.0f, 0.0f, 0.467f), Automatico);
-	pistas[8] = new Pista(Color(0.0f, 0.761f, 0.467f), Automatico);
-	pistas[9] = new Pista(Color(0.0f, 0.761f, 1.0f), Automatico);
-	pistas[10] = new Pista(Color(1.0f, 0.761f, 0.609f), Automatico);
-	pistas[11] = new Pista(Color(1.0f, 0.761f, 0.0f), Automatico);
-	pistas[12] = new Pista(Color(0.489f, 0.587f, 0.489f), Automatico);
-	pistas[13] = new Pista(Color(0.489f, 0.0f, 0.489f), Automatico);
-	pistas[14] = new Pista(Color(1.0f, 0.0f, 0.489f), Automatico);
-	pistas[15] = new Pista(Color(0.407f, 0.348f, 0.408f), Automatico);
-	pistas[16] = new Pista(Color(0.407f, 0.348f, 0.0f), Automatico);
-	pistas[17] = new Pista(Color(0.407f, 0.348f, 1.0f), Automatico);
-	pistas[18] = new Pista(Color(0.0f, 0.348f, 1.0f), Automatico);
-	pistas[19] = new Pista(Color(0.0f, 0.348f, 0.0f), Automatico);
-
-	tablero->e_notas(musica->Notes());
-	tablero->e_pistas(&pistas);
-	tablero->e_lineas(musica->GetBarLines());
+	tablero->e_notas(musica->o_musica()->Notes());
+	tablero->e_pistas(musica->o_pistas());
+	tablero->e_lineas(musica->o_musica()->GetBarLines());
 	organo->e_blancas_presionadas(tablero->o_blancas_presionadas());
 	organo->e_negras_presionadas(tablero->o_negras_presionadas());
 	this->cambio_velocidad = false;
@@ -71,19 +30,16 @@ VentanaOrgano::VentanaOrgano(Administrador_Recursos *recursos) : Ventana()
 
 VentanaOrgano::~VentanaOrgano()
 {
-	midi_salida->Reset();
 	delete barra;
 	delete tablero;
 	delete organo;
-	delete musica;
-	delete midi_entrada;
-	delete midi_salida;
 }
 
 void VentanaOrgano::actualizar(unsigned int diferencia_tiempo)
 {
-	if(musica->IsSongOver())
+	if(musica->o_musica()->IsSongOver())
 	{
+		this->musica->reiniciar();
 		this->accion = CambiarASeleccionPista;
 	}
 	unsigned int microsegundos_actualizar = (diferencia_tiempo / 1000.0) * velocidad_musica;
@@ -91,26 +47,26 @@ void VentanaOrgano::actualizar(unsigned int diferencia_tiempo)
 	if(this->pausa)
 		microsegundos_actualizar = 0;
 
-	MidiEventListWithTrackId evs = musica->Update(microsegundos_actualizar);
+	MidiEventListWithTrackId evs = musica->o_musica()->Update(microsegundos_actualizar);
 
 	for (MidiEventListWithTrackId::const_iterator i = evs.begin(); i != evs.end(); i++)
 	{
-		midi_salida->Write(i->second);
+		configuracion->o_salida()->Write(i->second);
 	}
 
 	if(barra->o_tiempo_seleccionado() > 0)
 	{
-		musica->GoTo(barra->o_tiempo_seleccionado());
+		musica->o_musica()->GoTo(barra->o_tiempo_seleccionado());
 		tablero->reiniciar();
-		midi_salida->Reset();
+		configuracion->o_salida()->Reset();
 	}
 
 	barra->actualizar(diferencia_tiempo);
 	tablero->actualizar(diferencia_tiempo);
 	organo->actualizar(diferencia_tiempo);
 
-	barra->e_tiempo(musica->GetSongPositionInMicroseconds());
-	tablero->e_tiempo(musica->GetSongPositionInMicroseconds());
+	barra->e_tiempo(musica->o_musica()->GetSongPositionInMicroseconds());
+	tablero->e_tiempo(musica->o_musica()->GetSongPositionInMicroseconds());
 
 	if(this->cambio_velocidad)
 	{
@@ -142,7 +98,8 @@ void VentanaOrgano::evento_teclado(Tecla tecla, bool estado)
 {
 	if(tecla == TECLA_ESCAPE && !estado)
 	{
-		midi_salida->Reset();
+		configuracion->o_salida()->Reset();
+		this->musica->reiniciar();
 		this->accion = CambiarASeleccionPista;
 	}
 	else if(tecla == TECLA_FLECHA_ARRIBA && estado)
@@ -167,7 +124,7 @@ void VentanaOrgano::evento_teclado(Tecla tecla, bool estado)
 	{
 		this->pausa = !this->pausa;
 		if(this->pausa)
-			midi_salida->Reset();
+			configuracion->o_salida()->Reset();
 	}
 	else if(tecla == TECLA_F5 && estado)
 	{
@@ -204,7 +161,7 @@ void VentanaOrgano::evento_teclado(Tecla tecla, bool estado)
 void VentanaOrgano::evento_pantalla(int ancho, int alto)
 {
 	barra->e_ancho(ancho);
-	organo->e_y(alto);
+	organo->posicion_y(alto);
 	organo->e_ancho(ancho);
 	tablero->e_dimension(ancho, alto - (organo->o_alto() + barra->o_alto()+40));
 }

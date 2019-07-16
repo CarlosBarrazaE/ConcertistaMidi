@@ -1,14 +1,7 @@
 #include "boton.h++"
 
-Boton::Boton(int x, int y, int ancho, int alto, std::string texto, Textura2D *textura, Color color, bool centrado, Administrador_Recursos *recursos) : Elemento()
+Boton::Boton(int x, int y, int ancho, int alto, std::string texto, Textura2D *textura, Color color, bool centrado, Administrador_Recursos *recursos) : Elemento(x, y, ancho, alto, centrado)
 {
-	if(centrado)
-		this->x = x - ancho / 2.0;
-	else
-		this->x = x;
-	this->y = y;
-	this->ancho = ancho;
-	this->alto = alto;
 	this->texto_boton = texto;
 	this->textura_boton = textura;
 	this->centrado = centrado;
@@ -40,19 +33,6 @@ void Boton::e_letra(Texto *texto)
 {
 	this->texto = texto;
 	this->ajuste_texto = this->texto->ancho_texto(this->texto_boton) / 2;
-}
-
-void Boton::posicion_x(int x)
-{
-	if(centrado)
-		this->x = x - ancho / 2.0;
-	else
-		this->x = x;
-}
-
-void Boton::posicion_y(int y)
-{
-	this->y = y;
 }
 
 void Boton::actualizar(unsigned int diferencia_tiempo)

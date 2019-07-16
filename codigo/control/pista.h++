@@ -3,6 +3,8 @@
 
 #include "../recursos/color.h++"
 
+#define NUMERO_COLORES_PISTA 9
+
 enum Modo
 {
 	Tocar,
@@ -17,8 +19,10 @@ private:
 	Color color_pista;
 	Modo modo_pista;
 public:
+	static Color colores_pista[NUMERO_COLORES_PISTA];
 	Pista(Color color, Modo modo);
 	~Pista();
+
 	Color o_color();
 	Modo o_modo();
 };

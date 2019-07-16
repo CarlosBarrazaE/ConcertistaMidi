@@ -62,8 +62,8 @@ void VentanaTitulo::evento_raton(Raton *raton)
 
 	if(boton_tocar->esta_activado())
 		this->accion = CambiarASeleccionMusica;
-	else if(boton_practicar->esta_activado())
-		this->accion = CambiarAOrgano;
+	//else if(boton_practicar->esta_activado())
+	//	this->accion = CambiarAOrgano;
 	else if(boton_configurar->esta_activado())
 		this->accion = CambiarAConfiguracion;
 	else if(boton_salir->esta_activado())

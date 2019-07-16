@@ -28,7 +28,6 @@ private:
 	Generador_Particulas *generador_particulas;
 
 	Teclado *teclado;
-	int x, y, ancho, alto;
 	int ancho_real, ajuste_x;
 	int ancho_tecla_blanca, ancho_tecla_negra;
 	int alto_tecla_blanca, alto_tecla_negra;
@@ -45,9 +44,6 @@ public:
 	Organo(int x, int y, int ancho, Teclado *teclado, Administrador_Recursos *recursos);
 	~Organo();
 
-	int o_alto();
-
-	void e_y(int valor);
 	void e_ancho(int valor);
 	void c_teclado(Teclado *teclado);
 

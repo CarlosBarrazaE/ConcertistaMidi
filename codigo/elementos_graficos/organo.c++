@@ -1,11 +1,8 @@
 #include "organo.h++"
 
-Organo::Organo(int x, int y, int ancho, Teclado *teclado, Administrador_Recursos *recursos) : Elemento()
+Organo::Organo(int x, int y, int ancho, Teclado *teclado, Administrador_Recursos *recursos) : Elemento(x, y, ancho, 0)
 {
 	//El origen del organo esta abajo a la izquierda
-	this->x = x;
-	this->y = y;
-	this->ancho = ancho;
 	this->teclado = teclado;
 	this->calcular_tamannos();
 
@@ -45,16 +42,6 @@ void Organo::calcular_tamannos()
 	//Diferencia producida porque no se puede dibujar menos de un pixel
 	this->ancho_real = this->ancho_tecla_blanca * this->teclado->o_numero_blancas();
 	this->ajuste_x = (this->ancho - this->ancho_real) / 2;
-}
-
-int Organo::o_alto()
-{
-	return this->alto;
-}
-
-void Organo::e_y(int valor)
-{
-	this->y = valor;
 }
 
 void Organo::e_ancho(int valor)

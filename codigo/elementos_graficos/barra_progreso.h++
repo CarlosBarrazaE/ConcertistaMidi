@@ -5,14 +5,13 @@
 #include "../util/funciones.h++"
 #include "../libmidi/Midi.h++"
 
-class Barra_Progreso : Elemento
+class Barra_Progreso : public Elemento
 {
 private:
 	MidiEventMicrosecondList lineas;
 	microseconds_t tiempo_total;
 	microseconds_t tiempo_actual;
 	microseconds_t tiempo_nuevo;
-	int x, y, ancho, alto;
 	int x_anterior;
 	int progreso;
 	bool sobre_barra;
@@ -31,10 +30,6 @@ public:
 	~Barra_Progreso();
 
 	void e_tiempo(microseconds_t tiempo_actual);
-	void e_ancho(int ancho);
-
-	int o_alto();
-	int o_ancho();
 	microseconds_t o_tiempo_seleccionado();
 
 	void actualizar(unsigned int diferencia_tiempo);

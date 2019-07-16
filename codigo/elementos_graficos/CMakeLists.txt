@@ -5,5 +5,6 @@ set(elementos_graficos
 	${CMAKE_CURRENT_SOURCE_DIR}/tablero_notas.c++
 	${CMAKE_CURRENT_SOURCE_DIR}/organo.c++
 	${CMAKE_CURRENT_SOURCE_DIR}/configuracion_pista.c++
+	${CMAKE_CURRENT_SOURCE_DIR}/barra_desplazamiento.c++
 	PARENT_SCOPE
 )

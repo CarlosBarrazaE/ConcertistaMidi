@@ -14,6 +14,9 @@
 #include "ventanas/ventana_organo.h++"
 #include "ventanas/ventana_configuracion.h++"
 
+#include "control/configuracion.h++"
+#include "control/datos_musica.h++"
+
 class Controlador_Juego
 {
 private:
@@ -31,9 +34,12 @@ private:
 	//Eventos
 	Raton raton;
 	Ventana *ventana_actual;
+
+	Configuracion configuracion;
+	Datos_Musica musica;
+
 	//Configuracion bd
 	//Usuario
-	//Midis
 public:
 	Controlador_Juego(Administrador_Recursos *recursos);
 	~Controlador_Juego();

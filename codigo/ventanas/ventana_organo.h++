@@ -7,6 +7,8 @@
 #include "../elementos_graficos/organo.h++"
 #include "../control/pista.h++"
 #include "../control/tipo_teclados.h++"
+#include "../control/configuracion.h++"
+#include "../control/datos_musica.h++"
 #include "../libmidi/Midi.h++"
 #include "../libmidi/MidiComm.h++"
 #include <map>
@@ -29,21 +31,17 @@ private:
 	bool cambio_velocidad;
 	bool pausa;
 
-	//Datos
-	std::map<int, Pista*> pistas;
-
 	//Texto pantalla
 	std::string texto_pausa;
 	int ancho_titulo;
 	int ancho_pausa;
 
-	//Quitar de aqui
-	Midi *musica;
-	MidiCommIn *midi_entrada;
-	MidiCommOut *midi_salida;
+	//Datos
+	Configuracion *configuracion;
+	Datos_Musica *musica;
 
 public:
-	VentanaOrgano(Administrador_Recursos *recursos);
+	VentanaOrgano(Configuracion *configuracion, Datos_Musica *musica, Administrador_Recursos *recursos);
 	~VentanaOrgano();
 
 	void actualizar(unsigned int diferencia_tiempo);

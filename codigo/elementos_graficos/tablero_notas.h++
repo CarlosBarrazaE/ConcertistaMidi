@@ -19,7 +19,6 @@ private:
 	Texto *texto;
 
 	Teclado *teclado;
-	int x, y, ancho, alto;
 	microseconds_t tiempo_actual_midi;
 	int ancho_blanca, ancho_negra;
 	int ajuste_x;
@@ -29,7 +28,8 @@ private:
 	std::array<Color, 52> teclas_activas_blancas;
 	std::array<Color, 36> teclas_activas_negras;
 	std::vector<int> ultima_nota;//Ultima nota por cada pista
-	std::map<int, Pista*> *pistas;
+
+	std::vector<Pista> *pistas;
 
 	void calcular_tamannos();
 	void dibujar_lineas_horizontales();
@@ -46,7 +46,7 @@ public:
 	void e_tiempo(microseconds_t tiempo);
 	void e_notas(NotasPistas notas);
 	void e_lineas(MidiEventMicrosecondList lineas);
-	void e_pistas(std::map<int, Pista*> *pistas);
+	void e_pistas(std::vector<Pista> *pistas);
 	void e_dimension(int ancho, int alto);
 	void c_velocidad_caida(int valor);
 	void c_teclado(Teclado *teclado);

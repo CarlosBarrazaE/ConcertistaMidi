@@ -16,10 +16,6 @@ private:
 	Color color_boton_sobre;
 	Color color_texto;
 
-	int x;
-	int y;
-	int ancho;
-	int alto;
 	bool centrado;
 	std::string texto_boton;
 	int ajuste_texto;
@@ -34,8 +30,6 @@ public:
 	void e_color_texto(Color color);
 	void e_letra(Texto *texto);
 
-	void posicion_x(int x);
-	void posicion_y(int y);
 	void actualizar(unsigned int diferencia_tiempo);
 	void dibujar();
 

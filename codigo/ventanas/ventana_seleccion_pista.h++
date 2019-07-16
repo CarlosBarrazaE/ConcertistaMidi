@@ -4,6 +4,8 @@
 #include "ventana.h++"
 #include "../elementos_graficos/boton.h++"
 #include "../elementos_graficos/configuracion_pista.h++"
+#include "../control/configuracion.h++"
+#include "../control/datos_musica.h++"
 
 class VentanaSeleccionPista : public Ventana
 {
@@ -15,12 +17,15 @@ private:
 	//Componentes
 	Boton *boton_atras;
 	Boton *boton_continuar;
-	Configuracion_Pista *pista_1;
+	std::vector<Configuracion_Pista> configuracion_pistas;
 
 	//Texto pantalla
 	int ajuste_titulo;
+
+	//Datos
+	Datos_Musica *musica;
 public:
-	VentanaSeleccionPista(Administrador_Recursos *recursos);
+	VentanaSeleccionPista(Datos_Musica *musica, Administrador_Recursos *recursos);
 	~VentanaSeleccionPista();
 
 	void actualizar(unsigned int diferencia_tiempo);
