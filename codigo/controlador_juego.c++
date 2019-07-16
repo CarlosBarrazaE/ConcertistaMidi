@@ -12,7 +12,7 @@ Controlador_Juego::Controlador_Juego(Administrador_Recursos *recursos)
 	this->texto = recursos->obtener_tipografia(LetraChica);
 
 	ventana_actual = new VentanaTitulo(recursos);
-
+/*
 
 	MidiCommDescriptionList dispositivos_entrada = MidiCommIn::GetDeviceList();
 	MidiCommDescriptionList dispositivos_salida = MidiCommOut::GetDeviceList();
@@ -27,7 +27,7 @@ Controlador_Juego::Controlador_Juego(Administrador_Recursos *recursos)
 	{
 		Registro::aviso("\tNombre: " + dispositivos_salida[x].name);
 	}
-
+*/
 	this->configuracion.cambiar_entrada(3);
 	this->configuracion.cambiar_salida(1);
 

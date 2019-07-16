@@ -1,7 +1,8 @@
 #include "configuracion_pista.h++"
+#include "../registro.h++"
 
-Configuracion_Pista::Configuracion_Pista(int x, int y, std::string nombre_instrumento, unsigned int notas, Pista pista, Administrador_Recursos *recursos)
-: Elemento(x, y, 350, 150), datos_pista(pista)
+Configuracion_Pista::Configuracion_Pista(int x, int y, int ancho, int alto, std::string nombre_instrumento, unsigned int notas, Pista pista, Administrador_Recursos *recursos)
+: Elemento(x, y, ancho, alto), datos_pista(pista)
 {
 	this->nombre_instrumento = nombre_instrumento;
 	this->numero_notas = notas;

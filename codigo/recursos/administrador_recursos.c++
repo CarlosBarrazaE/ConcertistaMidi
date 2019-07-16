@@ -20,6 +20,7 @@ Administrador_Recursos::Administrador_Recursos()
 	archivo_texturas[T_Sombra] = "../texturas/sombra.tga";
 	archivo_texturas[T_FrenteBarraProgreso] = "../texturas/frente_barra_progreso.tga";
 	archivo_texturas[T_ParticulaNota] = "../texturas/particula_nota.tga";
+	archivo_texturas[T_Barra] = "../texturas/barra.tga";
 
 	archivo_sombreador_vertice[S_Rectangulo] = "../sombreadores/rectangulo_sv.glsl";
 	archivo_sombreador_fragmento[S_Rectangulo] = "../sombreadores/rectangulo_sf.glsl";

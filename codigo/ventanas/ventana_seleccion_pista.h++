@@ -4,6 +4,7 @@
 #include "ventana.h++"
 #include "../elementos_graficos/boton.h++"
 #include "../elementos_graficos/configuracion_pista.h++"
+#include "../elementos_graficos/barra_desplazamiento.h++"
 #include "../control/configuracion.h++"
 #include "../control/datos_musica.h++"
 
@@ -17,7 +18,8 @@ private:
 	//Componentes
 	Boton *boton_atras;
 	Boton *boton_continuar;
-	std::vector<Configuracion_Pista> configuracion_pistas;
+	Barra_Desplazamiento *barra_desplazamiento;
+	std::vector<Configuracion_Pista*> configuracion_pistas;
 
 	//Texto pantalla
 	int ajuste_titulo;

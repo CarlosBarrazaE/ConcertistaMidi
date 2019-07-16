@@ -16,7 +16,6 @@ public:
 
 	virtual void actualizar(unsigned int diferencia_tiempo) = 0;
 	virtual void dibujar() = 0;
-
 	virtual void evento_raton(Raton *raton) = 0;
 
 	int posicion_x();

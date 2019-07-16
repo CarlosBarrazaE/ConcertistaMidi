@@ -32,6 +32,7 @@ enum Textura
 	T_Sombra,
 	T_FrenteBarraProgreso,
 	T_ParticulaNota,
+	T_Barra,
 };
 
 enum SombreadorVF

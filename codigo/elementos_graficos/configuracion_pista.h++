@@ -20,7 +20,7 @@ private:
 	Rectangulo *rectangulo;
 
 public:
-	Configuracion_Pista(int x, int y, std::string nombre_instrumento, unsigned int notas, Pista pista, Administrador_Recursos *recursos);
+	Configuracion_Pista(int x, int y, int ancho, int alto, std::string nombre_instrumento, unsigned int notas, Pista pista, Administrador_Recursos *recursos);
 	~Configuracion_Pista();
 
 	Pista o_pista();
