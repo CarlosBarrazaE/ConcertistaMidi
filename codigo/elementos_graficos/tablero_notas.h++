@@ -34,7 +34,7 @@ private:
 	void calcular_tamannos();
 	void dibujar_lineas_horizontales();
 	void dibujar_lineas_verticales();
-	void dibujar_notas(int pista);
+	void dibujar_notas(int pista_real, int pista);
 
 public:
 	Tablero_Notas(int x, int y, int alto, int ancho, Teclado *teclado, Administrador_Recursos *recursos);

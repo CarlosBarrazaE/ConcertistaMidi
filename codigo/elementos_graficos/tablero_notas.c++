@@ -110,7 +110,8 @@ void Tablero_Notas::dibujar()
 		if(notas[pista].size() > 0)
 		{
 			if(pistas->at(pista_valida).o_visible())
-				this->dibujar_notas(pista_valida);//Dibuja la nota
+				this->dibujar_notas(pista_valida, pista);//Dibuja la nota
+
 			pista_valida++;
 		}
 	}
@@ -167,7 +168,7 @@ void Tablero_Notas::dibujar_lineas_verticales()
 	}
 }
 
-void Tablero_Notas::dibujar_notas(int pista)
+void Tablero_Notas::dibujar_notas(int pista_real, int pista)
 {
 	int ajuste_negra = 0;
 	int ancho_tecla = 0;
@@ -226,7 +227,7 @@ void Tablero_Notas::dibujar_notas(int pista)
 			if(posicion_y >= 0)
 			{
 				posicion_negra = Octava::prosicion_nota_negra(notas[pista][n].note_id) - this->teclado->o_desplazamiento_negras();
-				teclas_activas_negras[posicion_negra] = pistas->at(pista).o_color();
+				teclas_activas_negras[posicion_negra] = pistas->at(pista_real).o_color();
 			}
 			es_negra = true;
 		}
@@ -237,7 +238,7 @@ void Tablero_Notas::dibujar_notas(int pista)
 
 			if(posicion_y >= 0)
 			{
-				teclas_activas_blancas[posicion_blanca] = pistas->at(pista).o_color();
+				teclas_activas_blancas[posicion_blanca] = pistas->at(pista_real).o_color();
 			}
 			es_negra = false;
 		}
@@ -256,9 +257,9 @@ void Tablero_Notas::dibujar_notas(int pista)
 		}
 
 		if(es_negra)
-			this->rectangulo->color(pistas->at(pista).o_color()-0.3);
+			this->rectangulo->color(pistas->at(pista_real).o_color()-0.3);
 		else
-			this->rectangulo->color(pistas->at(pista).o_color());
+			this->rectangulo->color(pistas->at(pista_real).o_color());
 		textura_nota->activar();
 		this->rectangulo->dibujar_estirable(this->x+this->ajuste_x + posicion_blanca * this->ancho_blanca + ajuste_negra, this->y+this->alto+posicion_y-largo_nota, ancho_tecla, largo_final_nota, 0, 10);
 	}

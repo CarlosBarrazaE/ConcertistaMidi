@@ -35,8 +35,6 @@ VentanaSeleccionPista::~VentanaSeleccionPista()
 void VentanaSeleccionPista::crear_configuracion(Administrador_Recursos *recursos)
 {
 	int numero_pistas = this->musica->o_musica()->Notes().size();
-	std::vector<Pista> pistas;
-
 	int color_usado = 0;
 	Configuracion_Pista *configuracion;
 	Color color_pista;
@@ -61,11 +59,8 @@ void VentanaSeleccionPista::crear_configuracion(Administrador_Recursos *recursos
 			configuracion = new Configuracion_Pista(0, 0, 350, 150, Pista(pista_actual.InstrumentName(), pista_actual.Notes().size(), color_pista, Fondo, visible, true), recursos);
 			configuracion_pistas.push_back(configuracion);
 			barra_desplazamiento->agregar_elemento(configuracion);
-			pistas.push_back(Pista(pista_actual.InstrumentName(), pista_actual.Notes().size(), color_pista, Fondo, visible, true));
 		}
 	}
-
-	this->musica->e_pistas(pistas);
 }
 
 void VentanaSeleccionPista::cargar_configuracion(Administrador_Recursos *recursos)
@@ -121,7 +116,10 @@ void VentanaSeleccionPista::evento_raton(Raton *raton)
 		this->accion = CambiarASeleccionMusica;
 
 	if(boton_continuar->esta_activado())
+	{
 		this->accion = CambiarAOrgano;
+		this->guardar_configuracion();
+	}
 }
 
 void VentanaSeleccionPista::evento_teclado(Tecla tecla, bool estado)
