@@ -26,6 +26,10 @@ private:
 
 	//Datos
 	Datos_Musica *musica;
+
+	void crear_configuracion(Administrador_Recursos *recursos);
+	void cargar_configuracion(Administrador_Recursos *recursos);
+ 	void guardar_configuracion();
 public:
 	VentanaSeleccionPista(Datos_Musica *musica, Administrador_Recursos *recursos);
 	~VentanaSeleccionPista();

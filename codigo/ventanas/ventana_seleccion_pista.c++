@@ -20,51 +20,76 @@ VentanaSeleccionPista::VentanaSeleccionPista(Datos_Musica *musica, Administrador
 
 	barra_desplazamiento = new Barra_Desplazamiento(0, 40, Pantalla::ancho, Pantalla::alto - 80, 350, 150, 10, 10, recursos);
 
-	NotasPistas np = this->musica->o_musica()->Notes();
-	int numero_pistas = np.size();
-
-	std::vector<Pista> pistas;
-
-	int color_udado = 0;
-	Configuracion_Pista *configuracion;
-	for(int i=0; i<numero_pistas; i++)
-	{
-		MidiTrack pista_actual = this->musica->o_musica()->Tracks()[i];
-		Modo modo;
-		Color color_pista;
-		if(pista_actual.Notes().size() > 0)
-		{
-			if(pista_actual.IsPercussion())
-			{
-				color_pista = Color(0.5f, 0.5f, 0.5f);
-				modo = AutomaticoOculto;
-			}
-			else
-			{
-				color_pista = Pista::colores_pista[color_udado % NUMERO_COLORES_PISTA];
-				modo = Automatico;
-				color_udado++;
-			}
-
-			configuracion = new Configuracion_Pista(0, 0, 350, 150, pista_actual.InstrumentName(), pista_actual.Notes().size(), Pista(color_pista, modo), recursos);
-			configuracion_pistas.push_back(configuracion);
-			barra_desplazamiento->agregar_elemento(configuracion);
-		}
-		else
-		{
-			color_pista = Color(0.5f, 0.5f, 0.5f);
-			modo = NoTocar;
-		}
-		pistas.push_back(Pista(color_pista, modo));
-	}
-
-	this->musica->e_pistas(pistas);
+	if(this->musica->o_pistas()->size() > 0)
+		this->cargar_configuracion(recursos);
+	else
+		this->crear_configuracion(recursos);
 }
 
 VentanaSeleccionPista::~VentanaSeleccionPista()
 {
 	delete boton_atras;
 	delete boton_continuar;
+}
+
+void VentanaSeleccionPista::crear_configuracion(Administrador_Recursos *recursos)
+{
+	int numero_pistas = this->musica->o_musica()->Notes().size();
+	std::vector<Pista> pistas;
+
+	int color_usado = 0;
+	Configuracion_Pista *configuracion;
+	Color color_pista;
+	bool visible = true;
+	for(int i=0; i<numero_pistas; i++)
+	{
+		MidiTrack pista_actual = this->musica->o_musica()->Tracks()[i];
+		if(pista_actual.Notes().size() > 0)
+		{
+			if(pista_actual.IsPercussion())
+			{
+				color_pista = Color(0.5f, 0.5f, 0.5f);
+				visible = false;
+			}
+			else
+			{
+				color_pista = Pista::colores_pista[color_usado % NUMERO_COLORES_PISTA];
+				visible = true;
+				color_usado++;
+			}
+
+			configuracion = new Configuracion_Pista(0, 0, 350, 150, Pista(pista_actual.InstrumentName(), pista_actual.Notes().size(), color_pista, Fondo, visible, true), recursos);
+			configuracion_pistas.push_back(configuracion);
+			barra_desplazamiento->agregar_elemento(configuracion);
+			pistas.push_back(Pista(pista_actual.InstrumentName(), pista_actual.Notes().size(), color_pista, Fondo, visible, true));
+		}
+	}
+
+	this->musica->e_pistas(pistas);
+}
+
+void VentanaSeleccionPista::cargar_configuracion(Administrador_Recursos *recursos)
+{
+	std::vector<Pista> *pistas = this->musica->o_pistas();
+	Configuracion_Pista *configuracion;
+	for(int i=0; i<pistas->size(); i++)
+	{
+		configuracion = new Configuracion_Pista(0, 0, 350, 150, pistas->at(i), recursos);
+		configuracion_pistas.push_back(configuracion);
+		barra_desplazamiento->agregar_elemento(configuracion);
+	}
+}
+
+void VentanaSeleccionPista::guardar_configuracion()
+{
+	std::vector<Pista> pistas;
+
+	int pistas_validas = 0;
+	for(int i=0; i<configuracion_pistas.size(); i++)
+	{
+		pistas.push_back(configuracion_pistas[i]->o_pista());
+	}
+	this->musica->e_pistas(pistas);
 }
 
 void VentanaSeleccionPista::actualizar(unsigned int diferencia_tiempo)
@@ -104,7 +129,10 @@ void VentanaSeleccionPista::evento_teclado(Tecla tecla, bool estado)
 	if(tecla == TECLA_ESCAPE && !estado)
 		this->accion = CambiarASeleccionMusica;
 	else if(tecla == TECLA_ENTRAR && !estado)
+	{
 		this->accion = CambiarAOrgano;
+		this->guardar_configuracion();
+	}
 }
 
 void VentanaSeleccionPista::evento_pantalla(int ancho, int alto)
