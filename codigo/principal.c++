@@ -23,6 +23,7 @@ int main (int n, char **argumentos)
 	Pantalla::ancho = ANCHO;
 	Pantalla::alto = ALTO;
 
+	SDL_SetHint (SDL_HINT_VIDEO_X11_NET_WM_BYPASS_COMPOSITOR, "0");//No suspende el compositor de ventana
 	SDL_Window *ventana = SDL_CreateWindow("Concertista Midi", 0, 0, ANCHO, ALTO, SDL_WINDOW_OPENGL | SDL_WINDOW_RESIZABLE);
 	SDL_GLContext contexto = SDL_GL_CreateContext(ventana);
 	SDL_GL_SetSwapInterval(1);//Limita a 60 fps
