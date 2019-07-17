@@ -16,6 +16,10 @@ private:
 	int columna, fila;
 	int margen_columna, margen_fila;
 	bool calcular_posicion;
+	double proporcion;
+
+	bool sobre_barra;
+	bool boton_activado;
 
 	std::vector<Elemento*> elementos;
 

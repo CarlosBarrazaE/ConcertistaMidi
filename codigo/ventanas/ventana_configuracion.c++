@@ -5,7 +5,7 @@ VentanaConfiguracion::VentanaConfiguracion(Administrador_Recursos *recursos) : V
 	Textura2D *textura = recursos->obtener_textura(T_Boton);
 	Color color(0.8f, 0.9f, 1.0f);
 
-	boton_atras = new Boton(10, 10, 100, 40, "Atras", textura, color, false, recursos);
+	boton_atras = new Boton(10, 10, 100, 40, "Atrás", textura, color, false, recursos);
 }
 
 VentanaConfiguracion::~VentanaConfiguracion()

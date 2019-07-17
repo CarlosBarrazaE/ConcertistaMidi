@@ -5,7 +5,7 @@ VentanaSeleccionMusica::VentanaSeleccionMusica(Administrador_Recursos *recursos)
 	Textura2D *textura = recursos->obtener_textura(T_Boton);
 	Color color(0.9f, 0.9f, 0.9f);
 
-	boton_atras = new Boton(10, Pantalla::alto - 32, 120, 25, "Atras", textura, color, false, recursos);
+	boton_atras = new Boton(10, Pantalla::alto - 32, 120, 25, "Atrás", textura, color, false, recursos);
 	boton_continuar = new Boton(Pantalla::ancho - 130, Pantalla::alto - 32, 120, 25, "Continuar", textura, color, false, recursos);
 
 	Texto *texto_boton = recursos->obtener_tipografia(LetraChica);

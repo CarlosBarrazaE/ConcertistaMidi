@@ -16,6 +16,10 @@ Barra_Desplazamiento::Barra_Desplazamiento(int x, int y, int ancho, int alto, in
 
 	this->rectangulo = recursos->obtener_figura(F_Rectangulo);
 	this->barra = recursos->obtener_textura(T_Barra);
+
+	this->sobre_barra = false;
+	this->boton_activado = false;
+	this->proporcion = 0;
 }
 
 Barra_Desplazamiento::~Barra_Desplazamiento()
@@ -60,10 +64,9 @@ void Barra_Desplazamiento::dibujar()
 		this->rectangulo->extremos_fijos(false, true);
 		this->rectangulo->textura(true);
 		this->rectangulo->color(Color(0.7f, 0.7f, 0.7f));
-		double proporcion = (double)(this->alto-20) / (double)this->alto_actual;
 		this->rectangulo->dibujar_estirable(this->x+this->ancho-10, this->y+10, 10, this->alto-20, 0, 10);
 		this->rectangulo->color(Color(0.5f, 0.5f, 0.5f));
-		this->rectangulo->dibujar_estirable(this->x+this->ancho-10, this->y+10-this->desplazamiento_y*proporcion, 10, this->alto * proporcion, 0, 10);
+		this->rectangulo->dibujar_estirable(this->x+this->ancho-10, this->y+10-this->desplazamiento_y*this->proporcion, 10, this->alto * this->proporcion, 0, 10);
 		this->rectangulo->extremos_fijos(false, false);
 	}
 }
@@ -72,24 +75,54 @@ void Barra_Desplazamiento::evento_raton(Raton *raton)
 {
 	int dy = raton->dy();
 	int desplazamiento_nuevo_y = 0;
-	if(dy != 0)
+	int desplazamiento_anterior_y = 0;
+	if(this->alto < this->alto_actual)
 	{
-		int desplazamiento_anterior_y = this->desplazamiento_y;
-		if(this->alto < this->alto_actual)
+		desplazamiento_anterior_y = this->desplazamiento_y;
+		if(dy != 0)
 		{
 			this->desplazamiento_y += dy*20;
-			if(this->desplazamiento_y > 0)
-				this->desplazamiento_y = 0;
-			else if(this->desplazamiento_y < this->alto - this->alto_actual)
-				this->desplazamiento_y = this->alto - this->alto_actual;
-
-			desplazamiento_nuevo_y = this->desplazamiento_y - desplazamiento_anterior_y;
 		}
+		else if(raton->x() >= this->x+this->ancho-10 && raton->x() <= this->x+this->ancho &&
+		raton->y() >= this->y+10 && raton->y() <= this->y + this->alto-20)
+		{
+			if(raton->activado(BotonIzquierdo) && this->sobre_barra)
+			{
+				this->boton_activado = true;
+				//El inicio de la barra esta en this->y + 20, el centro de la barra desplazable esta en (this->alto * this->proporcion) / 2)
+				this->desplazamiento_y = -(raton->y() - (this->y + 20 + (this->alto * this->proporcion) / 2)) / this->proporcion;
+			}
+			else if(!raton->activado(BotonIzquierdo))
+			{
+				this->sobre_barra = true;
+			}
+		}
+		else if(this->boton_activado)
+		{
+			this->desplazamiento_y = -(raton->y() - (this->y + 20 + (this->alto * this->proporcion) / 2)) / this->proporcion;
+		}
+		else
+		{
+			this->sobre_barra = false;
+		}
+
+		if(!raton->activado(BotonIzquierdo) && this->boton_activado)
+		{
+			this->boton_activado = false;
+		}
+
+		if(this->desplazamiento_y > 0)
+				this->desplazamiento_y = 0;
+		else if(this->desplazamiento_y < this->alto - this->alto_actual)
+			this->desplazamiento_y = this->alto - this->alto_actual;
+
+		desplazamiento_nuevo_y = this->desplazamiento_y - desplazamiento_anterior_y;
 	}
 
 	for(int i=0; i<elementos.size(); i++)
 	{
-		elementos[i]->posicion_y(elementos[i]->posicion_y() + desplazamiento_nuevo_y);
+		if(this->alto < this->alto_actual)
+			elementos[i]->posicion_y(elementos[i]->posicion_y() + desplazamiento_nuevo_y);
 		elementos[i]->evento_raton(raton);
 	}
 }
@@ -131,4 +164,6 @@ void Barra_Desplazamiento::actualizar_dimension()
 
 	this->desplazamiento_y = 0;
 	this->calcular_posicion = false;
+	if(this->alto < this->alto_actual)
+		this->proporcion = (double)(this->alto-20) / (double)this->alto_actual;
 }
