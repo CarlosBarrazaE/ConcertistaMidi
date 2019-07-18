@@ -2,6 +2,8 @@
 #define CONFIGURACION_PISTA_H
 
 #include "elemento.h++"
+#include "lista_desplegable.h++"
+#include "boton.h++"
 #include "../control/pista.h++"
 #include <string>
 
@@ -11,11 +13,28 @@ private:
 	//Recursos
 	Texto *texto;
 	Texto *texto_chico;
-
-	Pista datos_pista;
-
-	//Recursos
 	Rectangulo *rectangulo;
+	Textura2D *textura_fondo;
+	Textura2D *textura_sonido_activado;
+	Textura2D *textura_sonido_desactivado;
+	Textura2D *textura_reproducir;
+	Textura2D *textura_pausar;
+
+	//Componentes
+	Lista_Desplegable *seleccion_modo;
+	Lista_Desplegable *seleccion_color;
+	Boton *vista_previa;
+	Boton *boton_sonido;
+
+	//Estados
+	bool estado_sonido;
+	bool estado_vista_previa;
+
+	//Ajustes
+	int centro_texto_sonido;
+
+	//Datos
+	Pista datos_pista;
 
 public:
 	Configuracion_Pista(int x, int y, int ancho, int alto, Pista pista, Administrador_Recursos *recursos);

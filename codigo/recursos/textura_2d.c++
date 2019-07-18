@@ -9,7 +9,7 @@ Textura2D::Textura2D()
 	this->formato = 0;
 	this->envolver_s = GL_REPEAT;
 	this->envolver_t = GL_REPEAT;
-	this->filtro_minimizar = GL_NEAREST;
+	this->filtro_minimizar = GL_LINEAR;
 	this->filtro_maximizar = GL_LINEAR;
 
 	glGenTextures(1, &this->indice_textura);

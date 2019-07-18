@@ -21,6 +21,11 @@ Administrador_Recursos::Administrador_Recursos()
 	archivo_texturas[T_FrenteBarraProgreso] = "../texturas/frente_barra_progreso.tga";
 	archivo_texturas[T_ParticulaNota] = "../texturas/particula_nota.tga";
 	archivo_texturas[T_Barra] = "../texturas/barra.tga";
+	archivo_texturas[T_ConfiguracionPista] = "../texturas/configuracion_pista.tga";
+	archivo_texturas[T_SonidoActivado] = "../texturas/sonido_activado.tga";
+	archivo_texturas[T_SonidoDesactivado] = "../texturas/sonido_desactivado.tga";
+	archivo_texturas[T_Reproducir] = "../texturas/reproducir.tga";
+	archivo_texturas[T_Pausar] = "../texturas/pausar.tga";
 
 	archivo_sombreador_vertice[S_Rectangulo] = "../sombreadores/rectangulo_sv.glsl";
 	archivo_sombreador_fragmento[S_Rectangulo] = "../sombreadores/rectangulo_sf.glsl";
@@ -57,9 +62,6 @@ Administrador_Recursos::~Administrador_Recursos()
 	for(std::map<FiguraGeometrica, Rectangulo*>::iterator i = lista_figuras.begin(); i != lista_figuras.end(); i++)
 		delete i->second;
 	lista_figuras.clear();
-
-	//glDeleteTextures(1, &indice);
-	//glDeleteProgram(indice);
 }
 
 Textura2D *Administrador_Recursos::obtener_textura(Textura valor)

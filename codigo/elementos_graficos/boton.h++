@@ -29,6 +29,7 @@ public:
 	~Boton();
 	void e_color_texto(Color color);
 	void e_letra(Texto *texto);
+	void e_textura(Textura2D *textura);
 
 	void actualizar(unsigned int diferencia_tiempo);
 	void dibujar();

@@ -33,6 +33,11 @@ enum Textura
 	T_FrenteBarraProgreso,
 	T_ParticulaNota,
 	T_Barra,
+	T_ConfiguracionPista,
+	T_SonidoActivado,
+	T_SonidoDesactivado,
+	T_Reproducir,
+	T_Pausar,
 };
 
 enum SombreadorVF

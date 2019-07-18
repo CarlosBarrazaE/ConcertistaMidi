@@ -35,6 +35,11 @@ void Boton::e_letra(Texto *texto)
 	this->ajuste_texto = this->texto->ancho_texto(this->texto_boton) / 2;
 }
 
+void Boton::e_textura(Textura2D *textura)
+{
+	this->textura_boton = textura;
+}
+
 void Boton::actualizar(unsigned int diferencia_tiempo)
 {
 }
@@ -43,14 +48,14 @@ void Boton::dibujar()
 {
 	this->textura_boton->activar();
 	rectangulo->textura(true);
-	rectangulo->dibujar(this->x, this->y, this->ancho, this->alto, color_boton);
-	this->texto->imprimir(this->x+this->ancho/2 - this->ajuste_texto, this->y+this->alto/2 + this->texto->alto_texto()/2, this->texto_boton, color_texto);
+	rectangulo->dibujar(this->x+this->dx, this->y+this->dy, this->ancho, this->alto, color_boton);
+	this->texto->imprimir(this->x+this->dx+this->ancho/2 - this->ajuste_texto, this->y+this->dy+this->alto/2 + this->texto->alto_texto()/2, this->texto_boton, color_texto);
 }
 
 void Boton::evento_raton(Raton *raton)
 {
-	if(raton->x() >= this->x && raton->x() <= this->x + this->ancho &&
-		raton->y() >= this->y && raton->y() <= this->y + this->alto)
+	if(raton->x() >= this->x+this->dx && raton->x() <= this->x+this->dx + this->ancho &&
+		raton->y() >= this->y+this->dy && raton->y() <= this->y+this->dy + this->alto)
 	{
 		if(raton->activado(BotonIzquierdo) && this->sobre_boton)
 			this->boton_pre_activado = true;
@@ -59,7 +64,10 @@ void Boton::evento_raton(Raton *raton)
 			color_boton = color_boton_sobre;
 			this->sobre_boton = true;
 			if(this->boton_pre_activado)
+			{
 				this->boton_activado = true;
+				this->boton_pre_activado = false;
+			}
 		}
 	}
 	else
@@ -73,5 +81,7 @@ void Boton::evento_raton(Raton *raton)
 
 bool Boton::esta_activado()
 {
-	return this->boton_activado;
+	bool estado = this->boton_activado;
+	this->boton_activado = false;
+	return estado;
 }
