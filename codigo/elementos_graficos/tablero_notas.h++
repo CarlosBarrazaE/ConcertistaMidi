@@ -27,6 +27,10 @@ private:
 	MidiEventMicrosecondList lineas;
 	std::array<Color, 52> teclas_activas_blancas;
 	std::array<Color, 36> teclas_activas_negras;
+
+	std::array<double, 52> tiempo_espera_blancas;
+	std::array<double, 36> tiempo_espera_negras;
+
 	std::vector<int> ultima_nota;//Ultima nota por cada pista
 
 	std::vector<Pista> *pistas;

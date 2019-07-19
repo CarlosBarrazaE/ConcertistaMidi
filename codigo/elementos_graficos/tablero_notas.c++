@@ -12,6 +12,13 @@ Tablero_Notas::Tablero_Notas(int x, int y, int ancho, int alto, Teclado *teclado
 
 	this->rectangulo = recursos->obtener_figura(F_Rectangulo);
 	this->texto = recursos->obtener_tipografia(LetraMuyChica);
+
+	for(int i=0; i<52; i++)
+	{
+		tiempo_espera_blancas[i] = 0;
+		if(i<36)
+			tiempo_espera_negras[i] = 0;
+	}
 }
 
 Tablero_Notas::~Tablero_Notas()
@@ -84,10 +91,30 @@ void Tablero_Notas::reiniciar()
 	{
 		this->ultima_nota[i] = 0;
 	}
+	for(int i=0; i<52; i++)
+	{
+		tiempo_espera_blancas[i] = 0;
+		if(i<36)
+			tiempo_espera_negras[i] = 0;
+	}
 }
 
 void Tablero_Notas::actualizar(unsigned int diferencia_tiempo)
 {
+	for(int i=0; i<52; i++)
+	{
+		if(tiempo_espera_blancas[i] > 0)
+		{
+			tiempo_espera_blancas[i] -= 1;
+		}
+		if(i<36)
+		{
+			if(tiempo_espera_negras[i] > 0)
+			{
+				tiempo_espera_negras[i] -= 1;
+			}
+		}
+	}
 }
 
 void Tablero_Notas::dibujar()
@@ -224,10 +251,18 @@ void Tablero_Notas::dibujar_notas(int pista_real, int pista)
 			else if(negra==4)
 				ajuste_negra = this->ancho_blanca - (this->ancho_negra * 0.5);
 
-			if(posicion_y >= 0)
+			if(posicion_y >= -5 && posicion_y < 0)
 			{
 				posicion_negra = Octava::prosicion_nota_negra(notas[pista][n].note_id) - this->teclado->o_desplazamiento_negras();
-				teclas_activas_negras[posicion_negra] = pistas->at(pista_real).o_color();
+				tiempo_espera_negras[posicion_negra] = 5;
+			}
+			else if(posicion_y >= 0)
+			{
+				posicion_negra = Octava::prosicion_nota_negra(notas[pista][n].note_id) - this->teclado->o_desplazamiento_negras();
+				if(tiempo_espera_negras[posicion_negra] <= 0)
+				{
+					teclas_activas_negras[posicion_negra] = pistas->at(pista_real).o_color();
+				}
 			}
 			es_negra = true;
 		}
@@ -236,9 +271,16 @@ void Tablero_Notas::dibujar_notas(int pista_real, int pista)
 			ancho_tecla = this->ancho_blanca;
 			ajuste_negra = 0;
 
-			if(posicion_y >= 0)
+			if(posicion_y >= -5 && posicion_y < 0)
 			{
-				teclas_activas_blancas[posicion_blanca] = pistas->at(pista_real).o_color();
+				tiempo_espera_blancas[posicion_blanca] = 5;
+			}
+			else if(posicion_y >= 0)
+			{
+				if(tiempo_espera_blancas[posicion_blanca] <= 0)
+				{
+					teclas_activas_blancas[posicion_blanca] = pistas->at(pista_real).o_color();
+				}
 			}
 			es_negra = false;
 		}
