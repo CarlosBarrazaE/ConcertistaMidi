@@ -60,6 +60,11 @@ void VentanaSeleccionPista::crear_configuracion(Administrador_Recursos *recursos
 			configuracion_pistas.push_back(configuracion);
 			barra_desplazamiento->agregar_elemento(configuracion);
 		}
+		else
+		{
+			configuracion = new Configuracion_Pista(0, 0, 350, 150, Pista(pista_actual.InstrumentName(), pista_actual.Notes().size(), Color(0.0f, 0.0f, 0.0f), Fondo, false, false), recursos);
+			configuracion_pistas.push_back(configuracion);
+		}
 	}
 }
 
@@ -71,7 +76,8 @@ void VentanaSeleccionPista::cargar_configuracion(Administrador_Recursos *recurso
 	{
 		configuracion = new Configuracion_Pista(0, 0, 350, 150, pistas->at(i), recursos);
 		configuracion_pistas.push_back(configuracion);
-		barra_desplazamiento->agregar_elemento(configuracion);
+		if(pistas->at(i).o_numero_notas() > 0)
+			barra_desplazamiento->agregar_elemento(configuracion);
 	}
 }
 

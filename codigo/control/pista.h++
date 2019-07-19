@@ -27,6 +27,11 @@ public:
 	Pista(std::string instrumento, unsigned int numero_notas, Color color, Modo modo, bool visible, bool sonido);
 	~Pista();
 
+	void e_color(Color color);
+	void e_modo(Modo modo);
+	void e_visible(bool estado);
+	void e_sonido(bool estado);
+
 	Color o_color();
 	Modo o_modo();
 	bool o_visible();

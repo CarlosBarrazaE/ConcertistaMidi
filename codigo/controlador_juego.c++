@@ -31,7 +31,7 @@ Controlador_Juego::Controlador_Juego(Administrador_Recursos *recursos)
 	this->configuracion.cambiar_entrada(3);
 	this->configuracion.cambiar_salida(1);
 
-	this->musica.cargar_midi("../musica/kirby.midi");
+	this->musica.cargar_midi("../musica/Navidad_Jingle_Bells_1.midi");
 	this->musica.e_nombre_musica("Nombre de la canción");
 }
 

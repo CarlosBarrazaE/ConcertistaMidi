@@ -26,6 +26,26 @@ Pista::~Pista()
 {
 }
 
+void Pista::e_color(Color color)
+{
+	this->color_pista = color;
+}
+
+void Pista::e_modo(Modo modo)
+{
+	this->modo_pista = modo;
+}
+
+void Pista::e_visible(bool estado)
+{
+	this->visible = estado;
+}
+
+void Pista::e_sonido(bool estado)
+{
+	this->sonido = estado;
+}
+
 Color Pista::o_color()
 {
 	return this->color_pista;

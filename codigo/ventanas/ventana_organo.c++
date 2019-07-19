@@ -49,9 +49,13 @@ void VentanaOrgano::actualizar(unsigned int diferencia_tiempo)
 
 	MidiEventListWithTrackId evs = musica->o_musica()->Update(microsegundos_actualizar);
 
+	std::vector<Pista> *pistas = musica->o_pistas();
 	for (MidiEventListWithTrackId::const_iterator i = evs.begin(); i != evs.end(); i++)
 	{
-		configuracion->o_salida()->Write(i->second);
+		if(pistas->at(i->first).o_sonido())
+		{
+			configuracion->o_salida()->Write(i->second);
+		}
 	}
 
 	if(barra->o_tiempo_seleccionado() > 0)

@@ -27,10 +27,10 @@ private:
 	Boton *boton_sonido;
 
 	//Estados
-	bool estado_sonido;
 	bool estado_vista_previa;
 
 	//Ajustes
+	std::string texto_sonido;
 	int centro_texto_sonido;
 
 	//Datos
