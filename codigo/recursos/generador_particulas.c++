@@ -41,7 +41,7 @@ Generador_Particulas::Generador_Particulas(Sombreador *sombreador, Textura2D *te
 	this->particulas_activas = 0;
 
 	this->sombreador->activar();
-	this->sombreador->e_int("escala", escala);
+	this->sombreador->e_float("escala", escala);
 	this->sombreador->e_vector4f("color", 0.0f, 0.0f, 0.0f, 0.0f);
 	Generador_Particulas::color_anterior = Color(0.0f, 0.0f, 0.0f);
 	this->escala = escala;

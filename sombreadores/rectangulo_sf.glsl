@@ -1,4 +1,4 @@
-#version 460
+#version 130
 out vec4 fragmento_color;
 
 in vec2 textura_posicion;

@@ -1,4 +1,4 @@
-#version 460
+#version 130
 in vec2 coordenadas_textura_texto;
 out vec4 color_salida;
 

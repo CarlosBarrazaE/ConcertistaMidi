@@ -1,4 +1,5 @@
-#version 460
+#version 130
+#extension GL_ARB_explicit_attrib_location : enable
 layout (location = 0) in vec2 posicion_vertice;
 layout (location = 1) in vec2 coordenadas_textura;
 
