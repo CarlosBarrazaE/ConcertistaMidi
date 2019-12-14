@@ -4,10 +4,10 @@
 class Color
 {
 private:
-	float rojo;
-	float verde;
-	float azul;
-	float alfa;
+	float m_rojo;
+	float m_verde;
+	float m_azul;
+	float m_alfa;
 
 	float valor_limitado(float valor);
 	void establecer_valores(float rojo, float verde, float azul, float alfa);

@@ -23,24 +23,24 @@ namespace Archivo
 					{
 						//La cabecera contiene: ancho, alto y los bpp
 						//El ancho se guarda en cabecera[0] y cabecera[1] para leerlo hay que multiplicar cabecera[1]*256
-						ancho_imagen = 256 * cabecera[1] + cabecera[0];
-						alto_imagen = 256 * cabecera[3] + cabecera[2];
+						m_ancho_imagen = 256 * cabecera[1] + cabecera[0];
+						m_alto_imagen = 256 * cabecera[3] + cabecera[2];
 
-						if(ancho_imagen > 0 && alto_imagen > 0)
+						if(m_ancho_imagen > 0 && m_alto_imagen > 0)
 						{
-							bytes_imagen = cabecera[4];
-							bpp = (bytes_imagen/8);//bytes por pixel
-							tamanno_imagen  = alto_imagen * ancho_imagen * bpp;
+							m_bytes_imagen = cabecera[4];
+							bpp = (m_bytes_imagen/8);//bytes por pixel
+							tamanno_imagen  = m_alto_imagen * m_ancho_imagen * bpp;
 
-							datos_imagen = new unsigned char[tamanno_imagen];
+							m_datos_imagen = new unsigned char[tamanno_imagen];
 
-							if(fread(datos_imagen, 1, tamanno_imagen, archivo) == tamanno_imagen)
+							if(fread(m_datos_imagen, 1, tamanno_imagen, archivo) == tamanno_imagen)
 							{
 								for(unsigned int x=0; x<(int)tamanno_imagen; x+=bpp)
 								{
-									temporal = datos_imagen[x];
-									datos_imagen[x] = datos_imagen[x+2];
-									datos_imagen[x+2] = temporal;
+									temporal = m_datos_imagen[x];
+									m_datos_imagen[x] = m_datos_imagen[x+2];
+									m_datos_imagen[x+2] = temporal;
 								}
 							}
 						}
@@ -51,39 +51,39 @@ namespace Archivo
 		}
 		else
 		{
-			Registro::error("Error al leer la textura: " + direccion);
-			error = true;
-			datos_imagen = NULL;
+			Registro::Error("Error al leer la textura: " + direccion);
+			m_error = true;
+			m_datos_imagen = NULL;
 		}
 	}
 
 	Tga::~Tga()
 	{
-		delete[] datos_imagen;
+		delete[] m_datos_imagen;
 	}
 
 	unsigned char * Tga::imagen()
 	{
-		return this->datos_imagen;
+		return this->m_datos_imagen;
 	}
 
 	unsigned int Tga::ancho()
 	{
-		return this->ancho_imagen;
+		return this->m_ancho_imagen;
 	}
 
 	unsigned int Tga::alto()
 	{
-		return this->alto_imagen;
+		return this->m_alto_imagen;
 	}
 
 	unsigned int Tga::bytes()
 	{
-		return this->bytes_imagen;
+		return this->m_bytes_imagen;
 	}
 
 	bool Tga::hay_error()
 	{
-		return this->error;
+		return this->m_error;
 	}
 }

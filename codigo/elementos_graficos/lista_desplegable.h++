@@ -2,6 +2,7 @@
 #define LISTA_DESPLEGABLE_H
 
 #include "elemento.h++"
+#include "etiqueta.h++"
 #include <vector>
 #include <string>
 
@@ -9,37 +10,33 @@ class Lista_Desplegable : public Elemento
 {
 private:
 	//Recursos
-	Rectangulo *rectangulo;
-	Texto *texto;
+	Rectangulo *m_rectangulo;
+	Texto *m_tipografia;
+	Etiqueta m_texto_seleccion;
 
-	std::vector<std::string> opciones;
-	std::vector<Textura2D*> iconos;
-	bool usar_iconos;
-	int ancho_icono, alto_icono;
+	std::vector<std::string> m_opciones;
+	std::vector<Textura2D*> m_iconos;
+	bool m_usar_iconos = false;
+	bool m_mostrar_lista;
 
-	bool centrado;
-	bool mostrar_lista;
-	unsigned int opcion_actual;
-
-	int ajuste_icono;
-	int ajuste_texto;
-	int centrado_vertical;
-
-	void iniciar(Administrador_Recursos *recursos);
+	int m_centrado_icono;
+	int m_ancho_icono, m_alto_icono;
+	unsigned int m_opcion_actual;
 public:
-	Lista_Desplegable(int x, int y, int ancho, int alto, std::vector<std::string> opciones, Texto *texto, Administrador_Recursos *recursos);
-	Lista_Desplegable(int x, int y, int ancho, int alto, int ancho_icono, int alto_icono, bool centrado, std::vector<std::string> opciones, std::vector<Textura2D*> iconos, Texto *texto, Administrador_Recursos *recursos);
+	Lista_Desplegable(int x, int y, int ancho, int alto, Administrador_Recursos *recursos);
 	~Lista_Desplegable();
 
-	void e_dimension_icono(int ancho, int alto);
-	void e_centrado(bool valor);
-
+	void dimension_icono(int ancho, int alto);
+	void opciones_textos(std::vector<std::string> opciones);
+	void opciones_iconos(std::vector<Textura2D*> iconos);
+	void tipografia(Texto *tipografia);
 	void opcion_predeterminada(unsigned int opcion);
 	unsigned int opcion_seleccionada();
 
 	void actualizar(unsigned int diferencia_tiempo);
 	void dibujar();
 	void evento_raton(Raton *raton);
+	void evento_pantalla(int ancho, int alto);
 };
 
 #endif

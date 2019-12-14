@@ -1,14 +1,14 @@
 #include "pantalla.h++"
 
-int Pantalla::ancho = 0;
-int Pantalla::alto = 0;
+int Pantalla::Ancho = 0;
+int Pantalla::Alto = 0;
 
-int Pantalla::centro_h()
+int Pantalla::Centro_h()
 {
-	return ancho / 2;
+	return Ancho / 2;
 }
 
-int Pantalla::centro_v()
+int Pantalla::Centro_v()
 {
-	return alto / 2;
+	return Alto / 2;
 }

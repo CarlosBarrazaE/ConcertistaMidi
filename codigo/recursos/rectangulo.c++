@@ -13,11 +13,11 @@ Rectangulo::Rectangulo(Sombreador *sombreador) : Figura(sombreador)
 	this->indice_figura = 0;//Matriz de vertice de objeto
 	glGenVertexArrays(1, &this->indice_figura);
 	glBindVertexArray(this->indice_figura);
-	Figura::ultimo_indice_seleccionado = this->indice_figura;
+	Figura::Ultimo_indice_seleccionado = this->indice_figura;
 
-	this->indice_objeto = 0; //Vertice temporal de objeto
-	glGenBuffers(1, &this->indice_objeto);
-	glBindBuffer(GL_ARRAY_BUFFER, this->indice_objeto);
+	m_indice_objeto = 0; //Vertice temporal de objeto
+	glGenBuffers(1, &m_indice_objeto);
+	glBindBuffer(GL_ARRAY_BUFFER, m_indice_objeto);
 	glBufferData(GL_ARRAY_BUFFER, sizeof(puntos), puntos, GL_STATIC_DRAW);
 
 	glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, 4 * sizeof(float), (void*)0);
@@ -27,15 +27,15 @@ Rectangulo::Rectangulo(Sombreador *sombreador) : Figura(sombreador)
 	glEnableVertexAttribArray(1);
 	glBindBuffer(GL_ARRAY_BUFFER, 0);
 
-	this->color_rectangulo = Color(1.0f, 1.0f, 1.0f);
-	this->textura_activada = true;
-	this->textura_estirable_horizontal = false;
-	this->textura_estirable_vertical = false;
+	m_color_rectangulo = Color(1.0f, 1.0f, 1.0f);
+	m_textura_activada = true;
+	m_textura_estirable_horizontal = false;
+	m_textura_estirable_vertical = false;
 
-	sombreador->e_vector4f("color", this->color_rectangulo.o_rojo(), this->color_rectangulo.o_verde(), this->color_rectangulo.o_azul(), 1.0f);
-	sombreador->e_bool("textura_activada", this->textura_activada);
-	sombreador->e_bool("textura_estirable_horizontal", this->textura_estirable_horizontal);
-	sombreador->e_bool("textura_estirable_vertical", this->textura_estirable_vertical);
+	sombreador->e_vector4f("color", m_color_rectangulo.o_rojo(), m_color_rectangulo.o_verde(), m_color_rectangulo.o_azul(), 1.0f);
+	sombreador->e_bool("textura_activada", m_textura_activada);
+	sombreador->e_bool("textura_estirable_horizontal", m_textura_estirable_horizontal);
+	sombreador->e_bool("textura_estirable_vertical", m_textura_estirable_vertical);
 }
 
 Rectangulo::~Rectangulo()
@@ -43,39 +43,39 @@ Rectangulo::~Rectangulo()
 	glBindVertexArray(0);
 	glBindBuffer(GL_ARRAY_BUFFER, 0);
 	glDeleteVertexArrays(1, &this->indice_figura);
-	glDeleteBuffers(1, &this->indice_objeto);
+	glDeleteBuffers(1, &m_indice_objeto);
 }
 
 void Rectangulo::color(Color color_nuevo)
 {
-	if(this->color_rectangulo != color_nuevo)
+	if(m_color_rectangulo != color_nuevo)
 	{
-		this->color_rectangulo = color_nuevo;
-		sombreador->e_vector4f("color", this->color_rectangulo.o_rojo(), this->color_rectangulo.o_verde(), this->color_rectangulo.o_azul(), this->color_rectangulo.o_alfa());
+		m_color_rectangulo = color_nuevo;
+		sombreador->e_vector4f("color", m_color_rectangulo.o_rojo(), m_color_rectangulo.o_verde(), m_color_rectangulo.o_azul(), m_color_rectangulo.o_alfa());
 	}
 }
 
 void Rectangulo::textura(bool estado)
 {
-	if(this->textura_activada != estado)
+	if(m_textura_activada != estado)
 	{
-		this->textura_activada = estado;
-		sombreador->e_bool("textura_activada", this->textura_activada);
+		m_textura_activada = estado;
+		sombreador->e_bool("textura_activada", m_textura_activada);
 	}
 }
 
 void Rectangulo::extremos_fijos(bool horizontal, bool vertical)
 {
-	if(this->textura_estirable_horizontal != horizontal)
+	if(m_textura_estirable_horizontal != horizontal)
 	{
-		this->textura_estirable_horizontal = horizontal;
-		sombreador->e_bool("textura_estirable_horizontal", this->textura_estirable_horizontal);
+		m_textura_estirable_horizontal = horizontal;
+		sombreador->e_bool("textura_estirable_horizontal", m_textura_estirable_horizontal);
 	}
 
-	if(this->textura_estirable_vertical != vertical)
+	if(m_textura_estirable_vertical != vertical)
 	{
-		this->textura_estirable_vertical = vertical;
-		sombreador->e_bool("textura_estirable_vertical", this->textura_estirable_vertical);
+		m_textura_estirable_vertical = vertical;
+		sombreador->e_bool("textura_estirable_vertical", m_textura_estirable_vertical);
 	}
 }
 
@@ -92,10 +92,10 @@ void Rectangulo::dibujar(float x, float y, float ancho, float alto)
 	modelo = glm::scale(modelo, glm::vec3(ancho, alto, 1.0f));
 	this->sombreador->e_matriz4("modelo", modelo);
 
-	if(Figura::ultimo_indice_seleccionado != this->indice_figura)
+	if(Figura::Ultimo_indice_seleccionado != this->indice_figura)
 	{
 		glBindVertexArray(this->indice_figura);
-		Figura::ultimo_indice_seleccionado = this->indice_figura;
+		Figura::Ultimo_indice_seleccionado = this->indice_figura;
 	}
 	glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
 }
@@ -105,45 +105,45 @@ void Rectangulo::dibujar_estirable(float x, float y, float ancho, float alto, fl
 	//Dibuja un rectangulo con textura fija arriba y abajo de alto variable en el centro.
 	bool cambio = false;
 
-	if(borde_horizontal <= 0 && this->textura_estirable_horizontal)
+	if(borde_horizontal <= 0 && m_textura_estirable_horizontal)
 	{
-		this->textura_estirable_horizontal = false;
+		m_textura_estirable_horizontal = false;
 		sombreador->e_bool("textura_estirable_horizontal", false);
 		borde_horizontal = 0;
 	}
 
-	if(borde_vertical <= 0 && this->textura_estirable_vertical)
+	if(borde_vertical <= 0 && m_textura_estirable_vertical)
 	{
-		this->textura_estirable_vertical = false;
+		m_textura_estirable_vertical = false;
 		sombreador->e_bool("textura_estirable_vertical", false);
 		borde_vertical = 0;
 	}
 
-	if(borde_horizontal > 0 && !this->textura_estirable_horizontal)
+	if(borde_horizontal > 0 && !m_textura_estirable_horizontal)
 	{
-		this->textura_estirable_horizontal = true;
+		m_textura_estirable_horizontal = true;
 		sombreador->e_bool("textura_estirable_horizontal", true);
 	}
-	if(borde_vertical > 0 && !this->textura_estirable_vertical)
+	if(borde_vertical > 0 && !m_textura_estirable_vertical)
 	{
-		this->textura_estirable_vertical = true;
+		m_textura_estirable_vertical = true;
 		sombreador->e_bool("textura_estirable_vertical", true);
 	}
 
-	if(this->borde_horizontal != borde_horizontal / ancho)
+	if(m_borde_horizontal != borde_horizontal / ancho)
 	{
-		this->borde_horizontal = borde_horizontal / ancho;
+		m_borde_horizontal = borde_horizontal / ancho;
 		cambio = true;
 	}
 
-	if(this->borde_vertical != borde_vertical / alto)
+	if(m_borde_vertical != borde_vertical / alto)
 	{
-		this->borde_vertical = borde_vertical / alto;
+		m_borde_vertical = borde_vertical / alto;
 		cambio = true;
 	}
 
 	if(cambio)
-		sombreador->e_vector2f("borde", this->borde_horizontal, this->borde_vertical);
+		sombreador->e_vector2f("borde", m_borde_horizontal, m_borde_vertical);
 
 	this->dibujar(x, y, ancho, alto);
 }

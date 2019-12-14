@@ -38,19 +38,19 @@ struct Caracter
 class Texto : public Figura
 {
 private:
-	static Color ultimo_color;
+	static Color Ultimo_color;
 
-	FT_Library libreria;
-	FT_Face tipografia;
+	FT_Library m_libreria;
+	FT_Face m_tipografia;
 
-	std::map<unsigned int, Caracter*> caracteres;
-	unsigned int indice_atlas;
-	unsigned int ancho_atlas;
-	unsigned int alto_atlas;
+	std::map<unsigned int, Caracter*> m_caracteres;
+	unsigned int m_indice_atlas;
+	unsigned int m_ancho_atlas;
+	unsigned int m_alto_atlas;
 
-	unsigned int indice_objeto;
-	unsigned int largo_ultimo_texto;
-	int tamanno_letra;
+	unsigned int m_indice_objeto;
+	unsigned int m_largo_ultimo_texto;
+	int m_tamanno_letra;
 
 	void generar_caracteres();
 	Caracter *obtener_caracter(unsigned int caracter);

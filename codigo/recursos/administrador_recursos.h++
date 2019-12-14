@@ -64,19 +64,19 @@ enum ModeloLetra
 class Administrador_Recursos
 {
 private:
-	std::map<Textura, Textura2D*> lista_texturas;
-	std::map<SombreadorVF, Sombreador*> lista_sombreadores;
-	std::map<FiguraGeometrica, Rectangulo*> lista_figuras;
+	std::map<Textura, Textura2D*> m_lista_texturas;
+	std::map<SombreadorVF, Sombreador*> m_lista_sombreadores;
+	std::map<FiguraGeometrica, Rectangulo*> m_lista_figuras;
 
-	std::map<Textura, const char*> archivo_texturas;
-	std::map<SombreadorVF, const char*> archivo_sombreador_vertice;
-	std::map<SombreadorVF, const char*> archivo_sombreador_fragmento;
+	std::map<Textura, const char*> m_archivo_texturas;
+	std::map<SombreadorVF, const char*> m_archivo_sombreador_vertice;
+	std::map<SombreadorVF, const char*> m_archivo_sombreador_fragmento;
 
-	std::map<ModeloLetra, Texto*> formato_letras;
+	std::map<ModeloLetra, Texto*> m_formato_letras;
 
-	int ancho;
-	int alto;
-	glm::mat4 matriz_proyeccion;
+	int m_ancho;
+	int m_alto;
+	glm::mat4 m_matriz_proyeccion;
 public:
 	Administrador_Recursos();
 	~Administrador_Recursos();

@@ -1,68 +1,63 @@
 #include "registro.h++"
 #include <GL/glew.h>
-void Registro::escribir_registro(CodigoEstado estado, std::string texto)
+void Registro::Escribir_registro(CodigoEstado estado, std::string texto)
 {
 	//TODO agregar despues de un \n la etiqueta que corresponda [Error / Aviso / Dato]
 	std::ofstream archivo;
 	archivo.open(ARCHIVO_REGISTRO, std::ios::app);
-	if(estado == Error)
+	if(estado == EstadoError)
 		archivo << "[ERROR] " << texto << "\n";
-	else if(estado == Aviso && NIVEL_REGISTRO >= 1)
+	else if(estado == EstadoAviso && NIVEL_REGISTRO >= 1)
 		archivo << "[AVISO] " << texto << "\n";
-	else if(estado == Dato && NIVEL_REGISTRO >= 2)
+	else if(estado == EstadoDato && NIVEL_REGISTRO >= 2)
 		archivo << "[NOTA] " << texto << "\n";
-	else if(estado == Depurar && NIVEL_REGISTRO >= 3)
+	else if(estado == EstadoDepurar && NIVEL_REGISTRO >= 3)
 		archivo << "[DEPURAR] " << texto << "\n";
 
 	if(IMPRIMIR_PANTALLA)
 	{
-		if(estado == Error)
+		if(estado == EstadoError)
 			std::cout << "\033[31m[ERROR]\033[0m " << texto << "\n";
-		else if(estado == Aviso && NIVEL_REGISTRO >= 1)
+		else if(estado == EstadoAviso && NIVEL_REGISTRO >= 1)
 			std::cout << "\033[33m[AVISO]\033[0m " << texto << "\n";
-		else if(estado == Dato && NIVEL_REGISTRO >= 2)
+		else if(estado == EstadoDato && NIVEL_REGISTRO >= 2)
 			std::cout << "\033[32m[NOTA]\033[0m " << texto << "\n";
-		else if(estado == Depurar && NIVEL_REGISTRO >= 3)
+		else if(estado == EstadoDepurar && NIVEL_REGISTRO >= 3)
 			std::cout << "\033[34m[DEPURAR]\033[0m " << texto << "\n";
 	}
 }
 
-void Registro::error(std::string texto)
+void Registro::Error(std::string texto)
 {
-	escribir_registro(Error, texto);
+	Escribir_registro(EstadoError, texto);
 }
 
-void Registro::aviso(std::string texto)
+void Registro::Aviso(std::string texto)
 {
-	escribir_registro(Aviso, texto);
+	Escribir_registro(EstadoAviso, texto);
 }
 
-void Registro::nota(std::string texto)
+void Registro::Nota(std::string texto)
 {
-	escribir_registro(Dato, texto);
+	Escribir_registro(EstadoDato, texto);
 }
 
-void Registro::depurar(std::string texto)
+void Registro::Depurar(std::string texto)
 {
-	escribir_registro(Depurar, texto);
+	Escribir_registro(EstadoDepurar, texto);
 }
 
-void Registro::error_glfw(int error, const char *descripcion)
-{
-	escribir_registro(Error, "Error GLFW codigo: " + std::to_string(error) + std::string(descripcion));
-}
-
-void Registro::mostrar_detalles()
+void Registro::Mostrar_detalles()
 {
 	const GLubyte *marca = glGetString(GL_VENDOR);
 	const GLubyte *tarjeta_grafica = glGetString(GL_RENDERER);
 	const GLubyte *version = glGetString(GL_VERSION);
 	const GLubyte *version_glsl = glGetString(GL_SHADING_LANGUAGE_VERSION);
 
-	Registro::nota("Vendedor: " + std::string(reinterpret_cast<const char*>(marca)));
-	Registro::nota("Tarjeta Grafica: " +std::string(reinterpret_cast<const char*>(tarjeta_grafica)));
-	Registro::nota("Version OpenGl: " + std::string(reinterpret_cast<const char*>(version)));
-	Registro::nota("Version GLSL: " + std::string(reinterpret_cast<const char*>(version_glsl)));
+	Registro::Nota("Vendedor: " + std::string(reinterpret_cast<const char*>(marca)));
+	Registro::Nota("Tarjeta Grafica: " +std::string(reinterpret_cast<const char*>(tarjeta_grafica)));
+	Registro::Nota("Version OpenGl: " + std::string(reinterpret_cast<const char*>(version)));
+	Registro::Nota("Version GLSL: " + std::string(reinterpret_cast<const char*>(version_glsl)));
 
 	GLenum parametros[] = {
 		GL_MAX_COMBINED_TEXTURE_IMAGE_UNITS,
@@ -91,23 +86,23 @@ void Registro::mostrar_detalles()
 		"GL_STEREO",
 	};
 
-	Registro::depurar("---------------------------------------");
-	Registro::depurar("Parametros del Contexto GL:");
+	Registro::Depurar("---------------------------------------");
+	Registro::Depurar("Parametros del Contexto GL:");
 
 	int valor = 0;
 	for (int x = 0; x < 10; x++)
 	{
 		glGetIntegerv(parametros[x], &valor);
-		Registro::depurar(std::string(nombres[x]) + " " + std::to_string(valor));
+		Registro::Depurar(std::string(nombres[x]) + " " + std::to_string(valor));
 	}
 
 	int valor_doble[2];
 	valor_doble[0] = valor_doble[1] = 0;
 	glGetIntegerv(GL_MAX_VIEWPORT_DIMS, valor_doble);
-	Registro::depurar("GL_MAX_VIEWPORT_DIMS " + std::to_string(valor_doble[0]) + " " + std::to_string(valor_doble[1]));
+	Registro::Depurar("GL_MAX_VIEWPORT_DIMS " + std::to_string(valor_doble[0]) + " " + std::to_string(valor_doble[1]));
 
 	unsigned char estereo = 0;
 	glGetBooleanv(GL_STEREO, &estereo);
-	Registro::depurar("GL_STEREO " + std::to_string((unsigned int)estereo));
-	Registro::depurar("---------------------------------------");
+	Registro::Depurar("GL_STEREO " + std::to_string((unsigned int)estereo));
+	Registro::Depurar("---------------------------------------");
 }

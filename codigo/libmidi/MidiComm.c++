@@ -27,7 +27,7 @@ void midiInit()
 	if (err < 0)
 	{
 		alsa_seq = NULL;
-		Registro::error("No se puede abrir el secuensiador MIDI. MIDI no disponible");
+		Registro::Error("No se puede abrir el secuensiador MIDI. MIDI no disponible");
 		return;
 	}
 
@@ -349,7 +349,7 @@ void MidiCommOut::Write(const MidiEvent &out)
 			snd_seq_ev_set_noteon(&ev, ch, note, out.NoteVelocity());
 
 			// save for reset
-			notes_on.push_back(std::pair<int,int>(ch, note));
+			m_notes_on.push_back(std::pair<int,int>(ch, note));
 			break;
 		}
 		case MidiEventType_NoteOff:
@@ -361,11 +361,11 @@ void MidiCommOut::Write(const MidiEvent &out)
 			// remove from reset
 			std::pair<int,int> p(ch, note);
 			std::vector<std::pair<int,int> >::iterator i;
-			for (i = notes_on.begin(); i != notes_on.end(); ++i)
+			for (i = m_notes_on.begin(); i != m_notes_on.end(); ++i)
 			{
 				if (*i == p)
 				{
-					notes_on.erase(i);
+					m_notes_on.erase(i);
 					break;
 				}
 			}
@@ -396,7 +396,7 @@ void MidiCommOut::Reset()
 	snd_seq_ev_set_direct(&ev);
 
 	std::vector<std::pair<int,int> >::const_iterator i;
-	for (i = notes_on.begin(); i != notes_on.end(); ++i)
+	for (i = m_notes_on.begin(); i != m_notes_on.end(); ++i)
 	{
 		snd_seq_ev_set_noteoff(&ev, i->first, i->second, 0);
 		snd_seq_event_output(alsa_seq, &ev);

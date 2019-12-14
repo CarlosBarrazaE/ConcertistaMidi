@@ -2,10 +2,10 @@
 
 Ventana::Ventana()
 {
-	this->accion = Ninguna;
+	m_accion = Ninguna;
 }
 
 Accion Ventana::obtener_accion()
 {
-	return this->accion;
+	return m_accion;
 }

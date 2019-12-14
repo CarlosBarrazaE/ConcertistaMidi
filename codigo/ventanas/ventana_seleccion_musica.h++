@@ -3,21 +3,18 @@
 
 #include "ventana.h++"
 #include "../elementos_graficos/boton.h++"
+#include "../elementos_graficos/etiqueta.h++"
 
 class VentanaSeleccionMusica : public Ventana
 {
 private:
 	//Recursos
-	Rectangulo *rectangulo;
-	Textura2D *textura_fondo;
-	Texto *texto;
+	Rectangulo *m_rectangulo;
+	Etiqueta m_texto_titulo;
 
 	//Componentes
-	Boton *boton_atras;
-	Boton *boton_continuar;
-
-	//Texto pantalla
-	int ajuste_titulo;
+	Boton *m_boton_atras;
+	Boton *m_boton_continuar;
 public:
 	VentanaSeleccionMusica(Administrador_Recursos *recursos);
 	~VentanaSeleccionMusica();

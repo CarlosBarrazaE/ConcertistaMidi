@@ -3,6 +3,7 @@
 
 #include "ventana.h++"
 #include "../elementos_graficos/barra_progreso.h++"
+#include "../elementos_graficos/etiqueta.h++"
 #include "../elementos_graficos/tablero_notas.h++"
 #include "../elementos_graficos/organo.h++"
 #include "../control/pista.h++"
@@ -17,28 +18,23 @@ class VentanaOrgano : public Ventana
 {
 private:
 	//Recursos
-	Rectangulo *rectangulo;
-	Texto *texto_titulo;
-	Texto *texto;
+	Rectangulo *m_rectangulo;
+	Etiqueta m_texto_velocidad;
+	Etiqueta m_texto_pausa;
 
 	//Componentes
-	Barra_Progreso *barra;
-	Tablero_Notas *tablero;
-	Organo *organo;
+	Barra_Progreso *m_barra;
+	Tablero_Notas *m_tablero;
+	Organo *m_organo;
 
 	//Controles
-	double velocidad_musica;
-	bool cambio_velocidad;
-	bool pausa;
-
-	//Texto pantalla
-	std::string texto_pausa;
-	int ancho_titulo;
-	int ancho_pausa;
+	double m_velocidad_musica;
+	bool m_cambio_velocidad;
+	bool m_pausa;
 
 	//Datos
-	Configuracion *configuracion;
-	Datos_Musica *musica;
+	Configuracion *m_configuracion;
+	Datos_Musica *m_musica;
 
 public:
 	VentanaOrgano(Configuracion *configuracion, Datos_Musica *musica, Administrador_Recursos *recursos);

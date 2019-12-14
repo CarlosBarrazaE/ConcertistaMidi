@@ -2,6 +2,7 @@
 #define RECTANGULO_H
 
 #include <glm/glm.hpp>
+#include <glm/gtc/matrix_transform.hpp>
 
 #include "figura.h++"
 #include "textura_2d.h++"
@@ -10,13 +11,13 @@
 class Rectangulo : public Figura
 {
 private:
-	unsigned int indice_objeto;
-	Color color_rectangulo;
-	bool textura_activada;
-	bool textura_estirable_horizontal;
-	bool textura_estirable_vertical;
-	float borde_horizontal;//Entre 0 y 1
-	float borde_vertical;//Entre 0 y 1
+	unsigned int m_indice_objeto;
+	Color m_color_rectangulo;
+	bool m_textura_activada;
+	bool m_textura_estirable_horizontal;
+	bool m_textura_estirable_vertical;
+	float m_borde_horizontal;//Entre 0 y 1
+	float m_borde_vertical;//Entre 0 y 1
 public:
 	Rectangulo(Sombreador *sombreador);
 	~Rectangulo();

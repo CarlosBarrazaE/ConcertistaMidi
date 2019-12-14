@@ -8,11 +8,11 @@
 class Datos_Musica
 {
 private:
-	Midi *musica;
-	std::vector<Pista> pistas;
+	Midi *m_musica;
+	std::vector<Pista> m_pistas;
 
-	std::string nombre_musica;
-	std::string autor;
+	std::string m_nombre_musica;
+	std::string m_autor;
 public:
 	Datos_Musica();
 	~Datos_Musica();

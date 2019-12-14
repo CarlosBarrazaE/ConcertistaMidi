@@ -93,7 +93,7 @@ private:
 	void Release();
 
 	MidiCommDescription m_description;
-	std::vector<std::pair<int,int> > notes_on;
+	std::vector<std::pair<int,int> > m_notes_on;
 };
 
 #endif

@@ -3,6 +3,7 @@
 
 #include "ventana.h++"
 #include "../elementos_graficos/boton.h++"
+#include "../elementos_graficos/etiqueta.h++"
 #include "../elementos_graficos/configuracion_pista.h++"
 #include "../elementos_graficos/barra_desplazamiento.h++"
 #include "../control/configuracion.h++"
@@ -12,20 +13,17 @@ class VentanaSeleccionPista : public Ventana
 {
 private:
 	//Recursos
-	Rectangulo *rectangulo;
-	Texto *texto;
+	Rectangulo *m_rectangulo;
+	Etiqueta m_texto_titulo;
 
 	//Componentes
-	Boton *boton_atras;
-	Boton *boton_continuar;
-	Barra_Desplazamiento *barra_desplazamiento;
-	std::vector<Configuracion_Pista*> configuracion_pistas;
-
-	//Texto pantalla
-	int ajuste_titulo;
+	Boton *m_boton_atras;
+	Boton *m_boton_continuar;
+	Barra_Desplazamiento *m_barra_desplazamiento;
+	std::vector<Configuracion_Pista*> m_configuracion_pistas;
 
 	//Datos
-	Datos_Musica *musica;
+	Datos_Musica *m_musica;
 
 	void crear_configuracion(Administrador_Recursos *recursos);
 	void cargar_configuracion(Administrador_Recursos *recursos);

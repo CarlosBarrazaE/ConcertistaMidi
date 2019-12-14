@@ -13,7 +13,7 @@ namespace Archivo
 			archivo_texto.open(nombre);
 
 			if(!archivo_texto.is_open())
-				Registro::error("Error al abrir el archivo: \"" + std::string(nombre) + "\"");
+				Registro::Error("Error al abrir el archivo: \"" + std::string(nombre) + "\"");
 
 			cadena_texto << archivo_texto.rdbuf();
 			texto = cadena_texto.str();
@@ -21,7 +21,7 @@ namespace Archivo
 		}
 		catch(std::ifstream::failure e)
 		{
-			Registro::error("Error con el archivo " + std::string(nombre) + ": " + std::string(e.what()));
+			Registro::Error("Error con el archivo " + std::string(nombre) + ": " + std::string(e.what()));
 		}
 
 		return texto;

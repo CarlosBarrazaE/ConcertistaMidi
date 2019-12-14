@@ -1,18 +1,30 @@
 #include "configuracion_pista.h++"
 
 Configuracion_Pista::Configuracion_Pista(int x, int y, int ancho, int alto, Pista pista, Administrador_Recursos *recursos)
-: Elemento(x, y, ancho, alto), datos_pista(pista)
+: Elemento(x, y, ancho, alto), m_datos_pista(pista), m_seleccion_modo(20, 85, 70, 55, recursos), m_seleccion_color(137, 85, 70, 55, recursos)
 {
-	this->rectangulo = recursos->obtener_figura(F_Rectangulo);
-	this->texto = recursos->obtener_tipografia(LetraMediana);
-	this->texto_chico = recursos->obtener_tipografia(LetraMuyChica);
-	this->textura_fondo = recursos->obtener_textura(T_ConfiguracionPista);
+	m_rectangulo = recursos->obtener_figura(F_Rectangulo);
 
-	this->textura_reproducir = recursos->obtener_textura(T_Reproducir);
-	this->textura_pausar = recursos->obtener_textura(T_Pausar);
+	m_texto_instrumento.texto(m_datos_pista.o_instrumento());
+	m_texto_instrumento.tipografia(recursos->obtener_tipografia(LetraMediana));
+	m_texto_instrumento.color(Color(1.0f, 1.0f, 1.0f));
 
-	this->textura_sonido_activado = recursos->obtener_textura(T_SonidoActivado);
-	this->textura_sonido_desactivado = recursos->obtener_textura(T_SonidoDesactivado);
+	m_texto_notas.texto(std::to_string(m_datos_pista.o_numero_notas()) + " notas");
+	m_texto_notas.tipografia(recursos->obtener_tipografia(LetraMuyChica));
+	m_texto_notas.color(Color(1.0f, 1.0f, 1.0f));
+
+	m_texto_sonido.tipografia(recursos->obtener_tipografia(LetraMuyChica));
+	m_texto_sonido.color(Color(1.0f, 1.0f, 1.0f));
+	m_texto_sonido.dimension(100, 8);
+	m_texto_sonido.centrado(true);
+
+	m_textura_fondo = recursos->obtener_textura(T_ConfiguracionPista);
+
+	m_textura_reproducir = recursos->obtener_textura(T_Reproducir);
+	m_textura_pausar = recursos->obtener_textura(T_Pausar);
+
+	m_textura_sonido_activado = recursos->obtener_textura(T_SonidoActivado);
+	m_textura_sonido_desactivado = recursos->obtener_textura(T_SonidoDesactivado);
 
 	std::vector<std::string> opcion_modo;
 	opcion_modo.push_back("Izquierza");
@@ -38,102 +50,118 @@ Configuracion_Pista::Configuracion_Pista(int x, int y, int ancho, int alto, Pist
 	icono_color.push_back(recursos->obtener_textura(T_Pausar));
 	icono_color.push_back(recursos->obtener_textura(T_Reproducir));
 
-	this->seleccion_modo = new Lista_Desplegable(20, 85, 77, 55, 40, 40, true, opcion_modo, icono_modos, this->texto_chico, recursos);
-	this->seleccion_color = new Lista_Desplegable(137, 85, 77, 55, 40, 40, true, opcion_color, icono_color, this->texto_chico, recursos);
+	m_seleccion_modo.dimension_icono(40, 40);
+	m_seleccion_modo.opciones_textos(opcion_modo);
+	m_seleccion_modo.opciones_iconos(icono_modos);
+	m_seleccion_modo.tipografia(recursos->obtener_tipografia(LetraMuyChica));
+	m_seleccion_modo.opcion_predeterminada(0);
 
-	this->vista_previa = new Boton(300, 22, 30, 30, "", textura_reproducir, Color(1.0f, 1.0f, 1.0f), false, recursos);
+	m_seleccion_color.dimension_icono(40, 40);
+	m_seleccion_color.opciones_textos(opcion_color);
+	m_seleccion_color.opciones_iconos(icono_color);
+	m_seleccion_color.tipografia(recursos->obtener_tipografia(LetraMuyChica));
+	m_seleccion_color.opcion_predeterminada(0);
 
-	Textura2D *textura_sonido_actual;
-	if(this->datos_pista.o_sonido())
+	m_vista_previa = new Boton(300, 22, 30, 30, "", recursos);
+	m_vista_previa->color_boton(Color(1.0f, 1.0f, 1.0f));
+	m_vista_previa->textura(m_textura_reproducir);
+
+	m_boton_sonido = new Boton(272, 87, 40, 40, "", recursos);
+	m_boton_sonido->color_boton(Color(1.0f, 1.0f, 1.0f));
+	if(m_datos_pista.o_sonido())
 	{
-		textura_sonido_actual = textura_sonido_activado;
-		this->texto_sonido = "Sonido activado";
+		m_boton_sonido->textura(m_textura_sonido_activado);
+		m_texto_sonido.texto("Sonido activado");
 	}
 	else
 	{
-		textura_sonido_actual = textura_sonido_desactivado;
-		this->texto_sonido = "Sin sonido";
+		m_boton_sonido->textura(m_textura_sonido_desactivado);
+		m_texto_sonido.texto("Sin sonido");
 	}
 
-	this->boton_sonido = new Boton(272, 87, 40, 40, "", textura_sonido_actual, Color(1.0f, 1.0f, 1.0f), false, recursos);
-	this->centro_texto_sonido = this->texto_chico->ancho_texto(texto_sonido) / 2;
-
-	this->estado_vista_previa = false;
+	m_estado_vista_previa = false;
 }
 
 Configuracion_Pista::~Configuracion_Pista()
 {
-	delete seleccion_modo;
-	delete seleccion_color;
-	delete vista_previa;
-	delete boton_sonido;
+	delete m_vista_previa;
+	delete m_boton_sonido;
 }
 
 Pista Configuracion_Pista::o_pista()
 {
-	return this->datos_pista;
+	return m_datos_pista;
 }
 
 void Configuracion_Pista::actualizar(unsigned int diferencia_tiempo)
 {
-	seleccion_modo->actualizar(diferencia_tiempo);
-	seleccion_color->actualizar(diferencia_tiempo);
-	vista_previa->actualizar(diferencia_tiempo);
-	boton_sonido->actualizar(diferencia_tiempo);
+	m_seleccion_modo.actualizar(diferencia_tiempo);
+	m_seleccion_color.actualizar(diferencia_tiempo);
+	m_vista_previa->actualizar(diferencia_tiempo);
+	m_boton_sonido->actualizar(diferencia_tiempo);
 
-	seleccion_modo->ajuste(this->x, this->y);
-	seleccion_color->ajuste(this->x, this->y);
-	vista_previa->ajuste(this->x, this->y);
-	boton_sonido->ajuste(this->x, this->y);
+	m_seleccion_modo.ajuste(this->posicion_x(), this->posicion_y());
+	m_seleccion_color.ajuste(this->posicion_x(), this->posicion_y());
+	m_vista_previa->ajuste(this->posicion_x(), this->posicion_y());
+	m_boton_sonido->ajuste(this->posicion_x(), this->posicion_y());
+
+	m_texto_instrumento.posicion(this->posicion_x()+20, this->posicion_y()+15);
+	m_texto_notas.posicion(this->posicion_x()+20, this->posicion_y()+35);
+	m_texto_sonido.posicion(this->posicion_x()+242, this->posicion_y()+128);
 }
 
 void Configuracion_Pista::dibujar()
 {
-	this->rectangulo->textura(true);
-	this->textura_fondo->activar();
-	this->rectangulo->dibujar(this->x, this->y, this->ancho, this->alto, this->datos_pista.o_color());
-	this->texto->imprimir(this->x+20, this->y+40, this->datos_pista.o_instrumento(), Color(1.0f, 1.0f, 1.0f));
-	this->texto_chico->imprimir(this->x+20, this->y+55, std::to_string(this->datos_pista.o_numero_notas()) + " notas", Color(1.0f, 1.0f, 1.0f));
-	this->texto_chico->imprimir(this->x+292 - centro_texto_sonido, this->y+137, this->texto_sonido, Color(1.0f, 1.0f, 1.0f));
-	seleccion_modo->dibujar();
-	seleccion_color->dibujar();
-	vista_previa->dibujar();
-	boton_sonido->dibujar();
+	m_rectangulo->textura(true);
+	m_textura_fondo->activar();
+	m_rectangulo->dibujar(this->posicion_x(), this->posicion_y(), this->ancho(), this->alto(), m_datos_pista.o_color());
+	//m_rectangulo->dibujar(this->posicion_x(), this->posicion_y()+128, this->ancho(), 8, Color(0.8f, 0.2f, 0.7f)); //Para alinear el texto
+
+	m_texto_instrumento.dibujar();
+	m_texto_notas.dibujar();
+	m_texto_sonido.dibujar();
+
+	m_seleccion_modo.dibujar();
+	m_seleccion_color.dibujar();
+	m_vista_previa->dibujar();
+	m_boton_sonido->dibujar();
 }
 
 void Configuracion_Pista::evento_raton(Raton *raton)
 {
-	seleccion_modo->evento_raton(raton);
-	seleccion_color->evento_raton(raton);
-	vista_previa->evento_raton(raton);
-	boton_sonido->evento_raton(raton);
+	m_seleccion_modo.evento_raton(raton);
+	m_seleccion_color.evento_raton(raton);
+	m_vista_previa->evento_raton(raton);
+	m_boton_sonido->evento_raton(raton);
 
-	if(vista_previa->esta_activado())
+	if(m_vista_previa->esta_activado())
 	{
-		estado_vista_previa = !estado_vista_previa;
-		if(estado_vista_previa)
-			vista_previa->e_textura(textura_pausar);
+		m_estado_vista_previa = !m_estado_vista_previa;
+		if(m_estado_vista_previa)
+			m_vista_previa->textura(m_textura_pausar);
 		else
-			vista_previa->e_textura(textura_reproducir);
+			m_vista_previa->textura(m_textura_reproducir);
 	}
 
-	if(boton_sonido->esta_activado())
+	if(m_boton_sonido->esta_activado())
 	{
 
-		bool estado = this->datos_pista.o_sonido();
+		bool estado = m_datos_pista.o_sonido();
 		estado = !estado;
-		this->datos_pista.e_sonido(estado);
+		m_datos_pista.e_sonido(estado);
 		if(estado)
 		{
-			this->texto_sonido = "Sonido activado";
-			this->boton_sonido->e_textura(textura_sonido_activado);
+			m_texto_sonido.texto("Sonido activado");
+			m_boton_sonido->textura(m_textura_sonido_activado);
 		}
 		else
 		{
-			this->texto_sonido = "Sin sonido";
-			this->boton_sonido->e_textura(textura_sonido_desactivado);
+			m_texto_sonido.texto("Sin sonido");
+			m_boton_sonido->textura(m_textura_sonido_desactivado);
 		}
-
-		this->centro_texto_sonido = this->texto_chico->ancho_texto(texto_sonido) / 2;
 	}
+}
+
+void Configuracion_Pista::evento_pantalla(int ancho, int alto)
+{
 }

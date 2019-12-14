@@ -20,8 +20,8 @@ void controlar_eventos(SDL_Window *ventana, Controlador_Juego *controlador, SDL_
 
 int main (int n, char **argumentos)
 {
-	Pantalla::ancho = ANCHO;
-	Pantalla::alto = ALTO;
+	Pantalla::Ancho = ANCHO;
+	Pantalla::Alto = ALTO;
 
 	SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 3);
 	SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 0);
@@ -33,7 +33,7 @@ int main (int n, char **argumentos)
 	glewExperimental = GL_TRUE;
 	glewInit();
 
-	Registro::mostrar_detalles();
+	Registro::Mostrar_detalles();
 
 	configurar_gl();
 	Administrador_Recursos recursos;

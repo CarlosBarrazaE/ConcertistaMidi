@@ -2,29 +2,27 @@
 #define BARRA_PROGRESO_H
 
 #include "elemento.h++"
+#include "etiqueta.h++"
 #include "../util/funciones.h++"
 #include "../libmidi/Midi.h++"
 
 class Barra_Progreso : public Elemento
 {
 private:
-	MidiEventMicrosecondList lineas;
-	microseconds_t tiempo_total;
-	microseconds_t tiempo_actual;
-	microseconds_t tiempo_nuevo;
-	int x_anterior;
-	int progreso;
-	bool sobre_barra;
+	MidiEventMicrosecondList m_lineas;
+	microseconds_t m_tiempo_total;
+	microseconds_t m_tiempo_actual;
+	microseconds_t m_tiempo_nuevo;
+	int m_x_anterior;
+	int m_progreso;
+	bool m_sobre_barra;
 
-	Textura2D *t_frente;
-	Texto *texto;
-	Rectangulo *rectangulo;
+	Textura2D *m_frente;
+	Etiqueta m_texto_inicial, m_texto_final;
+	Rectangulo *m_rectangulo;
 
-	std::string duracion_total;
-	int largo_texto;
-
-	Color color_fondo;
-	Color color_progreso;
+	Color m_color_fondo;
+	Color m_color_progreso;
 public:
 	Barra_Progreso(int x, int y, int ancho, int alto, microseconds_t tiempo_total, MidiEventMicrosecondList lineas, Administrador_Recursos *recursos);
 	~Barra_Progreso();
@@ -34,8 +32,8 @@ public:
 
 	void actualizar(unsigned int diferencia_tiempo);
 	void dibujar();
-
 	void evento_raton(Raton *raton);
+	void evento_pantalla(int ancho, int alto);
 };
 
 #endif

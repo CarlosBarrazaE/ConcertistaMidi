@@ -2,86 +2,104 @@
 
 VentanaTitulo::VentanaTitulo(Administrador_Recursos *recursos) : Ventana()
 {
-	Textura2D *textura = recursos->obtener_textura(T_Boton);
-	Color color(0.9f, 0.9f, 0.9f);
+	m_rectangulo = recursos->obtener_figura(F_Rectangulo);
 
-	boton_tocar = new Boton(Pantalla::centro_h(), 220, 250, 50, "Tocar una canción", textura, Color(0.145f, 0.707f, 1.0f), true, recursos);
-	boton_tocar->e_color_texto(Color(1.0f, 1.0f, 1.0f));
-	boton_practicar = new Boton(Pantalla::centro_h(), 280, 250, 50, "Practicar", textura, color, true, recursos);
-	boton_configurar = new Boton(Pantalla::centro_h(), 340, 250, 50, "Configuración", textura, color, true, recursos);
-	boton_salir = new Boton(Pantalla::centro_h(), 400, 250, 50, "Salir", textura, color, true, recursos);
+	m_textura_fondo = recursos->obtener_textura(T_FondoTitulo);
+	m_textura_titulo = recursos->obtener_textura(T_Titulo);
 
-	textura_fondo = recursos->obtener_textura(T_FondoTitulo);
-	textura_titulo = recursos->obtener_textura(T_Titulo);
+	m_boton_tocar = new Boton(Pantalla::Centro_h(), 220, 250, 50, "Tocar una canción", recursos);
+	m_boton_tocar->color_boton(Color(0.145f, 0.707f, 1.0f));
+	m_boton_tocar->color_texto(Color(1.0f, 1.0f, 1.0f));
+	m_boton_tocar->centrado(true);
 
-	rectangulo = recursos->obtener_figura(F_Rectangulo);
+	m_boton_practicar = new Boton(Pantalla::Centro_h(), 280, 250, 50, "Practicar", recursos);
+	m_boton_practicar->color_boton(Color(0.9f, 0.9f, 0.9f));
+	m_boton_practicar->centrado(true);
 
-	texto_version = recursos->obtener_tipografia(LetraChica);
+	m_boton_configurar = new Boton(Pantalla::Centro_h(), 340, 250, 50, "Configuración", recursos);
+	m_boton_configurar->color_boton(Color(0.9f, 0.9f, 0.9f));
+	m_boton_configurar->centrado(true);
+
+	m_boton_salir = new Boton(Pantalla::Centro_h(), 400, 250, 50, "Salir", recursos);
+	m_boton_salir->color_boton(Color(0.9f, 0.9f, 0.9f));
+	m_boton_salir->centrado(true);
+
+	m_texto_version.texto("Versión: " + std::string(VERSION));
+	m_texto_version.tipografia(recursos->obtener_tipografia(LetraChica));
+	m_texto_version.color(Color(1.0f, 1.0f, 1.0f));
+	m_texto_version.posicion(20, Pantalla::Alto - 26);
 }
 
 VentanaTitulo::~VentanaTitulo()
 {
-	delete boton_tocar;
-	delete boton_practicar;
-	delete boton_configurar;
-	delete boton_salir;
+	delete m_boton_tocar;
+	delete m_boton_practicar;
+	delete m_boton_configurar;
+	delete m_boton_salir;
 }
 
 void VentanaTitulo::actualizar(unsigned int diferencia_tiempo)
 {
-	boton_tocar->actualizar(diferencia_tiempo);
-	boton_practicar->actualizar(diferencia_tiempo);
-	boton_configurar->actualizar(diferencia_tiempo);
-	boton_salir->actualizar(diferencia_tiempo);
+	m_boton_tocar->actualizar(diferencia_tiempo);
+	m_boton_practicar->actualizar(diferencia_tiempo);
+	m_boton_configurar->actualizar(diferencia_tiempo);
+	m_boton_salir->actualizar(diferencia_tiempo);
 }
 
 void VentanaTitulo::dibujar()
 {
-	textura_fondo->activar();
-	rectangulo->color(Color(1.0f, 1.0f, 1.0f));
-	rectangulo->dibujar(0, 0, Pantalla::ancho, 150);
-	rectangulo->dibujar(0, Pantalla::alto - 40, Pantalla::ancho, 40);
+	m_textura_fondo->activar();
+	m_rectangulo->color(Color(1.0f, 1.0f, 1.0f));
+	m_rectangulo->dibujar(0, 0, Pantalla::Ancho, 150);
+	m_rectangulo->dibujar(0, Pantalla::Alto - 40, Pantalla::Ancho, 40);
 
-	textura_titulo->activar();
-	rectangulo->dibujar(Pantalla::centro_h() - 256, 30, 512, 128);
+	m_textura_titulo->activar();
+	m_rectangulo->dibujar(Pantalla::Centro_h() - 256, 30, 512, 128);
 
-	boton_tocar->dibujar();
-	boton_practicar->dibujar();
-	boton_configurar->dibujar();
-	boton_salir->dibujar();
+	m_boton_tocar->dibujar();
+	m_boton_practicar->dibujar();
+	m_boton_configurar->dibujar();
+	m_boton_salir->dibujar();
 
-	texto_version->imprimir(20, Pantalla::alto - 15, "Versión: " + std::string(VERSION), Color(1.0f, 1.0f, 1.0f));
+	m_texto_version.dibujar();
 }
 
 void VentanaTitulo::evento_raton(Raton *raton)
 {
-	boton_tocar->evento_raton(raton);
-	boton_practicar->evento_raton(raton);
-	boton_configurar->evento_raton(raton);
-	boton_salir->evento_raton(raton);
+	m_boton_tocar->evento_raton(raton);
+	m_boton_practicar->evento_raton(raton);
+	m_boton_configurar->evento_raton(raton);
+	m_boton_salir->evento_raton(raton);
 
-	if(boton_tocar->esta_activado())
-		this->accion = CambiarASeleccionMusica;
-	//else if(boton_practicar->esta_activado())
-	//	this->accion = CambiarAOrgano;
-	else if(boton_configurar->esta_activado())
-		this->accion = CambiarAConfiguracion;
-	else if(boton_salir->esta_activado())
-		this->accion = Salir;
+	if(m_boton_tocar->esta_activado())
+		m_accion = CambiarASeleccionMusica;
+	//else if(m_boton_practicar->esta_activado())
+	//	m_accion = CambiarAOrgano;
+	else if(m_boton_configurar->esta_activado())
+		m_accion = CambiarAConfiguracion;
+	else if(m_boton_salir->esta_activado())
+		m_accion = Salir;
 }
 
 void VentanaTitulo::evento_teclado(Tecla tecla, bool estado)
 {
 	if(tecla == TECLA_ESCAPE && estado)
-		this->accion = Salir;
+		m_accion = Salir;
 	else if(tecla == TECLA_ENTRAR && !estado)
-		this->accion = CambiarASeleccionMusica;
+		m_accion = CambiarASeleccionMusica;
 }
 
 void VentanaTitulo::evento_pantalla(int ancho, int alto)
 {
-	boton_tocar->posicion_x(Pantalla::centro_h());
-	boton_practicar->posicion_x(Pantalla::centro_h());
-	boton_configurar->posicion_x(Pantalla::centro_h());
-	boton_salir->posicion_x(Pantalla::centro_h());
+	m_boton_tocar->posicion_x(Pantalla::Centro_h());
+	m_boton_practicar->posicion_x(Pantalla::Centro_h());
+	m_boton_configurar->posicion_x(Pantalla::Centro_h());
+	m_boton_salir->posicion_x(Pantalla::Centro_h());
+
+	m_boton_tocar->evento_pantalla(ancho, alto);
+	m_boton_practicar->evento_pantalla(ancho, alto);
+	m_boton_configurar->evento_pantalla(ancho, alto);
+	m_boton_salir->evento_pantalla(ancho, alto);
+
+	m_texto_version.posicion(20, alto - 26);
 }

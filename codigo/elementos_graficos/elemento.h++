@@ -7,10 +7,10 @@
 class Elemento
 {
 protected:
-	int x, y;
-	int ancho, alto;
-	int dx, dy;
-	bool centrado;
+	int m_x = 0, m_y = 0;
+	int m_ancho = 0, m_alto = 0;
+	int m_dx = 0, m_dy = 0;
+	bool m_centrado = false;
 public:
 	Elemento(int x, int y, int ancho, int alto);
 	Elemento(int x, int y, int ancho, int alto, bool centrado);
@@ -18,19 +18,27 @@ public:
 	virtual void actualizar(unsigned int diferencia_tiempo) = 0;
 	virtual void dibujar() = 0;
 	virtual void evento_raton(Raton *raton) = 0;
+	virtual void evento_pantalla(int ancho, int alto) = 0;
 
 	int posicion_x();
 	int posicion_y();
-	int o_ancho();
-	int o_alto();
+	int ancho();
+	int alto();
+	int dx();
+	int dy();
 
+	void centrado(bool centrado);
+	void posicion(int x, int y);
 	void posicion_x(int x);
 	void posicion_y(int y);
-	void e_ancho(int ancho);
-	void e_alto(int alto);
+
+	void dimension(int ancho, int alto);
+	void ancho(int ancho);
+	void alto(int alto);
+
 	void ajuste(int dx, int dy);
-	void ajuste_x(int dx);
-	void ajuste_y(int dy);
+	void dx(int dx);
+	void dy(int dy);
 };
 
 #endif

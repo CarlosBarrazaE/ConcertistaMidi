@@ -2,69 +2,76 @@
 
 VentanaSeleccionMusica::VentanaSeleccionMusica(Administrador_Recursos *recursos) : Ventana()
 {
-	Textura2D *textura = recursos->obtener_textura(T_Boton);
-	Color color(0.9f, 0.9f, 0.9f);
-
-	boton_atras = new Boton(10, Pantalla::alto - 32, 120, 25, "Atrás", textura, color, false, recursos);
-	boton_continuar = new Boton(Pantalla::ancho - 130, Pantalla::alto - 32, 120, 25, "Continuar", textura, color, false, recursos);
-
+	m_rectangulo = recursos->obtener_figura(F_Rectangulo);
 	Texto *texto_boton = recursos->obtener_tipografia(LetraChica);
-	boton_atras->e_letra(texto_boton);
-	boton_continuar->e_letra(texto_boton);
 
-	textura_fondo = recursos->obtener_textura(T_FondoTitulo);
+	m_boton_atras = new Boton(10, Pantalla::Alto - 32, 120, 25, "Atrás", recursos);
+	m_boton_atras->color_boton(Color(0.9f, 0.9f, 0.9f));
+	m_boton_atras->tipografia(texto_boton);
 
-	rectangulo = recursos->obtener_figura(F_Rectangulo);
-	texto = recursos->obtener_tipografia(LetraTitulo);
-	ajuste_titulo = texto->ancho_texto("Seleccione una canción para tocar") / 2;
+	m_boton_continuar = new Boton(Pantalla::Ancho - 130, Pantalla::Alto - 32, 120, 25, "Continuar", recursos);
+	m_boton_continuar->color_boton(Color(0.9f, 0.9f, 0.9f));
+	m_boton_continuar->tipografia(texto_boton);
+
+	m_texto_titulo.texto("Seleccione una canción para tocar");
+	m_texto_titulo.tipografia(recursos->obtener_tipografia(LetraTitulo));
+	m_texto_titulo.color(Color(1.0f, 1.0f, 1.0f));
+	m_texto_titulo.posicion(0, 0);
+	m_texto_titulo.dimension(Pantalla::Ancho, 40);
+	m_texto_titulo.centrado(true);
 }
 
 VentanaSeleccionMusica::~VentanaSeleccionMusica()
 {
-	delete boton_atras;
-	delete boton_continuar;
+	delete m_boton_atras;
+	delete m_boton_continuar;
 }
 
 void VentanaSeleccionMusica::actualizar(unsigned int diferencia_tiempo)
 {
-	boton_atras->actualizar(diferencia_tiempo);
-	boton_continuar->actualizar(diferencia_tiempo);
+	m_boton_atras->actualizar(diferencia_tiempo);
+	m_boton_continuar->actualizar(diferencia_tiempo);
 }
 
 void VentanaSeleccionMusica::dibujar()
 {
-	rectangulo->textura(false);
-	rectangulo->dibujar(0, 0, Pantalla::ancho, 40, Color(0.141f, 0.624f, 0.933f));
-	rectangulo->dibujar(0, Pantalla::alto - 40, Pantalla::ancho, 40, Color(0.761f, 0.887f, 0.985f));
-	texto->imprimir(Pantalla::centro_h() - ajuste_titulo, 30, "Seleccione una canción para tocar", Color(1.0f, 1.0f, 1.0f));
+	m_rectangulo->textura(false);
+	m_rectangulo->dibujar(0, 0, Pantalla::Ancho, 40, Color(0.141f, 0.624f, 0.933f));
+	m_rectangulo->dibujar(0, Pantalla::Alto - 40, Pantalla::Ancho, 40, Color(0.761f, 0.887f, 0.985f));
+	m_texto_titulo.dibujar();
 
-	boton_atras->dibujar();
-	boton_continuar->dibujar();
+	m_boton_atras->dibujar();
+	m_boton_continuar->dibujar();
 }
 
 void VentanaSeleccionMusica::evento_raton(Raton *raton)
 {
-	boton_atras->evento_raton(raton);
-	boton_continuar->evento_raton(raton);
+	m_boton_atras->evento_raton(raton);
+	m_boton_continuar->evento_raton(raton);
 
-	if(boton_atras->esta_activado())
-		this->accion = CambiarATitulo;
-	else if(boton_continuar->esta_activado())
-		this->accion = CambiarASeleccionPista;
+	if(m_boton_atras->esta_activado())
+		m_accion = CambiarATitulo;
+	else if(m_boton_continuar->esta_activado())
+		m_accion = CambiarASeleccionPista;
 }
 
 void VentanaSeleccionMusica::evento_teclado(Tecla tecla, bool estado)
 {
 	if(tecla == TECLA_ESCAPE && !estado)
-		this->accion = CambiarATitulo;
+		m_accion = CambiarATitulo;
 	else if(tecla == TECLA_ENTRAR && !estado)
-		this->accion = CambiarASeleccionPista;
+		m_accion = CambiarASeleccionPista;
 }
 
 void VentanaSeleccionMusica::evento_pantalla(int ancho, int alto)
 {
-	boton_atras->posicion_y(alto - 32);
+	m_boton_atras->posicion_y(alto - 32);
 
-	boton_continuar->posicion_x(ancho - 130);
-	boton_continuar->posicion_y(alto - 32);
+	m_boton_continuar->posicion_x(ancho - 130);
+	m_boton_continuar->posicion_y(alto - 32);
+
+	m_boton_atras->evento_pantalla(ancho, alto);
+	m_boton_continuar->evento_pantalla(ancho, alto);
+
+	m_texto_titulo.dimension(Pantalla::Ancho, 40);
 }

@@ -2,6 +2,7 @@
 #define VENTANATITULO_H
 
 #include "ventana.h++"
+#include "../elementos_graficos/etiqueta.h++"
 #include "../elementos_graficos/boton.h++"
 #include "../version.h++"
 
@@ -9,15 +10,15 @@ class VentanaTitulo : public Ventana
 {
 private:
 	//Recursos
-	Rectangulo *rectangulo;
-	Textura2D *textura_fondo, *textura_titulo;
-	Texto *texto_version;
+	Rectangulo *m_rectangulo;
+	Textura2D *m_textura_fondo, *m_textura_titulo;
+	Etiqueta m_texto_version;
 
 	//Componetes
-	Boton *boton_practicar;
-	Boton *boton_tocar;
-	Boton *boton_configurar;
-	Boton *boton_salir;
+	Boton *m_boton_tocar;
+	Boton *m_boton_practicar;
+	Boton *m_boton_configurar;
+	Boton *m_boton_salir;
 public:
 	VentanaTitulo(Administrador_Recursos *recursos);
 	~VentanaTitulo();

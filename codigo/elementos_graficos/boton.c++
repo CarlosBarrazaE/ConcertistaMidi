@@ -1,43 +1,67 @@
 #include "boton.h++"
 
-Boton::Boton(int x, int y, int ancho, int alto, std::string texto, Textura2D *textura, Color color, bool centrado, Administrador_Recursos *recursos) : Elemento(x, y, ancho, alto, centrado)
+Boton::Boton(int x, int y, int ancho, int alto, std::string texto, Administrador_Recursos *recursos) : Elemento(x, y, ancho, alto)
 {
-	this->texto_boton = texto;
-	this->textura_boton = textura;
-	this->centrado = centrado;
-	this->sobre_boton = false;
-	this->boton_pre_activado = false;
-	this->boton_activado = false;
+	m_rectangulo = recursos->obtener_figura(F_Rectangulo);
+	m_textura_boton = recursos->obtener_textura(T_Boton);
 
-	color_boton_normal = color;
-	color_boton_sobre.e_color(color.o_rojo()-0.1f, color.o_verde()-0.1f, color.o_azul()-0.1f);
-	color_texto.e_color(0.2f, 0.2f, 0.2f);
+	m_sobre_boton = false;
+	m_boton_pre_activado = false;
+	m_boton_activado = false;
 
-	color_boton = color_boton_normal;
+	Color color(1.0f, 1.0f, 1.0f);
+	m_color_boton_normal = color;
+	m_color_boton_actual = color;
+	m_color_boton_sobre.e_color(color.o_rojo()-0.1f, color.o_verde()-0.1f, color.o_azul()-0.1f);
 
-	this->texto = recursos->obtener_tipografia(LetraMediana);
-	rectangulo = recursos->obtener_figura(F_Rectangulo);
-	this->ajuste_texto = this->texto->ancho_texto(texto) / 2;
+	m_texto.texto(texto);
+	m_texto.tipografia(recursos->obtener_tipografia(LetraMediana));
+	m_texto.posicion(this->posicion_x()+this->dx(), this->posicion_y()+this->dy());
+	m_texto.dimension(ancho, alto);
+	m_texto.centrado(true);
 }
 
 Boton::~Boton()
 {
 }
 
-void Boton::e_color_texto(Color color)
+void Boton::textura(Textura2D *textura)
 {
-	this->color_texto = color;
+	m_textura_boton = textura;
 }
 
-void Boton::e_letra(Texto *texto)
+void Boton::color_boton(Color color)
 {
-	this->texto = texto;
-	this->ajuste_texto = this->texto->ancho_texto(this->texto_boton) / 2;
+	m_color_boton_normal = color;
+	m_color_boton_actual = color;
+	m_color_boton_sobre.e_color(color.o_rojo()-0.1f, color.o_verde()-0.1f, color.o_azul()-0.1f);
 }
 
-void Boton::e_textura(Textura2D *textura)
+void Boton::color_texto(Color color)
 {
-	this->textura_boton = textura;
+	m_texto.color(color);
+}
+
+void Boton::tipografia(Texto *texto)
+{
+	m_texto.tipografia(texto);
+}
+
+void Boton::centrado(bool centrado)
+{
+	bool centrado_actual = m_centrado;
+	m_centrado = centrado;
+	if(m_centrado)
+	{
+		if(!centrado_actual)//Centra el objeto
+			this->m_x = this->posicion_x() - (this->ancho() / 2.0);
+	}
+	else
+	{
+		if(centrado_actual)//Revierte el centrado
+			this->m_x = this->posicion_x() + (this->ancho() / 2.0);
+	}
+	m_texto.posicion(this->posicion_x()+this->dx(), this->posicion_y()+this->dy());
 }
 
 void Boton::actualizar(unsigned int diferencia_tiempo)
@@ -46,42 +70,47 @@ void Boton::actualizar(unsigned int diferencia_tiempo)
 
 void Boton::dibujar()
 {
-	this->textura_boton->activar();
-	rectangulo->textura(true);
-	rectangulo->dibujar(this->x+this->dx, this->y+this->dy, this->ancho, this->alto, color_boton);
-	this->texto->imprimir(this->x+this->dx+this->ancho/2 - this->ajuste_texto, this->y+this->dy+this->alto/2 + this->texto->alto_texto()/2, this->texto_boton, color_texto);
+	m_textura_boton->activar();
+	m_rectangulo->textura(true);
+	m_rectangulo->dibujar(this->posicion_x()+this->dx(), this->posicion_y()+this->dy(), this->ancho(), this->alto(), m_color_boton_actual);
+	m_texto.dibujar();
 }
 
 void Boton::evento_raton(Raton *raton)
 {
-	if(raton->x() >= this->x+this->dx && raton->x() <= this->x+this->dx + this->ancho &&
-		raton->y() >= this->y+this->dy && raton->y() <= this->y+this->dy + this->alto)
+	if(raton->x() >= this->posicion_x()+this->dx() && raton->x() <= this->posicion_x()+this->dx() + this->ancho() &&
+		raton->y() >= this->posicion_y()+this->dy() && raton->y() <= this->posicion_y()+this->dy() + this->alto())
 	{
-		if(raton->activado(BotonIzquierdo) && this->sobre_boton)
-			this->boton_pre_activado = true;
+		if(raton->activado(BotonIzquierdo) && m_sobre_boton)
+			m_boton_pre_activado = true;
 		else if(!raton->activado(BotonIzquierdo))
 		{
-			color_boton = color_boton_sobre;
-			this->sobre_boton = true;
-			if(this->boton_pre_activado)
+			m_color_boton_actual = m_color_boton_sobre;
+			m_sobre_boton = true;
+			if(m_boton_pre_activado)
 			{
-				this->boton_activado = true;
-				this->boton_pre_activado = false;
+				m_boton_activado = true;
+				m_boton_pre_activado = false;
 			}
 		}
 	}
 	else
 	{
-		color_boton = color_boton_normal;
-		this->sobre_boton = false;
-		this->boton_pre_activado = false;
-		this->boton_activado = false;
+		m_color_boton_actual = m_color_boton_normal;
+		m_sobre_boton = false;
+		m_boton_pre_activado = false;
+		m_boton_activado = false;
 	}
+}
+
+void Boton::evento_pantalla(int ancho, int alto)
+{
+	m_texto.posicion(this->posicion_x()+this->dx(), this->posicion_y()+this->dy());
 }
 
 bool Boton::esta_activado()
 {
-	bool estado = this->boton_activado;
-	this->boton_activado = false;
+	bool estado = m_boton_activado;
+	m_boton_activado = false;
 	return estado;
 }

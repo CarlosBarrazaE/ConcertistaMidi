@@ -3,23 +3,23 @@
 Barra_Desplazamiento::Barra_Desplazamiento(int x, int y, int ancho, int alto, int columna, int fila, int margen_columna, int margen_fila, Administrador_Recursos *recursos)
 : Elemento(x, y, ancho, alto)
 {
-	this->columna = columna;
-	this->fila = fila;
-	this->margen_columna = margen_columna;
-	this->margen_fila = margen_fila;
-	this->ancho_actual = 0;
-	this->alto_actual = 0;
-	this->desplazamiento_x = 0;
-	this->desplazamiento_y = 0;
+	m_columna = columna;
+	m_fila = fila;
+	m_margen_columna = margen_columna;
+	m_margen_fila = margen_fila;
+	m_ancho_actual = 0;
+	m_alto_actual = 0;
+	m_desplazamiento_x = 0;
+	m_desplazamiento_y = 0;
 
-	this->calcular_posicion = true;
+	m_calcular_posicion = true;
 
-	this->rectangulo = recursos->obtener_figura(F_Rectangulo);
-	this->barra = recursos->obtener_textura(T_Barra);
+	m_rectangulo = recursos->obtener_figura(F_Rectangulo);
+	m_barra = recursos->obtener_textura(T_Barra);
 
-	this->sobre_barra = false;
-	this->boton_activado = false;
-	this->proporcion = 0;
+	m_sobre_barra = false;
+	m_boton_activado = false;
+	m_proporcion = 0;
 }
 
 Barra_Desplazamiento::~Barra_Desplazamiento()
@@ -28,46 +28,53 @@ Barra_Desplazamiento::~Barra_Desplazamiento()
 
 void Barra_Desplazamiento::agregar_elemento(Elemento *e)
 {
-	elementos.push_back(e);
+	m_elementos.push_back(e);
+}
+
+void Barra_Desplazamiento::dimension(int ancho, int alto)
+{
+	this->ancho(ancho);
+	this->alto(alto);
+	m_calcular_posicion = true;
 }
 
 void Barra_Desplazamiento::actualizar(unsigned int diferencia_tiempo)
 {
-	if(this->calcular_posicion)
+	if(m_calcular_posicion)
 		this->actualizar_dimension();
-	for(int i=0; i<elementos.size(); i++)
+	for(int i=0; i<m_elementos.size(); i++)
 	{
-		elementos[i]->actualizar(diferencia_tiempo);
+		m_elementos[i]->actualizar(diferencia_tiempo);
 	}
 }
 
 void Barra_Desplazamiento::dibujar()
 {
 	Elemento *e;
-	for(int i=0; i<elementos.size(); i++)
+	for(int i=0; i<m_elementos.size(); i++)
 	{
-		e = elementos.at(i);
-		if(e->posicion_y() + e->o_alto() > this->y && e->posicion_y() < this->y + this->alto &&
-			e->posicion_x() + e->o_ancho() > this->x && e->posicion_x() < this->x + this->ancho)
+		e = m_elementos.at(i);
+		if(e->posicion_y() + e->alto() > this->posicion_y() && e->posicion_y() < this->posicion_y() + this->alto() &&
+			e->posicion_x() + e->ancho() > this->posicion_x() && e->posicion_x() < this->posicion_x() + this->ancho())
 		{
 			e->dibujar();
 		}
 	}
-	this->rectangulo->textura(false);
-	this->rectangulo->color(Color(0.95f, 0.95f, 0.95f));
-	this->rectangulo->dibujar(this->x, this->y, this->ancho, this->margen_fila);
-	this->rectangulo->dibujar(this->x, this->y+this->alto-this->margen_fila, this->ancho, this->margen_fila);
+	m_rectangulo->textura(false);
+	m_rectangulo->color(Color(0.95f, 0.95f, 0.95f));
+	m_rectangulo->dibujar(this->posicion_x(), this->posicion_y(), this->ancho(), m_margen_fila);
+	m_rectangulo->dibujar(this->posicion_x(), this->posicion_y()+this->alto()-m_margen_fila, this->ancho(), m_margen_fila);
 
-	if(this->alto < this->alto_actual)
+	if(this->alto() < m_alto_actual)
 	{
-		this->barra->activar();
-		this->rectangulo->extremos_fijos(false, true);
-		this->rectangulo->textura(true);
-		this->rectangulo->color(Color(0.7f, 0.7f, 0.7f));
-		this->rectangulo->dibujar_estirable(this->x+this->ancho-10, this->y+10, 10, this->alto-20, 0, 10);
-		this->rectangulo->color(Color(0.5f, 0.5f, 0.5f));
-		this->rectangulo->dibujar_estirable(this->x+this->ancho-10, this->y+10-this->desplazamiento_y*this->proporcion, 10, this->alto * this->proporcion, 0, 10);
-		this->rectangulo->extremos_fijos(false, false);
+		m_barra->activar();
+		m_rectangulo->extremos_fijos(false, true);
+		m_rectangulo->textura(true);
+		m_rectangulo->color(Color(0.7f, 0.7f, 0.7f));
+		m_rectangulo->dibujar_estirable(this->posicion_x()+this->ancho()-10, this->posicion_y()+10, 10, this->alto()-20, 0, 10);
+		m_rectangulo->color(Color(0.5f, 0.5f, 0.5f));
+		m_rectangulo->dibujar_estirable(this->posicion_x()+this->ancho()-10, this->posicion_y()+10-m_desplazamiento_y*m_proporcion, 10, this->alto() * m_proporcion, 0, 10);
+		m_rectangulo->extremos_fijos(false, false);
 	}
 }
 
@@ -76,94 +83,91 @@ void Barra_Desplazamiento::evento_raton(Raton *raton)
 	int dy = raton->dy();
 	int desplazamiento_nuevo_y = 0;
 	int desplazamiento_anterior_y = 0;
-	if(this->alto < this->alto_actual)
+	if(this->alto() < m_alto_actual)
 	{
-		desplazamiento_anterior_y = this->desplazamiento_y;
+		desplazamiento_anterior_y = m_desplazamiento_y;
 		if(dy != 0)
 		{
-			this->desplazamiento_y += dy*20;
+			m_desplazamiento_y += dy*20;
 		}
-		else if(raton->x() >= this->x+this->ancho-10 && raton->x() <= this->x+this->ancho &&
-		raton->y() >= this->y+10 && raton->y() <= this->y + this->alto-20)
+		else if(raton->x() >= this->posicion_x()+this->ancho()-10 && raton->x() <= this->posicion_x()+this->ancho() &&
+		raton->y() >= this->posicion_y()+10 && raton->y() <= this->posicion_y() + this->alto()-20)
 		{
-			if(raton->activado(BotonIzquierdo) && this->sobre_barra)
+			if(raton->activado(BotonIzquierdo) && m_sobre_barra)
 			{
-				this->boton_activado = true;
-				//El inicio de la barra esta en this->y + 20, el centro de la barra desplazable esta en (this->alto * this->proporcion) / 2)
-				this->desplazamiento_y = -(raton->y() - (this->y + 20 + (this->alto * this->proporcion) / 2)) / this->proporcion;
+				m_boton_activado = true;
+				//El inicio de la barra esta en this->posicion_y() + 20, el centro de la barra desplazable esta en (this->alto() * m_proporcion) / 2)
+				m_desplazamiento_y = -(raton->y() - (this->posicion_y() + 20 + (this->alto() * m_proporcion) / 2)) / m_proporcion;
 			}
 			else if(!raton->activado(BotonIzquierdo))
 			{
-				this->sobre_barra = true;
+				m_sobre_barra = true;
 			}
 		}
-		else if(this->boton_activado)
+		else if(m_boton_activado)
 		{
-			this->desplazamiento_y = -(raton->y() - (this->y + 20 + (this->alto * this->proporcion) / 2)) / this->proporcion;
+			m_desplazamiento_y = -(raton->y() - (this->posicion_y() + 20 + (this->alto() * m_proporcion) / 2)) / m_proporcion;
 		}
 		else
 		{
-			this->sobre_barra = false;
+			m_sobre_barra = false;
 		}
 
-		if(!raton->activado(BotonIzquierdo) && this->boton_activado)
+		if(!raton->activado(BotonIzquierdo) && m_boton_activado)
 		{
-			this->boton_activado = false;
+			m_boton_activado = false;
 		}
 
-		if(this->desplazamiento_y > 0)
-				this->desplazamiento_y = 0;
-		else if(this->desplazamiento_y < this->alto - this->alto_actual)
-			this->desplazamiento_y = this->alto - this->alto_actual;
+		if(m_desplazamiento_y > 0)
+				m_desplazamiento_y = 0;
+		else if(m_desplazamiento_y < this->alto() - m_alto_actual)
+			m_desplazamiento_y = this->alto() - m_alto_actual;
 
-		desplazamiento_nuevo_y = this->desplazamiento_y - desplazamiento_anterior_y;
+		desplazamiento_nuevo_y = m_desplazamiento_y - desplazamiento_anterior_y;
 	}
 
-	for(int i=0; i<elementos.size(); i++)
+	for(int i=0; i<m_elementos.size(); i++)
 	{
-		if(this->alto < this->alto_actual)
-			elementos[i]->posicion_y(elementos[i]->posicion_y() + desplazamiento_nuevo_y);
-		elementos[i]->evento_raton(raton);
+		if(this->alto() < m_alto_actual)
+			m_elementos[i]->posicion_y(m_elementos[i]->posicion_y() + desplazamiento_nuevo_y);
+		m_elementos[i]->evento_raton(raton);
 	}
 }
 
-void Barra_Desplazamiento::c_dimension(int ancho, int alto)
+void Barra_Desplazamiento::evento_pantalla(int ancho, int alto)
 {
-	this->ancho = ancho;
-	this->alto = alto;
-	this->calcular_posicion = true;
 }
 
 void Barra_Desplazamiento::actualizar_dimension()
 {
-	int numero_columnas = this->ancho / (this->columna + this->margen_columna);
-	this->ancho_actual = (numero_columnas * this->columna) + ((numero_columnas - 1) * this->margen_columna);
-	int x_inicio = (this->ancho - this->ancho_actual) / 2 + this->x;
+	int numero_columnas = this->ancho() / (m_columna + m_margen_columna);
+	m_ancho_actual = (numero_columnas * m_columna) + ((numero_columnas - 1) * m_margen_columna);
+	int x_inicio = (this->ancho() - m_ancho_actual) / 2 + this->posicion_x();
 	int x_actual = x_inicio;
-	int y_actual = this->y + this->margen_fila;
+	int y_actual = this->posicion_y() + m_margen_fila;
 	int contador_columnas = 1;
-	for(int i=0; i<elementos.size(); i++)
+	for(int i=0; i<m_elementos.size(); i++)
 	{
-		elementos[i]->posicion_x(x_actual);
-		elementos[i]->posicion_y(y_actual);
+		m_elementos[i]->posicion_x(x_actual);
+		m_elementos[i]->posicion_y(y_actual);
 
 		if(contador_columnas < numero_columnas)
 		{
-			x_actual += this->columna + this->margen_columna;
+			x_actual += m_columna + m_margen_columna;
 		}
 		else
 		{
 			contador_columnas = 0;
 			x_actual = x_inicio;
-			if(i<elementos.size()-1)
-				y_actual += this->fila + this->margen_fila;
+			if(i<m_elementos.size()-1)
+				y_actual += m_fila + m_margen_fila;
 		}
 		contador_columnas++;
 	}
-	this->alto_actual = y_actual + this->fila + this->margen_fila - this->y;
+	m_alto_actual = y_actual + m_fila + m_margen_fila - this->posicion_y();
 
-	this->desplazamiento_y = 0;
-	this->calcular_posicion = false;
-	if(this->alto < this->alto_actual)
-		this->proporcion = (double)(this->alto-20) / (double)this->alto_actual;
+	m_desplazamiento_y = 0;
+	m_calcular_posicion = false;
+	if(this->alto() < m_alto_actual)
+		m_proporcion = (double)(this->alto()-20) / (double)m_alto_actual;
 }

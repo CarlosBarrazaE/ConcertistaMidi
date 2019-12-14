@@ -8,18 +8,18 @@ typedef std::chrono::high_resolution_clock::time_point Tiempo;
 class Fps
 {
 private:
-	static Tiempo tiempo_actual;
-	static Tiempo tiempo_anterior;
+	static Tiempo Tiempo_actual;
+	static Tiempo Tiempo_anterior;
 
-	static unsigned int nanosegundos;
+	static unsigned int Nanosegundos;
 
-	static bool mostrar_fps;
-	static unsigned int contador_fps;
+	static bool Mostrar_fps;
+	static unsigned int Contador_fps;
 
 public:
-	static unsigned int tiempo_fotograma();
-	static bool actualizar_fps();
-	static unsigned int obtener_nanosegundos();
+	static unsigned int Tiempo_fotograma();
+	static bool Actualizar_fps();
+	static unsigned int Obtener_nanosegundos();
 };
 
 #endif

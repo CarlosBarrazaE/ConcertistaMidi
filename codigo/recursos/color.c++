@@ -42,10 +42,10 @@ float Color::valor_limitado(float valor)
 
 void Color::establecer_valores(float rojo, float verde, float azul, float alfa)
 {
-	this->rojo = this->valor_limitado(rojo);
-	this->verde = this->valor_limitado(verde);
-	this->azul = this->valor_limitado(azul);
-	this->alfa = this->valor_limitado(alfa);
+	m_rojo = this->valor_limitado(rojo);
+	m_verde = this->valor_limitado(verde);
+	m_azul = this->valor_limitado(azul);
+	m_alfa = this->valor_limitado(alfa);
 }
 
 void Color::e_color(int rojo, int verde, int azul)
@@ -70,103 +70,103 @@ void Color::e_color(float rojo, float verde, float azul, float alfa)
 
 float Color::o_rojo()
 {
-	return this->rojo;
+	return m_rojo;
 }
 
 float Color::o_verde()
 {
-	return this->verde;
+	return m_verde;
 }
 
 float Color::o_azul()
 {
-	return this->azul;
+	return m_azul;
 }
 
 float Color::o_alfa()
 {
-	return this->alfa;
+	return m_alfa;
 }
 
 void Color::c_rojo(float valor)
 {
-	this->rojo = this->valor_limitado(this->rojo+valor);
+	m_rojo = this->valor_limitado(m_rojo+valor);
 }
 
 void Color::c_verde(float valor)
 {
-	this->verde = this->valor_limitado(this->verde+valor);
+	m_verde = this->valor_limitado(m_verde+valor);
 }
 
 void Color::c_azul(float valor)
 {
-	this->azul = this->valor_limitado(this->azul+valor);
+	m_azul = this->valor_limitado(m_azul+valor);
 }
 
 void Color::c_alfa(float valor)
 {
-	this->alfa = this->valor_limitado(this->alfa+valor);
+	m_alfa = this->valor_limitado(m_alfa+valor);
 }
 
 void Color::c_tono(float valor)
 {
-	this->rojo = this->valor_limitado(this->rojo+valor);
-	this->verde = this->valor_limitado(this->verde+valor);
-	this->azul = this->valor_limitado(this->azul+valor);
+	m_rojo = this->valor_limitado(m_rojo+valor);
+	m_verde = this->valor_limitado(m_verde+valor);
+	m_azul = this->valor_limitado(m_azul+valor);
 }
 
 bool Color::operator == (const Color &c) const
 {
-	return this->rojo == c.rojo && this->verde == c.verde && this->azul == c.azul && this->alfa == c.alfa;
+	return m_rojo == c.m_rojo && m_verde == c.m_verde && m_azul == c.m_azul && m_alfa == c.m_alfa;
 }
 
 bool Color::operator != (const Color &c) const
 {
-	return this->rojo != c.rojo || this->verde != c.verde || this->azul != c.azul || this->alfa != c.alfa;
+	return m_rojo != c.m_rojo || m_verde != c.m_verde || m_azul != c.m_azul || m_alfa != c.m_alfa;
 }
 
 Color& Color::operator = (const Color &c)
 {
 	if(this != &c)
 	{
-		this->rojo = c.rojo;
-		this->verde = c.verde;
-		this->azul = c.azul;
-		this->alfa = c.alfa;
+		m_rojo = c.m_rojo;
+		m_verde = c.m_verde;
+		m_azul = c.m_azul;
+		m_alfa = c.m_alfa;
 	}
 	return *this;
 }
 
 Color& Color::operator + (const Color &c)
 {
-	this->rojo = this->valor_limitado(this->rojo + c.rojo);
-	this->verde = this->valor_limitado(this->verde + c.verde);
-	this->azul = this->valor_limitado(this->azul + c.azul);
-	this->alfa = this->valor_limitado(this->alfa + c.alfa);
+	m_rojo = this->valor_limitado(m_rojo + c.m_rojo);
+	m_verde = this->valor_limitado(m_verde + c.m_verde);
+	m_azul = this->valor_limitado(m_azul + c.m_azul);
+	m_alfa = this->valor_limitado(m_alfa + c.m_alfa);
 	return *this;
 }
 
 Color& Color::operator - (const Color &c)
 {
-	this->rojo = this->valor_limitado(this->rojo - c.rojo);
-	this->verde = this->valor_limitado(this->verde - c.verde);
-	this->azul = this->valor_limitado(this->azul - c.azul);
-	this->alfa = this->valor_limitado(this->alfa - c.alfa);
+	m_rojo = this->valor_limitado(m_rojo - c.m_rojo);
+	m_verde = this->valor_limitado(m_verde - c.m_verde);
+	m_azul = this->valor_limitado(m_azul - c.m_azul);
+	m_alfa = this->valor_limitado(m_alfa - c.m_alfa);
 	return *this;
 }
 
 Color& Color::operator + (const float &valor)
 {
-	this->rojo = this->valor_limitado(this->rojo + valor);
-	this->verde = this->valor_limitado(this->verde + valor);
-	this->azul = this->valor_limitado(this->azul + valor);
+	m_rojo = this->valor_limitado(m_rojo + valor);
+	m_verde = this->valor_limitado(m_verde + valor);
+	m_azul = this->valor_limitado(m_azul + valor);
 	return *this;
 }
 
 Color& Color::operator - (const float &valor)
 {
-	this->rojo = this->valor_limitado(this->rojo - valor);
-	this->verde = this->valor_limitado(this->verde - valor);
-	this->azul = this->valor_limitado(this->azul - valor);
+	m_rojo = this->valor_limitado(m_rojo - valor);
+	m_verde = this->valor_limitado(m_verde - valor);
+	m_azul = this->valor_limitado(m_azul - valor);
 	return *this;
 }

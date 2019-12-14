@@ -10,8 +10,8 @@
 class Sombreador
 {
 private:
-	static unsigned int ultimo_indice_seleccionado;
-	unsigned int indice_programa;
+	static unsigned int Ultimo_indice_seleccionado;
+	unsigned int m_indice_programa;
 
 	void comprobar_error_sombreador(unsigned int indice) const;
 	void comprobar_error_programas(unsigned int indice) const;

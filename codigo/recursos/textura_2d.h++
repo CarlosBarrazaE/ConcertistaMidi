@@ -6,17 +6,17 @@
 class Textura2D
 {
 private:
-	unsigned int indice_textura;
+	unsigned int m_indice_textura;
 
-	unsigned int ancho;
-	unsigned int alto;
-	unsigned int formato;
+	unsigned int m_ancho;
+	unsigned int m_alto;
+	unsigned int m_formato;
 
-	unsigned int envolver_s;
-	unsigned int envolver_t;
+	unsigned int m_envolver_s;
+	unsigned int m_envolver_t;
 
-	unsigned int filtro_minimizar;
-	unsigned int filtro_maximizar;
+	unsigned int m_filtro_minimizar;
+	unsigned int m_filtro_maximizar;
 
 public:
 	Textura2D();
@@ -31,7 +31,7 @@ public:
 	void e_filtro_minimizar(unsigned int valor);
 	void e_filtro_maximizar(unsigned int valor);
 
-	static unsigned int ultimo_indice_seleccionado;
+	static unsigned int Ultimo_indice_seleccionado;
 };
 
 #endif

@@ -6,8 +6,8 @@
 class Configuracion
 {
 private:
-	MidiCommIn *entrada;
-	MidiCommOut *salida;
+	MidiCommIn *m_entrada;
+	MidiCommOut *m_salida;
 
 public:
 	Configuracion();

@@ -8,20 +8,20 @@ class Barra_Desplazamiento : public Elemento
 {
 private:
 	//Recursos
-	Rectangulo *rectangulo;
-	Textura2D *barra;
+	Rectangulo *m_rectangulo;
+	Textura2D *m_barra;
 
-	int ancho_actual, alto_actual;
-	int desplazamiento_x, desplazamiento_y;
-	int columna, fila;
-	int margen_columna, margen_fila;
-	bool calcular_posicion;
-	double proporcion;
+	int m_ancho_actual, m_alto_actual;
+	int m_desplazamiento_x, m_desplazamiento_y;
+	int m_columna, m_fila;
+	int m_margen_columna, m_margen_fila;
+	bool m_calcular_posicion;
+	double m_proporcion;
 
-	bool sobre_barra;
-	bool boton_activado;
+	bool m_sobre_barra;
+	bool m_boton_activado;
 
-	std::vector<Elemento*> elementos;
+	std::vector<Elemento*> m_elementos;
 
 	void actualizar_dimension();
 public:
@@ -29,13 +29,12 @@ public:
 	~Barra_Desplazamiento();
 
 	void agregar_elemento(Elemento *e);
+	void dimension(int ancho, int alto);
 
 	void actualizar(unsigned int diferencia_tiempo);
 	void dibujar();
-
 	void evento_raton(Raton *raton);
-
-	void c_dimension(int ancho, int alto);
+	void evento_pantalla(int ancho, int alto);
 };
 
 #endif

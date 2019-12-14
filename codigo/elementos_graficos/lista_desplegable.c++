@@ -1,53 +1,18 @@
 #include "lista_desplegable.h++"
 
-Lista_Desplegable::Lista_Desplegable(int x, int y, int ancho, int alto, std::vector<std::string> opciones, Texto *texto, Administrador_Recursos *recursos)
-: Elemento(x, y, ancho, alto)
+Lista_Desplegable::Lista_Desplegable(int x, int y, int ancho, int alto, Administrador_Recursos *recursos) : Elemento(x, y, ancho, alto)
 {
-	this->iniciar(recursos);
-	this->centrado = false;
-	this->ancho_icono = 0;
-	this->alto_icono = 0;
+	m_rectangulo = recursos->obtener_figura(F_Rectangulo);
+	m_opcion_actual = 0;
+	m_mostrar_lista = false;
+	m_ancho_icono = 10;
+	m_alto_icono = 10;
+	m_centrado_icono = (ancho - m_ancho_icono)/2;
 
-	this->opciones = opciones;
-	this->texto = texto;
-	this->usar_iconos = false;
-	this->centrado_vertical = (this->alto - this->texto->alto_texto()) / 2;
-}
-
-Lista_Desplegable::Lista_Desplegable(int x, int y, int ancho, int alto, int ancho_icono, int alto_icono, bool centrado, std::vector<std::string> opciones, std::vector<Textura2D*> iconos, Texto *texto, Administrador_Recursos *recursos)
-: Elemento(x, y, ancho, alto)
-{
-	this->iniciar(recursos);
-	this->ancho_icono = ancho_icono;
-	this->alto_icono = alto_icono;
-	this->centrado = centrado;
-
-	this->opciones = opciones;
-	this->iconos = iconos;
-	this->texto = texto;
-
-	if(this->opciones.size() != this->iconos.size())
-		this->usar_iconos = false;
-	else
-		this->usar_iconos = true;
-
-	if(this->usar_iconos)
-	{
-		if(this->centrado)
-		{
-			this->ajuste_icono = (this->ancho - this->ancho_icono)/2;
-			this->centrado_vertical = (this->alto - (this->alto_icono + this->texto->alto_texto() + 2)) / 2;
-			this->ajuste_texto = this->texto->ancho_texto(this->opciones[this->opcion_actual]) / 2;
-		}
-		else
-		{
-			this->centrado_vertical = (this->alto - (std::max(this->alto_icono, this->texto->alto_texto()))) / 2;
-		}
-	}
-	else
-	{
-		this->centrado_vertical = (this->alto - this->texto->alto_texto()) / 2;
-	}
+	m_texto_seleccion.color(Color(1.0f, 1.0f, 1.0f));
+	m_texto_seleccion.posicion(x, y);
+	m_texto_seleccion.dimension(ancho, alto);
+	m_texto_seleccion.centrado(true);
 }
 
 Lista_Desplegable::~Lista_Desplegable()
@@ -55,53 +20,76 @@ Lista_Desplegable::~Lista_Desplegable()
 
 }
 
-void Lista_Desplegable::iniciar(Administrador_Recursos *recursos)
+void Lista_Desplegable::dimension_icono(int ancho, int alto)
 {
-	this->opcion_actual = 0;
-	this->ajuste_icono = 0;
-	this->ajuste_texto = 0;
-	this->centrado_vertical = 0;
-	this->mostrar_lista = true;
-	this->rectangulo = recursos->obtener_figura(F_Rectangulo);
+	m_ancho_icono = ancho;
+	m_alto_icono = alto;
+	m_centrado_icono = (m_ancho - m_ancho_icono)/2;
+}
+
+void Lista_Desplegable::opciones_textos(std::vector<std::string> opciones)
+{
+	m_opciones = opciones;
+	m_texto_seleccion.texto(opciones[m_opcion_actual]);
+}
+
+void Lista_Desplegable::opciones_iconos(std::vector<Textura2D*> iconos)
+{
+	m_iconos = iconos;
+	m_usar_iconos = true;
+	m_texto_seleccion.alto(0);//Para anular centrado vertical
+}
+
+void Lista_Desplegable::tipografia(Texto *tipografia)
+{
+	m_tipografia = tipografia;
+	m_texto_seleccion.tipografia(m_tipografia);
 }
 
 void Lista_Desplegable::opcion_predeterminada(unsigned int opcion)
 {
-	if(opcion >= 0 && opcion < opciones.size())
-		this->opcion_actual = opcion;
+	if(opcion >= 0 && opcion < m_opciones.size())
+		m_opcion_actual = opcion;
 }
 
 unsigned int Lista_Desplegable::opcion_seleccionada()
 {
-	return this->opcion_actual;
+	return m_opcion_actual;
 }
 
 void Lista_Desplegable::actualizar(unsigned int diferencia_tiempo)
 {
+	if(m_usar_iconos)
+	{
+		m_texto_seleccion.posicion(this->posicion_x() + this->dx(), this->posicion_y() + this->dy()+47);
+	}
+	else
+	{
+		m_texto_seleccion.posicion(this->posicion_x() + this->dx(), this->posicion_y() + this->dy());
+	}
 }
 
 void Lista_Desplegable::dibujar()
 {
-	if(this->usar_iconos)
+	m_rectangulo->textura(false);
+	//m_rectangulo->dibujar(this->posicion_x()+this->dx(), this->posicion_y()+this->dy(), this->ancho(), this->alto(), Color(1.0f, 0.0f, 1.0f, 0.5f));
+	//m_rectangulo->dibujar(this->posicion_x()+this->dx(), this->posicion_y()+this->dy(), m_ancho_icono, m_alto_icono, Color(0.0f, 1.0f, 1.0f, 0.5f));
+	if(m_usar_iconos)
 	{
-		this->rectangulo->textura(true);
-		this->iconos[this->opcion_actual]->activar();
-		this->rectangulo->dibujar(this->x+this->dx+this->ajuste_icono, this->y+this->dy+this->centrado_vertical, this->ancho_icono, this->alto_icono, Color(1.0f, 1.0f, 1.0f));
-
-		if(centrado)
-			this->texto->imprimir(this->x+this->dx+(this->ancho/2)-this->ajuste_texto, this->y+this->dy+this->centrado_vertical+this->alto_icono+this->texto->alto_texto()+2, this->opciones[this->opcion_actual], Color(1.0f, 1.0f, 1.0f));
-		else
-			this->texto->imprimir(this->x+this->dx+this->ancho_icono + 2, this->y+this->dy+this->centrado_vertical+this->alto_icono, this->opciones[this->opcion_actual], Color(1.0f, 1.0f, 1.0f));
+		m_rectangulo->textura(true);
+		m_iconos[m_opcion_actual]->activar();
+		m_rectangulo->dibujar(this->posicion_x()+this->dx()+m_centrado_icono, this->posicion_y()+this->dy(), m_ancho_icono, m_alto_icono, Color(1.0f, 1.0f, 1.0f));
 	}
-	else
-	{
-		this->texto->imprimir(this->x+this->dx+2, this->y+this->dy+this->centrado_vertical+this->texto->alto_texto(), this->opciones[this->opcion_actual], Color(1.0f, 1.0f, 1.0f));
-	}
-	if(this->mostrar_lista)
+	m_texto_seleccion.dibujar();
+	if(m_mostrar_lista)
 	{
 	}
 }
 
 void Lista_Desplegable::evento_raton(Raton *raton)
+{
+}
+
+void Lista_Desplegable::evento_pantalla(int ancho, int alto)
 {
 }

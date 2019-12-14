@@ -11,21 +11,21 @@
 class Generador_Particulas : public Figura
 {
 private:
-	static int ultima_escala;
-	static Color color_anterior;
+	static int Ultima_escala;
+	static Color Color_anterior;
 
-	Textura2D *textura;
-	unsigned int indice_objeto;
+	Textura2D *m_textura;
+	unsigned int m_indice_objeto;
 
-	std::vector<Particula> particulas;
+	std::vector<Particula> m_particulas;
 
-	unsigned int particulas_activas;
-	unsigned int particulas_maximas;
-	unsigned int primera_particula_activa;
-	unsigned int ultima_particula_activa;
+	unsigned int m_particulas_activas;
+	unsigned int m_particulas_maximas;
+	unsigned int m_primera_particula_activa;
+	unsigned int m_ultima_particula_activa;
 
-	float tiempo;
-	int escala;
+	float m_tiempo;
+	int m_escala;
 
 	int obtener_particula_inactiva();
 

@@ -19,7 +19,7 @@ enum Accion
 class Ventana
 {
 protected:
-	Accion accion;
+	Accion m_accion;
 public:
 	Ventana();
 

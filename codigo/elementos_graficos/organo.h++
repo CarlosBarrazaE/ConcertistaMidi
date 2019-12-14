@@ -6,7 +6,7 @@
 #include "../recursos/rectangulo.h++"
 #include "../util/octava.h++"
 #include "../control/pista.h++"
-#include "../control/teclado.h++"
+#include "../control/teclado_configuracion.h++"
 #include "../libmidi/Midi.h++"
 
 #include <map>
@@ -15,25 +15,25 @@
 class Organo : public Elemento
 {
 private:
-	Rectangulo *rectangulo;
+	Rectangulo *m_rectangulo;
 
-	Textura2D *tecla_blanca;
-	Textura2D *tecla_negra;
-	Textura2D *tecla_blanca_presionada;
-	Textura2D *tecla_blanca_presionada_doble;
-	Textura2D *tecla_negra_presionada;
-	Textura2D *borde_negro;
-	Textura2D *borde_rojo;
+	Textura2D *m_tecla_blanca;
+	Textura2D *m_tecla_negra;
+	Textura2D *m_tecla_blanca_presionada;
+	Textura2D *m_tecla_blanca_presionada_doble;
+	Textura2D *m_tecla_negra_presionada;
+	Textura2D *m_borde_negro;
+	Textura2D *m_borde_rojo;
 
-	Generador_Particulas *generador_particulas;
+	Generador_Particulas *m_generador_particulas;
 
-	Teclado *teclado;
-	int ancho_real, ajuste_x;
-	int ancho_tecla_blanca, ancho_tecla_negra;
-	int alto_tecla_blanca, alto_tecla_negra;
+	Teclado_Configuracion *m_teclado;
+	int m_ancho_real, m_ajuste_x;
+	int m_ancho_tecla_blanca, m_ancho_tecla_negra;
+	int m_alto_tecla_blanca, m_alto_tecla_negra;
 
-	std::array<Color, 52> *teclas_activas_blancas;
-	std::array<Color, 36> *teclas_activas_negras;
+	std::array<Color, 52> *m_teclas_activas_blancas;
+	std::array<Color, 36> *m_teclas_activas_negras;
 
 	//Metodos
 	void dibujar_blancas(int x, int y, int numero_teclas);
@@ -41,19 +41,20 @@ private:
 	void calcular_tamannos();
 
 public:
-	Organo(int x, int y, int ancho, Teclado *teclado, Administrador_Recursos *recursos);
+	Organo(int x, int y, int ancho, Teclado_Configuracion *teclado, Administrador_Recursos *recursos);
 	~Organo();
 
-	void e_ancho(int valor);
-	void c_teclado(Teclado *teclado);
+	void ancho(int valor);
+	int ancho();
+	void c_teclado(Teclado_Configuracion *teclado);
 
 	void e_blancas_presionadas(std::array<Color, 52> *teclas_blancas);
 	void e_negras_presionadas(std::array<Color, 36> *teclas_negras);
 
 	void actualizar(unsigned int diferencia_tiempo);
 	void dibujar();
-
 	void evento_raton(Raton *raton);
+	void evento_pantalla(int ancho, int alto);
 };
 
 #endif

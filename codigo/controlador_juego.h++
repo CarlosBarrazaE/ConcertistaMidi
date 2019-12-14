@@ -2,6 +2,7 @@
 #define CONTROLADOR_JUEGO_H
 
 #include "recursos/administrador_recursos.h++"
+#include "elementos_graficos/etiqueta.h++"
 #include "dispositivos/teclas.h++"
 #include "dispositivos/raton.h++"
 #include "dispositivos/pantalla.h++"
@@ -20,23 +21,22 @@
 class Controlador_Juego
 {
 private:
-	Administrador_Recursos *recursos;
-	double fps;
-	std::string texto_fps;
-	Texto *texto;
+	Administrador_Recursos *m_recursos;
+	Etiqueta m_texto_fps;
+	double m_fps;
 
 	//Control
-	bool mostrar_fps;
-	bool pantalla_completa;
-	bool modo_alambre;
-	bool finalizar;
+	bool m_mostrar_fps;
+	bool m_pantalla_completa;
+	bool m_modo_alambre;
+	bool m_finalizar;
 
 	//Eventos
-	Raton raton;
-	Ventana *ventana_actual;
+	Raton m_raton;
+	Ventana *m_ventana_actual;
 
-	Configuracion configuracion;
-	Datos_Musica musica;
+	Configuracion m_configuracion;
+	Datos_Musica m_musica;
 
 	//Configuracion bd
 	//Usuario

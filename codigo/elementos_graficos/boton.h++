@@ -2,39 +2,38 @@
 #define BOTON_H
 
 #include "elemento.h++"
+#include "etiqueta.h++"
 
 //TODO Agregar animacion al cambiar de color
 class Boton : public Elemento
 {
 private:
-	Texto *texto;
-	Textura2D *textura_boton;
-	Rectangulo *rectangulo;
+	Textura2D *m_textura_boton;
+	Rectangulo *m_rectangulo;
 
-	Color color_boton;
-	Color color_boton_normal;
-	Color color_boton_sobre;
-	Color color_texto;
+	Etiqueta m_texto;
+	Color m_color_boton_actual;
+	Color m_color_boton_normal;
+	Color m_color_boton_sobre;
 
-	bool centrado;
-	std::string texto_boton;
-	int ajuste_texto;
-
-	bool sobre_boton;
-	bool boton_pre_activado;
-	bool boton_activado;
+	bool m_sobre_boton;
+	bool m_boton_pre_activado;
+	bool m_boton_activado;
 
 public:
-	Boton(int x, int y, int ancho, int alto, std::string texto, Textura2D *textura, Color color, bool centrado, Administrador_Recursos *recursos);
+	Boton(int x, int y, int ancho, int alto, std::string texto, Administrador_Recursos *recursos);
+	//Boton(int x, int y, int ancho, int alto, std::string texto, Textura2D *textura, Color color, bool centrado, Administrador_Recursos *recursos);
 	~Boton();
-	void e_color_texto(Color color);
-	void e_letra(Texto *texto);
-	void e_textura(Textura2D *textura);
+	void textura(Textura2D *textura);
+	void color_boton(Color color);
+	void color_texto(Color color);
+	void tipografia(Texto *texto);
+	void centrado(bool centrado);
 
 	void actualizar(unsigned int diferencia_tiempo);
 	void dibujar();
-
 	void evento_raton(Raton *raton);
+	void evento_pantalla(int ancho, int alto);
 
 	bool esta_activado();
 };

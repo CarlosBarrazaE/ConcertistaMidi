@@ -16,14 +16,14 @@ enum Modo
 class Pista
 {
 private:
-	Color color_pista;
-	Modo modo_pista;
-	bool visible;
-	bool sonido;
-	std::string instrumento;
-	unsigned int numero_notas;
+	Color m_color_pista;
+	Modo m_modo_pista;
+	bool m_visible;
+	bool m_sonido;
+	std::string m_instrumento;
+	unsigned int m_numero_notas;
 public:
-	static Color colores_pista[NUMERO_COLORES_PISTA];
+	static Color Colores_pista[NUMERO_COLORES_PISTA];
 	Pista(std::string instrumento, unsigned int numero_notas, Color color, Modo modo, bool visible, bool sonido);
 	~Pista();
 

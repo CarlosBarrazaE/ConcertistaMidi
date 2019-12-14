@@ -1,6 +1,6 @@
 #include "sombreador.h++"
 
-unsigned int Sombreador::ultimo_indice_seleccionado = 0;
+unsigned int Sombreador::Ultimo_indice_seleccionado = 0;
 
 Sombreador::Sombreador(const char* codigo_vertice, const char* codigo_fragmento)
 {
@@ -14,7 +14,7 @@ Sombreador::Sombreador(const char* codigo_vertice, const char* codigo_fragmento)
 	glGetShaderiv(indice_vertice, GL_COMPILE_STATUS, &exito);
 	if(!exito)
 	{
-		Registro::error("Error al compilar el sombreador de vertices indice: " + std::to_string(indice_vertice));
+		Registro::Error("Error al compilar el sombreador de vertices indice: " + std::to_string(indice_vertice));
 		comprobar_error_sombreador(indice_vertice);
 		indice_vertice = 0;
 	}
@@ -26,23 +26,23 @@ Sombreador::Sombreador(const char* codigo_vertice, const char* codigo_fragmento)
 	glGetShaderiv(indice_fragmento, GL_COMPILE_STATUS, &exito);
 	if(!exito)
 	{
-		Registro::error("Error al compilar el sombreador de fragmentos indice: " + std::to_string(indice_fragmento));
+		Registro::Error("Error al compilar el sombreador de fragmentos indice: " + std::to_string(indice_fragmento));
 		comprobar_error_sombreador(indice_fragmento);
 		indice_fragmento = 0;
 	}
 
 	//Se crea el programa
-	this->indice_programa = glCreateProgram();
-	glAttachShader(this->indice_programa, indice_vertice);
-	glAttachShader(this->indice_programa, indice_fragmento);
-	glLinkProgram(this->indice_programa);
-	glGetProgramiv(this->indice_programa, GL_LINK_STATUS, &exito);
+	m_indice_programa = glCreateProgram();
+	glAttachShader(m_indice_programa, indice_vertice);
+	glAttachShader(m_indice_programa, indice_fragmento);
+	glLinkProgram(m_indice_programa);
+	glGetProgramiv(m_indice_programa, GL_LINK_STATUS, &exito);
 	if(!exito)
 	{
-		Registro::error("Error al compilar el programa indice: " + std::to_string(this->indice_programa));
-		comprobar_error_programas(this->indice_programa);
+		Registro::Error("Error al compilar el programa indice: " + std::to_string(m_indice_programa));
+		comprobar_error_programas(m_indice_programa);
 	}
-	imprimir_detalle_programa(this->indice_programa);
+	imprimir_detalle_programa(m_indice_programa);
 
 	glDeleteShader(indice_vertice);
 	glDeleteShader(indice_fragmento);
@@ -51,63 +51,63 @@ Sombreador::Sombreador(const char* codigo_vertice, const char* codigo_fragmento)
 Sombreador::~Sombreador()
 {
 	glUseProgram(0);
-	glDeleteProgram(this->indice_programa);
+	glDeleteProgram(m_indice_programa);
 }
 
 void Sombreador::activar()
 {
-	if(Sombreador::ultimo_indice_seleccionado != this->indice_programa)
+	if(Sombreador::Ultimo_indice_seleccionado != m_indice_programa)
 	{
-		Sombreador::ultimo_indice_seleccionado = this->indice_programa;
-		glUseProgram(this->indice_programa);
+		Sombreador::Ultimo_indice_seleccionado = m_indice_programa;
+		glUseProgram(m_indice_programa);
 	}
 }
 
 unsigned int Sombreador::o_indice()
 {
-	return this->indice_programa;
+	return m_indice_programa;
 }
 
 void Sombreador::e_bool(const std::string &nombre, bool valor)
 {
 	this->activar();
-	glUniform1i(glGetUniformLocation(this->indice_programa, nombre.c_str()), valor);
+	glUniform1i(glGetUniformLocation(m_indice_programa, nombre.c_str()), valor);
 }
 
 void Sombreador::e_int(const std::string &nombre, int valor)
 {
 	this->activar();
-	glUniform1i(glGetUniformLocation(this->indice_programa, nombre.c_str()), valor);
+	glUniform1i(glGetUniformLocation(m_indice_programa, nombre.c_str()), valor);
 }
 
 void Sombreador::e_float(const std::string &nombre, float valor)
 {
 	this->activar();
-	glUniform1f(glGetUniformLocation(this->indice_programa, nombre.c_str()), valor);
+	glUniform1f(glGetUniformLocation(m_indice_programa, nombre.c_str()), valor);
 }
 
 void Sombreador::e_vector2f(const std::string &nombre, float x, float y)
 {
 	this->activar();
-	glUniform2f(glGetUniformLocation(this->indice_programa, nombre.c_str()), x, y);
+	glUniform2f(glGetUniformLocation(m_indice_programa, nombre.c_str()), x, y);
 }
 
 void Sombreador::e_vector3f(const std::string &nombre, float x, float y, float z)
 {
 	this->activar();
-	glUniform3f(glGetUniformLocation(this->indice_programa, nombre.c_str()), x, y, z);
+	glUniform3f(glGetUniformLocation(m_indice_programa, nombre.c_str()), x, y, z);
 }
 
 void Sombreador::e_vector4f(const std::string &nombre, float x, float y, float z, float w)
 {
 	this->activar();
-	glUniform4f(glGetUniformLocation(this->indice_programa, nombre.c_str()), x, y, z, w);
+	glUniform4f(glGetUniformLocation(m_indice_programa, nombre.c_str()), x, y, z, w);
 }
 
 void Sombreador::e_matriz4(const std::string &nombre, glm::mat4 valor)
 {
 	this->activar();
-	glUniformMatrix4fv(glGetUniformLocation(this->indice_programa, nombre.c_str()), 1, GL_FALSE, glm::value_ptr(valor));
+	glUniformMatrix4fv(glGetUniformLocation(m_indice_programa, nombre.c_str()), 1, GL_FALSE, glm::value_ptr(valor));
 }
 
 void Sombreador::comprobar_error_sombreador(unsigned int indice) const
@@ -115,7 +115,7 @@ void Sombreador::comprobar_error_sombreador(unsigned int indice) const
 	int maximo_largo = 2048;
 	char estado[2048];
 	glGetShaderInfoLog(indice, maximo_largo, NULL, estado);
-	Registro::depurar("Detalle indice " + std::to_string(indice) + ": " + std::string(estado));
+	Registro::Depurar("Detalle indice " + std::to_string(indice) + ": " + std::string(estado));
 }
 
 void Sombreador::comprobar_error_programas(unsigned int indice) const
@@ -123,7 +123,7 @@ void Sombreador::comprobar_error_programas(unsigned int indice) const
 	int maximo_largo = 2048;
 	char estado[2048];
 	glGetProgramInfoLog(indice, maximo_largo, NULL, estado);
-	Registro::depurar("Detalle indice " + std::to_string(indice) + ": " + std::string(estado));
+	Registro::Depurar("Detalle indice " + std::to_string(indice) + ": " + std::string(estado));
 }
 
 void Sombreador::imprimir_detalle_programa(unsigned int indice) const
@@ -135,16 +135,16 @@ void Sombreador::imprimir_detalle_programa(unsigned int indice) const
 	int ubicacion = 0;
 	GLenum tipo;
 
-	Registro::depurar("**** Programa sombreador indice: " + std::to_string(indice) + " ****");
+	Registro::Depurar("**** Programa sombreador indice: " + std::to_string(indice) + " ****");
 	int parametro = -1;
 	glGetProgramiv(indice, GL_LINK_STATUS, &parametro);
-	Registro::depurar("GL_LINK_STATUS: " + std::to_string(parametro));
+	Registro::Depurar("GL_LINK_STATUS: " + std::to_string(parametro));
 
 	glGetProgramiv(indice, GL_ATTACHED_SHADERS, &parametro);
-	Registro::depurar("GL_ATTACHED_SHADERS: " + std::to_string(parametro));
+	Registro::Depurar("GL_ATTACHED_SHADERS: " + std::to_string(parametro));
 
 	glGetProgramiv(indice, GL_ACTIVE_ATTRIBUTES, &parametro);
-	Registro::depurar("GL_ACTIVE_ATTRIBUTES: " + std::to_string(parametro));
+	Registro::Depurar("GL_ACTIVE_ATTRIBUTES: " + std::to_string(parametro));
 
 	for(int x=0; x<parametro; x++)
 	{
@@ -155,18 +155,18 @@ void Sombreador::imprimir_detalle_programa(unsigned int indice) const
 			{
 				sprintf(nombre_largo, "%s[%i]", nombre, y);
 				ubicacion = glGetAttribLocation(indice, nombre_largo);
-				Registro::depurar("\tTipo: " + GL_tipo_a_texto(tipo) + " Nombre: " + std::string(nombre_largo) + " Ubicacion: " + std::to_string(ubicacion));
+				Registro::Depurar("\tTipo: " + GL_tipo_a_texto(tipo) + " Nombre: " + std::string(nombre_largo) + " Ubicacion: " + std::to_string(ubicacion));
 			}
 		}
 		else
 		{
 			ubicacion = glGetAttribLocation(indice, nombre);
-			Registro::depurar("\tTipo: " + GL_tipo_a_texto(tipo) + " Nombre: " + std::string(nombre) + " Ubicacion: " + std::to_string(ubicacion));
+			Registro::Depurar("\tTipo: " + GL_tipo_a_texto(tipo) + " Nombre: " + std::string(nombre) + " Ubicacion: " + std::to_string(ubicacion));
 		}
 	}
 
 	glGetProgramiv(indice, GL_ACTIVE_UNIFORMS, &parametro);
-	Registro::depurar("GL_ACTIVE_UNIFORMS: " + std::to_string(parametro));
+	Registro::Depurar("GL_ACTIVE_UNIFORMS: " + std::to_string(parametro));
 
 	for(int x=0; x<parametro; x++)
 	{
@@ -177,13 +177,13 @@ void Sombreador::imprimir_detalle_programa(unsigned int indice) const
 			{
 				sprintf(nombre_largo, "%s[%i]", nombre, y);
 				ubicacion = glGetUniformLocation(indice, nombre_largo);
-				Registro::depurar("\tTipo: " + GL_tipo_a_texto(tipo) + " Nombre: " + std::string(nombre_largo) + " Ubicacion: " + std::to_string(ubicacion));
+				Registro::Depurar("\tTipo: " + GL_tipo_a_texto(tipo) + " Nombre: " + std::string(nombre_largo) + " Ubicacion: " + std::to_string(ubicacion));
 			}
 		}
 		else
 		{
 			ubicacion = glGetUniformLocation(indice, nombre);
-			Registro::depurar("\tTipo: " + GL_tipo_a_texto(tipo) + " Nombre: " + std::string(nombre) + " Ubicacion: " + std::to_string(ubicacion));
+			Registro::Depurar("\tTipo: " + GL_tipo_a_texto(tipo) + " Nombre: " + std::string(nombre) + " Ubicacion: " + std::to_string(ubicacion));
 		}
 	}
 }

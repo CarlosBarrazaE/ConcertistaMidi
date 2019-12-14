@@ -1,26 +1,26 @@
 #include "organo.h++"
 
-Organo::Organo(int x, int y, int ancho, Teclado *teclado, Administrador_Recursos *recursos) : Elemento(x, y, ancho, 0)
+Organo::Organo(int x, int y, int ancho, Teclado_Configuracion *teclado, Administrador_Recursos *recursos) : Elemento(x, y, ancho, 0)
 {
 	//El origen del organo esta abajo a la izquierda
-	this->teclado = teclado;
-	this->calcular_tamannos();
+	m_teclado = teclado;
+	calcular_tamannos();
 
-	this->tecla_blanca = recursos->obtener_textura(T_TeclaBlanca);
-	this->tecla_negra = recursos->obtener_textura(T_TeclaNegra);
+	m_tecla_blanca = recursos->obtener_textura(T_TeclaBlanca);
+	m_tecla_negra = recursos->obtener_textura(T_TeclaNegra);
 
-	this->tecla_blanca_presionada = recursos->obtener_textura(T_TeclaBlancaPresionada);
-	this->tecla_blanca_presionada_doble = recursos->obtener_textura(T_TeclaBlancaPresionadaDoble);
-	this->tecla_negra_presionada = recursos->obtener_textura(T_TeclaNegraPresionada);
+	m_tecla_blanca_presionada = recursos->obtener_textura(T_TeclaBlancaPresionada);
+	m_tecla_blanca_presionada_doble = recursos->obtener_textura(T_TeclaBlancaPresionadaDoble);
+	m_tecla_negra_presionada = recursos->obtener_textura(T_TeclaNegraPresionada);
 
-	this->borde_negro = recursos->obtener_textura(T_BordeOrganoNegro);
-	this->borde_rojo = recursos->obtener_textura(T_BordeOrganoRojo);
+	m_borde_negro = recursos->obtener_textura(T_BordeOrganoNegro);
+	m_borde_rojo = recursos->obtener_textura(T_BordeOrganoRojo);
 
-	this->rectangulo = recursos->obtener_figura(F_Rectangulo);
+	m_rectangulo = recursos->obtener_figura(F_Rectangulo);
 
 	Sombreador *particulas = recursos->obtener_sombreador(S_Particula);
 	Textura2D *t_particula = recursos->obtener_textura(T_ParticulaNota);
-	this->generador_particulas = new Generador_Particulas(particulas, t_particula, 500, this->ancho_tecla_blanca);
+	m_generador_particulas = new Generador_Particulas(particulas, t_particula, 500, m_ancho_tecla_blanca);
 }
 
 Organo::~Organo()
@@ -29,74 +29,83 @@ Organo::~Organo()
 
 void Organo::calcular_tamannos()
 {
-	this->ancho_tecla_blanca = (this->ancho / this->teclado->o_numero_blancas());
-	this->alto_tecla_blanca = this->ancho_tecla_blanca * PROPORCION_BLANCA;
-	if(this->alto_tecla_blanca > 250)
-		this->alto_tecla_blanca = 250;
+	m_ancho_tecla_blanca = (this->ancho() / m_teclado->o_numero_blancas());
+	m_alto_tecla_blanca = m_ancho_tecla_blanca * PROPORCION_BLANCA;
+	if(m_alto_tecla_blanca > 250)
+		m_alto_tecla_blanca = 250;
 
-	this->ancho_tecla_negra = this->ancho_tecla_blanca * PROPORCION_ANCHO_NEGRA;
-	this->alto_tecla_negra = this->alto_tecla_blanca * PROPORCION_NEGRA;
+	m_ancho_tecla_negra = m_ancho_tecla_blanca * PROPORCION_ANCHO_NEGRA;
+	m_alto_tecla_negra = m_alto_tecla_blanca * PROPORCION_NEGRA;
 
-	this->alto = this->alto_tecla_blanca + 11;
+	this->alto(m_alto_tecla_blanca + 11);
 
 	//Diferencia producida porque no se puede dibujar menos de un pixel
-	this->ancho_real = this->ancho_tecla_blanca * this->teclado->o_numero_blancas();
-	this->ajuste_x = (this->ancho - this->ancho_real) / 2;
+	m_ancho_real = m_ancho_tecla_blanca * m_teclado->o_numero_blancas();
+	m_ajuste_x = (this->ancho() - m_ancho_real) / 2;
 }
 
-void Organo::e_ancho(int valor)
+void Organo::ancho(int valor)
 {
-	this->ancho = valor;
+	m_ancho = valor;
 	this->calcular_tamannos();
-	this->generador_particulas->e_escala(this->ancho_tecla_blanca);
+	m_generador_particulas->e_escala(m_ancho_tecla_blanca);
 }
 
-void Organo::c_teclado(Teclado *teclado)
+int Organo::ancho()
 {
-	this->teclado = teclado;
+	return m_ancho;
+}
+
+void Organo::c_teclado(Teclado_Configuracion *teclado)
+{
+	m_teclado = teclado;
 	this->calcular_tamannos();
-	this->generador_particulas->e_escala(this->ancho_tecla_blanca);
+	m_generador_particulas->e_escala(m_ancho_tecla_blanca);
 }
 
 void Organo::e_blancas_presionadas(std::array<Color, 52> *teclas_blancas)
 {
-	this->teclas_activas_blancas = teclas_blancas;
+	m_teclas_activas_blancas = teclas_blancas;
 }
 
 void Organo::e_negras_presionadas(std::array<Color, 36> *teclas_negras)
 {
-	this->teclas_activas_negras = teclas_negras;
+	m_teclas_activas_negras = teclas_negras;
 }
 
 void Organo::actualizar(unsigned int diferencia_tiempo)
 {
-	this->generador_particulas->actualizar(((double)diferencia_tiempo/1000000000.0)*3);
+	m_generador_particulas->actualizar(((double)diferencia_tiempo/1000000000.0)*3);
 }
 
 void Organo::dibujar()
 {
-	rectangulo->textura(false);
-	rectangulo->dibujar(this->x, this->y - this->alto, this->ancho, this->alto, Color(0.0f, 0.0f, 0.0f));
+	m_rectangulo->textura(false);
+	m_rectangulo->dibujar(this->posicion_x(), this->posicion_y() - this->alto(), this->ancho(), this->alto(), Color(0.0f, 0.0f, 0.0f));
 
-	tecla_blanca->activar();
-	rectangulo->textura(true);
-	rectangulo->color(Color(1.0f, 1.0f, 1.0f));
-	this->dibujar_blancas(this->x + this->ajuste_x, this->y - this->alto + 10, this->teclado->o_numero_blancas());
+	m_tecla_blanca->activar();
+	m_rectangulo->textura(true);
+	m_rectangulo->color(Color(1.0f, 1.0f, 1.0f));
+	this->dibujar_blancas(this->posicion_x() + this->m_ajuste_x, this->posicion_y() - this->alto() + 10, m_teclado->o_numero_blancas());
 
-	tecla_negra->activar();
-	this->dibujar_negras(this->x + this->ajuste_x, this->y - this->alto + 10, this->teclado->o_numero_negras());
+	m_tecla_negra->activar();
+	this->dibujar_negras(this->posicion_x() + this->m_ajuste_x, this->posicion_y() - this->alto() + 10, m_teclado->o_numero_negras());
 
-	borde_negro->activar();
-	rectangulo->color(Color(1.0f, 1.0f, 1.0f));
-	rectangulo->dibujar(this->x, this->y - this->alto, this->ancho, 5);
+	m_borde_negro->activar();
+	m_rectangulo->color(Color(1.0f, 1.0f, 1.0f));
+	m_rectangulo->dibujar(this->posicion_x(), this->posicion_y() - this->alto(), this->ancho(), 5);
 
-	borde_rojo->activar();
-	rectangulo->dibujar(this->x + this->ajuste_x, this->y - this->alto + 5, this->ancho_real-1, 5);
+	m_borde_rojo->activar();
+	m_rectangulo->dibujar(this->posicion_x() + this->m_ajuste_x, this->posicion_y() - this->alto() + 5, m_ancho_real-1, 5);
 
-	this->generador_particulas->dibujar();
+	m_generador_particulas->dibujar();
 }
 
 void Organo::evento_raton(Raton *raton)
+{
+}
+
+void Organo::evento_pantalla(int ancho, int alto)
 {
 }
 
@@ -107,62 +116,62 @@ void Organo::dibujar_blancas(int x, int y, int numero_teclas)
 	bool tecla_presionada_anterior = false;
 	for(int n=0; n<numero_teclas; n++)
 	{
-		if(teclas_activas_blancas->at(n) != negro)
+		if(m_teclas_activas_blancas->at(n) != negro)
 		{
-			rectangulo->color(teclas_activas_blancas->at(n));
-			this->generador_particulas->agregar_particulas(desplazamiento + this->ancho_tecla_blanca/2.0 - this->ancho_tecla_blanca/2, y, 2, teclas_activas_blancas->at(n));
-			teclas_activas_blancas->at(n) = negro;
+			m_rectangulo->color(m_teclas_activas_blancas->at(n));
+			m_generador_particulas->agregar_particulas(desplazamiento + m_ancho_tecla_blanca/2.0 - m_ancho_tecla_blanca/2, y, 2, m_teclas_activas_blancas->at(n));
+			m_teclas_activas_blancas->at(n) = negro;
 			if(tecla_presionada_anterior)
-				tecla_blanca_presionada_doble->activar();
+				m_tecla_blanca_presionada_doble->activar();
 			else
-				tecla_blanca_presionada->activar();
+				m_tecla_blanca_presionada->activar();
 			tecla_presionada_anterior = true;
 		}
 		else
 		{
-			tecla_blanca->activar();
-			rectangulo->color(Color(1.0f, 1.0f, 1.0f));
+			m_tecla_blanca->activar();
+			m_rectangulo->color(Color(1.0f, 1.0f, 1.0f));
 			tecla_presionada_anterior = false;
 		}
 
-		rectangulo->dibujar(desplazamiento, y, this->ancho_tecla_blanca - 1, this->alto_tecla_blanca);
-		desplazamiento += this->ancho_tecla_blanca;
+		m_rectangulo->dibujar(desplazamiento, y, m_ancho_tecla_blanca - 1, m_alto_tecla_blanca);
+		desplazamiento += m_ancho_tecla_blanca;
 	}
 }
 
 void Organo::dibujar_negras(int x, int y, int numero_teclas)
 {
 	int desplazamiento = 0;
-	int n_blanca = this->teclado->o_inicio_blancas();
-	int n_negra = this->teclado->o_inicio_negras();
+	int n_blanca = m_teclado->o_inicio_blancas();
+	int n_negra = m_teclado->o_inicio_negras();
 	Color negro;
 	Color color_actual;
 	bool tecla_activa = false;
 	for(int n=0; n<numero_teclas; n++)
 	{
-		if(teclas_activas_negras->at(n) != negro)
+		if(m_teclas_activas_negras->at(n) != negro)
 		{
-			rectangulo->color(teclas_activas_negras->at(n));
-			color_actual = teclas_activas_negras->at(n);
-			teclas_activas_negras->at(n) = negro;
-			tecla_negra_presionada->activar();
+			m_rectangulo->color(m_teclas_activas_negras->at(n));
+			color_actual = m_teclas_activas_negras->at(n);
+			m_teclas_activas_negras->at(n) = negro;
+			m_tecla_negra_presionada->activar();
 			tecla_activa = true;
 		}
 		else
 		{
-			rectangulo->color(Color(1.0f, 1.0f, 1.0f));
-			tecla_negra->activar();
+			m_rectangulo->color(Color(1.0f, 1.0f, 1.0f));
+			m_tecla_negra->activar();
 			tecla_activa = false;
 		}
 		if(n_negra==0 || n_negra == 2)
 		{
 			n_blanca++;
-			desplazamiento = x + n_blanca * this->ancho_tecla_blanca - this->ancho_tecla_negra * 0.667;
+			desplazamiento = x + n_blanca * m_ancho_tecla_blanca - m_ancho_tecla_negra * 0.667;
 		}
 		else if(n_negra==1 || n_negra == 4)
-			desplazamiento = x + n_blanca * this->ancho_tecla_blanca - this->ancho_tecla_negra * 0.333;
+			desplazamiento = x + n_blanca * m_ancho_tecla_blanca - m_ancho_tecla_negra * 0.333;
 		else if(n_negra==3)
-			desplazamiento = x + n_blanca * this->ancho_tecla_blanca - this->ancho_tecla_negra * 0.5;
+			desplazamiento = x + n_blanca * m_ancho_tecla_blanca - m_ancho_tecla_negra * 0.5;
 
 		n_negra++;
 		n_blanca++;
@@ -170,8 +179,8 @@ void Organo::dibujar_negras(int x, int y, int numero_teclas)
 			n_negra = 0;
 
 		if(tecla_activa)
-			this->generador_particulas->agregar_particulas(desplazamiento + this->ancho_tecla_negra/2.0 - this->ancho_tecla_blanca/2, y, 2, color_actual-0.2f);
+			m_generador_particulas->agregar_particulas(desplazamiento + m_ancho_tecla_negra/2.0 - m_ancho_tecla_blanca/2, y, 2, color_actual-0.2f);
 		//El ancho de la tecla mas el ancho de la sombra
-		rectangulo->dibujar(desplazamiento, y, this->ancho_tecla_negra + this->ancho_tecla_negra * 0.22, this->alto_tecla_negra);
+		m_rectangulo->dibujar(desplazamiento, y, m_ancho_tecla_negra + m_ancho_tecla_negra * 0.22, m_alto_tecla_negra);
 	}
 }

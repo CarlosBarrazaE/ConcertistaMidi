@@ -23,6 +23,7 @@ add_subdirectory(codigo)
 set(todo
 		${codigo}
 )
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -O1 -march=native")
 add_executable(${PROJECT_NAME} ${todo})
 
 target_link_libraries(${PROJECT_NAME} ${OPENGL_LIBRARIES})

@@ -4,11 +4,11 @@
 class Pantalla
 {
 public:
-	static int ancho;
-	static int alto;
+	static int Ancho;
+	static int Alto;
 
-	static int centro_h();
-	static int centro_v();
+	static int Centro_h();
+	static int Centro_v();
 };
 
 #endif

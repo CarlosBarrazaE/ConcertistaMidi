@@ -11,13 +11,9 @@ enum BotonRaton
 class Raton
 {
 private:
-	int posicion_x;
-	int posicion_y;
-	int desplazamiento_x;
-	int desplazamiento_y;
-	bool boton_izquierdo;
-	bool boton_central;
-	bool boton_derecho;
+	int m_posicion_x, m_posicion_y;
+	int m_desplazamiento_x, m_desplazamiento_y;
+	bool m_boton_izquierdo, m_boton_central, m_boton_derecho;
 public:
 	Raton();
 	void actualizar_boton(BotonRaton boton, bool estado);

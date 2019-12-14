@@ -1,34 +1,34 @@
 #include "fps.h++"
 
-unsigned int Fps::nanosegundos = 0;
-bool Fps::mostrar_fps = true;
-unsigned int Fps::contador_fps = 0;
+unsigned int Fps::Nanosegundos = 0;
+bool Fps::Mostrar_fps = true;
+unsigned int Fps::Contador_fps = 0;
 
-Tiempo Fps::tiempo_actual = Reloj::now();
-Tiempo Fps::tiempo_anterior = Reloj::now();
+Tiempo Fps::Tiempo_actual = Reloj::now();
+Tiempo Fps::Tiempo_anterior = Reloj::now();
 
-unsigned int Fps::tiempo_fotograma()
+unsigned int Fps::Tiempo_fotograma()
 {
-	Fps::tiempo_actual = Reloj::now();
-	Fps::nanosegundos = std::chrono::duration_cast<std::chrono::nanoseconds>(Fps::tiempo_actual - Fps::tiempo_anterior).count();
-	Fps::tiempo_anterior = tiempo_actual;
-	if(Fps::contador_fps > 10)
+	Fps::Tiempo_actual = Reloj::now();
+	Fps::Nanosegundos = std::chrono::duration_cast<std::chrono::nanoseconds>(Fps::Tiempo_actual - Fps::Tiempo_anterior).count();
+	Fps::Tiempo_anterior = Fps::Tiempo_actual;
+	if(Fps::Contador_fps > 10)
 	{
-		Fps::mostrar_fps = true;
-		Fps::contador_fps = 0;
+		Fps::Mostrar_fps = true;
+		Fps::Contador_fps = 0;
 	}
 	else
-		Fps::mostrar_fps = false;
-	Fps::contador_fps++;
-	return 1000000000.0/Fps::nanosegundos;//Retorna FPS
+		Fps::Mostrar_fps = false;
+	Fps::Contador_fps++;
+	return 1000000000.0/Fps::Nanosegundos;//Retorna FPS
 }
 
-bool Fps::actualizar_fps()
+bool Fps::Actualizar_fps()
 {
-	return Fps::mostrar_fps;
+	return Fps::Mostrar_fps;
 }
 
-unsigned int Fps::obtener_nanosegundos()
+unsigned int Fps::Obtener_nanosegundos()
 {
-	return Fps::nanosegundos;
+	return Fps::Nanosegundos;
 }

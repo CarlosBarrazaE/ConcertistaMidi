@@ -1,6 +1,6 @@
 #include "figura.h++"
 
-unsigned int Figura::ultimo_indice_seleccionado = 0;
+unsigned int Figura::Ultimo_indice_seleccionado = 0;
 
 Figura::Figura(Sombreador *sombreador)
 {

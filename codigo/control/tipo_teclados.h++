@@ -2,7 +2,7 @@
 #define TIPO_TECLADOS
 
 #include <map>
-#include "teclado.h++"
+#include "teclado_configuracion.h++"
 
 enum TipoTeclado
 {
@@ -16,10 +16,10 @@ enum TipoTeclado
 class Tipo_Teclado
 {
 private:
-	static std::map<TipoTeclado, Teclado> teclado;
-	static std::map<TipoTeclado, Teclado> cargar_datos();
+	static std::map<TipoTeclado, Teclado_Configuracion> Teclado;
+	static std::map<TipoTeclado, Teclado_Configuracion> Cargar_datos();
 public:
-	static Teclado *obtener_teclado(TipoTeclado tipo);
+	static Teclado_Configuracion *Obtener_teclado(TipoTeclado tipo);
 };
 
 #endif

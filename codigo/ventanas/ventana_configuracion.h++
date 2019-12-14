@@ -8,7 +8,7 @@ class VentanaConfiguracion : public Ventana
 {
 private:
 	//Componentes
-	Boton *boton_atras;
+	Boton *m_boton_atras;
 
 public:
 	VentanaConfiguracion(Administrador_Recursos *recursos);
