@@ -8,5 +8,6 @@ set(elementos_graficos
 	${CMAKE_CURRENT_SOURCE_DIR}/configuracion_pista.c++
 	${CMAKE_CURRENT_SOURCE_DIR}/barra_desplazamiento.c++
 	${CMAKE_CURRENT_SOURCE_DIR}/lista_desplegable.c++
+	${CMAKE_CURRENT_SOURCE_DIR}/titulo.c++
 	PARENT_SCOPE
 )

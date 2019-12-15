@@ -20,7 +20,7 @@ Barra_Progreso::Barra_Progreso(int x, int y, int ancho, int alto, microseconds_t
 
 	m_texto_final.texto(Funciones::milisegundos_a_texto(tiempo_total));
 	m_texto_final.tipografia(recursos->obtener_tipografia(LetraMuyChica));
-	m_texto_final.posicion(this->posicion_x()+this->ancho() - (4 + m_texto_final.o_largo_texto()), this->posicion_y() + this->alto() - 12);
+	m_texto_final.posicion(this->posicion_x()+this->ancho() - (4 + m_texto_final.largo_texto()), this->posicion_y() + this->alto() - 12);
 	m_texto_final.color(Color(0.0f, 0.0f, 0.0f));
 }
 
@@ -106,5 +106,5 @@ void Barra_Progreso::evento_raton(Raton *raton)
 
 void Barra_Progreso::evento_pantalla(int ancho, int alto)
 {
-	m_texto_final.posicion(ancho - (4 + m_texto_final.o_largo_texto()), this->posicion_y() + this->alto() - 12);
+	m_texto_final.posicion(ancho - (4 + m_texto_final.largo_texto()), this->posicion_y() + this->alto() - 12);
 }

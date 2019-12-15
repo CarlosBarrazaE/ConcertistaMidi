@@ -26,6 +26,7 @@ Administrador_Recursos::Administrador_Recursos()
 	m_archivo_texturas[T_SonidoDesactivado] = "../texturas/sonido_desactivado.tga";
 	m_archivo_texturas[T_Reproducir] = "../texturas/reproducir.tga";
 	m_archivo_texturas[T_Pausar] = "../texturas/pausar.tga";
+	m_archivo_texturas[T_TituloMusica] = "../texturas/titulo_musica.tga";
 
 	m_archivo_sombreador_vertice[S_Rectangulo] = "../sombreadores/rectangulo_sv.glsl";
 	m_archivo_sombreador_fragmento[S_Rectangulo] = "../sombreadores/rectangulo_sf.glsl";
@@ -42,6 +43,7 @@ Administrador_Recursos::Administrador_Recursos()
 	sombreador_letras->e_int("textura_texto", 0);
 	sombreador_letras->e_vector3f("color_texto", 0.0, 0.0, 0.0);
 
+	m_formato_letras[LetraTituloGrande] = new Texto(Normal, 35, sombreador_letras);
 	m_formato_letras[LetraTitulo] = new Texto(Normal, 20, sombreador_letras);
 	m_formato_letras[LetraGrande] = new Texto(Normal, 16, sombreador_letras);
 	m_formato_letras[LetraMediana] = new Texto(Normal, 14, sombreador_letras);

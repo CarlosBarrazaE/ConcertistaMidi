@@ -35,8 +35,9 @@ Controlador_Juego::Controlador_Juego(Administrador_Recursos *recursos)
 	m_configuracion.cambiar_entrada(3);
 	m_configuracion.cambiar_salida(1);
 
-	m_musica.cargar_midi("../musica/Una espiga.mid");
-	m_musica.e_nombre_musica("Nombre de la canción");
+	m_musica.cargar_midi("../musica/Himno de Chile.midi");
+	m_musica.nombre_musica("Himno de Chile");
+	m_musica.autor("Eusebio Lillo");
 }
 
 Controlador_Juego::~Controlador_Juego()

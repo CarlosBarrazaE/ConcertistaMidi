@@ -8,9 +8,12 @@ VentanaOrgano::VentanaOrgano(Configuracion *configuracion, Datos_Musica *musica,
 	m_rectangulo = recursos->obtener_figura(F_Rectangulo);
 	Teclado_Configuracion *teclado = Tipo_Teclado::Obtener_teclado(Teclas88);
 
-	m_barra = new Barra_Progreso(0, 40, Pantalla::Ancho, 40, m_musica->o_musica()->GetSongLengthInMicroseconds(), m_musica->o_musica()->GetBarLines(), recursos);
+	m_barra = new Barra_Progreso(0, 40, Pantalla::Ancho, 40, m_musica->musica()->GetSongLengthInMicroseconds(), m_musica->musica()->GetBarLines(), recursos);
 	m_organo = new Organo(0, Pantalla::Alto, Pantalla::Ancho, teclado, recursos);
 	m_tablero = new Tablero_Notas(0, m_barra->alto()+40, Pantalla::Ancho, Pantalla::Alto - (m_organo->alto() + m_barra->alto() + 40), teclado, recursos);
+
+	m_titulo_musica = new Titulo(0, m_barra->alto()+40, Pantalla::Ancho, Pantalla::Alto - (m_organo->alto() + m_barra->alto() + 40), recursos);
+	m_titulo_musica->datos(musica);
 
 	m_velocidad_musica = 1.0;
 
@@ -28,11 +31,12 @@ VentanaOrgano::VentanaOrgano(Configuracion *configuracion, Datos_Musica *musica,
 	m_texto_pausa.dimension(Pantalla::Ancho, 40);
 	m_texto_pausa.centrado(true);
 
-	m_tablero->e_notas(m_musica->o_musica()->Notes());
-	m_tablero->e_pistas(m_musica->o_pistas());
-	m_tablero->e_lineas(m_musica->o_musica()->GetBarLines());
+	m_tablero->e_notas(m_musica->musica()->Notes());
+	m_tablero->e_pistas(m_musica->pistas());
+	m_tablero->e_lineas(m_musica->musica()->GetBarLines());
 	m_organo->e_blancas_presionadas(m_tablero->o_blancas_presionadas());
 	m_organo->e_negras_presionadas(m_tablero->o_negras_presionadas());
+
 	m_cambio_velocidad = false;
 	m_pausa = false;
 }
@@ -46,7 +50,7 @@ VentanaOrgano::~VentanaOrgano()
 
 void VentanaOrgano::actualizar(unsigned int diferencia_tiempo)
 {
-	if(m_musica->o_musica()->IsSongOver())
+	if(m_musica->musica()->IsSongOver())
 	{
 		m_musica->reiniciar();
 		m_accion = CambiarASeleccionPista;
@@ -56,9 +60,9 @@ void VentanaOrgano::actualizar(unsigned int diferencia_tiempo)
 	if(m_pausa)
 		microsegundos_actualizar = 0;
 
-	MidiEventListWithTrackId evs = m_musica->o_musica()->Update(microsegundos_actualizar);
+	MidiEventListWithTrackId evs = m_musica->musica()->Update(microsegundos_actualizar);
 
-	std::vector<Pista> *pistas = m_musica->o_pistas();
+	std::vector<Pista> *pistas = m_musica->pistas();
 	for (MidiEventListWithTrackId::const_iterator i = evs.begin(); i != evs.end(); i++)
 	{
 		if(pistas->at(i->first).o_sonido())
@@ -69,7 +73,7 @@ void VentanaOrgano::actualizar(unsigned int diferencia_tiempo)
 
 	if(m_barra->o_tiempo_seleccionado() > 0)
 	{
-		m_musica->o_musica()->GoTo(m_barra->o_tiempo_seleccionado());
+		m_musica->musica()->GoTo(m_barra->o_tiempo_seleccionado());
 		m_tablero->reiniciar();
 		m_configuracion->o_salida()->Reset();
 	}
@@ -77,9 +81,10 @@ void VentanaOrgano::actualizar(unsigned int diferencia_tiempo)
 	m_barra->actualizar(diferencia_tiempo);
 	m_tablero->actualizar(diferencia_tiempo);
 	m_organo->actualizar(diferencia_tiempo);
+	m_titulo_musica->actualizar(diferencia_tiempo);
 
-	m_barra->e_tiempo(m_musica->o_musica()->GetSongPositionInMicroseconds());
-	m_tablero->e_tiempo(m_musica->o_musica()->GetSongPositionInMicroseconds());
+	m_barra->e_tiempo(m_musica->musica()->GetSongPositionInMicroseconds());
+	m_tablero->e_tiempo(m_musica->musica()->GetSongPositionInMicroseconds());
 
 	if(m_cambio_velocidad)
 	{
@@ -98,6 +103,7 @@ void VentanaOrgano::dibujar()
 	m_texto_velocidad.dibujar();
 	if(m_pausa)
 		m_texto_pausa.dibujar();
+	m_titulo_musica->dibujar();
 }
 
 void VentanaOrgano::evento_raton(Raton *raton)
@@ -105,6 +111,7 @@ void VentanaOrgano::evento_raton(Raton *raton)
 	m_barra->evento_raton(raton);
 	m_tablero->evento_raton(raton);
 	m_organo->evento_raton(raton);
+	m_titulo_musica->evento_raton(raton);
 }
 
 void VentanaOrgano::evento_teclado(Tecla tecla, bool estado)
@@ -184,4 +191,5 @@ void VentanaOrgano::evento_pantalla(int ancho, int alto)
 	m_barra->evento_pantalla(ancho, alto);
 	m_organo->evento_pantalla(ancho, alto);
 	m_tablero->evento_pantalla(ancho, alto);
+	m_titulo_musica->evento_pantalla(Pantalla::Ancho, Pantalla::Alto - (m_organo->alto() + m_barra->alto() + 40));
 }

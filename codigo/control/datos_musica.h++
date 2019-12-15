@@ -18,16 +18,16 @@ public:
 	~Datos_Musica();
 
 	void cargar_midi(std::string direccion);
-	void e_pistas(std::vector<Pista> pistas);
-	void e_nombre_musica(std::string nombre);
-	void e_autor(std::string autor);
+	void pistas(std::vector<Pista> pistas);
+	void nombre_musica(std::string nombre);
+	void autor(std::string autor);
 
 	void reiniciar();
 
-	Midi *o_musica();
-	std::vector<Pista> *o_pistas();
-	std::string o_nombre_musica();
-	std::string o_autor();
+	Midi *musica();
+	std::vector<Pista> *pistas();
+	std::string nombre_musica();
+	std::string autor();
 };
 
 #endif

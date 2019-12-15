@@ -28,7 +28,12 @@ void Etiqueta::actualizar(unsigned int diferencia_tiempo)
 void Etiqueta::dibujar()
 {
 	if(m_centrado)
-		m_tipografia->imprimir(this->posicion_x()+this->dx()+this->ancho()/2.0 - m_largo_texto / 2.0, this->posicion_y()+this->dy()+m_tipografia->alto_texto()+this->alto()/2.0-m_tipografia->alto_texto()/2.0, m_texto, m_color);
+	{
+		if(this->alto() == 0)
+			m_tipografia->imprimir(this->posicion_x()+this->dx()+this->ancho()/2.0 - m_largo_texto / 2.0, this->posicion_y()+this->dy()+m_tipografia->alto_texto(), m_texto, m_color);
+		else
+			m_tipografia->imprimir(this->posicion_x()+this->dx()+this->ancho()/2.0 - m_largo_texto / 2.0, this->posicion_y()+this->dy()+m_tipografia->alto_texto()+this->alto()/2.0-m_tipografia->alto_texto()/2.0, m_texto, m_color);
+	}
 	else
 		m_tipografia->imprimir(this->posicion_x()+this->dx(), this->posicion_y()+this->dy()+m_tipografia->alto_texto(), m_texto, m_color);
 }
@@ -77,7 +82,12 @@ void Etiqueta::centrado(bool centrado)
 	m_centrado = centrado;
 }
 
-int Etiqueta::o_largo_texto()
+int Etiqueta::largo_texto()
 {
 	return m_largo_texto;
+}
+
+int Etiqueta::alto_texto()
+{
+	return m_alto_texto;
 }

@@ -38,6 +38,7 @@ enum Textura
 	T_SonidoDesactivado,
 	T_Reproducir,
 	T_Pausar,
+	T_TituloMusica,
 };
 
 enum SombreadorVF
@@ -54,7 +55,8 @@ enum FiguraGeometrica
 
 enum ModeloLetra
 {
-	LetraTitulo = 0,
+	LetraTituloGrande = 0,
+	LetraTitulo,
 	LetraGrande,
 	LetraMediana,
 	LetraChica,

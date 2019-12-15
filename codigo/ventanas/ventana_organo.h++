@@ -6,6 +6,7 @@
 #include "../elementos_graficos/etiqueta.h++"
 #include "../elementos_graficos/tablero_notas.h++"
 #include "../elementos_graficos/organo.h++"
+#include "../elementos_graficos/titulo.h++"
 #include "../control/pista.h++"
 #include "../control/tipo_teclados.h++"
 #include "../control/configuracion.h++"
@@ -26,6 +27,7 @@ private:
 	Barra_Progreso *m_barra;
 	Tablero_Notas *m_tablero;
 	Organo *m_organo;
+	Titulo *m_titulo_musica;
 
 	//Controles
 	double m_velocidad_musica;

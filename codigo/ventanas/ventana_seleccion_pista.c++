@@ -23,7 +23,7 @@ VentanaSeleccionPista::VentanaSeleccionPista(Datos_Musica *musica, Administrador
 
 	m_barra_desplazamiento = new Barra_Desplazamiento(0, 40, Pantalla::Ancho, Pantalla::Alto - 80, 350, 150, 10, 10, recursos);
 
-	if(m_musica->o_pistas()->size() > 0)
+	if(m_musica->pistas()->size() > 0)
 		this->cargar_configuracion(recursos);
 	else
 		this->crear_configuracion(recursos);
@@ -37,14 +37,14 @@ VentanaSeleccionPista::~VentanaSeleccionPista()
 
 void VentanaSeleccionPista::crear_configuracion(Administrador_Recursos *recursos)
 {
-	int numero_pistas = m_musica->o_musica()->Notes().size();
+	int numero_pistas = m_musica->musica()->Notes().size();
 	int color_usado = 0;
 	Configuracion_Pista *configuracion;
 	Color color_pista;
 	bool visible = true;
 	for(int i=0; i<numero_pistas; i++)
 	{
-		MidiTrack pista_actual = m_musica->o_musica()->Tracks()[i];
+		MidiTrack pista_actual = m_musica->musica()->Tracks()[i];
 		if(pista_actual.Notes().size() > 0)
 		{
 			if(pista_actual.IsPercussion())
@@ -73,7 +73,7 @@ void VentanaSeleccionPista::crear_configuracion(Administrador_Recursos *recursos
 
 void VentanaSeleccionPista::cargar_configuracion(Administrador_Recursos *recursos)
 {
-	std::vector<Pista> *pistas = m_musica->o_pistas();
+	std::vector<Pista> *pistas = m_musica->pistas();
 	Configuracion_Pista *configuracion;
 	for(int i=0; i<pistas->size(); i++)
 	{
@@ -93,7 +93,7 @@ void VentanaSeleccionPista::guardar_configuracion()
 	{
 		pistas.push_back(m_configuracion_pistas[i]->o_pista());
 	}
-	m_musica->e_pistas(pistas);
+	m_musica->pistas(pistas);
 }
 
 void VentanaSeleccionPista::actualizar(unsigned int diferencia_tiempo)

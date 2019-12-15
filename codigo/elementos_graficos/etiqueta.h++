@@ -33,7 +33,8 @@ public:
 	void tamanno_letra();
 	void centrado(bool centrado);
 
-	int o_largo_texto();
+	int largo_texto();
+	int alto_texto();
 };
 
 #endif

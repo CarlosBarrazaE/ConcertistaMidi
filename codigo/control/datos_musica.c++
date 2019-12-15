@@ -17,17 +17,17 @@ void Datos_Musica::cargar_midi(std::string direccion)
 	this->reiniciar();
 }
 
-void Datos_Musica::e_pistas(std::vector<Pista> pistas)
+void Datos_Musica::pistas(std::vector<Pista> pistas)
 {
 	m_pistas = pistas;
 }
 
-void Datos_Musica::e_nombre_musica(std::string nombre)
+void Datos_Musica::nombre_musica(std::string nombre)
 {
 	m_nombre_musica = nombre;
 }
 
-void Datos_Musica::e_autor(std::string autor)
+void Datos_Musica::autor(std::string autor)
 {
 	m_autor = autor;
 }
@@ -38,22 +38,22 @@ void Datos_Musica::reiniciar()
 		m_musica->Reset(5500000, 1000000);
 }
 
-Midi *Datos_Musica::o_musica()
+Midi *Datos_Musica::musica()
 {
 	return m_musica;
 }
 
-std::vector<Pista> *Datos_Musica::o_pistas()
+std::vector<Pista> *Datos_Musica::pistas()
 {
 	return &m_pistas;
 }
 
-std::string Datos_Musica::o_nombre_musica()
+std::string Datos_Musica::nombre_musica()
 {
 	return m_nombre_musica;
 }
 
-std::string Datos_Musica::o_autor()
+std::string Datos_Musica::autor()
 {
 	return m_autor;
 }
