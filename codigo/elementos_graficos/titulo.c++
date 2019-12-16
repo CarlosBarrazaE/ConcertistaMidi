@@ -37,7 +37,7 @@ void Titulo::actualizar(unsigned int diferencia_tiempo)
 		return;
 
 	float valocidad_alfa = diferencia_tiempo*3.0/1000000000.0;//0.05 a 60 fps
-	int velocidad_pixeles = diferencia_tiempo*12.0/10000000.0;//20px a 60 fps
+	int velocidad_pixeles = diferencia_tiempo*18.0/10000000.0;//1800 = 60 fps * 30 px
 
 	if(m_estado == 0)//Aparecer
 	{
@@ -57,10 +57,10 @@ void Titulo::actualizar(unsigned int diferencia_tiempo)
 			m_estado = 2;
 		}
 	}
-	else if(m_estado == 2)//Espera 1 segundo
+	else if(m_estado == 2)//Espera 3 segundo
 	{
 		m_tiempo += diferencia_tiempo;
-		if(m_tiempo >= 1000000000)
+		if(m_tiempo >= 2000000000)
 			m_estado = 3;
 	}
 	else if(m_estado == 3)//Salida

@@ -35,7 +35,7 @@ void Datos_Musica::autor(std::string autor)
 void Datos_Musica::reiniciar()
 {
 	if(m_musica != NULL)
-		m_musica->Reset(5500000, 1000000);
+		m_musica->Reset(7000000, 1000000);
 }
 
 Midi *Datos_Musica::musica()
