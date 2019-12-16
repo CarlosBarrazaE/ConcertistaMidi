@@ -21,6 +21,8 @@ Organo::Organo(int x, int y, int ancho, Teclado_Configuracion *teclado, Administ
 	Sombreador *particulas = recursos->obtener_sombreador(S_Particula);
 	Textura2D *t_particula = recursos->obtener_textura(T_ParticulaNota);
 	m_generador_particulas = new Generador_Particulas(particulas, t_particula, 500, m_ancho_tecla_blanca);
+	m_tiempo = 0;
+	m_numero_particulas = 0;
 }
 
 Organo::~Organo()
@@ -75,6 +77,16 @@ void Organo::e_negras_presionadas(std::array<Color, 36> *teclas_negras)
 
 void Organo::actualizar(unsigned int diferencia_tiempo)
 {
+	m_tiempo += diferencia_tiempo;
+	int particulas = m_tiempo / 16666666;//16ms
+	if(particulas > 0)
+	{
+		if(particulas * 16666666 < m_tiempo)
+			m_tiempo -= particulas * 16666666;
+		m_numero_particulas = particulas*2;
+	}
+	else
+		m_numero_particulas = 0;
 	m_generador_particulas->actualizar(((double)diferencia_tiempo/1000000000.0)*3);
 }
 
@@ -119,7 +131,7 @@ void Organo::dibujar_blancas(int x, int y, int numero_teclas)
 		if(m_teclas_activas_blancas->at(n) != negro)
 		{
 			m_rectangulo->color(m_teclas_activas_blancas->at(n));
-			m_generador_particulas->agregar_particulas(desplazamiento + m_ancho_tecla_blanca/2.0 - m_ancho_tecla_blanca/2, y, 2, m_teclas_activas_blancas->at(n));
+			m_generador_particulas->agregar_particulas(desplazamiento + m_ancho_tecla_blanca/2.0 - m_ancho_tecla_blanca/2, y, m_numero_particulas, m_teclas_activas_blancas->at(n));
 			m_teclas_activas_blancas->at(n) = negro;
 			if(tecla_presionada_anterior)
 				m_tecla_blanca_presionada_doble->activar();
@@ -179,7 +191,7 @@ void Organo::dibujar_negras(int x, int y, int numero_teclas)
 			n_negra = 0;
 
 		if(tecla_activa)
-			m_generador_particulas->agregar_particulas(desplazamiento + m_ancho_tecla_negra/2.0 - m_ancho_tecla_blanca/2, y, 2, color_actual-0.2f);
+			m_generador_particulas->agregar_particulas(desplazamiento + m_ancho_tecla_negra/2.0 - m_ancho_tecla_blanca/2, y, m_numero_particulas, color_actual-0.2f);
 		//El ancho de la tecla mas el ancho de la sombra
 		m_rectangulo->dibujar(desplazamiento, y, m_ancho_tecla_negra + m_ancho_tecla_negra * 0.22, m_alto_tecla_negra);
 	}

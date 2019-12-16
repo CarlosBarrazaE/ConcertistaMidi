@@ -26,6 +26,8 @@ private:
 	Textura2D *m_borde_rojo;
 
 	Generador_Particulas *m_generador_particulas;
+	unsigned int m_tiempo;
+	int m_numero_particulas;
 
 	Teclado_Configuracion *m_teclado;
 	int m_ancho_real, m_ajuste_x;
