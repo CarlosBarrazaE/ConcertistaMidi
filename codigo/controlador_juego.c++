@@ -35,9 +35,11 @@ Controlador_Juego::Controlador_Juego(Administrador_Recursos *recursos)
 	m_configuracion.cambiar_entrada(3);
 	m_configuracion.cambiar_salida(1);
 
-	m_musica.cargar_midi("../musica/Himno de Chile.midi");
-	m_musica.nombre_musica("Himno de Chile");
-	m_musica.autor("Eusebio Lillo");
+	m_musica.cargar_midi("../musica/Navidad_Jingle_Bells_1.midi");
+	m_musica.nombre_musica("Navidad");
+	m_musica.autor("Música de Navidad");
+
+	m_fotograma = -1;
 }
 
 Controlador_Juego::~Controlador_Juego()
@@ -53,6 +55,7 @@ void Controlador_Juego::actualizar()
 {
 	m_fps = Fps::Tiempo_fotograma();
 	m_ventana_actual->actualizar(Fps::Obtener_nanosegundos());
+	//m_ventana_actual->actualizar((1.0/60.0)*1000000000);
 	m_ventana_actual->dibujar();
 
 	if(m_mostrar_fps)
@@ -76,11 +79,14 @@ void Controlador_Juego::actualizar()
 	{
 		delete m_ventana_actual;
 		m_ventana_actual = new VentanaSeleccionPista(&m_musica, m_recursos);
+		m_fotograma = -1;
 	}
 	else if(m_ventana_actual->obtener_accion() == CambiarAOrgano)
 	{
 		delete m_ventana_actual;
 		m_ventana_actual = new VentanaOrgano(&m_configuracion, &m_musica, m_recursos);
+
+		m_fotograma++;
 	}
 	else if(m_ventana_actual->obtener_accion() == CambiarAConfiguracion)
 	{
@@ -89,6 +95,19 @@ void Controlador_Juego::actualizar()
 	}
 	else if(m_ventana_actual->obtener_accion() == Salir)
 		m_finalizar = true;
+
+	if(m_fotograma >= 0)
+	{
+		m_fotograma++;
+		if(m_fotograma > 1)
+		{
+			//Se omite el primer fotograma porque aun muestra la ventana anterior
+			/*float *pixeles = new float[Pantalla::Ancho*Pantalla::Alto*4];
+			glReadPixels(0, 0, Pantalla::Ancho, Pantalla::Alto, GL_RGBA, GL_FLOAT, pixeles);
+			Archivo::Tga::Escribir("../fotogramas/" + std::to_string(m_fotograma-1) + ".tga", pixeles, Pantalla::Ancho, Pantalla::Alto);
+			delete[] pixeles;*/
+		}
+	}
 }
 
 bool Controlador_Juego::es_pantalla_completa()

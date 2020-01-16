@@ -86,4 +86,51 @@ namespace Archivo
 	{
 		return this->m_error;
 	}
+
+	void Tga::Escribir(std::string direccion, float *datos, int ancho, int alto)
+	{
+		FILE *archivo = fopen(direccion.c_str(), "wb");
+		if(archivo == NULL)
+			Registro::Error("Error al crear el archivo " + direccion);
+		char id = 0;
+		char tipo_mapa = 0;
+		char tipo_imagen = 2;//Modo RGB
+		int primero_mapa = 0;
+		int largo_mapa = 0;
+		char tamanno_mapa = 0;
+		int x = 0;
+		int y = 0;
+		char bpp = 24;//RGB
+		char origen = 0x20;
+
+		fputc(id, archivo);
+		fputc(tipo_mapa, archivo);
+		fputc(tipo_imagen, archivo);
+		fputc(primero_mapa%256, archivo);	//Entero, primer byte
+		fputc(primero_mapa/256, archivo);	//Entero, segundo byte
+		fputc(largo_mapa%256, archivo);
+		fputc(largo_mapa/256, archivo);
+		fputc(tamanno_mapa, archivo);
+		fputc(x%256, archivo);
+		fputc(x/256, archivo);
+		fputc(y%256, archivo);
+		fputc(y/256, archivo);
+		fputc(ancho%256, archivo);
+		fputc(ancho/256, archivo);
+		fputc(alto%256, archivo);
+		fputc(alto/256, archivo);
+		fputc(bpp, archivo);
+		fputc(origen, archivo);
+
+		for(int i=1; i<=alto; i++)
+		{
+			for(int x=ancho*alto*4-(i*ancho*4); x<ancho*alto*4-((i-1)*ancho*4); x+=4)
+			{
+				fputc(datos[x+2]*255.0, archivo);	//Azul
+				fputc(datos[x+1]*255.0, archivo);	//Verde
+				fputc(datos[x+0]*255.0, archivo);	//Rojo
+			}
+		}
+		fclose(archivo);
+	}
 }

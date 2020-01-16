@@ -26,6 +26,8 @@ namespace Archivo
 		unsigned int bytes();
 
 		bool hay_error();
+
+		static void Escribir(std::string direccion, float *datos, int ancho, int alto);
 	};
 }
 

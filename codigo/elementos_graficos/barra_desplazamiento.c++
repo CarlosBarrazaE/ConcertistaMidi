@@ -24,6 +24,10 @@ Barra_Desplazamiento::Barra_Desplazamiento(int x, int y, int ancho, int alto, in
 
 Barra_Desplazamiento::~Barra_Desplazamiento()
 {
+	for(Elemento* e : m_elementos)
+		delete e;
+	m_elementos.clear();
+
 }
 
 void Barra_Desplazamiento::agregar_elemento(Elemento *e)

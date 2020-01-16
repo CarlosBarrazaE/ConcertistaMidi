@@ -1,19 +1,19 @@
-cmake_minimum_required(VERSION 3.11 FATAL_ERROR)
+cmake_minimum_required(VERSION 3.10 FATAL_ERROR)
 project(concertistamidi)
 
 find_package(PkgConfig REQUIRED)
 find_package(OpenGL REQUIRED)
 find_package(GLEW REQUIRED)
-find_package(SDL2 REQUIRED)
+#find_package(SDL2 REQUIRED)
 find_package(Freetype REQUIRED)
 
 find_library(ICUUC_LIBRARY icuuc)
 
+pkg_check_modules(SDL2 REQUIRED sdl2)
 pkg_check_modules(ALSA REQUIRED alsa)
 
 include_directories(${OPENGL_INCLUDE_DIRS})
 include_directories(${GLEW_INCLUDE_DIRS})
-include_directories(${SDL2_INCLUDE_DIRS})
 include_directories(${FREETYPE_INCLUDE_DIRS})
 include_directories(${ICUUC_INCLUDE_DIR})
 include_directories(${ALSA_INCLUDE_DIRS})
@@ -26,9 +26,12 @@ set(todo
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -O1 -march=native")
 add_executable(${PROJECT_NAME} ${todo})
 
+target_link_libraries(${PROJECT_NAME} ${SDL2_LIBRARIES})
+target_include_directories(${PROJECT_NAME} PUBLIC ${SDL2_INCLUDE_DIRS})
+target_compile_options(${PROJECT_NAME} PUBLIC ${SDL2_CFLAGS_OTHER})
+
 target_link_libraries(${PROJECT_NAME} ${OPENGL_LIBRARIES})
 target_link_libraries(${PROJECT_NAME} ${GLEW_LIBRARIES})
-target_link_libraries(${PROJECT_NAME} ${SDL2_LIBRARIES})
 target_link_libraries(${PROJECT_NAME} ${FREETYPE_LIBRARIES})
 target_link_libraries(${PROJECT_NAME} ${ICUUC_LIBRARY})
 target_link_libraries(${PROJECT_NAME} ${ALSA_LIBRARIES})

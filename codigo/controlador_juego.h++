@@ -2,6 +2,7 @@
 #define CONTROLADOR_JUEGO_H
 
 #include "recursos/administrador_recursos.h++"
+#include "archivos/imagen_tga.h++"
 #include "elementos_graficos/etiqueta.h++"
 #include "dispositivos/teclas.h++"
 #include "dispositivos/raton.h++"
@@ -37,6 +38,8 @@ private:
 
 	Configuracion m_configuracion;
 	Datos_Musica m_musica;
+
+	int m_fotograma;
 
 	//Configuracion bd
 	//Usuario

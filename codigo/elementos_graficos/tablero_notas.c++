@@ -252,19 +252,22 @@ void Tablero_Notas::dibujar_notas(int pista)
 			else if(negra==4)
 				ajuste_negra = m_ancho_blanca - (m_ancho_negra * 0.5);
 
-			if(posicion_y >= -5 && posicion_y < 0)
+			if(posicion_y >= -5 && posicion_y < 0 && m_tiempo_espera_negras[posicion_blanca] == 0)
 			{
 				posicion_negra = Octava::prosicion_nota_negra(m_notas[pista][n].note_id) - m_teclado->o_desplazamiento_negras();
-				m_tiempo_espera_negras[posicion_negra] = 5;
+				m_tiempo_espera_negras[posicion_negra] = (-posicion_y)-1;
 			}
 			else if(posicion_y >= 0)
 			{
+			//if(posicion_y >= 0)//Nuevo
+			//{//Nuevo
 				posicion_negra = Octava::prosicion_nota_negra(m_notas[pista][n].note_id) - m_teclado->o_desplazamiento_negras();
 				if(m_tiempo_espera_negras[posicion_negra] <= 0)
 				{
 					m_teclas_activas_negras[posicion_negra] = m_pistas->at(pista).o_color();
 				}
 			}
+			//}//Nuevo
 			es_negra = true;
 		}
 		else
@@ -272,14 +275,15 @@ void Tablero_Notas::dibujar_notas(int pista)
 			ancho_tecla = m_ancho_blanca;
 			ajuste_negra = 0;
 
-			if(posicion_y >= -5 && posicion_y < 0)
+			if(posicion_y >= -5 && posicion_y < 0 && m_tiempo_espera_blancas[posicion_blanca] == 0)
 			{
-				m_tiempo_espera_blancas[posicion_blanca] = 5;
+				m_tiempo_espera_blancas[posicion_blanca] = (-posicion_y)-1;
 			}
 			else if(posicion_y >= 0)
 			{
 				if(m_tiempo_espera_blancas[posicion_blanca] <= 0)
 				{
+				//if(posicion_y >= 0)//Nuevo
 					m_teclas_activas_blancas[posicion_blanca] = m_pistas->at(pista).o_color();
 				}
 			}
