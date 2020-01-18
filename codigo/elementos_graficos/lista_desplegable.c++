@@ -1,6 +1,6 @@
 #include "lista_desplegable.h++"
 
-Lista_Desplegable::Lista_Desplegable(int x, int y, int ancho, int alto, Administrador_Recursos *recursos) : Elemento(x, y, ancho, alto)
+Lista_Desplegable::Lista_Desplegable(int x, int y, int ancho, int alto, Administrador_Recursos *recursos) : Elemento(x, y, ancho, alto), m_texto_seleccion(recursos)
 {
 	m_rectangulo = recursos->obtener_figura(F_Rectangulo);
 	m_opcion_actual = 0;
@@ -40,7 +40,7 @@ void Lista_Desplegable::opciones_iconos(std::vector<Textura2D*> iconos)
 	m_texto_seleccion.alto(0);//Para anular centrado vertical
 }
 
-void Lista_Desplegable::tipografia(Texto *tipografia)
+void Lista_Desplegable::tipografia(Tipografia *tipografia)
 {
 	m_tipografia = tipografia;
 	m_texto_seleccion.tipografia(m_tipografia);

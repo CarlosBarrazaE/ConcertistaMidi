@@ -1,25 +1,34 @@
-#ifndef CUADRO_TEXTO_H
-#define CUADRO_TEXTO_H
+#ifndef ETIQUETA_H
+#define ETIQUETA_H
 
 #include <string>
+#include <unicode/unistr.h>
 #include "elemento.h++"
-#include "../recursos/texto.h++"
+#include "../recursos/tipografia.h++"
 #include "../registro.h++"
 
 class Etiqueta : public Elemento
 {
 private:
-    Texto *m_tipografia = NULL;
+    static Color Ultimo_color;
+    Tipografia *m_tipografia = NULL;
 	Color m_color;
-    std::string m_texto;
+    icu::UnicodeString m_texto;
 	bool m_centrado = false;
-	int m_largo_texto = 0;
+	int m_ancho_texto = 0;
 	int m_alto_texto = 0;
+    
+    Sombreador *m_sombreador;
+    unsigned int m_indice_figura = 0;
+    unsigned int m_indice_objeto = 0;
+    
+    void limpiar();
 
 public:
-	Etiqueta();
-	Etiqueta(int x, int y, int ancho, int alto, bool centrado, std::string texto, Texto *tipografia);
-	Etiqueta(int x, int y, bool centrado, std::string texto, Texto *tipografia);
+	Etiqueta(Administrador_Recursos *recursos);
+    Etiqueta(int x, int y, bool centrado, std::string texto, ModeloLetra tipografia, Administrador_Recursos *recursos);
+	Etiqueta(int x, int y, bool centrado, std::string texto, Tipografia *tipografia, Administrador_Recursos *recursos);
+	Etiqueta(int x, int y, int ancho, int alto, bool centrado, std::string texto, ModeloLetra tipografia, Administrador_Recursos *recursos);
     ~Etiqueta();
 
 	void actualizar(unsigned int diferencia_tiempo);
@@ -29,8 +38,7 @@ public:
 
     void texto(std::string texto);
     void color(Color color);
-	void tipografia(Texto *tipografia);
-	void tamanno_letra();
+	void tipografia(Tipografia *tipografia);
 	void centrado(bool centrado);
 
 	int largo_texto();

@@ -1,8 +1,6 @@
-#include "texto.h++"
+#include "tipografia.h++"
 
-Color Texto::Ultimo_color;
-
-Texto::Texto(Formato formato, int tamanno_letra, Sombreador *sombreador) : Figura(sombreador)
+Tipografia::Tipografia(Formato formato, int tamanno_letra)
 {
 	if(FT_Init_FreeType(&m_libreria))
 		Registro::Error("La libreria Freetype fallo al iniciar.");
@@ -27,34 +25,16 @@ Texto::Texto(Formato formato, int tamanno_letra, Sombreador *sombreador) : Figur
 	m_tamanno_letra = tamanno_letra;
 
 	FT_Set_Char_Size(m_tipografia, 0, tamanno_letra*64, 91.79, 91.79);
-
-	glGenVertexArrays(1, &this->indice_figura);
-	glBindVertexArray(this->indice_figura);
-	Figura::Ultimo_indice_seleccionado = this->indice_figura;
-
-	glGenBuffers(1, &m_indice_objeto);
-	glBindBuffer(GL_ARRAY_BUFFER, m_indice_objeto);
-	glBufferData(GL_ARRAY_BUFFER, 0, NULL, GL_DYNAMIC_DRAW);
-
-	glVertexAttribPointer(0, 4, GL_FLOAT, GL_FALSE, 4 * sizeof(float), 0);
-	glEnableVertexAttribArray(0);
 	generar_caracteres();
-
-	m_largo_ultimo_texto = 0;
 }
 
-Texto::~Texto()
+Tipografia::~Tipografia()
 {
 	glBindTexture(GL_TEXTURE_2D, 0);
-	glBindVertexArray(0);
-	glBindBuffer(GL_ARRAY_BUFFER, 0);
-
 	glDeleteTextures(1, &m_indice_atlas);
-	glDeleteVertexArrays(1, &this->indice_figura);
-	glDeleteBuffers(1, &m_indice_objeto);
 }
 
-void Texto::generar_caracteres()
+void Tipografia::generar_caracteres()
 {
 	icu::UnicodeString idioma_espannol = "0123456789 ⁰¹²³⁴⁵⁶⁷⁸⁹ABCDEFGHIJKLMNÑOPQRSTUVWXYZabcdefghijklmnñopqrstuvwxyzÁÉÍÓÚáéíóúÄËÏÖÜäëïöüâêîôû,.-_;:'·#$€%&@\"\\()[]{}+-*/=¿?¡!<>ºªḉḈçÇ^�";
 
@@ -136,35 +116,19 @@ void Texto::generar_caracteres()
 	}
 }
 
-Caracter *Texto::obtener_caracter(unsigned int caracter)
+Caracter *Tipografia::obtener_caracter(unsigned int caracter)
 {
 	return m_caracteres[caracter];
 }
 
-int Texto::imprimir_texto(int x, int y, icu::UnicodeString texto, Color color)
+int Tipografia::crear_texto(icu::UnicodeString texto, unsigned int *figura_actual, unsigned int *indice_objeto)
 {
+	int x=0, y=0;
+	glGenVertexArrays(1, figura_actual);
+	glBindVertexArray(*figura_actual);
+	Figura::Ultimo_indice_seleccionado = *figura_actual;
+
 	int x_inicial = x;
-
-	sombreador->activar();
-	if(Texto::Ultimo_color != color)
-	{
-		sombreador->e_vector3f("color_texto", color.o_rojo(), color.o_verde(), color.o_azul());
-		Texto::Ultimo_color = color;
-	}
-
-	if(Figura::Ultimo_indice_seleccionado != this->indice_figura)
-	{
-		glBindVertexArray(this->indice_figura);
-		Figura::Ultimo_indice_seleccionado = this->indice_figura;
-	}
-
-	glBindBuffer(GL_ARRAY_BUFFER, m_indice_objeto);
-
-	if(m_largo_ultimo_texto < texto.length())
-	{
-		glBufferData(GL_ARRAY_BUFFER, sizeof(float) * 6 * 4 * texto.length(), NULL, GL_DYNAMIC_DRAW);
-		m_largo_ultimo_texto = texto.length();
-	}
 
 	if(Textura2D::Ultimo_indice_seleccionado != m_indice_atlas)
 	{
@@ -176,6 +140,7 @@ int Texto::imprimir_texto(int x, int y, icu::UnicodeString texto, Color color)
 	unsigned int letra_anterior = 0;
 	float vertices[6*texto.length()][4];
 	int posicion_arreglo = 0;
+
 	for(int n=0; n<texto.length(); n++)
 	{
 		letra = obtener_caracter((unsigned int)texto[n]);
@@ -235,51 +200,36 @@ int Texto::imprimir_texto(int x, int y, icu::UnicodeString texto, Color color)
 		x += letra->avance_x >> 6;
 		letra_anterior = letra->codigo_unicode;
 	}
-	glBufferSubData(GL_ARRAY_BUFFER, 0, sizeof(vertices), vertices);
-	glDrawArrays(GL_TRIANGLES, 0, posicion_arreglo);
+
+	glGenBuffers(1, indice_objeto);
+	glBindBuffer(GL_ARRAY_BUFFER, *indice_objeto);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
+
+	glVertexAttribPointer(0, 4, GL_FLOAT, GL_FALSE, 4 * sizeof(float), 0);
+	glEnableVertexAttribArray(0);
+	/*
+	glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, 4 * sizeof(float), (void*)0);
+	glEnableVertexAttribArray(0);
+
+	glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 4 * sizeof(float), (void*)(2 * sizeof(float)));
+	glEnableVertexAttribArray(1);
+	glBindBuffer(GL_ARRAY_BUFFER, 0);
+		*/
+
+	//glDrawArrays(GL_TRIANGLES, 0, posicion_arreglo);
 	return x - x_inicial;
 }
 
-int Texto::imprimir(int x, int y, std::string texto)
-{
-	Color negro(0.0f, 0.0f, 0.0f);
-	return imprimir_texto(x, y, texto.c_str(), negro);
-}
-
-int Texto::imprimir(int x, int y, std::string texto, Color color)
-{
-	return imprimir_texto(x, y, texto.c_str(), color);
-}
-
-int Texto::ancho_texto_unicode(icu::UnicodeString texto)
-{
-	int ancho = 0;
-	Caracter *letra;
-	FT_Bool interletraje = FT_HAS_KERNING(m_tipografia);
-	unsigned int letra_anterior = 0;
-	for(int n=0; n<texto.length(); n++)
-	{
-		letra = obtener_caracter((unsigned int)texto[n]);
-		if(!letra)
-			continue;
-		if(interletraje && letra_anterior && letra->codigo_unicode)
-		{
-			FT_Vector delta;
-			FT_Get_Kerning(m_tipografia, letra_anterior, letra->codigo_unicode, FT_KERNING_DEFAULT, &delta);
-			ancho += delta.x >> 6;
-		}
-		ancho += letra->avance_x >> 6;
-		letra_anterior = letra->codigo_unicode;
-	}
-	return ancho;
-}
-
-int Texto::ancho_texto(std::string texto)
-{
-	return ancho_texto_unicode(texto.c_str());
-}
-
-int Texto::alto_texto()
+int Tipografia::alto_texto()
 {
 	return m_tamanno_letra;
+}
+
+void Tipografia::activar()
+{
+	if(Textura2D::Ultimo_indice_seleccionado != m_indice_atlas)
+	{
+		glBindTexture(GL_TEXTURE_2D, m_indice_atlas);
+		Textura2D::Ultimo_indice_seleccionado = m_indice_atlas;
+	}
 }

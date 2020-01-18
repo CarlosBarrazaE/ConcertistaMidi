@@ -1,6 +1,6 @@
 #include "ventana_titulo.h++"
 
-VentanaTitulo::VentanaTitulo(Administrador_Recursos *recursos) : Ventana()
+VentanaTitulo::VentanaTitulo(Administrador_Recursos *recursos) : Ventana(), m_texto_version(recursos)
 {
 	m_rectangulo = recursos->obtener_figura(F_Rectangulo);
 
@@ -28,6 +28,11 @@ VentanaTitulo::VentanaTitulo(Administrador_Recursos *recursos) : Ventana()
 	m_texto_version.tipografia(recursos->obtener_tipografia(LetraChica));
 	m_texto_version.color(Color(1.0f, 1.0f, 1.0f));
 	m_texto_version.posicion(20, Pantalla::Alto - 26);
+/*
+    for(int x=0; x<1; x++)
+    {
+        etiquetas_prueba.push_back(new Etiqueta(0, 0, false, "Versión: 0.1 Hola este es un texto de ejemplo con la nueva tipografia y la nueva etiqueta", LetraChica, recursos));
+    }*/
 }
 
 VentanaTitulo::~VentanaTitulo()
@@ -62,6 +67,11 @@ void VentanaTitulo::dibujar()
 	m_boton_salir->dibujar();
 
 	m_texto_version.dibujar();
+    /*
+    for(int x=0; x<etiquetas_prueba.size(); x++)
+    {
+        etiquetas_prueba.at(x)->dibujar();
+    }*/
 }
 
 void VentanaTitulo::evento_raton(Raton *raton)

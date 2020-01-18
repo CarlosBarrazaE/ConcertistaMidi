@@ -1,7 +1,7 @@
 #include "barra_progreso.h++"
 
 Barra_Progreso::Barra_Progreso(int x, int y, int ancho, int alto, microseconds_t tiempo_total, MidiEventMicrosecondList lineas, Administrador_Recursos *recursos)
-: Elemento(x, y, ancho, alto), m_color_fondo(0.8f, 0.8f, 0.8f), m_color_progreso(0.0f, 0.761f, 0.467f)
+: Elemento(x, y, ancho, alto), m_color_fondo(0.8f, 0.8f, 0.8f), m_color_progreso(0.0f, 0.761f, 0.467f), m_texto_inicial(recursos), m_texto_final(recursos)
 {
 	m_tiempo_total = tiempo_total;
 	m_tiempo_actual = 0;

@@ -11,7 +11,8 @@ Tablero_Notas::Tablero_Notas(int x, int y, int ancho, int alto, Teclado_Configur
 	m_textura_nota = recursos->obtener_textura(T_Nota);
 
 	m_rectangulo = recursos->obtener_figura(F_Rectangulo);
-	m_texto = recursos->obtener_tipografia(LetraMuyChica);
+	m_tipografia = recursos->obtener_tipografia(LetraMuyChica);
+	m_recursos = recursos;
 
 	for(int i=0; i<52; i++)
 	{
@@ -23,6 +24,9 @@ Tablero_Notas::Tablero_Notas(int x, int y, int ancho, int alto, Teclado_Configur
 
 Tablero_Notas::~Tablero_Notas()
 {
+	for(std::map<int, Etiqueta*>::iterator i = m_texto_numeros.begin(); i != m_texto_numeros.end(); i++)
+		delete i->second;
+	m_texto_numeros.clear();
 }
 
 std::array<Color, 52> *Tablero_Notas::o_blancas_presionadas()
@@ -163,6 +167,7 @@ void Tablero_Notas::dibujar_lineas_horizontales()
 {
 	int numero_linea = 0;
 	int posicion_y = 0;
+	Etiqueta *numero_temporal;
 
 	for(int i=0; i<m_lineas.size(); i++)
 	{
@@ -172,9 +177,18 @@ void Tablero_Notas::dibujar_lineas_horizontales()
 			break;
 		else if(posicion_y > this->alto())
 			continue;
+		numero_temporal = m_texto_numeros[numero_linea];
+		if(!numero_temporal)
+		{
+			numero_temporal = new Etiqueta(this->posicion_x()+10, this->posicion_y()+posicion_y, false, std::to_string(numero_linea), m_tipografia, m_recursos);
+			m_texto_numeros[numero_linea] = numero_temporal;
+		}
 
 		m_rectangulo->dibujar(this->posicion_x(), this->posicion_y()+posicion_y, this->ancho(), 1);
-		m_texto->imprimir(this->posicion_x()+10, this->posicion_y()+posicion_y, std::to_string(numero_linea));
+		
+		numero_temporal->posicion_x(this->posicion_x()+10);
+		numero_temporal->posicion_y(this->posicion_y()+posicion_y-m_tipografia->alto_texto());
+		numero_temporal->dibujar();
 	}
 }
 

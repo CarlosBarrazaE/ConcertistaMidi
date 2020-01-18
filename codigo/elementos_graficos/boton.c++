@@ -1,6 +1,6 @@
 #include "boton.h++"
 
-Boton::Boton(int x, int y, int ancho, int alto, std::string texto, Administrador_Recursos *recursos) : Elemento(x, y, ancho, alto)
+Boton::Boton(int x, int y, int ancho, int alto, std::string texto, Administrador_Recursos *recursos) : Elemento(x, y, ancho, alto), m_texto(recursos)
 {
 	m_rectangulo = recursos->obtener_figura(F_Rectangulo);
 	m_textura_boton = recursos->obtener_textura(T_Boton);
@@ -42,9 +42,9 @@ void Boton::color_texto(Color color)
 	m_texto.color(color);
 }
 
-void Boton::tipografia(Texto *texto)
+void Boton::tipografia(Tipografia *tipografia)
 {
-	m_texto.tipografia(texto);
+	m_texto.tipografia(tipografia);
 }
 
 void Boton::centrado(bool centrado)

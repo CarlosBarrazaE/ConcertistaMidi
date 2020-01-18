@@ -1,6 +1,6 @@
 #include "ventana_organo.h++"
 
-VentanaOrgano::VentanaOrgano(Configuracion *configuracion, Datos_Musica *musica, Administrador_Recursos *recursos) : Ventana()
+VentanaOrgano::VentanaOrgano(Configuracion *configuracion, Datos_Musica *musica, Administrador_Recursos *recursos) : Ventana(), m_texto_velocidad(recursos), m_texto_pausa(recursos)
 {
 	m_configuracion = configuracion;
 	m_musica = musica;

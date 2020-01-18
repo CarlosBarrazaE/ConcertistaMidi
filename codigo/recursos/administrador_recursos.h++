@@ -7,7 +7,7 @@
 
 #include "sombreador.h++"
 #include "textura_2d.h++"
-#include "texto.h++"
+#include "tipografia.h++"
 #include "color.h++"
 #include "rectangulo.h++"
 
@@ -74,7 +74,7 @@ private:
 	std::map<SombreadorVF, const char*> m_archivo_sombreador_vertice;
 	std::map<SombreadorVF, const char*> m_archivo_sombreador_fragmento;
 
-	std::map<ModeloLetra, Texto*> m_formato_letras;
+	std::map<ModeloLetra, Tipografia*> m_formato_letras;
 
 	int m_ancho;
 	int m_alto;
@@ -86,7 +86,7 @@ public:
 	Textura2D *obtener_textura(Textura valor);
 	Sombreador *obtener_sombreador(SombreadorVF valor);
 	Rectangulo *obtener_figura(FiguraGeometrica valor);
-	Texto *obtener_tipografia(ModeloLetra tipo);
+	Tipografia *obtener_tipografia(ModeloLetra tipo);
 
 	void actualizar_pantalla(int ancho, int alto);
 };

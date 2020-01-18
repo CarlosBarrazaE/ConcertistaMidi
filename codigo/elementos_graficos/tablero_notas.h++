@@ -2,6 +2,7 @@
 #define TABLERO_NOTAS_H
 
 #include "elemento.h++"
+#include "etiqueta.h++"
 #include "../recursos/rectangulo.h++"
 #include "../util/octava.h++"
 #include "../control/pista.h++"
@@ -10,13 +11,16 @@
 
 #include <vector>
 #include <array>
+#include <map>
 
 class Tablero_Notas : public Elemento
 {
 private:
+	Administrador_Recursos *m_recursos;
 	Textura2D *m_textura_sombra, *m_textura_nota;
 	Rectangulo *m_rectangulo;
-	Texto *m_texto;
+	Tipografia *m_tipografia;
+	std::map<int, Etiqueta*> m_texto_numeros;
 
 	Teclado_Configuracion *m_teclado;
 	microseconds_t m_tiempo_actual_midi;

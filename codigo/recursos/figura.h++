@@ -6,10 +6,10 @@
 class Figura
 {
 protected:
-	static unsigned int Ultimo_indice_seleccionado;
 	unsigned int indice_figura;
 	Sombreador *sombreador;
 public:
+    static unsigned int Ultimo_indice_seleccionado;
 	Figura(Sombreador *sombreador);
 	~Figura();
 };

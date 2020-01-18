@@ -1,5 +1,5 @@
-#ifndef DIBUJAR_TEXTO_H
-#define DIBUJAR_TEXTO_H
+#ifndef TIPOGRAFIA_H
+#define TIPOGRAFIA_H
 
 #include <map>
 #include <GL/glew.h>
@@ -11,7 +11,6 @@
 
 #include "figura.h++"
 #include "textura_2d.h++"
-#include "color.h++"
 
 #include "../registro.h++"
 
@@ -35,11 +34,9 @@ struct Caracter
 	unsigned int textura_x;//Posicion dentro del atlas
 };
 
-class Texto : public Figura
+class Tipografia
 {
 private:
-	static Color Ultimo_color;
-
 	FT_Library m_libreria;
 	FT_Face m_tipografia;
 
@@ -48,20 +45,16 @@ private:
 	unsigned int m_ancho_atlas;
 	unsigned int m_alto_atlas;
 
-	unsigned int m_indice_objeto;
-	unsigned int m_largo_ultimo_texto;
 	int m_tamanno_letra;
 
 	void generar_caracteres();
 	Caracter *obtener_caracter(unsigned int caracter);
-	int imprimir_texto(int x, int y, icu::UnicodeString texto, Color color);
-	int ancho_texto_unicode(icu::UnicodeString texto);
 public:
-	Texto(Formato formato, int tamanno_letra, Sombreador *sombreador);
-	~Texto();
-	int imprimir(int x, int y, std::string texto);
-	int imprimir(int x, int y, std::string texto, Color color);
-	int ancho_texto(std::string texto);
+	Tipografia(Formato formato, int tamanno_letra);
+	~Tipografia();
+    
+	int crear_texto(icu::UnicodeString texto, unsigned int *indice_figura, unsigned int *indice_objeto);
 	int alto_texto();
+	void activar();
 };
 #endif

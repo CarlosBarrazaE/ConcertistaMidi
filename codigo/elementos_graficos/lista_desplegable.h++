@@ -11,7 +11,7 @@ class Lista_Desplegable : public Elemento
 private:
 	//Recursos
 	Rectangulo *m_rectangulo;
-	Texto *m_tipografia;
+	Tipografia *m_tipografia;//TODO ¿sera necesario?
 	Etiqueta m_texto_seleccion;
 
 	std::vector<std::string> m_opciones;
@@ -29,7 +29,7 @@ public:
 	void dimension_icono(int ancho, int alto);
 	void opciones_textos(std::vector<std::string> opciones);
 	void opciones_iconos(std::vector<Textura2D*> iconos);
-	void tipografia(Texto *tipografia);
+	void tipografia(Tipografia *tipografia);
 	void opcion_predeterminada(unsigned int opcion);
 	unsigned int opcion_seleccionada();
 

@@ -1,6 +1,6 @@
 #include "titulo.h++"
 
-Titulo::Titulo(int x, int y, int ancho, int alto, Administrador_Recursos *recursos) : Elemento(x, y, ancho, alto)
+Titulo::Titulo(int x, int y, int ancho, int alto, Administrador_Recursos *recursos) : Elemento(x, y, ancho, alto), m_titulo(recursos), m_autor(recursos)
 {
 	m_rectangulo = recursos->obtener_figura(F_Rectangulo);
 	m_fondo = recursos->obtener_textura(T_TituloMusica);

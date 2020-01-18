@@ -1,7 +1,7 @@
 #include "controlador_juego.h++"
 #include <SDL2/SDL.h>
 
-Controlador_Juego::Controlador_Juego(Administrador_Recursos *recursos)
+Controlador_Juego::Controlador_Juego(Administrador_Recursos *recursos) : m_texto_fps(recursos)
 {
 	m_recursos = recursos;
 	m_fps = 0;
@@ -33,7 +33,7 @@ Controlador_Juego::Controlador_Juego(Administrador_Recursos *recursos)
 	if(dispositivos_salida.size() < 2)
 		Registro::Error("Sintetizador midi no encontrado");
 	m_configuracion.cambiar_entrada(3);
-	m_configuracion.cambiar_salida(1);
+	m_configuracion.cambiar_salida(0);
 
 	m_musica.cargar_midi("../musica/Navidad_Jingle_Bells_1.midi");
 	m_musica.nombre_musica("Navidad");
@@ -44,6 +44,7 @@ Controlador_Juego::Controlador_Juego(Administrador_Recursos *recursos)
 
 Controlador_Juego::~Controlador_Juego()
 {
+	delete m_ventana_actual;
 }
 
 Administrador_Recursos *Controlador_Juego::obtener_administrador_recursos()

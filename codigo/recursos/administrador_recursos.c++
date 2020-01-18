@@ -43,12 +43,12 @@ Administrador_Recursos::Administrador_Recursos()
 	sombreador_letras->e_int("textura_texto", 0);
 	sombreador_letras->e_vector3f("color_texto", 0.0, 0.0, 0.0);
 
-	m_formato_letras[LetraTituloGrande] = new Texto(Normal, 35, sombreador_letras);
-	m_formato_letras[LetraTitulo] = new Texto(Normal, 20, sombreador_letras);
-	m_formato_letras[LetraGrande] = new Texto(Normal, 16, sombreador_letras);
-	m_formato_letras[LetraMediana] = new Texto(Normal, 14, sombreador_letras);
-	m_formato_letras[LetraChica] = new Texto(Normal, 12, sombreador_letras);
-	m_formato_letras[LetraMuyChica] = new Texto(Normal, 8, sombreador_letras);
+	m_formato_letras[LetraTituloGrande] = new Tipografia(Normal, 35);
+	m_formato_letras[LetraTitulo] = new Tipografia(Normal, 20);
+	m_formato_letras[LetraGrande] = new Tipografia(Normal, 16);
+	m_formato_letras[LetraMediana] = new Tipografia(Normal, 14);
+	m_formato_letras[LetraChica] = new Tipografia(Normal, 12);
+	m_formato_letras[LetraMuyChica] = new Tipografia(Normal, 8);
 }
 
 Administrador_Recursos::~Administrador_Recursos()
@@ -113,7 +113,7 @@ Rectangulo *Administrador_Recursos::obtener_figura(FiguraGeometrica valor)
 	return m_lista_figuras[F_Rectangulo];
 }
 
-Texto *Administrador_Recursos::obtener_tipografia(ModeloLetra tipo)
+Tipografia *Administrador_Recursos::obtener_tipografia(ModeloLetra tipo)
 {
 	return m_formato_letras[tipo];
 }

@@ -5,6 +5,7 @@
 #include "../elementos_graficos/etiqueta.h++"
 #include "../elementos_graficos/boton.h++"
 #include "../version.h++"
+#include <vector>
 
 class VentanaTitulo : public Ventana
 {
@@ -19,6 +20,9 @@ private:
 	Boton *m_boton_practicar;
 	Boton *m_boton_configurar;
 	Boton *m_boton_salir;
+    
+    //std::vector<Etiqueta*> etiquetas_prueba;
+    
 public:
 	VentanaTitulo(Administrador_Recursos *recursos);
 	~VentanaTitulo();

@@ -27,7 +27,7 @@ public:
 	void textura(Textura2D *textura);
 	void color_boton(Color color);
 	void color_texto(Color color);
-	void tipografia(Texto *texto);
+	void tipografia(Tipografia *tipografia);
 	void centrado(bool centrado);
 
 	void actualizar(unsigned int diferencia_tiempo);

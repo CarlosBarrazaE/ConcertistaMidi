@@ -1,9 +1,9 @@
 #include "ventana_seleccion_musica.h++"
 
-VentanaSeleccionMusica::VentanaSeleccionMusica(Administrador_Recursos *recursos) : Ventana()
+VentanaSeleccionMusica::VentanaSeleccionMusica(Administrador_Recursos *recursos) : Ventana(), m_texto_titulo(recursos)
 {
 	m_rectangulo = recursos->obtener_figura(F_Rectangulo);
-	Texto *texto_boton = recursos->obtener_tipografia(LetraChica);
+	Tipografia *texto_boton = recursos->obtener_tipografia(LetraChica);
 
 	m_boton_atras = new Boton(10, Pantalla::Alto - 32, 120, 25, "Atrás", recursos);
 	m_boton_atras->color_boton(Color(0.9f, 0.9f, 0.9f));
