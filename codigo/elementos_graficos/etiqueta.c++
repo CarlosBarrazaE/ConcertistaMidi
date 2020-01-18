@@ -38,11 +38,14 @@ Etiqueta::~Etiqueta()
 
 void Etiqueta::limpiar()
 {
-	glBindVertexArray(0);
-	glBindBuffer(GL_ARRAY_BUFFER, 0);
+	if(m_indice_figura > 0 || m_indice_objeto > 0)
+	{
+		glBindVertexArray(0);
+		glBindBuffer(GL_ARRAY_BUFFER, 0);
 
-	glDeleteVertexArrays(1, &m_indice_figura);
-	glDeleteBuffers(1, &m_indice_objeto);
+		glDeleteVertexArrays(1, &m_indice_figura);
+		glDeleteBuffers(1, &m_indice_objeto);
+	}
 }
 
 void Etiqueta::actualizar(unsigned int diferencia_tiempo)
