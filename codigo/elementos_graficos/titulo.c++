@@ -2,15 +2,15 @@
 
 Titulo::Titulo(int x, int y, int ancho, int alto, Administrador_Recursos *recursos) : Elemento(x, y, ancho, alto), m_titulo(recursos), m_autor(recursos)
 {
-	m_rectangulo = recursos->obtener_figura(F_Rectangulo);
-	m_fondo = recursos->obtener_textura(T_TituloMusica);
+	m_rectangulo = recursos->figura(F_Rectangulo);
+	m_fondo = recursos->textura(T_TituloMusica);
 
-	m_titulo.tipografia(recursos->obtener_tipografia(LetraTituloGrande));
+	m_titulo.tipografia(recursos->tipografia(LetraTituloGrande));
 	m_titulo.ancho(ancho);
 	m_titulo.color(Color(1.0f, 1.0f, 1.0f));
 	m_titulo.centrado(true);
 
-	m_autor.tipografia(recursos->obtener_tipografia(LetraTitulo));
+	m_autor.tipografia(recursos->tipografia(LetraTitulo));
 	m_autor.ancho(ancho);
 	m_autor.color(Color(1.0f, 1.0f, 1.0f));
 	m_autor.centrado(true);
@@ -79,8 +79,8 @@ void Titulo::actualizar(unsigned int diferencia_tiempo)
 		}
 	}
 
-	m_titulo.posicion(this->posicion_x()+this->dx()+m_posicion_texto, this->posicion_y()+this->dy()+this->alto()/2-m_titulo.alto_texto());
-	m_autor.posicion(this->posicion_x()+this->dx()-m_posicion_texto, this->posicion_y()+this->dy()+this->alto()/2+20);
+	m_titulo.posicion(this->x()+this->dx()+m_posicion_texto, this->y()+this->dy()+this->alto()/2-m_titulo.alto_texto());
+	m_autor.posicion(this->x()+this->dx()-m_posicion_texto, this->y()+this->dy()+this->alto()/2+20);
 }
 
 void Titulo::dibujar()
@@ -89,7 +89,7 @@ void Titulo::dibujar()
 		return;
 	m_fondo->activar();
 	m_rectangulo->textura(true);
-	m_rectangulo->dibujar(this->posicion_x()+this->dx(), this->posicion_y()+this->dy()+this->alto()/2-100, this->ancho(), 200, Color(1.0f, 1.0f, 1.0f, m_alfa));
+	m_rectangulo->dibujar(this->x()+this->dx(), this->y()+this->dy()+this->alto()/2-100, this->ancho(), 200, Color(1.0f, 1.0f, 1.0f, m_alfa));
 
 	m_titulo.dibujar();
 	m_autor.dibujar();
@@ -103,9 +103,9 @@ void Titulo::evento_pantalla(int ancho, int alto)
 {
 	this->dimension(ancho, alto);
 
-	m_titulo.posicion(this->posicion_x()+this->dx(), this->posicion_y()+this->dy()+this->alto()/2-m_titulo.alto_texto());
+	m_titulo.posicion(this->x()+this->dx(), this->y()+this->dy()+this->alto()/2-m_titulo.alto_texto());
 	m_titulo.ancho(ancho);
 
-	m_autor.posicion(this->posicion_x()+this->dx(), this->posicion_y()+this->dy()+this->alto()/2+20);
+	m_autor.posicion(this->x()+this->dx(), this->y()+this->dy()+this->alto()/2+20);
 	m_autor.ancho(ancho);
 }

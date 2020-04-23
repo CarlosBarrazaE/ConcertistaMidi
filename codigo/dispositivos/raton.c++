@@ -9,9 +9,10 @@ Raton::Raton()
 	m_boton_izquierdo = false;
 	m_boton_central = false;
 	m_boton_derecho = false;
+	m_numero_clics = 0;
 }
 
-void Raton::actualizar_boton(BotonRaton boton, bool estado)
+void Raton::actualizar_boton(BotonRaton boton, bool estado, int numero_clics)
 {
 	if(boton == BotonIzquierdo)
 		m_boton_izquierdo = estado;
@@ -19,6 +20,8 @@ void Raton::actualizar_boton(BotonRaton boton, bool estado)
 		m_boton_central = estado;
 	else if(boton == BotonDerecho)
 		m_boton_derecho = estado;
+
+	m_numero_clics = numero_clics;
 
 	m_desplazamiento_x = 0;
 	m_desplazamiento_y = 0;
@@ -45,6 +48,22 @@ bool Raton::activado(BotonRaton boton)
 	else if(boton == BotonDerecho)
 		return m_boton_derecho;
 	return false;
+}
+
+BotonRaton Raton::boton_activado()
+{
+	if(m_boton_izquierdo)
+		return BotonIzquierdo;
+	else if(m_boton_central)
+		return BotonCentral;
+	else if(m_boton_derecho)
+		return BotonDerecho;
+	return Ninguno;
+}
+
+int Raton::numero_clics()
+{
+	return m_numero_clics;
 }
 
 int Raton::x()

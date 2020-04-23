@@ -8,6 +8,8 @@ class Configuracion
 private:
 	MidiCommIn *m_entrada;
 	MidiCommOut *m_salida;
+	int m_cantidad_dispositivos_entrada;
+	int m_cantidad_dispositivos_salida;
 
 public:
 	Configuracion();
@@ -16,8 +18,8 @@ public:
 
 	void cambiar_entrada(unsigned int id_entrada);
 	void cambiar_salida(unsigned int id_salida);
-	MidiCommIn *o_entrada();
-	MidiCommOut *o_salida();
+	MidiCommIn *entrada();
+	MidiCommOut *salida();
 };
 
 #endif

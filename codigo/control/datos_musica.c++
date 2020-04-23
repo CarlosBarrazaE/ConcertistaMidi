@@ -15,6 +15,7 @@ void Datos_Musica::cargar_midi(std::string direccion)
 {
 	m_musica = new Midi(Midi::ReadFromFile(direccion));
 	this->reiniciar();
+	m_pistas.clear();
 }
 
 void Datos_Musica::pistas(std::vector<Pista> pistas)

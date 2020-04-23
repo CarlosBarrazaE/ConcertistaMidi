@@ -1,15 +1,17 @@
 #include "pista.h++"
 
-Color Pista::Colores_pista[NUMERO_COLORES_PISTA] = {
-	Color(0.0f, 0.598f, 0.0f),
-	Color(0.0f, 0.598f, 1.0f),
-	Color(1.0f, 0.598f, 1.0f),
-	Color(1.0f, 0.424f, 0.0f),
-	Color(0.0f, 0.761f, 0.467f),
-	Color(0.0f, 0.8, 1.0f),
-	Color(1.0f, 0.761f, 0.609f),
-	Color(1.0f, 0.761f, 0.0f),
-	Color(0.407f, 0.348f, 1.0f)
+//El ultimo color es para poner la pista invisible
+Color Pista::Colores_pista[NUMERO_COLORES_PISTA+1] = {
+	Color(0.0f, 0.598f, 0.0f),//0     152.5     0
+	Color(0.0f, 0.598f, 1.0f),//0     152.5     255
+	Color(1.0f, 0.598f, 1.0f),//255   152.5     255
+	Color(1.0f, 0.424f, 0.0f),//255   108.1     0
+	Color(0.0f, 0.761f, 0.467f),//0   194.1     119.1
+	Color(0.0f, 0.8f, 1.0f),//0       204       255
+	Color(1.0f, 0.761f, 0.609f),//255 194.1     155.3
+	Color(1.0f, 0.761f, 0.0f),//255   194.1     0
+	Color(0.407f, 0.348f, 1.0f),//103,8   88,7    255
+	Color(0.5f, 0.5f, 0.5f)//127.5    127.5     127.5
 };
 
 Pista::Pista(std::string instrumento, unsigned int numero_notas, Color color, Modo modo, bool visible, bool sonido)
@@ -26,52 +28,52 @@ Pista::~Pista()
 {
 }
 
-void Pista::e_color(Color color)
+void Pista::color(Color color)
 {
 	m_color_pista = color;
 }
 
-void Pista::e_modo(Modo modo)
+void Pista::modo(Modo modo)
 {
 	m_modo_pista = modo;
 }
 
-void Pista::e_visible(bool estado)
+void Pista::visible(bool estado)
 {
 	m_visible = estado;
 }
 
-void Pista::e_sonido(bool estado)
+void Pista::sonido(bool estado)
 {
 	m_sonido = estado;
 }
 
-Color Pista::o_color()
+Color Pista::color()
 {
 	return m_color_pista;
 }
 
-Modo Pista::o_modo()
+Modo Pista::modo()
 {
 	return m_modo_pista;
 }
 
-bool Pista::o_visible()
+bool Pista::visible()
 {
 	return m_visible;
 }
 
-bool Pista::o_sonido()
+bool Pista::sonido()
 {
 	return m_sonido;
 }
 
-std::string Pista::o_instrumento()
+std::string Pista::instrumento()
 {
 	return m_instrumento;
 }
 
-unsigned int Pista::o_numero_notas()
+unsigned int Pista::numero_notas()
 {
 	return m_numero_notas;
 }

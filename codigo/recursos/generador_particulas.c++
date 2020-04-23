@@ -41,8 +41,8 @@ Generador_Particulas::Generador_Particulas(Sombreador *sombreador, Textura2D *te
 	m_particulas_activas = 0;
 
 	this->sombreador->activar();
-	this->sombreador->e_float("escala", escala);
-	this->sombreador->e_vector4f("color", 0.0f, 0.0f, 0.0f, 0.0f);
+	this->sombreador->uniforme_float("escala", escala);
+	this->sombreador->uniforme_vector4f("color", 0.0f, 0.0f, 0.0f, 0.0f);
 	Generador_Particulas::Color_anterior = Color(0.0f, 0.0f, 0.0f);
 	m_escala = escala;
 	Generador_Particulas::Ultima_escala = escala;
@@ -56,7 +56,7 @@ Generador_Particulas::~Generador_Particulas()
 	glDeleteBuffers(1, &m_indice_objeto);
 }
 
-int Generador_Particulas::obtener_particula_inactiva()
+int Generador_Particulas::particula_inactiva()
 {
 	int particula = 0;
 	if(m_particulas_activas < m_particulas_maximas)
@@ -72,10 +72,10 @@ int Generador_Particulas::obtener_particula_inactiva()
 	return 0;
 }
 
-void Generador_Particulas::e_escala(int escala)
+void Generador_Particulas::escala(int escala)
 {
 	m_escala = escala;
-	this->sombreador->e_float("escala", escala);
+	this->sombreador->uniforme_float("escala", escala);
 }
 
 void Generador_Particulas::actualizar(float tiempo)
@@ -96,7 +96,7 @@ void Generador_Particulas::dibujar()
 	if(Generador_Particulas::Ultima_escala != m_escala)
 	{
 		Generador_Particulas::Ultima_escala = m_escala;
-		this->sombreador->e_int("escala", Generador_Particulas::Ultima_escala);
+		this->sombreador->uniforme_int("escala", Generador_Particulas::Ultima_escala);
 	}
 
 	Particula *p;
@@ -110,14 +110,14 @@ void Generador_Particulas::dibujar()
 		{
 			p->posicion_x -= p->velocidad_x*m_tiempo;
 			p->posicion_y -= p->velocidad_y*m_tiempo;
-			p->color.c_alfa(-m_tiempo);
+			p->color.alfa(-m_tiempo);
 
 			if(Generador_Particulas::Color_anterior != p->color)
 			{
 				Generador_Particulas::Color_anterior = p->color;
-				this->sombreador->e_vector4f("color", p->color.o_rojo(), p->color.o_verde(), p->color.o_azul(), p->color.o_alfa());
+				this->sombreador->uniforme_vector4f("color", p->color.rojo(), p->color.verde(), p->color.azul(), p->color.alfa());
 			}
-			this->sombreador->e_vector2f("posicion", p->posicion_x, p->posicion_y);
+			this->sombreador->uniforme_vector2f("posicion", p->posicion_x, p->posicion_y);
 
 
 			if(Figura::Ultimo_indice_seleccionado != this->indice_figura)
@@ -162,7 +162,7 @@ void Generador_Particulas::agregar_particulas(int x, int y, unsigned int cantida
 	{
 		aleatorio = ((rand() % 100) - 50) / 10.0;
 		aleatorio2 = ((rand() % 100) - 50) / 10.0;
-		particula = &m_particulas[this->obtener_particula_inactiva()];
+		particula = &m_particulas[this->particula_inactiva()];
 		particula->posicion_x = x + aleatorio;
 		particula->posicion_y = y;
 		particula->color = color;

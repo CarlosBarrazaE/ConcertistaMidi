@@ -12,7 +12,7 @@ namespace Archivo
 		unsigned int temporal = 0;
 
 		FILE *archivo = fopen(direccion.c_str(), "rb");
-
+		m_datos_imagen = NULL;
 		if(archivo != NULL)
 		{
 			if(fread(cabeceraTGA, 1, sizeof(cabeceraTGA), archivo) == sizeof(cabeceraTGA))
@@ -45,15 +45,45 @@ namespace Archivo
 							}
 						}
 					}
+					else
+					{
+						Registro::Error("El archivo: " + direccion + " no se puede leer o esta dañado.");
+						m_error = true;
+					}
 				}
+				else
+				{
+					if(cabeceraTGA[2] == 0)
+						Registro::Error("El archivo: " + direccion + " no tiene datos.");
+					if(cabeceraTGA[2] == 1)
+						Registro::Error("El archivo: " + direccion + " es una imágen mapeada en color sin compresión.");
+					if(cabeceraTGA[2] == 3)
+						Registro::Error("El archivo: " + direccion + " es una imágen en blanco y negro sin comprimir");
+					if(cabeceraTGA[2] == 9)
+						Registro::Error("El archivo: " + direccion + " es una imágen mapeada en color con compresión RLE");
+					if(cabeceraTGA[2] == 10)
+						Registro::Error("El archivo: " + direccion + " es una imágen RGB con compresión RLE");
+					if(cabeceraTGA[2] == 11)
+						Registro::Error("El archivo: " + direccion + " es una imágen en blanco y negro comprimida");
+					if(cabeceraTGA[2] == 32)
+						Registro::Error("El archivo: " + direccion + " es una imágen de mapas de colores comprimida utilizando Huffman, Delta y RLE");
+					if(cabeceraTGA[2] == 33)
+						Registro::Error("El archivo: " + direccion + " es una imágen de mapas de colores comprimida utilizando Huffman, Delta y RLE. Arbol cuaternario");
+					Registro::Error("Se requiere una imagen RGB sin comprimir.");
+					m_error = true;
+				}
+			}
+			else
+			{
+				Registro::Error("El archivo: " + direccion + " no se puede leer o esta dañado.");
+				m_error = true;
 			}
 			fclose(archivo);
 		}
 		else
 		{
-			Registro::Error("Error al leer la textura: " + direccion);
+			Registro::Error("Error al leer el archivo: " + direccion);
 			m_error = true;
-			m_datos_imagen = NULL;
 		}
 	}
 

@@ -1,9 +1,13 @@
 #ifndef VENTANASELECCIONMUSICA_H
 #define VENTANASELECCIONMUSICA_H
 
+#include <filesystem>
+#include <vector>
 #include "ventana.h++"
 #include "../elementos_graficos/boton.h++"
 #include "../elementos_graficos/etiqueta.h++"
+#include "../elementos_graficos/tabla.h++"
+#include "../control/datos_musica.h++"
 
 class VentanaSeleccionMusica : public Ventana
 {
@@ -11,12 +15,18 @@ private:
 	//Recursos
 	Rectangulo *m_rectangulo;
 	Etiqueta m_texto_titulo;
+	Tabla m_tabla_archivos;
+
+	Datos_Musica *m_musica;
+	std::vector<std::string> ruta_archivos;
 
 	//Componentes
 	Boton *m_boton_atras;
 	Boton *m_boton_continuar;
+
+	bool abrir_archivo_seleccionado();
 public:
-	VentanaSeleccionMusica(Administrador_Recursos *recursos);
+	VentanaSeleccionMusica(Datos_Musica *musica, Administrador_Recursos *recursos);
 	~VentanaSeleccionMusica();
 
 	void actualizar(unsigned int diferencia_tiempo);

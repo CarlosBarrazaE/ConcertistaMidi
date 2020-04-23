@@ -5,7 +5,7 @@ VentanaOrgano::VentanaOrgano(Configuracion *configuracion, Datos_Musica *musica,
 	m_configuracion = configuracion;
 	m_musica = musica;
 
-	m_rectangulo = recursos->obtener_figura(F_Rectangulo);
+	m_rectangulo = recursos->figura(F_Rectangulo);
 	Teclado_Configuracion *teclado = Tipo_Teclado::Obtener_teclado(Teclas88);
 
 	m_barra = new Barra_Progreso(0, 40, Pantalla::Ancho, 40, m_musica->musica()->GetSongLengthInMicroseconds(), m_musica->musica()->GetBarLines(), recursos);
@@ -18,24 +18,24 @@ VentanaOrgano::VentanaOrgano(Configuracion *configuracion, Datos_Musica *musica,
 	m_velocidad_musica = 1.0;
 
 	m_texto_velocidad.texto("100%");
-	m_texto_velocidad.tipografia(recursos->obtener_tipografia(LetraTitulo));
+	m_texto_velocidad.tipografia(recursos->tipografia(LetraTitulo));
 	m_texto_velocidad.color(Color(1.0f, 1.0f, 1.0f));
 	m_texto_velocidad.posicion(0, 0);
 	m_texto_velocidad.dimension(Pantalla::Ancho, 40);
 	m_texto_velocidad.centrado(true);
 
 	m_texto_pausa.texto("Pausa");
-	m_texto_pausa.tipografia(recursos->obtener_tipografia(LetraTitulo));
+	m_texto_pausa.tipografia(recursos->tipografia(LetraTitulo));
 	m_texto_pausa.color(Color(0.0f, 0.0f, 0.0f));
 	m_texto_pausa.posicion(0, 200);
 	m_texto_pausa.dimension(Pantalla::Ancho, 40);
 	m_texto_pausa.centrado(true);
 
-	m_tablero->e_notas(m_musica->musica()->Notes());
-	m_tablero->e_pistas(m_musica->pistas());
-	m_tablero->e_lineas(m_musica->musica()->GetBarLines());
-	m_organo->e_blancas_presionadas(m_tablero->o_blancas_presionadas());
-	m_organo->e_negras_presionadas(m_tablero->o_negras_presionadas());
+	m_tablero->notas(m_musica->musica()->Notes());
+	m_tablero->pistas(m_musica->pistas());
+	m_tablero->lineas(m_musica->musica()->GetBarLines());
+	m_organo->blancas_presionadas(m_tablero->blancas_presionadas());
+	m_organo->negras_presionadas(m_tablero->negras_presionadas());
 
 	m_cambio_velocidad = false;
 	m_pausa = false;
@@ -65,9 +65,10 @@ void VentanaOrgano::actualizar(unsigned int diferencia_tiempo)
 	std::vector<Pista> *pistas = m_musica->pistas();
 	for (MidiEventListWithTrackId::const_iterator i = evs.begin(); i != evs.end(); i++)
 	{
-		if(pistas->at(i->first).o_sonido())
+		if(pistas->at(i->first).sonido())
 		{
-			m_configuracion->o_salida()->Write(i->second);
+			if(m_configuracion->salida() != NULL)
+				m_configuracion->salida()->Write(i->second);
 		}
 	}
 
@@ -75,7 +76,8 @@ void VentanaOrgano::actualizar(unsigned int diferencia_tiempo)
 	{
 		m_musica->musica()->GoTo(m_barra->o_tiempo_seleccionado());
 		m_tablero->reiniciar();
-		m_configuracion->o_salida()->Reset();
+		if(m_configuracion->salida() != NULL)
+			m_configuracion->salida()->Reset();
 	}
 
 	m_barra->actualizar(diferencia_tiempo);
@@ -83,8 +85,8 @@ void VentanaOrgano::actualizar(unsigned int diferencia_tiempo)
 	m_organo->actualizar(diferencia_tiempo);
 	m_titulo_musica->actualizar(diferencia_tiempo);
 
-	m_barra->e_tiempo(m_musica->musica()->GetSongPositionInMicroseconds());
-	m_tablero->e_tiempo(m_musica->musica()->GetSongPositionInMicroseconds());
+	m_barra->tiempo(m_musica->musica()->GetSongPositionInMicroseconds());
+	m_tablero->tiempo(m_musica->musica()->GetSongPositionInMicroseconds());
 
 	if(m_cambio_velocidad)
 	{
@@ -118,14 +120,15 @@ void VentanaOrgano::evento_teclado(Tecla tecla, bool estado)
 {
 	if(tecla == TECLA_ESCAPE && !estado)
 	{
-		m_configuracion->o_salida()->Reset();
+		if(m_configuracion->salida() != NULL)
+			m_configuracion->salida()->Reset();
 		m_musica->reiniciar();
 		m_accion = CambiarASeleccionPista;
 	}
 	else if(tecla == TECLA_FLECHA_ARRIBA && estado)
-		m_tablero->c_velocidad_caida(1);
+		m_tablero->velocidad_caida(1);
 	else if(tecla == TECLA_FLECHA_ABAJO && estado)
-		m_tablero->c_velocidad_caida(-1);
+		m_tablero->velocidad_caida(-1);
 	else if(tecla == TECLA_FLECHA_IZQUIERDA && estado)
 	{
 		m_velocidad_musica-=0.01;
@@ -144,46 +147,47 @@ void VentanaOrgano::evento_teclado(Tecla tecla, bool estado)
 	{
 		m_pausa = !m_pausa;
 		if(m_pausa)
-			m_configuracion->o_salida()->Reset();
+			if(m_configuracion->salida() != NULL)
+				m_configuracion->salida()->Reset();
 	}
 	else if(tecla == TECLA_F5 && estado)
 	{
-		m_tablero->c_teclado(Tipo_Teclado::Obtener_teclado(Teclas37));
-		m_organo->c_teclado(Tipo_Teclado::Obtener_teclado(Teclas37));
-		m_tablero->e_dimension(Pantalla::Ancho, Pantalla::Alto - (m_organo->alto() + m_barra->alto()+40));
+		m_tablero->teclado(Tipo_Teclado::Obtener_teclado(Teclas37));
+		m_organo->teclado(Tipo_Teclado::Obtener_teclado(Teclas37));
+		m_tablero->dimension(Pantalla::Ancho, Pantalla::Alto - (m_organo->alto() + m_barra->alto()+40));
 	}
 	else if(tecla == TECLA_F6 && estado)
 	{
-		m_tablero->c_teclado(Tipo_Teclado::Obtener_teclado(Teclas49));
-		m_organo->c_teclado(Tipo_Teclado::Obtener_teclado(Teclas49));
-		m_tablero->e_dimension(Pantalla::Ancho, Pantalla::Alto - (m_organo->alto() + m_barra->alto()+40));
+		m_tablero->teclado(Tipo_Teclado::Obtener_teclado(Teclas49));
+		m_organo->teclado(Tipo_Teclado::Obtener_teclado(Teclas49));
+		m_tablero->dimension(Pantalla::Ancho, Pantalla::Alto - (m_organo->alto() + m_barra->alto()+40));
 	}
 	else if(tecla == TECLA_F7 && estado)
 	{
-		m_tablero->c_teclado(Tipo_Teclado::Obtener_teclado(Teclas61));
-		m_organo->c_teclado(Tipo_Teclado::Obtener_teclado(Teclas61));
-		m_tablero->e_dimension(Pantalla::Ancho, Pantalla::Alto - (m_organo->alto() + m_barra->alto()+40));
+		m_tablero->teclado(Tipo_Teclado::Obtener_teclado(Teclas61));
+		m_organo->teclado(Tipo_Teclado::Obtener_teclado(Teclas61));
+		m_tablero->dimension(Pantalla::Ancho, Pantalla::Alto - (m_organo->alto() + m_barra->alto()+40));
 	}
 	else if(tecla == TECLA_F8 && estado)
 	{
-		m_tablero->c_teclado(Tipo_Teclado::Obtener_teclado(Teclas76));
-		m_organo->c_teclado(Tipo_Teclado::Obtener_teclado(Teclas76));
-		m_tablero->e_dimension(Pantalla::Ancho, Pantalla::Alto - (m_organo->alto() + m_barra->alto()+40));
+		m_tablero->teclado(Tipo_Teclado::Obtener_teclado(Teclas76));
+		m_organo->teclado(Tipo_Teclado::Obtener_teclado(Teclas76));
+		m_tablero->dimension(Pantalla::Ancho, Pantalla::Alto - (m_organo->alto() + m_barra->alto()+40));
 	}
 	else if(tecla == TECLA_F9 && estado)
 	{
-		m_tablero->c_teclado(Tipo_Teclado::Obtener_teclado(Teclas88));
-		m_organo->c_teclado(Tipo_Teclado::Obtener_teclado(Teclas88));
-		m_tablero->e_dimension(Pantalla::Ancho, Pantalla::Alto - (m_organo->alto() + m_barra->alto()+40));
+		m_tablero->teclado(Tipo_Teclado::Obtener_teclado(Teclas88));
+		m_organo->teclado(Tipo_Teclado::Obtener_teclado(Teclas88));
+		m_tablero->dimension(Pantalla::Ancho, Pantalla::Alto - (m_organo->alto() + m_barra->alto()+40));
 	}
 }
 
 void VentanaOrgano::evento_pantalla(int ancho, int alto)
 {
 	m_barra->ancho(ancho);
-	m_organo->posicion_y(alto);
+	m_organo->y(alto);
 	m_organo->ancho(ancho);
-	m_tablero->e_dimension(ancho, alto - (m_organo->alto() + m_barra->alto()+40));
+	m_tablero->dimension(ancho, alto - (m_organo->alto() + m_barra->alto()+40));
 
 	m_texto_velocidad.dimension(ancho, 40);
 	m_texto_pausa.dimension(ancho, 40);

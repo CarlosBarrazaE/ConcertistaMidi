@@ -25,42 +25,42 @@ Teclado_Configuracion::Teclado_Configuracion(int numero_b,int numero_n, int inic
 	m_en_do_primera_barra = en_do_primera_barra;
 }
 
-int Teclado_Configuracion::o_numero_blancas()
+int Teclado_Configuracion::numero_blancas()
 {
 	return m_numero_blancas;
 }
 
-int Teclado_Configuracion::o_numero_negras()
+int Teclado_Configuracion::numero_negras()
 {
 	return m_numero_negras;
 }
 
-int Teclado_Configuracion::o_inicio_blancas()
+int Teclado_Configuracion::inicio_blancas()
 {
 	return m_inicio_blanca;
 }
 
-int Teclado_Configuracion::o_inicio_negras()
+int Teclado_Configuracion::inicio_negras()
 {
 	return m_inicio_negra;
 }
 
-int Teclado_Configuracion::o_desplazamiento_blancas()
+int Teclado_Configuracion::desplazamiento_blancas()
 {
 	return m_desplazamiento_blancas;
 }
 
-int Teclado_Configuracion::o_desplazamiento_negras()
+int Teclado_Configuracion::desplazamiento_negras()
 {
 	return m_desplazamiento_negras;
 }
 
-int Teclado_Configuracion::o_primera_barra()
+int Teclado_Configuracion::primera_barra()
 {
 	return m_primera_barra;
 }
 
-bool Teclado_Configuracion::o_en_do_primera_barra()
+bool Teclado_Configuracion::en_do_primera_barra()
 {
 	return m_en_do_primera_barra;
 }

@@ -57,22 +57,22 @@ void Textura2D::activar()
 	}
 }
 
-void Textura2D::e_envolver_horizontal(unsigned int valor)
+void Textura2D::envolver_horizontal(unsigned int valor)
 {
 	m_envolver_s = valor;
 }
 
-void Textura2D::e_envolver_vertical(unsigned int valor)
+void Textura2D::envolver_vertical(unsigned int valor)
 {
 	m_envolver_t = valor;
 }
 
-void Textura2D::e_filtro_minimizar(unsigned int valor)
+void Textura2D::filtro_minimizar(unsigned int valor)
 {
 	m_filtro_minimizar = valor;
 }
 
-void Textura2D::e_filtro_maximizar(unsigned int valor)
+void Textura2D::filtro_maximizar(unsigned int valor)
 {
 	m_filtro_maximizar = valor;
 }

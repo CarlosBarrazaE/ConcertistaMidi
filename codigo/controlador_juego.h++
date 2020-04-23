@@ -25,6 +25,9 @@ private:
 	Administrador_Recursos *m_recursos;
 	Etiqueta m_texto_fps;
 	double m_fps;
+	bool m_fps_reducido;
+	bool m_fps_reducido_desactivado;
+	int m_contador_inactividad;
 
 	//Control
 	bool m_mostrar_fps;
@@ -43,6 +46,8 @@ private:
 
 	//Configuracion bd
 	//Usuario
+
+	void control_fps(bool activo);
 public:
 	Controlador_Juego(Administrador_Recursos *recursos);
 	~Controlador_Juego();
@@ -53,7 +58,7 @@ public:
 	bool modo_alambre_activado();
 	bool terminar();
 
-	Raton *o_raton();
+	Raton *raton();
 
 	void eventos_raton();
 	void eventos_teclado(Tecla tecla, bool estado);

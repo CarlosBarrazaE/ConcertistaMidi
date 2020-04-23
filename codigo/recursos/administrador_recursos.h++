@@ -39,6 +39,19 @@ enum Textura
 	T_Reproducir,
 	T_Pausar,
 	T_TituloMusica,
+	T_Color_1,
+	T_Color_2,
+	T_Color_3,
+	T_Color_4,
+	T_Color_5,
+	T_Color_6,
+	T_Color_7,
+	T_Color_8,
+	T_Color_9,
+	T_Color_Invisible,
+	T_ManoIzquierda,
+	T_ManoDerecha,
+	T_MusicaFondo,
 };
 
 enum SombreadorVF
@@ -83,10 +96,10 @@ public:
 	Administrador_Recursos();
 	~Administrador_Recursos();
 
-	Textura2D *obtener_textura(Textura valor);
-	Sombreador *obtener_sombreador(SombreadorVF valor);
-	Rectangulo *obtener_figura(FiguraGeometrica valor);
-	Tipografia *obtener_tipografia(ModeloLetra tipo);
+	Textura2D *textura(Textura valor);
+	Sombreador *sombreador(SombreadorVF valor);
+	Rectangulo *figura(FiguraGeometrica valor);
+	Tipografia *tipografia(ModeloLetra tipo);
 
 	void actualizar_pantalla(int ancho, int alto);
 };

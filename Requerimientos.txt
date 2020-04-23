@@ -1,3 +1,5 @@
+//Ubuntu o derivados
+
 cmake
 pkg-config
 
@@ -6,6 +8,22 @@ libsdl2-dev			//Sdl2 para OpenGl
 libglm-dev			//Libreria de matematica para opengl
 libfreetype6-dev	//Tipografias
 libicu-dev			//String Unicode
+
+//Gentoo
+media-libs/glew
+media-libs/libsdl2
+media-libs/glm
+media-sound/timidity++ //Sintetizador midi
+media-sound/fluid-soundfont //Sonidos midi
+media-libs/freetype
+dev-libs/icu
+
+editar /etc/timidity.cfg
+y reemplazar contenido por:
+dir /usr/share/sounds/sf2
+soundfont FluidR3_GM.sf2
+
+
 
 Ejecutar un sintetizador midi
 timidity -iA -B2,8 -Os1l -s 44100

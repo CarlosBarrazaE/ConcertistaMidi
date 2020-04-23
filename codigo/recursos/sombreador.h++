@@ -25,13 +25,13 @@ public:
 
 	unsigned int o_indice();
 
-	void e_bool(const std::string &nombre, bool valor);
-	void e_int(const std::string &nombre, int valor);
-	void e_float(const std::string &nombre, float valor);
-	void e_vector2f(const std::string &nombre, float x, float y);
-	void e_vector3f(const std::string &nombre, float x, float y, float z);
-	void e_vector4f(const std::string &nombre, float x, float y, float z, float w);
-	void e_matriz4(const std::string &nombre, glm::mat4 valor);
+	void uniforme_bool(const std::string &nombre, bool valor);
+	void uniforme_int(const std::string &nombre, int valor);
+	void uniforme_float(const std::string &nombre, float valor);
+	void uniforme_vector2f(const std::string &nombre, float x, float y);
+	void uniforme_vector3f(const std::string &nombre, float x, float y, float z);
+	void uniforme_vector4f(const std::string &nombre, float x, float y, float z, float w);
+	void uniforme_matriz4(const std::string &nombre, glm::mat4 valor);
 };
 
 #endif

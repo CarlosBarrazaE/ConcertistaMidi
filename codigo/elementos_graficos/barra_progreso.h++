@@ -27,7 +27,7 @@ public:
 	Barra_Progreso(int x, int y, int ancho, int alto, microseconds_t tiempo_total, MidiEventMicrosecondList lineas, Administrador_Recursos *recursos);
 	~Barra_Progreso();
 
-	void e_tiempo(microseconds_t tiempo_actual);
+	void tiempo(microseconds_t tiempo_actual);
 	microseconds_t o_tiempo_seleccionado();
 
 	void actualizar(unsigned int diferencia_tiempo);

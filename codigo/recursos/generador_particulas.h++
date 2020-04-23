@@ -27,12 +27,12 @@ private:
 	float m_tiempo;
 	int m_escala;
 
-	int obtener_particula_inactiva();
+	int particula_inactiva();
 
 public:
 	Generador_Particulas(Sombreador *sombreador, Textura2D *textura, unsigned int particulas_maximas, int escala);
 	~Generador_Particulas();
-	void e_escala(int escala);
+	void escala(int escala);
 
 	void actualizar(float tiempo);
 	void dibujar();

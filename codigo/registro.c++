@@ -9,7 +9,7 @@ void Registro::Escribir_registro(CodigoEstado estado, std::string texto)
 		archivo << "[ERROR] " << texto << "\n";
 	else if(estado == EstadoAviso && NIVEL_REGISTRO >= 1)
 		archivo << "[AVISO] " << texto << "\n";
-	else if(estado == EstadoDato && NIVEL_REGISTRO >= 2)
+	else if(estado == EstadoNota && NIVEL_REGISTRO >= 2)
 		archivo << "[NOTA] " << texto << "\n";
 	else if(estado == EstadoDepurar && NIVEL_REGISTRO >= 3)
 		archivo << "[DEPURAR] " << texto << "\n";
@@ -20,7 +20,7 @@ void Registro::Escribir_registro(CodigoEstado estado, std::string texto)
 			std::cout << "\033[31m[ERROR]\033[0m " << texto << "\n";
 		else if(estado == EstadoAviso && NIVEL_REGISTRO >= 1)
 			std::cout << "\033[33m[AVISO]\033[0m " << texto << "\n";
-		else if(estado == EstadoDato && NIVEL_REGISTRO >= 2)
+		else if(estado == EstadoNota && NIVEL_REGISTRO >= 2)
 			std::cout << "\033[32m[NOTA]\033[0m " << texto << "\n";
 		else if(estado == EstadoDepurar && NIVEL_REGISTRO >= 3)
 			std::cout << "\033[34m[DEPURAR]\033[0m " << texto << "\n";
@@ -39,7 +39,7 @@ void Registro::Aviso(std::string texto)
 
 void Registro::Nota(std::string texto)
 {
-	Escribir_registro(EstadoDato, texto);
+	Escribir_registro(EstadoNota, texto);
 }
 
 void Registro::Depurar(std::string texto)

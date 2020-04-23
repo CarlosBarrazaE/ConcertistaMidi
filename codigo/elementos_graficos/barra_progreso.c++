@@ -10,17 +10,17 @@ Barra_Progreso::Barra_Progreso(int x, int y, int ancho, int alto, microseconds_t
 	m_sobre_barra = false;
 	m_x_anterior = 0;
 
-	m_frente = recursos->obtener_textura(T_FrenteBarraProgreso);
-	m_rectangulo = recursos->obtener_figura(F_Rectangulo);
+	m_frente = recursos->textura(T_FrenteBarraProgreso);
+	m_rectangulo = recursos->figura(F_Rectangulo);
 
 	m_texto_inicial.texto(Funciones::milisegundos_a_texto(m_tiempo_actual));
-	m_texto_inicial.tipografia(recursos->obtener_tipografia(LetraMuyChica));
-	m_texto_inicial.posicion(this->posicion_x()+4, this->posicion_y() + this->alto() - 12);
+	m_texto_inicial.tipografia(recursos->tipografia(LetraMuyChica));
+	m_texto_inicial.posicion(this->x()+4, this->y() + this->alto() - 12);
 	m_texto_inicial.color(Color(0.0f, 0.0f, 0.0f));
 
 	m_texto_final.texto(Funciones::milisegundos_a_texto(tiempo_total));
-	m_texto_final.tipografia(recursos->obtener_tipografia(LetraMuyChica));
-	m_texto_final.posicion(this->posicion_x()+this->ancho() - (4 + m_texto_final.largo_texto()), this->posicion_y() + this->alto() - 12);
+	m_texto_final.tipografia(recursos->tipografia(LetraMuyChica));
+	m_texto_final.posicion(this->x()+this->ancho() - (4 + m_texto_final.largo_texto()), this->y() + this->alto() - 12);
 	m_texto_final.color(Color(0.0f, 0.0f, 0.0f));
 }
 
@@ -28,7 +28,7 @@ Barra_Progreso::~Barra_Progreso()
 {
 }
 
-void Barra_Progreso::e_tiempo(microseconds_t tiempo_actual)
+void Barra_Progreso::tiempo(microseconds_t tiempo_actual)
 {
 	if(tiempo_actual < 0)
 		m_tiempo_actual = 0;
@@ -55,22 +55,22 @@ void Barra_Progreso::actualizar(unsigned int diferencia_tiempo)
 void Barra_Progreso::dibujar()
 {
 	m_rectangulo->textura(false);
-	m_rectangulo->dibujar(this->posicion_x(), this->posicion_y(), m_progreso, this->alto(), m_color_progreso);
-	m_rectangulo->dibujar(this->posicion_x()+m_progreso, this->posicion_y(), this->ancho() - m_progreso, this->alto(), m_color_fondo);
+	m_rectangulo->dibujar(this->x(), this->y(), m_progreso, this->alto(), m_color_progreso);
+	m_rectangulo->dibujar(this->x()+m_progreso, this->y(), this->ancho() - m_progreso, this->alto(), m_color_fondo);
 
 	m_rectangulo->color(Color(0.5f, 0.5f, 0.5f));
 	for(int i=0; i<m_lineas.size(); i++)
 	{
-		m_rectangulo->dibujar(((double)m_lineas[i] / (double)m_tiempo_total) * this->ancho(), this->posicion_y(), 1, this->alto());
+		m_rectangulo->dibujar(((double)m_lineas[i] / (double)m_tiempo_total) * this->ancho(), this->y(), 1, this->alto());
 	}
 
 	m_rectangulo->color(Color(0.15f, 0.15f, 0.15f));
-	m_rectangulo->dibujar(this->posicion_x(), this->posicion_y(), this->ancho(), 1);
-	m_rectangulo->dibujar(this->posicion_x(), this->posicion_y()+this->alto()-1, this->ancho(), 1);
+	m_rectangulo->dibujar(this->x(), this->y(), this->ancho(), 1);
+	m_rectangulo->dibujar(this->x(), this->y()+this->alto()-1, this->ancho(), 1);
 
 	m_frente->activar();
 	m_rectangulo->textura(true);
-	m_rectangulo->dibujar(this->posicion_x(), this->posicion_y(), this->ancho(), this->alto(), Color(1.0f, 1.0f, 1.0f));
+	m_rectangulo->dibujar(this->x(), this->y(), this->ancho(), this->alto(), Color(1.0f, 1.0f, 1.0f));
 
 	m_texto_inicial.dibujar();
 	m_texto_final.dibujar();
@@ -78,8 +78,8 @@ void Barra_Progreso::dibujar()
 
 void Barra_Progreso::evento_raton(Raton *raton)
 {
-	if(raton->x() >= this->posicion_x() && raton->x() <= this->posicion_x() + this->ancho() &&
-		raton->y() >= this->posicion_y() && raton->y() <= this->posicion_y() + this->alto())
+	if(raton->x() >= this->x() && raton->x() <= this->x() + this->ancho() &&
+		raton->y() >= this->y() && raton->y() <= this->y() + this->alto())
 	{
 		if(raton->activado(BotonIzquierdo) && m_sobre_barra)
 		{
@@ -106,5 +106,5 @@ void Barra_Progreso::evento_raton(Raton *raton)
 
 void Barra_Progreso::evento_pantalla(int ancho, int alto)
 {
-	m_texto_final.posicion(ancho - (4 + m_texto_final.largo_texto()), this->posicion_y() + this->alto() - 12);
+	m_texto_final.posicion(ancho - (4 + m_texto_final.largo_texto()), this->y() + this->alto() - 12);
 }

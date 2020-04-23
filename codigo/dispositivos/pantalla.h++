@@ -7,8 +7,8 @@ public:
 	static int Ancho;
 	static int Alto;
 
-	static int Centro_h();
-	static int Centro_v();
+	static int Centro_horizontal();
+	static int Centro_vertical();
 };
 
 #endif

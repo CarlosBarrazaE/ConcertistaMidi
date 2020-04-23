@@ -25,11 +25,11 @@ public:
 	void generar(unsigned int ancho, unsigned int alto, unsigned int bits, unsigned int formato_entrada, unsigned char *datos);
 	void activar();
 
-	void e_envolver_horizontal(unsigned int valor);
-	void e_envolver_vertical(unsigned int valor);
+	void envolver_horizontal(unsigned int valor);
+	void envolver_vertical(unsigned int valor);
 
-	void e_filtro_minimizar(unsigned int valor);
-	void e_filtro_maximizar(unsigned int valor);
+	void filtro_minimizar(unsigned int valor);
+	void filtro_maximizar(unsigned int valor);
 
 	static unsigned int Ultimo_indice_seleccionado;
 };

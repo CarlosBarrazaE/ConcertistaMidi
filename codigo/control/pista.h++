@@ -23,21 +23,21 @@ private:
 	std::string m_instrumento;
 	unsigned int m_numero_notas;
 public:
-	static Color Colores_pista[NUMERO_COLORES_PISTA];
+	static Color Colores_pista[NUMERO_COLORES_PISTA+1];
 	Pista(std::string instrumento, unsigned int numero_notas, Color color, Modo modo, bool visible, bool sonido);
 	~Pista();
 
-	void e_color(Color color);
-	void e_modo(Modo modo);
-	void e_visible(bool estado);
-	void e_sonido(bool estado);
+	void color(Color color);
+	void modo(Modo modo);
+	void visible(bool estado);
+	void sonido(bool estado);
 
-	Color o_color();
-	Modo o_modo();
-	bool o_visible();
-	bool o_sonido();
-	std::string o_instrumento();
-	unsigned int o_numero_notas();
+	Color color();
+	Modo modo();
+	bool visible();
+	bool sonido();
+	std::string instrumento();
+	unsigned int numero_notas();
 };
 
 #endif

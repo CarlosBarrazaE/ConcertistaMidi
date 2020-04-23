@@ -4,7 +4,7 @@
 #include "elemento.h++"
 #include "boton.h++"
 #include "etiqueta.h++"
-#include "lista_desplegable.h++"
+#include "lista_opciones.h++"
 #include "../control/pista.h++"
 #include <string>
 
@@ -21,8 +21,8 @@ private:
 	Textura2D *m_textura_pausar;
 
 	//Componentes
-	Lista_Desplegable m_seleccion_modo;
-	Lista_Desplegable m_seleccion_color;
+	Lista_Opciones m_seleccion_modo;
+	Lista_Opciones m_seleccion_color;
 	Boton *m_vista_previa;
 	Boton *m_boton_sonido;
 
@@ -36,7 +36,7 @@ public:
 	Configuracion_Pista(int x, int y, int ancho, int alto, Pista pista, Administrador_Recursos *recursos);
 	~Configuracion_Pista();
 
-	Pista o_pista();
+	Pista pista();
 
 	void actualizar(unsigned int diferencia_tiempo);
 	void dibujar();

@@ -27,6 +27,19 @@ Administrador_Recursos::Administrador_Recursos()
 	m_archivo_texturas[T_Reproducir] = "../texturas/reproducir.tga";
 	m_archivo_texturas[T_Pausar] = "../texturas/pausar.tga";
 	m_archivo_texturas[T_TituloMusica] = "../texturas/titulo_musica.tga";
+	m_archivo_texturas[T_Color_1] = "../texturas/color_1.tga";
+	m_archivo_texturas[T_Color_2] = "../texturas/color_2.tga";
+	m_archivo_texturas[T_Color_3] = "../texturas/color_3.tga";
+	m_archivo_texturas[T_Color_4] = "../texturas/color_4.tga";
+	m_archivo_texturas[T_Color_5] = "../texturas/color_5.tga";
+	m_archivo_texturas[T_Color_6] = "../texturas/color_6.tga";
+	m_archivo_texturas[T_Color_7] = "../texturas/color_7.tga";
+	m_archivo_texturas[T_Color_8] = "../texturas/color_8.tga";
+	m_archivo_texturas[T_Color_9] = "../texturas/color_9.tga";
+	m_archivo_texturas[T_Color_Invisible] = "../texturas/color_invisible.tga";
+	m_archivo_texturas[T_ManoIzquierda] = "../texturas/mano_izquierda.tga";
+	m_archivo_texturas[T_ManoDerecha] = "../texturas/mano_derecha.tga";
+	m_archivo_texturas[T_MusicaFondo] = "../texturas/musica_fondo.tga";
 
 	m_archivo_sombreador_vertice[S_Rectangulo] = "../sombreadores/rectangulo_sv.glsl";
 	m_archivo_sombreador_fragmento[S_Rectangulo] = "../sombreadores/rectangulo_sf.glsl";
@@ -37,11 +50,11 @@ Administrador_Recursos::Administrador_Recursos()
 	m_archivo_sombreador_vertice[S_Particula] = "../sombreadores/particula_sv.glsl";
 	m_archivo_sombreador_fragmento[S_Particula] = "../sombreadores/particula_sf.glsl";
 
-	m_lista_figuras[F_Rectangulo] = new Rectangulo(this->obtener_sombreador(S_Rectangulo));
+	m_lista_figuras[F_Rectangulo] = new Rectangulo(this->sombreador(S_Rectangulo));
 
-	Sombreador *sombreador_letras = this->obtener_sombreador(S_Texto);
-	sombreador_letras->e_int("textura_texto", 0);
-	sombreador_letras->e_vector3f("color_texto", 0.0, 0.0, 0.0);
+	Sombreador *sombreador_letras = this->sombreador(S_Texto);
+	sombreador_letras->uniforme_int("textura_texto", 0);
+	sombreador_letras->uniforme_vector3f("color_texto", 0.0, 0.0, 0.0);
 
 	m_formato_letras[LetraTituloGrande] = new Tipografia(Normal, 35);
 	m_formato_letras[LetraTitulo] = new Tipografia(Normal, 20);
@@ -66,7 +79,7 @@ Administrador_Recursos::~Administrador_Recursos()
 	m_lista_figuras.clear();
 }
 
-Textura2D *Administrador_Recursos::obtener_textura(Textura valor)
+Textura2D *Administrador_Recursos::textura(Textura valor)
 {
 	Textura2D *temporal = m_lista_texturas[valor];
 	if(!temporal)
@@ -79,13 +92,14 @@ Textura2D *Administrador_Recursos::obtener_textura(Textura valor)
 
 		m_lista_texturas[valor] = temporal;
 
-		Registro::Depurar("Se cargo la textura del archivo: " + std::string(m_archivo_texturas[valor]));
+		if(!textura_nueva.hay_error())
+			Registro::Depurar("Se cargo la textura del archivo: " + std::string(m_archivo_texturas[valor]));
 	}
 
 	return temporal;
 }
 
-Sombreador *Administrador_Recursos::obtener_sombreador(SombreadorVF valor)
+Sombreador *Administrador_Recursos::sombreador(SombreadorVF valor)
 {
 	Sombreador *temporal = m_lista_sombreadores[valor];
 	if(!temporal)
@@ -97,7 +111,7 @@ Sombreador *Administrador_Recursos::obtener_sombreador(SombreadorVF valor)
 		const char* codigo_fragmento = texto_fragmento.c_str();
 
 		temporal = new Sombreador(codigo_vertice, codigo_fragmento);
-		temporal->e_matriz4("proyeccion", m_matriz_proyeccion);
+		temporal->uniforme_matriz4("proyeccion", m_matriz_proyeccion);
 
 		m_lista_sombreadores[valor] = temporal;
 
@@ -108,12 +122,12 @@ Sombreador *Administrador_Recursos::obtener_sombreador(SombreadorVF valor)
 	return temporal;
 }
 
-Rectangulo *Administrador_Recursos::obtener_figura(FiguraGeometrica valor)
+Rectangulo *Administrador_Recursos::figura(FiguraGeometrica valor)
 {
 	return m_lista_figuras[F_Rectangulo];
 }
 
-Tipografia *Administrador_Recursos::obtener_tipografia(ModeloLetra tipo)
+Tipografia *Administrador_Recursos::tipografia(ModeloLetra tipo)
 {
 	return m_formato_letras[tipo];
 }
@@ -127,6 +141,6 @@ void Administrador_Recursos::actualizar_pantalla(int nuevo_ancho, int nuevo_alto
 
 	for(std::map<SombreadorVF, Sombreador*>::iterator e=m_lista_sombreadores.begin(); e != m_lista_sombreadores.end(); e++)
 	{
-		e->second->e_matriz4("proyeccion", m_matriz_proyeccion);
+		e->second->uniforme_matriz4("proyeccion", m_matriz_proyeccion);
 	}
 }

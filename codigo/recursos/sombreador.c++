@@ -68,43 +68,43 @@ unsigned int Sombreador::o_indice()
 	return m_indice_programa;
 }
 
-void Sombreador::e_bool(const std::string &nombre, bool valor)
+void Sombreador::uniforme_bool(const std::string &nombre, bool valor)
 {
 	this->activar();
 	glUniform1i(glGetUniformLocation(m_indice_programa, nombre.c_str()), valor);
 }
 
-void Sombreador::e_int(const std::string &nombre, int valor)
+void Sombreador::uniforme_int(const std::string &nombre, int valor)
 {
 	this->activar();
 	glUniform1i(glGetUniformLocation(m_indice_programa, nombre.c_str()), valor);
 }
 
-void Sombreador::e_float(const std::string &nombre, float valor)
+void Sombreador::uniforme_float(const std::string &nombre, float valor)
 {
 	this->activar();
 	glUniform1f(glGetUniformLocation(m_indice_programa, nombre.c_str()), valor);
 }
 
-void Sombreador::e_vector2f(const std::string &nombre, float x, float y)
+void Sombreador::uniforme_vector2f(const std::string &nombre, float x, float y)
 {
 	this->activar();
 	glUniform2f(glGetUniformLocation(m_indice_programa, nombre.c_str()), x, y);
 }
 
-void Sombreador::e_vector3f(const std::string &nombre, float x, float y, float z)
+void Sombreador::uniforme_vector3f(const std::string &nombre, float x, float y, float z)
 {
 	this->activar();
 	glUniform3f(glGetUniformLocation(m_indice_programa, nombre.c_str()), x, y, z);
 }
 
-void Sombreador::e_vector4f(const std::string &nombre, float x, float y, float z, float w)
+void Sombreador::uniforme_vector4f(const std::string &nombre, float x, float y, float z, float w)
 {
 	this->activar();
 	glUniform4f(glGetUniformLocation(m_indice_programa, nombre.c_str()), x, y, z, w);
 }
 
-void Sombreador::e_matriz4(const std::string &nombre, glm::mat4 valor)
+void Sombreador::uniforme_matriz4(const std::string &nombre, glm::mat4 valor)
 {
 	this->activar();
 	glUniformMatrix4fv(glGetUniformLocation(m_indice_programa, nombre.c_str()), 1, GL_FALSE, glm::value_ptr(valor));

@@ -161,8 +161,7 @@ MidiCommIn::MidiCommIn(unsigned int device_id)
 	int res = snd_seq_connect_from(alsa_seq, local_in, m_description.client, m_description.port);
 	if (res < 0)
 	{
-		std::string msg = snd_strerror(res);
-		std::cout << "[WARNING] Input, cannot connect from '" << m_description.name << "': " << msg << std::endl;
+		Registro::Aviso("No se puede conectar al dispositivo de entrada: '" + m_description.name + "' " + snd_strerror(res));
 	}
 
 	// enable internal keyboard
@@ -223,7 +222,7 @@ MidiEvent MidiCommIn::Read()
 			break;
 		case SND_SEQ_EVENT_PORT_EXIT:// USB device is disconnected - the input client is closed
 		{
-			std::cout << "MIDI device is lost" << std::endl;
+			Registro::Aviso("El dispositivo MIDI se desconectó");
 			int lost_client = ev->data.addr.client;
 			int lost_port   = ev->data.addr.port;
 			// TODO add better error reporting
@@ -236,7 +235,7 @@ MidiEvent MidiCommIn::Read()
 			snd_seq_port_info_t* pinfo;
 			snd_seq_port_info_alloca(&pinfo);
 
-			std::cout << "New MIDI device client=" << new_client << ", port=" << new_port << std::endl;
+			Registro::Aviso("Nuevo dispositivo MIDI cliente: " + std::to_string(new_client) + ", puerto=" + std::to_string(new_port));
 			int err = snd_seq_get_any_port_info(alsa_seq, new_client, new_port, pinfo);
 
 			if (err < 0)
@@ -244,10 +243,8 @@ MidiEvent MidiCommIn::Read()
 
 			int port = snd_seq_port_info_get_port(pinfo);
 			int client = snd_seq_port_info_get_client(pinfo);
-			std::cout << "Port info client=" << client << ", port=" << port << std::endl;
-
-			std::string new_name = snd_seq_port_info_get_name(pinfo);
-			std::cout << "New MIDI device " << new_name << std::endl;
+			Registro::Aviso("Informacion puerto cliente: " + std::to_string(client) + " puerto: " + std::to_string(port));
+			Registro::Aviso("Nuevo dispositivo MIDI " + std::string(snd_seq_port_info_get_name(pinfo)));
 
 			m_should_reconnect = true;
 			break;// unknown type, do nothing
@@ -295,8 +292,8 @@ MidiCommOut::MidiCommOut(unsigned int device_id)
 	int res = snd_seq_connect_to(alsa_seq, local_out, m_description.client, m_description.port);
 	if (res < 0)
 	{
-		std::string msg = snd_strerror(res);
-		std::cout << "[WARNING] Output, cannot connect to '" << m_description.name << "': " << msg << std::endl;
+		//TODO notificar del error por la pantalla
+		Registro::Aviso("No se puede conectar al dispositivo de salida: '" + m_description.name + "' " + snd_strerror(res));
 	}
 }
 

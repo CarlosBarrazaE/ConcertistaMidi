@@ -48,67 +48,67 @@ void Color::establecer_valores(float rojo, float verde, float azul, float alfa)
 	m_alfa = this->valor_limitado(alfa);
 }
 
-void Color::e_color(int rojo, int verde, int azul)
+void Color::color(int rojo, int verde, int azul)
 {
 	this->establecer_valores(rojo / 254.0f, verde / 254.0f, azul / 254.0f, 1.0f);
 }
 
-void Color::e_color(float rojo, float verde, float azul)
+void Color::color(float rojo, float verde, float azul)
 {
 	this->establecer_valores(rojo, verde, azul, 1.0f);
 }
 
-void Color::e_color(int rojo, int verde, int azul, int alfa)
+void Color::color(int rojo, int verde, int azul, int alfa)
 {
 	this->establecer_valores(rojo / 254.0f, verde / 254.0f, azul / 254.0f, alfa / 254.0f);
 }
 
-void Color::e_color(float rojo, float verde, float azul, float alfa)
+void Color::color(float rojo, float verde, float azul, float alfa)
 {
 	this->establecer_valores(rojo, verde, azul, alfa);
 }
 
-float Color::o_rojo()
+float Color::rojo()
 {
 	return m_rojo;
 }
 
-float Color::o_verde()
+float Color::verde()
 {
 	return m_verde;
 }
 
-float Color::o_azul()
+float Color::azul()
 {
 	return m_azul;
 }
 
-float Color::o_alfa()
+float Color::alfa()
 {
 	return m_alfa;
 }
 
-void Color::c_rojo(float valor)
+void Color::rojo(float valor)
 {
 	m_rojo = this->valor_limitado(m_rojo+valor);
 }
 
-void Color::c_verde(float valor)
+void Color::verde(float valor)
 {
 	m_verde = this->valor_limitado(m_verde+valor);
 }
 
-void Color::c_azul(float valor)
+void Color::azul(float valor)
 {
 	m_azul = this->valor_limitado(m_azul+valor);
 }
 
-void Color::c_alfa(float valor)
+void Color::alfa(float valor)
 {
 	m_alfa = this->valor_limitado(m_alfa+valor);
 }
 
-void Color::c_tono(float valor)
+void Color::tono(float valor)
 {
 	m_rojo = this->valor_limitado(m_rojo+valor);
 	m_verde = this->valor_limitado(m_verde+valor);

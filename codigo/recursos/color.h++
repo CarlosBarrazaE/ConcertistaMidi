@@ -20,22 +20,22 @@ public:
 	Color(float rojo, float verde, float azul, float alfa);
 	~Color();
 
-	void e_color(int rojo, int verde, int azul);
-	void e_color(float rojo, float verde, float azul);
+	void color(int rojo, int verde, int azul);
+	void color(float rojo, float verde, float azul);
 
-	void e_color(int rojo, int verde, int azul, int alfa);
-	void e_color(float rojo, float verde, float azul, float alfa);
+	void color(int rojo, int verde, int azul, int alfa);
+	void color(float rojo, float verde, float azul, float alfa);
 
-	void c_rojo(float valor);
-	void c_verde(float valor);
-	void c_azul(float valor);
-	void c_alfa(float valor);
-	void c_tono(float valor);
+	void rojo(float valor);
+	void verde(float valor);
+	void azul(float valor);
+	void alfa(float valor);
+	void tono(float valor);
 
-	float o_rojo();
-	float o_verde();
-	float o_azul();
-	float o_alfa();
+	float rojo();
+	float verde();
+	float azul();
+	float alfa();
 
 	bool operator == (const Color &c) const;
 	bool operator != (const Color &c) const;

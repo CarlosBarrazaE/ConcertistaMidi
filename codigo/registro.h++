@@ -14,7 +14,7 @@ namespace
 	{
 		EstadoError = 0,
 		EstadoAviso = 1,
-		EstadoDato = 2,
+		EstadoNota = 2,
 		EstadoDepurar = 3
 	};
 }

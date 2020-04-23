@@ -48,10 +48,10 @@ public:
 
 	void ancho(int valor);
 	int ancho();
-	void c_teclado(Teclado_Configuracion *teclado);
+	void teclado(Teclado_Configuracion *teclado);
 
-	void e_blancas_presionadas(std::array<Color, 52> *teclas_blancas);
-	void e_negras_presionadas(std::array<Color, 36> *teclas_negras);
+	void blancas_presionadas(std::array<Color, 52> *teclas_blancas);
+	void negras_presionadas(std::array<Color, 36> *teclas_negras);
 
 	void actualizar(unsigned int diferencia_tiempo);
 	void dibujar();

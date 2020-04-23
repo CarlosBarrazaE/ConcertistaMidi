@@ -2,6 +2,7 @@
 #define BARRA_DESPLAZAMIENTO_H
 
 #include "elemento.h++"
+#include "../dispositivos/pantalla.h++"
 #include <vector>
 
 class Barra_Desplazamiento : public Elemento

@@ -26,12 +26,12 @@ Elemento::Elemento(int x, int y, int ancho, int alto, bool centrado)
 	m_dy = 0;
 }
 
-int Elemento::posicion_x()
+int Elemento::x()
 {
 	return m_x;
 }
 
-int Elemento::posicion_y()
+int Elemento::y()
 {
 	return m_y;
 }
@@ -71,7 +71,7 @@ void Elemento::posicion(int x, int y)
 	m_y = y;
 }
 
-void Elemento::posicion_x(int x)
+void Elemento::x(int x)
 {
 	if(m_centrado)
 		m_x = x - (m_ancho / 2);
@@ -79,7 +79,7 @@ void Elemento::posicion_x(int x)
 		m_x = x;
 }
 
-void Elemento::posicion_y(int y)
+void Elemento::y(int y)
 {
 	m_y = y;
 }

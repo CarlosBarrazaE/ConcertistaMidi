@@ -20,8 +20,8 @@ public:
 	virtual void evento_raton(Raton *raton) = 0;
 	virtual void evento_pantalla(int ancho, int alto) = 0;
 
-	int posicion_x();
-	int posicion_y();
+	int x();
+	int y();
 	int ancho();
 	int alto();
 	int dx();
@@ -29,8 +29,8 @@ public:
 
 	void centrado(bool centrado);
 	void posicion(int x, int y);
-	void posicion_x(int x);
-	void posicion_y(int y);
+	void x(int x);
+	void y(int y);
 
 	void dimension(int ancho, int alto);
 	void ancho(int ancho);
