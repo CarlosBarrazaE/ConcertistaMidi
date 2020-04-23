@@ -22,13 +22,13 @@ unsigned short BigToSystem16(unsigned short x)
 
 unsigned long parse_variable_length(std::istream &in)
 {
-	register unsigned long value = in.get();
+	unsigned long value = in.get();
 
 	if (in.good() && (value & 0x80))
 	{
 		value &= 0x7F;
 
-		register unsigned long c;
+		unsigned long c;
 		do
 		{
 			c = in.get();
