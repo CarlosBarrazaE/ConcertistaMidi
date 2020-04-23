@@ -92,7 +92,7 @@ void VentanaSeleccionMusica::evento_raton(Raton *raton)
 	m_tabla_archivos.evento_raton(raton);
 
 	//Abrir el archivo con doble clic
-	if(raton->activado(BotonIzquierdo) && raton->numero_clics() == 2 && m_tabla_archivos.obtener_seleccion() > 0)
+	if(raton->activado(BotonIzquierdo) && raton->numero_clics() == 2 && m_tabla_archivos.obtener_seleccion() >= 0)
 	{
 		if(this->abrir_archivo_seleccionado())
 			m_accion = CambiarASeleccionPista;
