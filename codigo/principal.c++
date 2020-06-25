@@ -147,6 +147,7 @@ void eventos_taclado(SDL_Window *ventana, Controlador_Juego *controlador, int te
 		case SDLK_7: controlador->eventos_teclado(TECLA_7, estado); break;
 		case SDLK_8: controlador->eventos_teclado(TECLA_8, estado); break;
 		case SDLK_9: controlador->eventos_teclado(TECLA_9, estado); break;
+
 		case SDLK_a: controlador->eventos_teclado(TECLA_A, estado); break;
 		case SDLK_b: controlador->eventos_teclado(TECLA_B, estado); break;
 		case SDLK_c: controlador->eventos_teclado(TECLA_C, estado); break;
@@ -161,7 +162,7 @@ void eventos_taclado(SDL_Window *ventana, Controlador_Juego *controlador, int te
 		case SDLK_l: controlador->eventos_teclado(TECLA_L, estado); break;
 		case SDLK_m: controlador->eventos_teclado(TECLA_M, estado); break;
 		case SDLK_n: controlador->eventos_teclado(TECLA_N, estado); break;
-		case 241: controlador->eventos_teclado(TECLA_NN, estado); break;
+		case 241: controlador->eventos_teclado(TECLA_NN, estado); break;//Ñ
 		case SDLK_o: controlador->eventos_teclado(TECLA_O, estado); break;
 		case SDLK_p: controlador->eventos_teclado(TECLA_P, estado); break;
 		case SDLK_q: controlador->eventos_teclado(TECLA_Q, estado); break;
@@ -174,16 +175,24 @@ void eventos_taclado(SDL_Window *ventana, Controlador_Juego *controlador, int te
 		case SDLK_x: controlador->eventos_teclado(TECLA_X, estado); break;
 		case SDLK_y: controlador->eventos_teclado(TECLA_Y, estado); break;
 		case SDLK_z: controlador->eventos_teclado(TECLA_Z, estado); break;
+
 		case SDLK_LEFT: controlador->eventos_teclado(TECLA_FLECHA_IZQUIERDA, estado); break;
 		case SDLK_RIGHT: controlador->eventos_teclado(TECLA_FLECHA_DERECHA, estado); break;
 		case SDLK_UP: controlador->eventos_teclado(TECLA_FLECHA_ARRIBA, estado); break;
 		case SDLK_DOWN: controlador->eventos_teclado(TECLA_FLECHA_ABAJO, estado); break;
+
 		case SDLK_SPACE: controlador->eventos_teclado(TECLA_ESPACIO, estado); break;
 		case SDLK_BACKSPACE: controlador->eventos_teclado(TECLA_BORRAR, estado); break;
 		case SDLK_PAUSE: controlador->eventos_teclado(TECLA_PAUSA, estado); break;
 		case SDLK_ESCAPE: controlador->eventos_teclado(TECLA_ESCAPE, estado); break;
 		case SDLK_RETURN: controlador->eventos_teclado(TECLA_ENTRAR, estado); break;
 		case SDLK_KP_ENTER: controlador->eventos_teclado(TECLA_ENTRAR, estado); break;
+		case SDLK_TAB: controlador->eventos_teclado(TECLA_TABULADOR, estado); break;
+		case SDLK_QUOTE: controlador->eventos_teclado(TECLA_APOSTRPFE, estado); break;
+		case 1073741824: controlador->eventos_teclado(TECLA_ACENTOGRAVE, estado); break;
+		case 161: controlador->eventos_teclado(TECLA_EXCLAMACIONINICIO, estado); break;
+		case SDLK_PLUS: controlador->eventos_teclado(TECLA_SUMA, estado); break;
+
 		case SDLK_F1: controlador->eventos_teclado(TECLA_F1, estado); break;
 		case SDLK_F2: controlador->eventos_teclado(TECLA_F2, estado); break;
 		case SDLK_F3: controlador->eventos_teclado(TECLA_F3, estado); break;

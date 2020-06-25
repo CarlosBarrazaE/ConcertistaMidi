@@ -5,6 +5,7 @@
 #include "archivos/imagen_tga.h++"
 #include "elementos_graficos/etiqueta.h++"
 #include "dispositivos/teclas.h++"
+#include "dispositivos/teclado.h++"
 #include "dispositivos/raton.h++"
 #include "dispositivos/pantalla.h++"
 #include "fps.h++"
@@ -18,6 +19,8 @@
 
 #include "control/configuracion.h++"
 #include "control/datos_musica.h++"
+
+#include "libmidi/MidiComm.h++"
 
 class Controlador_Juego
 {
@@ -34,6 +37,7 @@ private:
 	bool m_pantalla_completa;
 	bool m_modo_alambre;
 	bool m_finalizar;
+	std::set<int> m_teclas_pulsadas;
 
 	//Eventos
 	Raton m_raton;

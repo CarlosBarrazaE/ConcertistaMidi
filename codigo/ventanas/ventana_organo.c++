@@ -50,36 +50,57 @@ VentanaOrgano::~VentanaOrgano()
 
 void VentanaOrgano::actualizar(unsigned int diferencia_tiempo)
 {
+	//Cuando termina la cancion se retrocede a la ventana anterior
 	if(m_musica->musica()->IsSongOver())
 	{
 		m_musica->reiniciar();
 		m_accion = CambiarASeleccionPista;
 	}
+
+	//Se calculan los microsegundos entre fotogramas para actualizar el midi
 	unsigned int microsegundos_actualizar = (diferencia_tiempo / 1000.0) * m_velocidad_musica;
 
 	if(m_pausa)
 		microsegundos_actualizar = 0;
 
-	MidiEventListWithTrackId evs = m_musica->musica()->Update(microsegundos_actualizar);
+	MidiEventListWithTrackId eventos = m_musica->musica()->Update(microsegundos_actualizar);
 
-	std::vector<Pista> *pistas = m_musica->pistas();
-	for (MidiEventListWithTrackId::const_iterator i = evs.begin(); i != evs.end(); i++)
+	if(m_configuracion->salida() != NULL)//Verifica que la salida midi este disponible
 	{
-		if(pistas->at(i->first).sonido())
+		//Se escriben las notas
+		std::vector<Pista> *pistas = m_musica->pistas();
+		for (MidiEventListWithTrackId::const_iterator i = eventos.begin(); i != eventos.end(); i++)
 		{
-			if(m_configuracion->salida() != NULL)
+			//Solo se tocan las pistas que no estan en silencio y que no son tocadas por el jugador
+			if(pistas->at(i->first).sonido() && pistas->at(i->first).modo() == Fondo)
+			{
 				m_configuracion->salida()->Write(i->second);
+			}
+		}
+
+		//NOTE probando la entrada midi
+		MidiEvent evento = m_configuracion->entrada()->Read();
+		evento.SetChannel(1);
+		evento.SetVelocity(120);
+		m_configuracion->salida()->Write(evento);
+
+		//Si selecciono un nuevo tiempo en la barra de progreso, se cambia la posicion.
+		if(m_barra->o_tiempo_seleccionado() > 0)
+		{
+			m_musica->musica()->GoTo(m_barra->o_tiempo_seleccionado());
+			m_tablero->reiniciar();
+			m_configuracion->salida()->Reset();
 		}
 	}
 
-	if(m_barra->o_tiempo_seleccionado() > 0)
+	//Cambio de velocidad de la musica
+	if(m_cambio_velocidad)
 	{
-		m_musica->musica()->GoTo(m_barra->o_tiempo_seleccionado());
-		m_tablero->reiniciar();
-		if(m_configuracion->salida() != NULL)
-			m_configuracion->salida()->Reset();
+		m_cambio_velocidad = false;
+		m_texto_velocidad.texto(std::to_string((int)(m_velocidad_musica*100)) + "%");
 	}
 
+	//Se actualizan los componentes
 	m_barra->actualizar(diferencia_tiempo);
 	m_tablero->actualizar(diferencia_tiempo);
 	m_organo->actualizar(diferencia_tiempo);
@@ -87,12 +108,6 @@ void VentanaOrgano::actualizar(unsigned int diferencia_tiempo)
 
 	m_barra->tiempo(m_musica->musica()->GetSongPositionInMicroseconds());
 	m_tablero->tiempo(m_musica->musica()->GetSongPositionInMicroseconds());
-
-	if(m_cambio_velocidad)
-	{
-		m_cambio_velocidad = false;
-		m_texto_velocidad.texto(std::to_string((int)(m_velocidad_musica*100)) + "%");
-	}
 }
 
 void VentanaOrgano::dibujar()

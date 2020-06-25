@@ -71,21 +71,34 @@ Configuracion_Pista::Configuracion_Pista(int x, int y, int ancho, int alto, Pist
 	m_seleccion_color.opciones_iconos(icono_color);
 	m_seleccion_color.tipografia(recursos->tipografia(LetraMuyChica));
 
-	for(int x=0; x<=NUMERO_COLORES_PISTA; x++)
-	{
-		if(Pista::Colores_pista[x] == m_datos_pista.color())
-		{
-			m_seleccion_color.opcion_predeterminada(x);
-			break;
-		}
-	}
-
 	m_vista_previa = new Boton(300, 22, 30, 30, "", recursos);
 	m_vista_previa->color_boton(Color(1.0f, 1.0f, 1.0f));
 	m_vista_previa->textura(m_textura_reproducir);
 
 	m_boton_sonido = new Boton(272, 87, 40, 40, "", recursos);
 	m_boton_sonido->color_boton(Color(1.0f, 1.0f, 1.0f));
+
+	//Se lee la configuracion del color
+	bool color_encontrado = false;
+	for(int x=0; x<=NUMERO_COLORES_PISTA && !color_encontrado; x++)
+	{
+		//Se busca el color de la pista
+		if(Pista::Colores_pista[x] == m_datos_pista.color())
+		{
+			m_seleccion_color.opcion_predeterminada(x);
+			color_encontrado = true;
+		}
+	}
+
+	//Se lee la configuracion del modo
+	if(m_datos_pista.modo() == ManoIzquierda)
+		m_seleccion_modo.opcion_predeterminada(0);
+	else if(m_datos_pista.modo() == ManoDerecha)
+		m_seleccion_modo.opcion_predeterminada(1);
+	else if(m_datos_pista.modo() == Fondo)
+		m_seleccion_modo.opcion_predeterminada(2);
+
+	//Se lee la configuracion del sonido
 	if(m_datos_pista.sonido())
 	{
 		m_boton_sonido->textura(m_textura_sonido_activado);
@@ -152,6 +165,17 @@ void Configuracion_Pista::evento_raton(Raton *raton)
 	m_seleccion_color.evento_raton(raton);
 	m_vista_previa->evento_raton(raton);
 	m_boton_sonido->evento_raton(raton);
+
+	if(m_seleccion_modo.cambio_opcion_seleccionada())
+	{
+		int modo_seleccionado = m_seleccion_modo.opcion_seleccionada();
+		if(modo_seleccionado == 0)
+			m_datos_pista.modo(ManoIzquierda);
+		else if(modo_seleccionado == 1)
+			m_datos_pista.modo(ManoDerecha);
+		else if(modo_seleccionado == 2)
+			m_datos_pista.modo(Fondo);
+	}
 
 	if(m_seleccion_color.cambio_opcion_seleccionada())
 	{

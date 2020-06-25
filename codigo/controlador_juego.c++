@@ -172,7 +172,29 @@ void Controlador_Juego::eventos_teclado(Tecla tecla, bool estado)
 	else if(tecla == TECLA_F12 && estado)
 		m_modo_alambre = !m_modo_alambre;
 	else
+	{
 		m_ventana_actual->evento_teclado(tecla, estado);
+		int nota = Teclado::Tecla_a_nota(tecla);
+		if(nota > 0)
+		{
+			if(estado)
+			{
+				if(m_teclas_pulsadas.count(nota) == 0)
+				{
+					m_teclas_pulsadas.insert(nota);
+					sendNote(nota, true);
+				}
+			}
+			else
+			{
+				if(m_teclas_pulsadas.count(nota) > 0)
+				{
+					m_teclas_pulsadas.erase(nota);
+					sendNote(nota, false);
+				}
+			}
+		}
+	}
 	this->control_fps(true);
 }
 
