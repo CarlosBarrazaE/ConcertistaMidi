@@ -23,6 +23,7 @@ void Tabla::actualizar(unsigned int diferencia_tiempo)
 
 void Tabla::dibujar()
 {
+	//Dibuja solo lo que esta dentro del cuadro
 	glScissor(this->x()+this->dx(), Pantalla::Alto-this->y()+this->dy()-this->alto(), this->ancho(), this->alto());
 	glEnable(GL_SCISSOR_TEST);
 	m_rectangulo->textura(false);
@@ -91,6 +92,12 @@ void Tabla::insertar_fila(std::vector<std::string> fila_contenido)
 	}
 	else
 		Registro::Error("No coincide el numero de columnas en la tabla");
+}
+
+void Tabla::eliminar_contenido()
+{
+	m_filas.clear();
+	m_ultima_fila = ANCHO_FILA;
 }
 
 int Tabla::obtener_seleccion()

@@ -26,23 +26,7 @@ VentanaSeleccionMusica::VentanaSeleccionMusica(Datos_Musica *musica, Administrad
 	m_tabla_archivos.agregar_columna("Veces", 0.1);
 	m_tabla_archivos.agregar_columna("Fecha", 0.1);
 
-	//https://en.cppreference.com/w/cpp/filesystem/directory_entry
-	int i=0;
-	for(const std::filesystem::directory_entry & elemento : std::filesystem::directory_iterator("../musica/"))
-	{
-		ruta_archivos.push_back(elemento.path());
-		// + " Tamaño: " + std::to_string(elemento.file_size())
-		std::vector<std::string> fila_nueva;
-		fila_nueva.push_back(elemento.path());
-		if(!elemento.is_directory())
-			fila_nueva.push_back(std::to_string(elemento.file_size()));
-		else
-			fila_nueva.push_back("Carpeta");
-		fila_nueva.push_back("35");
-		fila_nueva.push_back("12/04/2020");
-		m_tabla_archivos.insertar_fila(fila_nueva);
-		i++;
-	}
+	this->cargar_carpeta("../musica");
 
 	m_musica = musica;
 }
@@ -51,6 +35,7 @@ VentanaSeleccionMusica::~VentanaSeleccionMusica()
 {
 	delete m_boton_atras;
 	delete m_boton_continuar;
+	Registro::Depurar("Borrando VentanaSeleccionMusica");
 }
 
 void VentanaSeleccionMusica::actualizar(unsigned int diferencia_tiempo)
@@ -73,16 +58,112 @@ void VentanaSeleccionMusica::dibujar()
 	m_boton_continuar->dibujar();
 }
 
+void VentanaSeleccionMusica::cargar_carpeta(std::string ruta_abrir)
+{
+	for(const std::filesystem::directory_entry elemento : std::filesystem::directory_iterator(ruta_abrir))
+	{
+		std::string ruta = std::string(elemento.path());
+		Registro::Depurar("Archivo encontrado: " + ruta);
+		int inicio_archivo = 0;
+		int extencion = ruta.length()-1;
+		//Se recorre la ruta desde el final
+		for(int i=ruta.length()-1; i>0; i--)
+		{
+			//Se busca el punto solo si es un archivo
+			if(!elemento.is_directory() && extencion == ruta.length()-1 && ruta[i] == '.')
+			{
+				//Encuentra el primer punto
+				extencion = i;
+			}
+
+			if(inicio_archivo == 0 && ruta[i] == '/')
+			{
+				//Termina al encontrar el inicio del nombre del archivo
+				inicio_archivo = i;
+				i=0;
+			}
+		}
+
+		//Se obtiene el nombre y la extencion del archivo
+		std::string nombre_archivo, extencion_archivo;
+		if(extencion != ruta.length()-1)
+		{
+			nombre_archivo = ruta.substr(inicio_archivo+1, extencion-(inicio_archivo+1));
+			extencion_archivo = ruta.substr(extencion+1);
+		}
+		else
+			nombre_archivo = ruta.substr(inicio_archivo+1);
+
+		bool es_midi = false;
+		if(extencion_archivo == "mid" ||
+			extencion_archivo == "MID" ||
+			extencion_archivo == "midi" ||
+			extencion_archivo == "MIDI"
+		)
+		{
+			es_midi = true;
+		}
+
+		if(elemento.is_directory() || (!elemento.is_directory() && es_midi))
+		{
+			Datos_Archivos actual;
+			actual.es_carpeta = elemento.is_directory();
+			actual.ruta = elemento.path();
+			actual.nombre = nombre_archivo;
+
+			if(!elemento.is_directory())
+			{
+				//Archivo
+				actual.tamanno = elemento.file_size();
+				actual.fecha = "Fecha_archivo";
+			}
+			//Todo Filtrar archivos Midi
+			lista_archivos.push_back(actual);
+		}
+	}
+
+	//Ordenar Lista
+
+	//Crear Tabla
+	for(int i=0; i<lista_archivos.size(); i++)
+	{
+		std::vector<std::string> fila_nueva;
+
+		fila_nueva.push_back(lista_archivos[i].nombre);
+		fila_nueva.push_back(std::to_string(lista_archivos[i].tamanno));
+		fila_nueva.push_back("35");
+		fila_nueva.push_back(lista_archivos[i].fecha);
+		m_tabla_archivos.insertar_fila(fila_nueva);
+	}
+}
+
 bool VentanaSeleccionMusica::abrir_archivo_seleccionado()
 {
 	int seleccion_actual = m_tabla_archivos.obtener_seleccion();
-	if(seleccion_actual < ruta_archivos.size())
+	if(seleccion_actual < lista_archivos.size())
 	{
-		Registro::Nota("Abriendo archivo: " + ruta_archivos[seleccion_actual]);
-		m_musica->cargar_midi(ruta_archivos[seleccion_actual]);
-		m_musica->nombre_musica(ruta_archivos[seleccion_actual]);
-		m_musica->autor("Autor");
-		return true;
+		if(lista_archivos[seleccion_actual].es_carpeta)
+		{
+			std::string ruta_nueva = lista_archivos[seleccion_actual].ruta;
+
+			//Limpia la lista y la tabla
+			lista_archivos.clear();
+			m_tabla_archivos.eliminar_contenido();
+
+			//Carga la lista de archivos de la carpeta seleccionada
+			Registro::Nota("Abriendo carpeta: " + ruta_nueva);
+			this->cargar_carpeta(ruta_nueva);
+			return false;
+		}
+		else
+		{
+			//Abre el archivo seleccionado
+			Registro::Nota("Abriendo archivo: " + lista_archivos[seleccion_actual].ruta);
+			m_musica->cargar_midi(lista_archivos[seleccion_actual].ruta);
+			m_musica->nombre_musica(lista_archivos[seleccion_actual].nombre);
+			m_musica->autor("Autor");
+			return true;
+		}
 	}
 	return false;
 }

@@ -8,6 +8,7 @@
 #include "../elementos_graficos/etiqueta.h++"
 #include "../elementos_graficos/tabla.h++"
 #include "../control/datos_musica.h++"
+#include "../control/datos_archivos.h++"
 
 class VentanaSeleccionMusica : public Ventana
 {
@@ -18,13 +19,16 @@ private:
 	Tabla m_tabla_archivos;
 
 	Datos_Musica *m_musica;
-	std::vector<std::string> ruta_archivos;
+
+	std::vector<Datos_Archivos> lista_archivos;
 
 	//Componentes
 	Boton *m_boton_atras;
 	Boton *m_boton_continuar;
 
+	void cargar_carpeta(std::string ruta_abrir);
 	bool abrir_archivo_seleccionado();
+
 public:
 	VentanaSeleccionMusica(Datos_Musica *musica, Administrador_Recursos *recursos);
 	~VentanaSeleccionMusica();

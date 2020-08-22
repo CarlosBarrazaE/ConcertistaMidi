@@ -13,7 +13,7 @@
 struct Celda
 {
 	//TODO posiblemente deberia agregar un campo para saber si es ocultable cuando la tabla es muy chica
-	//Agregar orientacion de aliniacion del texto
+	//Agregar Aliniacion del texto (centrado por ejemplo)
 	Etiqueta *texto;
 	double ancho;//Porcentaje reprecentado de 0 a 1 en relacion al ancho de la fila
 };
@@ -45,6 +45,7 @@ public:
 
 	void agregar_columna(std::string nombre, double ancho);
 	void insertar_fila(std::vector<std::string> fila_contenido);
+	void eliminar_contenido();
 	int obtener_seleccion();
 };
 
