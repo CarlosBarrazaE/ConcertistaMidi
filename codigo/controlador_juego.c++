@@ -63,7 +63,7 @@ Administrador_Recursos *Controlador_Juego::obtener_administrador_recursos()
 
 void Controlador_Juego::actualizar()
 {
-	m_fps = Fps::Tiempo_fotograma();
+	m_fps = Fps::Calcular_tiempo();
 	m_ventana_actual->actualizar(Fps::Obtener_nanosegundos());
 	//m_ventana_actual->actualizar((1.0/60.0)*1000000000);
 	m_ventana_actual->dibujar();
@@ -80,18 +80,21 @@ void Controlador_Juego::actualizar()
 	if(m_ventana_actual->obtener_accion() == CambiarATitulo)
 	{
 		delete m_ventana_actual;
+		m_fps_reducido_desactivado = false;
 		m_ventana_actual = new VentanaTitulo(m_recursos);
 		cambio_ventana = true;
 	}
 	else if(m_ventana_actual->obtener_accion() == CambiarASeleccionMusica)
 	{
 		delete m_ventana_actual;
+		m_fps_reducido_desactivado = false;
 		m_ventana_actual = new VentanaSeleccionMusica(&m_musica, m_recursos);
 		cambio_ventana = true;
 	}
 	else if(m_ventana_actual->obtener_accion() == CambiarASeleccionPista)
 	{
 		delete m_ventana_actual;
+		m_fps_reducido_desactivado = false;
 		m_ventana_actual = new VentanaSeleccionPista(&m_musica, m_recursos);
 		cambio_ventana = true;
 
@@ -100,6 +103,7 @@ void Controlador_Juego::actualizar()
 	else if(m_ventana_actual->obtener_accion() == CambiarAOrgano)
 	{
 		delete m_ventana_actual;
+		m_fps_reducido_desactivado = true;
 		m_ventana_actual = new VentanaOrgano(&m_configuracion, &m_musica, m_recursos);
 		cambio_ventana = true;
 
@@ -108,6 +112,7 @@ void Controlador_Juego::actualizar()
 	else if(m_ventana_actual->obtener_accion() == CambiarAConfiguracion)
 	{
 		delete m_ventana_actual;
+		m_fps_reducido_desactivado = false;
 		m_ventana_actual = new VentanaConfiguracion(m_recursos);
 		cambio_ventana = true;
 	}
@@ -116,7 +121,6 @@ void Controlador_Juego::actualizar()
 
 	if(cambio_ventana)
 	{
-		m_fps_reducido_desactivado = true;
 		//Reenvia el ultimo evento del raton
 		m_ventana_actual->evento_raton(&m_raton);
 	}
