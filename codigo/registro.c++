@@ -70,6 +70,8 @@ void Registro::Mostrar_detalles()
 		GL_MAX_VERTEX_ATTRIBS,
 		GL_MAX_VERTEX_TEXTURE_IMAGE_UNITS,
 		GL_MAX_VERTEX_UNIFORM_COMPONENTS,
+		GL_MAX_GEOMETRY_OUTPUT_VERTICES,
+		GL_MAX_GEOMETRY_TOTAL_OUTPUT_COMPONENTS,
 	};
 	const char* nombres[] = {
 		"GL_MAX_COMBINED_TEXTURE_IMAGE_UNITS",
@@ -82,15 +84,15 @@ void Registro::Mostrar_detalles()
 		"GL_MAX_VERTEX_ATTRIBS",
 		"GL_MAX_VERTEX_TEXTURE_IMAGE_UNITS",
 		"GL_MAX_VERTEX_UNIFORM_COMPONENTS",
-		"GL_MAX_VIEWPORT_DIMS",
-		"GL_STEREO",
+		"GL_MAX_GEOMETRY_OUTPUT_VERTICES",
+		"GL_MAX_GEOMETRY_TOTAL_OUTPUT_COMPONENTS",
 	};
 
 	Registro::Depurar("---------------------------------------");
 	Registro::Depurar("Parametros del Contexto GL:");
 
 	int valor = 0;
-	for (int x = 0; x < 10; x++)
+	for (int x = 0; x < 12; x++)
 	{
 		glGetIntegerv(parametros[x], &valor);
 		Registro::Depurar(std::string(nombres[x]) + " " + std::to_string(valor));
