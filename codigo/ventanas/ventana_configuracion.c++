@@ -8,6 +8,7 @@ VentanaConfiguracion::VentanaConfiguracion(Administrador_Recursos *recursos) : V
 
 VentanaConfiguracion::~VentanaConfiguracion()
 {
+	delete m_boton_atras;
 }
 
 void VentanaConfiguracion::actualizar(unsigned int diferencia_tiempo)
