@@ -35,7 +35,6 @@ VentanaSeleccionMusica::~VentanaSeleccionMusica()
 {
 	delete m_boton_atras;
 	delete m_boton_continuar;
-	Registro::Depurar("Borrando VentanaSeleccionMusica");
 }
 
 void VentanaSeleccionMusica::actualizar(unsigned int diferencia_tiempo)

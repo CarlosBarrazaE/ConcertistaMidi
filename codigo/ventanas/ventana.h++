@@ -4,6 +4,7 @@
 #include "../dispositivos/pantalla.h++"
 #include "../dispositivos/teclas.h++"
 #include "../dispositivos/raton.h++"
+#include "../registro.h++"
 
 enum Accion
 {
@@ -22,6 +23,7 @@ protected:
 	Accion m_accion;
 public:
 	Ventana();
+	virtual ~Ventana();
 
 	virtual void actualizar(unsigned int diferencia_tiempo) = 0;
 	virtual void dibujar() = 0;
