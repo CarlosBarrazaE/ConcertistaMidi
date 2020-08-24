@@ -23,7 +23,7 @@ class Tabla : public Elemento
 private:
 	Administrador_Recursos *m_recursos;
 	std::vector<Celda> m_titulos;//Fila titulo
-	std::vector<Fila> m_filas;
+	std::vector<Fila*> m_filas;
 
 	int m_fila_seleccionada;
 

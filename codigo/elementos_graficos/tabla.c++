@@ -11,13 +11,21 @@ Tabla::Tabla(int x, int y, int ancho, int alto, Administrador_Recursos *recursos
 
 Tabla::~Tabla()
 {
+	for(Celda c : m_titulos)
+	{
+		delete c.texto;
+	}
+	for(Fila *m : m_filas)
+	{
+		delete m;
+	}
 }
 
 void Tabla::actualizar(unsigned int diferencia_tiempo)
 {
 	for(int x=0; x<m_filas.size(); x++)
 	{
-		m_filas[x].actualizar(diferencia_tiempo);
+		m_filas[x]->actualizar(diferencia_tiempo);
 	}
 }
 
@@ -37,8 +45,8 @@ void Tabla::dibujar()
 
 	for(int x=0; x<m_filas.size(); x++)
 	{
-		if(m_filas[x].y() < this->y()+this->alto())
-			m_filas[x].dibujar();
+		if(m_filas[x]->y() < this->y()+this->alto())
+			m_filas[x]->dibujar();
 	}
 	glDisable(GL_SCISSOR_TEST);
 }
@@ -47,12 +55,12 @@ void Tabla::evento_raton(Raton *raton)
 {
 	for(int x=0; x<m_filas.size(); x++)
 	{
-		if(m_filas[x].y() < this->y()+this->alto())
+		if(m_filas[x]->y() < this->y()+this->alto())
 		{
-			m_filas[x].evento_raton(raton);
-			if(m_filas[x].esta_seleccionado() && x != m_fila_seleccionada)
+			m_filas[x]->evento_raton(raton);
+			if(m_filas[x]->esta_seleccionado() && x != m_fila_seleccionada)
 			{
-				m_filas[m_fila_seleccionada].deseleccionar();
+				m_filas[m_fila_seleccionada]->deseleccionar();
 				m_fila_seleccionada = x;
 			}
 		}
@@ -82,10 +90,10 @@ void Tabla::insertar_fila(std::vector<std::string> fila_contenido)
 {
 	if(fila_contenido.size() == m_titulos.size())
 	{
-		Fila fila_nueva(this->x(), this->y()+m_ultima_fila, this->ancho(), ANCHO_FILA-1, m_recursos);
+		Fila *fila_nueva = new Fila(this->x(), this->y()+m_ultima_fila, this->ancho(), ANCHO_FILA-1, m_recursos);
 		for(int x=0; x<fila_contenido.size(); x++)
 		{
-			fila_nueva.agregar_celda(new Etiqueta(m_titulos[x].texto->x(), this->y()+m_ultima_fila, false, fila_contenido[x], LetraChica, m_recursos));
+			fila_nueva->agregar_celda(new Etiqueta(m_titulos[x].texto->x(), this->y()+m_ultima_fila, false, fila_contenido[x], LetraChica, m_recursos));
 		}
 		m_filas.push_back(fila_nueva);
 		m_ultima_fila += ANCHO_FILA;
@@ -96,6 +104,11 @@ void Tabla::insertar_fila(std::vector<std::string> fila_contenido)
 
 void Tabla::eliminar_contenido()
 {
+	//Se eliminan las filas al cambiar de carpeta
+	for(Fila *m : m_filas)
+	{
+		delete m;
+	}
 	m_filas.clear();
 	m_ultima_fila = ANCHO_FILA;
 }

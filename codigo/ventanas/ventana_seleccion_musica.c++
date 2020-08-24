@@ -62,7 +62,6 @@ void VentanaSeleccionMusica::cargar_carpeta(std::string ruta_abrir)
 	for(const std::filesystem::directory_entry elemento : std::filesystem::directory_iterator(ruta_abrir))
 	{
 		std::string ruta = std::string(elemento.path());
-		Registro::Depurar("Archivo encontrado: " + ruta);
 		int inicio_archivo = 0;
 		int extencion = ruta.length()-1;
 		//Se recorre la ruta desde el final

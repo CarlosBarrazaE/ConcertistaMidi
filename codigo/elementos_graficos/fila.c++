@@ -13,6 +13,10 @@ Fila::Fila(int x, int y, int ancho, int alto, Administrador_Recursos *recursos) 
 
 Fila::~Fila()
 {
+	for(Etiqueta* e : m_celda)
+	{
+		delete e;
+	}
 }
 
 void Fila::actualizar(unsigned int diferencia_tiempo)
