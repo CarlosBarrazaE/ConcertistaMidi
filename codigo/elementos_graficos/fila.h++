@@ -26,6 +26,7 @@ public:
 	void agregar_celda(Etiqueta *celda);
 
 	bool esta_seleccionado();
+	void seleccionar();
 	void deseleccionar();
 };
 

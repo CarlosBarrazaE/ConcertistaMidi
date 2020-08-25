@@ -80,6 +80,11 @@ bool Fila::esta_seleccionado()
 	return m_boton_seleccionado;
 }
 
+void Fila::seleccionar()
+{
+	m_boton_seleccionado = true;
+}
+
 void Fila::deseleccionar()
 {
 	m_boton_seleccionado = false;

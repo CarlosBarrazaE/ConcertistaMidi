@@ -111,6 +111,28 @@ void Tabla::eliminar_contenido()
 	}
 	m_filas.clear();
 	m_ultima_fila = ANCHO_FILA;
+	m_fila_seleccionada = 0;
+}
+
+void Tabla::cambiar_seleccion(int cambio)
+{
+	//Se deselecciona la fila anterior y se marca la siguiente
+	//Si llega arriba comienza abajo de nuevo
+	if(!m_filas[m_fila_seleccionada]->esta_seleccionado())
+	{
+		//La fila no esta seleccionada visiblemente
+		m_filas[m_fila_seleccionada]->seleccionar();
+	}
+	else
+	{
+		m_filas[m_fila_seleccionada]->deseleccionar();
+		m_fila_seleccionada+=cambio;
+		if(m_fila_seleccionada >= m_filas.size())
+			m_fila_seleccionada = 0;
+		else if(m_fila_seleccionada < 0)
+			m_fila_seleccionada = m_filas.size() - 1;
+		m_filas[m_fila_seleccionada]->seleccionar();
+	}
 }
 
 int Tabla::obtener_seleccion()

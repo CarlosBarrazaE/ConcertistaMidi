@@ -21,12 +21,13 @@ private:
 	Datos_Musica *m_musica;
 
 	std::vector<Datos_Archivos> m_lista_archivos;
+	std::vector<std::string> m_rutas;
 
 	//Componentes
 	Boton *m_boton_atras;
 	Boton *m_boton_continuar;
 
-	void cargar_carpeta(std::string ruta_abrir);
+	void cargar_carpeta(std::string ruta_abrir, bool guardar_ruta);
 	bool abrir_archivo_seleccionado();
 
 public:

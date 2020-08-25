@@ -26,7 +26,7 @@ VentanaSeleccionMusica::VentanaSeleccionMusica(Datos_Musica *musica, Administrad
 	m_tabla_archivos.agregar_columna("Veces", 0.1);
 	m_tabla_archivos.agregar_columna("Fecha", 0.1);
 
-	this->cargar_carpeta("../musica");
+	this->cargar_carpeta("../musica", true);
 
 	m_musica = musica;
 }
@@ -57,8 +57,10 @@ void VentanaSeleccionMusica::dibujar()
 	m_boton_continuar->dibujar();
 }
 
-void VentanaSeleccionMusica::cargar_carpeta(std::string ruta_abrir)
+void VentanaSeleccionMusica::cargar_carpeta(std::string ruta_abrir, bool guardar_ruta)
 {
+	if(guardar_ruta)
+		m_rutas.push_back(ruta_abrir);//Para guardar solo cuando va hacia delante y no cuando se retrocede
 	for(const std::filesystem::directory_entry elemento : std::filesystem::directory_iterator(ruta_abrir))
 	{
 		std::string ruta = std::string(elemento.path());
@@ -152,7 +154,7 @@ bool VentanaSeleccionMusica::abrir_archivo_seleccionado()
 
 			//Carga la lista de archivos de la carpeta seleccionada
 			Registro::Nota("Abriendo carpeta: " + ruta_nueva);
-			this->cargar_carpeta(ruta_nueva);
+			this->cargar_carpeta(ruta_nueva, true);
 			return false;
 		}
 		else
@@ -195,11 +197,28 @@ void VentanaSeleccionMusica::evento_teclado(Tecla tecla, bool estado)
 {
 	if(tecla == TECLA_ESCAPE && !estado)
 		m_accion = CambiarATitulo;
-	else if(tecla == TECLA_ENTRAR && !estado)
+	else if((tecla == TECLA_ENTRAR || tecla == TECLA_FLECHA_DERECHA) && !estado)
 	{
 		if(this->abrir_archivo_seleccionado())
 			m_accion = CambiarASeleccionPista;
 	}
+	else if((tecla == TECLA_BORRAR || tecla == TECLA_FLECHA_IZQUIERDA) && !estado)
+	{
+		if(m_rutas.size() > 1)
+		{
+			m_lista_archivos.clear();
+			m_tabla_archivos.eliminar_contenido();
+
+			//Carga la lista de archivos de la carpeta seleccionada
+			m_rutas.erase(m_rutas.end());//Borra el ultimo, para cargar el anterior
+			Registro::Nota("Abriendo anterior: " + m_rutas[m_rutas.size()-1]);
+			this->cargar_carpeta(m_rutas[m_rutas.size()-1], false);
+		}
+	}
+	else if(tecla == TECLA_FLECHA_ABAJO && !estado)
+		m_tabla_archivos.cambiar_seleccion(1);
+	else if(tecla == TECLA_FLECHA_ARRIBA && !estado)
+		m_tabla_archivos.cambiar_seleccion(-1);
 }
 
 void VentanaSeleccionMusica::evento_pantalla(int ancho, int alto)
