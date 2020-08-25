@@ -12,5 +12,7 @@ struct Datos_Archivos
 	std::string fecha;
 
 	Datos_Archivos();
+
+	bool operator < (const Datos_Archivos &d) const;
 };
 #endif

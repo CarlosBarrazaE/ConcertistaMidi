@@ -20,7 +20,7 @@ private:
 
 	Datos_Musica *m_musica;
 
-	std::vector<Datos_Archivos> lista_archivos;
+	std::vector<Datos_Archivos> m_lista_archivos;
 
 	//Componentes
 	Boton *m_boton_atras;

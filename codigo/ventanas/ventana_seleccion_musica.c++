@@ -91,6 +91,7 @@ void VentanaSeleccionMusica::cargar_carpeta(std::string ruta_abrir)
 		}
 		else
 			nombre_archivo = ruta.substr(inicio_archivo+1);
+		std::replace(nombre_archivo.begin(), nombre_archivo.end(), '_', ' ');//Reemplaza el guion bajo por espacio
 
 		bool es_midi = false;
 		if(extencion_archivo == "mid" ||
@@ -116,21 +117,22 @@ void VentanaSeleccionMusica::cargar_carpeta(std::string ruta_abrir)
 				actual.fecha = "Fecha_archivo";
 			}
 			//Todo Filtrar archivos Midi
-			lista_archivos.push_back(actual);
+			m_lista_archivos.push_back(actual);
 		}
 	}
 
 	//Ordenar Lista
+	std::sort(m_lista_archivos.begin(), m_lista_archivos.end());
 
 	//Crear Tabla
-	for(int i=0; i<lista_archivos.size(); i++)
+	for(int i=0; i<m_lista_archivos.size(); i++)
 	{
 		std::vector<std::string> fila_nueva;
 
-		fila_nueva.push_back(lista_archivos[i].nombre);
-		fila_nueva.push_back(std::to_string(lista_archivos[i].tamanno));
+		fila_nueva.push_back(m_lista_archivos[i].nombre);
+		fila_nueva.push_back(std::to_string(m_lista_archivos[i].tamanno));
 		fila_nueva.push_back("35");
-		fila_nueva.push_back(lista_archivos[i].fecha);
+		fila_nueva.push_back(m_lista_archivos[i].fecha);
 		m_tabla_archivos.insertar_fila(fila_nueva);
 	}
 }
@@ -138,14 +140,14 @@ void VentanaSeleccionMusica::cargar_carpeta(std::string ruta_abrir)
 bool VentanaSeleccionMusica::abrir_archivo_seleccionado()
 {
 	int seleccion_actual = m_tabla_archivos.obtener_seleccion();
-	if(seleccion_actual < lista_archivos.size())
+	if(seleccion_actual < m_lista_archivos.size())
 	{
-		if(lista_archivos[seleccion_actual].es_carpeta)
+		if(m_lista_archivos[seleccion_actual].es_carpeta)
 		{
-			std::string ruta_nueva = lista_archivos[seleccion_actual].ruta;
+			std::string ruta_nueva = m_lista_archivos[seleccion_actual].ruta;
 
 			//Limpia la lista y la tabla
-			lista_archivos.clear();
+			m_lista_archivos.clear();
 			m_tabla_archivos.eliminar_contenido();
 
 			//Carga la lista de archivos de la carpeta seleccionada
@@ -156,9 +158,9 @@ bool VentanaSeleccionMusica::abrir_archivo_seleccionado()
 		else
 		{
 			//Abre el archivo seleccionado
-			Registro::Nota("Abriendo archivo: " + lista_archivos[seleccion_actual].ruta);
-			m_musica->cargar_midi(lista_archivos[seleccion_actual].ruta);
-			m_musica->nombre_musica(lista_archivos[seleccion_actual].nombre);
+			Registro::Nota("Abriendo archivo: " + m_lista_archivos[seleccion_actual].ruta);
+			m_musica->cargar_midi(m_lista_archivos[seleccion_actual].ruta);
+			m_musica->nombre_musica(m_lista_archivos[seleccion_actual].nombre);
 			m_musica->autor("Autor");
 			return true;
 		}

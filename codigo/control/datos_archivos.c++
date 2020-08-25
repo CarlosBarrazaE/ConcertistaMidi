@@ -9,3 +9,14 @@ Datos_Archivos::Datos_Archivos()
 	this->fecha = "Desconocido";
 }
 
+bool Datos_Archivos::operator < (const Datos_Archivos &d) const
+{
+	if(es_carpeta && !d.es_carpeta)
+		return true;
+	else if(es_carpeta == d.es_carpeta)
+	{
+		if(nombre < d.nombre)
+		return true;
+	}
+	return false;
+}
