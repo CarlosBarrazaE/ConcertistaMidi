@@ -17,7 +17,7 @@ class Tablero_Notas : public Elemento
 {
 private:
 	Administrador_Recursos *m_recursos;
-	Textura2D *m_textura_sombra, *m_textura_nota;
+	Textura2D *m_textura_sombra, *m_textura_nota, *m_textura_nota_resaltada;
 	Rectangulo *m_rectangulo;
 	Tipografia *m_tipografia;
 	std::map<int, Etiqueta*> m_texto_numeros;

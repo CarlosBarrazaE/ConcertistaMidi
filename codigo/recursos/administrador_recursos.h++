@@ -29,6 +29,7 @@ enum Textura
 	T_BordeOrganoRojo,
 	T_BordeOrganoNegro,
 	T_Nota,
+	T_NotaResaltada,
 	T_Sombra,
 	T_FrenteBarraProgreso,
 	T_ParticulaNota,

@@ -9,6 +9,7 @@ Tablero_Notas::Tablero_Notas(int x, int y, int ancho, int alto, Teclado_Configur
 
 	m_textura_sombra = recursos->textura(T_Sombra);
 	m_textura_nota = recursos->textura(T_Nota);
+	m_textura_nota_resaltada = recursos->textura(T_NotaResaltada);
 
 	m_rectangulo = recursos->figura(F_Rectangulo);
 	m_tipografia = recursos->tipografia(LetraMuyChica);
@@ -321,7 +322,18 @@ void Tablero_Notas::dibujar_notas(int pista)
 			m_rectangulo->color(m_pistas->at(pista).color()-0.3);
 		else
 			m_rectangulo->color(m_pistas->at(pista).color());
+
+
+
 		m_textura_nota->activar();
 		m_rectangulo->dibujar_estirable(this->x()+m_ajuste_x + posicion_blanca * m_ancho_blanca + ajuste_negra, this->y()+this->alto()+posicion_y-largo_nota, ancho_tecla, largo_final_nota, 0, 10);
+
+		//Agrega una segunda textura a la nota tocada
+		if(posicion_y > 0)
+		{
+			m_textura_nota_resaltada->activar();
+			m_rectangulo->color(Color(1.0f, 1.0f, 1.0f));
+			m_rectangulo->dibujar_estirable(this->x()+m_ajuste_x + posicion_blanca * m_ancho_blanca + ajuste_negra, this->y()+this->alto()+posicion_y-largo_nota, ancho_tecla, largo_final_nota, 0, 10);
+		}
 	}
 }

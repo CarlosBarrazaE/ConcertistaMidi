@@ -17,6 +17,7 @@ Administrador_Recursos::Administrador_Recursos()
 	m_archivo_texturas[T_BordeOrganoRojo] = "../texturas/borde_organo_rojo.tga";
 	m_archivo_texturas[T_BordeOrganoNegro] = "../texturas/borde_organo_negro.tga";
 	m_archivo_texturas[T_Nota] = "../texturas/nota.tga";
+	m_archivo_texturas[T_NotaResaltada] = "../texturas/nota_resaltada.tga";
 	m_archivo_texturas[T_Sombra] = "../texturas/sombra.tga";
 	m_archivo_texturas[T_FrenteBarraProgreso] = "../texturas/frente_barra_progreso.tga";
 	m_archivo_texturas[T_ParticulaNota] = "../texturas/particula_nota.tga";
