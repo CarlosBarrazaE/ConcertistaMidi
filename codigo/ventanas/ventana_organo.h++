@@ -37,6 +37,10 @@ private:
 	//Datos
 	Configuracion *m_configuracion;
 	Datos_Musica *m_musica;
+	std::array<Color, 52> *m_teclas_activas_blancas;
+	std::array<Color, 36> *m_teclas_activas_negras;
+	std::set<int> m_notas_tocadas_blanca;
+	std::set<int> m_notas_tocadas_negra;
 
 public:
 	VentanaOrgano(Configuracion *configuracion, Datos_Musica *musica, Administrador_Recursos *recursos);
