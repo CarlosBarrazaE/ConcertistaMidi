@@ -37,6 +37,9 @@ VentanaOrgano::VentanaOrgano(Configuracion *configuracion, Datos_Musica *musica,
 	m_organo->blancas_presionadas(m_tablero->blancas_presionadas());
 	m_organo->negras_presionadas(m_tablero->negras_presionadas());
 
+	//Elimina las notas tocadas antes de esta ventana
+	m_configuracion->entrada()->Reset();
+
 	m_cambio_velocidad = false;
 	m_pausa = false;
 }
