@@ -5,7 +5,7 @@
 #include <fstream>
 
 #define ARCHIVO_REGISTRO "../registros.txt"
-#define IMPRIMIR_PANTALLA 1
+#define IMPRIMIR_TERMINAL 1
 #define NIVEL_REGISTRO 3
 
 namespace

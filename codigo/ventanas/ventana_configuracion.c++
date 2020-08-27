@@ -1,7 +1,9 @@
 #include "ventana_configuracion.h++"
 
-VentanaConfiguracion::VentanaConfiguracion(Administrador_Recursos *recursos) : Ventana()
+VentanaConfiguracion::VentanaConfiguracion(Configuracion *configuracion, Administrador_Recursos *recursos) : Ventana()
 {
+	m_configuracion = configuracion;
+
 	m_boton_atras = new Boton(10, 10, 100, 40, "Atrás", recursos);
 	m_boton_atras->color_boton(Color(0.8f, 0.9f, 1.0f));
 }

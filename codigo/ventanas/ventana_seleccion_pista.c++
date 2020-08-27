@@ -1,8 +1,10 @@
 #include "ventana_seleccion_pista.h++"
 
-VentanaSeleccionPista::VentanaSeleccionPista(Datos_Musica *musica, Administrador_Recursos *recursos) : Ventana(), m_texto_titulo(recursos)
+VentanaSeleccionPista::VentanaSeleccionPista(Configuracion *configuracion, Datos_Musica *musica, Administrador_Recursos *recursos) : Ventana(), m_texto_titulo(recursos)
 {
+	m_configuracion = configuracion;
 	m_musica = musica;
+
 	m_rectangulo = recursos->figura(F_Rectangulo);
 	Tipografia *texto_boton = recursos->tipografia(LetraChica);
 

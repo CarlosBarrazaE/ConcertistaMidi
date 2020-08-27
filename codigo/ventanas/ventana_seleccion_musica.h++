@@ -7,6 +7,7 @@
 #include "../elementos_graficos/boton.h++"
 #include "../elementos_graficos/etiqueta.h++"
 #include "../elementos_graficos/tabla.h++"
+#include "../control/configuracion.h++"
 #include "../control/datos_musica.h++"
 #include "../control/datos_archivos.h++"
 
@@ -18,6 +19,8 @@ private:
 	Etiqueta m_texto_titulo;
 	Tabla m_tabla_archivos;
 
+	//Datos
+	Configuracion *m_configuracion;
 	Datos_Musica *m_musica;
 
 	std::vector<Datos_Archivos> m_lista_archivos;
@@ -31,7 +34,7 @@ private:
 	bool abrir_archivo_seleccionado();
 
 public:
-	VentanaSeleccionMusica(Datos_Musica *musica, Administrador_Recursos *recursos);
+	VentanaSeleccionMusica(Configuracion *configuracion, Datos_Musica *musica, Administrador_Recursos *recursos);
 	~VentanaSeleccionMusica();
 
 	void actualizar(unsigned int diferencia_tiempo);

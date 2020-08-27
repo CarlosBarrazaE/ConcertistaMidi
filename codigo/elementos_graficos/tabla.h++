@@ -15,7 +15,7 @@ struct Celda
 	//TODO posiblemente deberia agregar un campo para saber si es ocultable cuando la tabla es muy chica
 	//Agregar Aliniacion del texto (centrado por ejemplo)
 	Etiqueta *texto;
-	double ancho;//Porcentaje reprecentado de 0 a 1 en relacion al ancho de la fila
+	double ancho_celda;//Porcentaje reprecentado de 0 a 1 en relacion al ancho de la fila
 };
 
 class Tabla : public Elemento

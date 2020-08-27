@@ -14,7 +14,7 @@ void Registro::Escribir_registro(CodigoEstado estado, std::string texto)
 	else if(estado == EstadoDepurar && NIVEL_REGISTRO >= 3)
 		archivo << "[DEPURAR] " << texto << "\n";
 
-	if(IMPRIMIR_PANTALLA)
+	if(IMPRIMIR_TERMINAL)
 	{
 		if(estado == EstadoError)
 			std::cout << "\033[31m[ERROR]\033[0m " << texto << "\n";

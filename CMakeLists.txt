@@ -8,6 +8,7 @@ find_package(GLEW REQUIRED)
 find_package(Freetype REQUIRED)
 
 find_library(ICUUC_LIBRARY icuuc)
+find_library(SQLITE3_LIBRERIA NAMES sqlite3)
 
 pkg_check_modules(SDL2 REQUIRED sdl2)
 pkg_check_modules(ALSA REQUIRED alsa)
@@ -35,3 +36,4 @@ target_link_libraries(${PROJECT_NAME} ${GLEW_LIBRARIES})
 target_link_libraries(${PROJECT_NAME} ${FREETYPE_LIBRARIES})
 target_link_libraries(${PROJECT_NAME} ${ICUUC_LIBRARY})
 target_link_libraries(${PROJECT_NAME} ${ALSA_LIBRARIES})
+target_link_libraries(${PROJECT_NAME} ${SQLITE3_LIBRERIA})

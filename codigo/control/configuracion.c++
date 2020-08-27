@@ -2,60 +2,89 @@
 
 Configuracion::Configuracion()
 {
-	MidiCommDescriptionList dispositivos_entrada = MidiCommIn::GetDeviceList();
-	MidiCommDescriptionList dispositivos_salida = MidiCommOut::GetDeviceList();
+	int id_dispositivo_entrada = 0;
+	int id_dispositivo_salida = 0;
 
-	m_cantidad_dispositivos_entrada = dispositivos_entrada.size();
-	m_cantidad_dispositivos_salida = dispositivos_salida.size();
+	std::string ruta_base_de_datos = Usuario::carpeta_personal() + ".concertista.db";
+	if(std::ifstream(ruta_base_de_datos))
+	{
+		//Se abre la base de datos existente
+		Registro::Depurar("Abriendo la base de datos en: " + ruta_base_de_datos);
+		m_datos.abrir(ruta_base_de_datos);
+		m_datos.actualizar();
+		id_dispositivo_entrada = std::stoi(m_datos.leer_configuracion("dispositivo_entrada"));
+		id_dispositivo_salida = std::stoi(m_datos.leer_configuracion("dispositivo_salida"));
+	}
+	else
+	{
+		//Se crea la base de datos si no existe
+		Registro::Depurar("Creando la base de datos en: " + ruta_base_de_datos);
+		m_datos.abrir(ruta_base_de_datos);
+		m_datos.crear();
 
-	this->cambiar_entrada(0);
-	this->cambiar_salida(0);
-}
+		//Configuracion Inicial
+		m_datos.escribir_configuracion("dispositivo_entrada", "0");
+		m_datos.escribir_configuracion("dispositivo_salida", "0");
+		id_dispositivo_entrada = 0;
+		id_dispositivo_salida = 0;
+	}
 
-Configuracion::Configuracion(unsigned int id_entrada, unsigned int id_salida)
-{
-	MidiCommDescriptionList dispositivos_entrada = MidiCommIn::GetDeviceList();
-	MidiCommDescriptionList dispositivos_salida = MidiCommOut::GetDeviceList();
-
-	m_cantidad_dispositivos_entrada = dispositivos_entrada.size();
-	m_cantidad_dispositivos_salida = dispositivos_salida.size();
-
-	this->cambiar_entrada(id_entrada);
-	this->cambiar_salida(id_salida);
+	this->dispositivo_entrada(id_dispositivo_entrada);
+	this->dispositivo_salida(id_dispositivo_salida);
 }
 
 Configuracion::~Configuracion()
 {
 }
 
-void Configuracion::cambiar_entrada(unsigned int id_entrada)
+std::string Configuracion::leer(std::string atributo)
 {
-	if(m_cantidad_dispositivos_entrada > 0)
-	{
-		if(id_entrada < m_cantidad_dispositivos_entrada)
-			m_entrada = new MidiCommIn(id_entrada);
-		else
-			m_entrada = new MidiCommIn(0);
-	}
+	return m_datos.leer_configuracion(atributo);
 }
 
-void Configuracion::cambiar_salida(unsigned int id_salida)
+bool Configuracion::escribir(std::string atributo, std::string valor)
 {
-	if(m_cantidad_dispositivos_salida > 0)
-	{
-		if(id_salida < m_cantidad_dispositivos_salida)
-			m_salida = new MidiCommOut(id_salida);
-		else
-			m_salida = new MidiCommOut(0);
-	}
+	return m_datos.escribir_configuracion(atributo, valor);
 }
 
-MidiCommIn *Configuracion::entrada()
+void Configuracion::dispositivo_entrada(unsigned int id_entrada)
+{
+	MidiCommDescriptionList dispositivos_entrada = MidiCommIn::GetDeviceList();
+	if(dispositivos_entrada.size() > 0)
+	{
+		int id = 0;
+		if(id_entrada < dispositivos_entrada.size())
+			id = id_entrada;
+
+		Registro::Nota("Conectado al dispositivo de entrada: " + dispositivos_entrada[id].name);
+		m_entrada = new MidiCommIn(id);
+	}
+	else
+		Registro::Nota("No se pudo conectar al dispositivo de entrada");
+}
+
+void Configuracion::dispositivo_salida(unsigned int id_salida)
+{
+	MidiCommDescriptionList dispositivos_salida = MidiCommOut::GetDeviceList();
+	if(dispositivos_salida.size() > 0)
+	{
+		int id = 0;
+		if(id_salida < dispositivos_salida.size())
+			id = id_salida;
+
+		Registro::Nota("Conectado al dispositivo de salida: " + dispositivos_salida[id].name);
+		m_salida = new MidiCommOut(id);
+	}
+	else
+		Registro::Nota("No se pudo conectar al dispositivo de salida");
+}
+
+MidiCommIn *Configuracion::dispositivo_entrada()
 {
 	return m_entrada;
 }
 
-MidiCommOut *Configuracion::salida()
+MidiCommOut *Configuracion::dispositivo_salida()
 {
 	return m_salida;
 }

@@ -16,36 +16,6 @@ Controlador_Juego::Controlador_Juego(Administrador_Recursos *recursos) : m_texto
 
 	m_ventana_actual = new VentanaTitulo(recursos);
 
-	MidiCommDescriptionList dispositivos_entrada = MidiCommIn::GetDeviceList();
-	MidiCommDescriptionList dispositivos_salida = MidiCommOut::GetDeviceList();
-
-	if(dispositivos_entrada.size() > 0)
-	{
-		Registro::Nota("Dispositivos de entrada:");
-		for(int x=0; x<dispositivos_entrada.size(); x++)
-			Registro::Nota("\tNombre: " + dispositivos_entrada[x].name);
-	}
-	else
-	{
-		//TODO Agregar mensaje permanete en la pantalla del error
-		Registro::Aviso("Dispositivo de entrada no encontrado");
-	}
-
-	if(dispositivos_salida.size() > 0)
-	{
-		Registro::Nota("Dispositivos de salida:");
-		for(int x=0; x<dispositivos_salida.size(); x++)
-			Registro::Nota("\tNombre: " + dispositivos_salida[x].name);
-	}
-	else
-	{
-		//TODO Agregar mensaje permanete en la pantalla del error
-		Registro::Aviso("Dispositivo de salida no encontrado");
-	}
-
-	m_configuracion.cambiar_entrada(2);
-	m_configuracion.cambiar_salida(0);
-
 	m_fotograma = -1;
 	m_fps_reducido = false;
 	m_fps_reducido_desactivado = false;
@@ -88,14 +58,14 @@ void Controlador_Juego::actualizar()
 	{
 		delete m_ventana_actual;
 		m_fps_reducido_desactivado = false;
-		m_ventana_actual = new VentanaSeleccionMusica(&m_musica, m_recursos);
+		m_ventana_actual = new VentanaSeleccionMusica(&m_configuracion, &m_musica, m_recursos);
 		cambio_ventana = true;
 	}
 	else if(m_ventana_actual->obtener_accion() == CambiarASeleccionPista)
 	{
 		delete m_ventana_actual;
 		m_fps_reducido_desactivado = false;
-		m_ventana_actual = new VentanaSeleccionPista(&m_musica, m_recursos);
+		m_ventana_actual = new VentanaSeleccionPista(&m_configuracion, &m_musica, m_recursos);
 		cambio_ventana = true;
 
 		m_fotograma = -1;
@@ -113,7 +83,7 @@ void Controlador_Juego::actualizar()
 	{
 		delete m_ventana_actual;
 		m_fps_reducido_desactivado = false;
-		m_ventana_actual = new VentanaConfiguracion(m_recursos);
+		m_ventana_actual = new VentanaConfiguracion(&m_configuracion, m_recursos);
 		cambio_ventana = true;
 	}
 	else if(m_ventana_actual->obtener_accion() == Salir)

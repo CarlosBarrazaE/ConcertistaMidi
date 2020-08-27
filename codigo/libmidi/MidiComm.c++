@@ -161,7 +161,7 @@ MidiCommIn::MidiCommIn(unsigned int device_id)
 	int res = snd_seq_connect_from(alsa_seq, local_in, m_description.client, m_description.port);
 	if (res < 0)
 	{
-		Registro::Aviso("No se puede conectar al dispositivo de entrada: '" + m_description.name + "' " + snd_strerror(res));
+		Registro::Error("No se puede conectar al dispositivo de entrada: '" + m_description.name + "' " + snd_strerror(res));
 	}
 
 	// enable internal keyboard
@@ -293,7 +293,7 @@ MidiCommOut::MidiCommOut(unsigned int device_id)
 	if (res < 0)
 	{
 		//TODO notificar del error por la pantalla
-		Registro::Aviso("No se puede conectar al dispositivo de salida: '" + m_description.name + "' " + snd_strerror(res));
+		Registro::Error("No se puede conectar al dispositivo de salida: '" + m_description.name + "' " + snd_strerror(res));
 	}
 }
 

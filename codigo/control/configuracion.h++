@@ -3,23 +3,29 @@
 
 #include "../libmidi/MidiComm.h++"
 
+#include "base_de_datos.h++"
+#include "../util/usuario.h++"
+
 class Configuracion
 {
 private:
+	Base_de_Datos m_datos;
+
 	MidiCommIn *m_entrada;
 	MidiCommOut *m_salida;
-	int m_cantidad_dispositivos_entrada;
-	int m_cantidad_dispositivos_salida;
 
 public:
 	Configuracion();
-	Configuracion(unsigned int id_entrada, unsigned int id_salida);
 	~Configuracion();
 
-	void cambiar_entrada(unsigned int id_entrada);
-	void cambiar_salida(unsigned int id_salida);
-	MidiCommIn *entrada();
-	MidiCommOut *salida();
+	std::string leer(std::string atributo);
+	bool escribir(std::string atributo, std::string valor);
+
+	void dispositivo_entrada(unsigned int id_entrada);
+	void dispositivo_salida(unsigned int id_salida);
+
+	MidiCommIn *dispositivo_entrada();
+	MidiCommOut *dispositivo_salida();
 };
 
 #endif

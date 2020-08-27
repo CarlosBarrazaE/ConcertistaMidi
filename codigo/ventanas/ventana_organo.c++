@@ -41,7 +41,7 @@ VentanaOrgano::VentanaOrgano(Configuracion *configuracion, Datos_Musica *musica,
 	m_teclas_activas_negras = m_tablero->negras_presionadas();
 
 	//Elimina las notas tocadas antes de esta ventana
-	m_configuracion->entrada()->Reset();
+	m_configuracion->dispositivo_entrada()->Reset();
 
 	m_cambio_velocidad = false;
 	m_pausa = false;
@@ -71,7 +71,7 @@ void VentanaOrgano::actualizar(unsigned int diferencia_tiempo)
 
 	MidiEventListWithTrackId eventos = m_musica->musica()->Update(microsegundos_actualizar);
 
-	if(m_configuracion->salida() != NULL)//Verifica que la salida midi este disponible
+	if(m_configuracion->dispositivo_salida() != NULL)//Verifica que la salida midi este disponible
 	{
 		//Se escriben las notas
 		std::vector<Pista> *pistas = m_musica->pistas();
@@ -80,15 +80,15 @@ void VentanaOrgano::actualizar(unsigned int diferencia_tiempo)
 			//Solo se tocan las pistas que no estan en silencio y que no son tocadas por el jugador
 			if(pistas->at(i->first).sonido() && pistas->at(i->first).modo() == Fondo)
 			{
-				m_configuracion->salida()->Write(i->second);
+				m_configuracion->dispositivo_salida()->Write(i->second);
 			}
 		}
 
 		//NOTE probando la entrada midi
-		MidiEvent evento = m_configuracion->entrada()->Read();
+		MidiEvent evento = m_configuracion->dispositivo_entrada()->Read();
 		evento.SetChannel(1);
 		evento.SetVelocity(120);
-		m_configuracion->salida()->Write(evento);
+		m_configuracion->dispositivo_salida()->Write(evento);
 
 		//Almacena las notas tocadas por el jugador
 		if(evento.NoteNumber() != 0)
@@ -125,7 +125,7 @@ void VentanaOrgano::actualizar(unsigned int diferencia_tiempo)
 		{
 			m_musica->musica()->GoTo(m_barra->o_tiempo_seleccionado());
 			m_tablero->reiniciar();
-			m_configuracion->salida()->Reset();
+			m_configuracion->dispositivo_salida()->Reset();
 		}
 	}
 
@@ -171,8 +171,8 @@ void VentanaOrgano::evento_teclado(Tecla tecla, bool estado)
 {
 	if(tecla == TECLA_ESCAPE && !estado)
 	{
-		if(m_configuracion->salida() != NULL)
-			m_configuracion->salida()->Reset();
+		if(m_configuracion->dispositivo_salida() != NULL)
+			m_configuracion->dispositivo_salida()->Reset();
 		m_musica->reiniciar();
 		m_accion = CambiarASeleccionPista;
 	}
@@ -198,8 +198,8 @@ void VentanaOrgano::evento_teclado(Tecla tecla, bool estado)
 	{
 		m_pausa = !m_pausa;
 		if(m_pausa)
-			if(m_configuracion->salida() != NULL)
-				m_configuracion->salida()->Reset();
+			if(m_configuracion->dispositivo_salida() != NULL)
+				m_configuracion->dispositivo_salida()->Reset();
 	}
 	else if(tecla == TECLA_F5 && estado)
 	{

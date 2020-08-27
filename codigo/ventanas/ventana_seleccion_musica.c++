@@ -1,7 +1,10 @@
 #include "ventana_seleccion_musica.h++"
 
-VentanaSeleccionMusica::VentanaSeleccionMusica(Datos_Musica *musica, Administrador_Recursos *recursos) : Ventana(), m_texto_titulo(recursos), m_tabla_archivos(10, 50, Pantalla::Ancho-20, Pantalla::Alto-100, recursos)
+VentanaSeleccionMusica::VentanaSeleccionMusica(Configuracion *configuracion, Datos_Musica *musica, Administrador_Recursos *recursos) : Ventana(), m_texto_titulo(recursos), m_tabla_archivos(10, 50, Pantalla::Ancho-20, Pantalla::Alto-100, recursos)
 {
+	m_configuracion = configuracion;
+	m_musica = musica;
+
 	m_rectangulo = recursos->figura(F_Rectangulo);
 	Tipografia *texto_boton = recursos->tipografia(LetraChica);
 
@@ -26,9 +29,14 @@ VentanaSeleccionMusica::VentanaSeleccionMusica(Datos_Musica *musica, Administrad
 	m_tabla_archivos.agregar_columna("Veces", 0.1);
 	m_tabla_archivos.agregar_columna("Fecha", 0.1);
 
-	this->cargar_carpeta("../musica", true);
-
-	m_musica = musica;
+	//Falta guardar la pila de rutas anteriores
+	std::string ultima_carpeta_activa = m_configuracion->leer("ultima_carpeta_activa");
+	if(ultima_carpeta_activa != "" && std::ifstream(ultima_carpeta_activa))//Verifica que la carpeta aun exista
+	{
+		this->cargar_carpeta(ultima_carpeta_activa, true);
+	}
+	else
+		this->cargar_carpeta("../musica", true);
 }
 
 VentanaSeleccionMusica::~VentanaSeleccionMusica()
@@ -59,6 +67,9 @@ void VentanaSeleccionMusica::dibujar()
 
 void VentanaSeleccionMusica::cargar_carpeta(std::string ruta_abrir, bool guardar_ruta)
 {
+	//La primera vez no se guarda la base de datos porque se acaba de leer
+	if(m_rutas.size() > 0)
+		m_configuracion->escribir("ultima_carpeta_activa", ruta_abrir);
 	if(guardar_ruta)
 		m_rutas.push_back(ruta_abrir);//Para guardar solo cuando va hacia delante y no cuando se retrocede
 	for(const std::filesystem::directory_entry elemento : std::filesystem::directory_iterator(ruta_abrir))
