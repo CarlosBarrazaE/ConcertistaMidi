@@ -14,6 +14,7 @@ protected:
 public:
 	Elemento(int x, int y, int ancho, int alto);
 	Elemento(int x, int y, int ancho, int alto, bool centrado);
+	virtual ~Elemento();
 
 	virtual void actualizar(unsigned int diferencia_tiempo) = 0;
 	virtual void dibujar() = 0;

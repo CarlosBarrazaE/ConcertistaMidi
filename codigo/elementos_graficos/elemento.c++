@@ -26,6 +26,10 @@ Elemento::Elemento(int x, int y, int ancho, int alto, bool centrado)
 	m_dy = 0;
 }
 
+Elemento::~Elemento()
+{
+}
+
 int Elemento::x()
 {
 	return m_x;

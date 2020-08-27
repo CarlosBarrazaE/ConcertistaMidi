@@ -24,7 +24,12 @@ add_subdirectory(codigo)
 set(todo
 		${codigo}
 )
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -O2 -march=native -std=c++17 -lstdc++fs")
+#-Wsign-compare -Wswitch-default -Wdeprecated-copy -Wshadow -Wsign-promo -Wmaybe-uninitialized -Wtype-limits -Wreorder -Wparentheses -Wcatch-value=
+set(advertencias "-Wdelete-non-virtual-dtor")
+#-Wall -Wextra -Wno-unused -Wcast-align -Wctor-dtor-privacy -Wdisabled-optimization -Winit-self -Wlogical-op -Wmissing-declarations -Wmissing-include-dirs -Wnoexcept -Woverloaded-virtual -Wredundant-decls -Wshadow -Wsign-promo -Wstrict-null-sentinel -Wswitch-default -Wundef -Wformat=2
+#-Werror
+set(depuracion "-g3")
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -O2 -march=native -std=c++17 -lstdc++fs ${advertencias} ${depuracion}")
 add_executable(${PROJECT_NAME} ${todo})
 
 target_link_libraries(${PROJECT_NAME} ${SDL2_LIBRARIES})
