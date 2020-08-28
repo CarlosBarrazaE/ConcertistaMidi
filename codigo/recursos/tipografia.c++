@@ -48,14 +48,14 @@ void Tipografia::generar_caracteres()
 		letra_actual = FT_Get_Char_Index(m_tipografia, idioma_espannol[n]);
 		if(letra_actual == 0)
 		{
-			Registro::Aviso("Caracter unicode desconocido \"" + std::to_string(idioma_espannol[n]) + "\" se requiere otra tipografia.");
+			Registro::Aviso("Caracter unicode desconocido \"" + std::to_string((unsigned int)idioma_espannol[n]) + "\" se requiere otra tipografia.");
 			continue;
 		}
 
 		error = FT_Load_Glyph(m_tipografia, letra_actual, FT_LOAD_RENDER);
 		if(error)
 		{
-			Registro::Error("Error al cargar el caracter: " + std::to_string(idioma_espannol[n]));
+			Registro::Error("Error al cargar el caracter: " + std::to_string((unsigned int)idioma_espannol[n]));
 			continue;
 		}
 
@@ -87,14 +87,14 @@ void Tipografia::generar_caracteres()
 		letra_actual = FT_Get_Char_Index(m_tipografia, idioma_espannol[n]);
 		if(letra_actual == 0)
 		{
-			Registro::Aviso("Caracter unicode desconocido \"" + std::to_string(idioma_espannol[n]) + "\" se requiere otra tipografia.");
+			Registro::Aviso("Caracter unicode desconocido \"" + std::to_string((unsigned int)idioma_espannol[n]) + "\" se requiere otra tipografia.");
 			continue;
 		}
 
 		error = FT_Load_Glyph(m_tipografia, letra_actual, FT_LOAD_RENDER);
 		if(error)
 		{
-			Registro::Error("Error al cargar el caracter: " + std::to_string(idioma_espannol[n]));
+			Registro::Error("Error al cargar el caracter: " + std::to_string((unsigned int)idioma_espannol[n]));
 			continue;
 		}
 

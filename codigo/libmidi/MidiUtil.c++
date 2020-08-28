@@ -106,7 +106,7 @@ std::string MidiError::GetErrorDescription() const
 			return "Los datos de tiempo se solicitaron desde un evento MIDI no temporal.";
 
 		default:
-			return "Codigo de error desconocido: " + std::to_string(m_error) + ".";
+			return "Codigo de error desconocido: " + std::to_string((unsigned int)m_error) + ".";
 	}
 }
 

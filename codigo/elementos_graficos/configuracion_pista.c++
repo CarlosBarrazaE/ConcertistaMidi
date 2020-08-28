@@ -1,7 +1,7 @@
 #include "configuracion_pista.h++"
 
 Configuracion_Pista::Configuracion_Pista(int x, int y, int ancho, int alto, Pista pista, Administrador_Recursos *recursos)
-: Elemento(x, y, ancho, alto), m_datos_pista(pista), m_seleccion_modo(20, 85, 70, 55, recursos), m_seleccion_color(137, 85, 70, 55, recursos), m_texto_instrumento(recursos), m_texto_notas(recursos), m_texto_sonido(recursos)
+: Elemento(x, y, ancho, alto), m_texto_instrumento(recursos), m_texto_notas(recursos), m_texto_sonido(recursos), m_seleccion_modo(20, 85, 70, 55, recursos), m_seleccion_color(137, 85, 70, 55, recursos), m_datos_pista(pista)
 {
 	m_rectangulo = recursos->figura(F_Rectangulo);
 

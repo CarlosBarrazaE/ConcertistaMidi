@@ -232,7 +232,7 @@ void Tablero_Notas::dibujar_notas(int pista)
 		largo_nota = (m_notas[pista][n].end - m_notas[pista][n].start) / m_velocidad_caida;
 
 		//Alto minimo de la nota a mostrar = 20
-		if(posicion_y-largo_nota > 0 && largo_nota >= 20 || posicion_y-20 > 0 && largo_nota < 20 || largo_nota == 0)//La nota n salio de la pantalla
+		if((posicion_y-largo_nota > 0 && largo_nota >= 20) || (posicion_y-20 > 0 && largo_nota < 20) || largo_nota == 0)//La nota n salio de la pantalla
 		{
 			if(n == m_ultima_nota[pista])
 				m_ultima_nota[pista] = n+1;
