@@ -19,7 +19,7 @@ namespace Archivo
 			texto = cadena_texto.str();
 			archivo_texto.close();
 		}
-		catch(std::ifstream::failure e)
+		catch(const std::ifstream::failure &e)
 		{
 			Registro::Error("Error con el archivo " + std::string(nombre) + ": " + std::string(e.what()));
 		}

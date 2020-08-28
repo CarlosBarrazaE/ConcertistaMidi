@@ -47,7 +47,7 @@ void Lista_Opciones::tipografia(Tipografia *tipografia)
 
 void Lista_Opciones::opcion_predeterminada(unsigned int opcion)
 {
-	if(opcion >= 0 && opcion < m_opciones.size())
+	if(opcion < m_opciones.size())
 	{
 		m_opcion_actual = opcion;
 		m_texto_seleccion.texto(m_opciones[m_opcion_actual]);

@@ -129,7 +129,7 @@ void Sombreador::comprobar_error_programas(unsigned int indice) const
 void Sombreador::imprimir_detalle_programa(unsigned int indice) const
 {
 	char nombre[64];
-	char *nombre_largo;
+	char *nombre_largo = NULL;
 	int maximo_largo = 64;
 	int tamanno = 0;
 	int ubicacion = 0;

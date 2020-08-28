@@ -24,8 +24,8 @@ add_subdirectory(codigo)
 set(todo
 		${codigo}
 )
-#-Wsign-compare -Wmaybe-uninitialized -Wtype-limits -Wcatch-value=
-set(advertencias "-Wdelete-non-virtual-dtor -Wdeprecated-copy -Wswitch-default -Wshadow -Wsign-promo -Wreorder -Wparentheses")
+#-Wsign-compare=
+set(advertencias "-Wdelete-non-virtual-dtor -Wdeprecated-copy -Wswitch-default -Wshadow -Wsign-promo -Wreorder -Wparentheses -Wmaybe-uninitialized -Wtype-limits -Wcatch-value")
 #-Wall -Wextra -Wctor-dtor-privacy -Wdisabled-optimization -Winit-self -Wlogical-op -Wmissing-declarations -Wmissing-include-dirs -Wnoexcept -Woverloaded-virtual -Wredundant-decls -Wstrict-null-sentinel -Wswitch-default -Wundef -Wformat=2
 #-Werror
 set(depuracion "-g3")
