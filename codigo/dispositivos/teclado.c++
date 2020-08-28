@@ -33,6 +33,7 @@ int Teclado::Tecla_a_nota(int tecla)
 		case TECLA_SUMA:				return do_segunda_octava + 9;
 		case TECLA_BORRAR:				return do_segunda_octava + 10;
 		case TECLA_ENTRAR:				return do_segunda_octava + 11;
+		default:						return -1;
 	}
 	return -1;
 }

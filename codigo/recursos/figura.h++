@@ -7,7 +7,7 @@ class Figura
 {
 protected:
 	unsigned int indice_figura;
-	Sombreador *sombreador;
+	Sombreador *m_sombreador;
 public:
     static unsigned int Ultimo_indice_seleccionado;
 	Figura(Sombreador *sombreador);

@@ -154,11 +154,11 @@ namespace Archivo
 
 		for(int i=1; i<=alto; i++)
 		{
-			for(int x=ancho*alto*4-(i*ancho*4); x<ancho*alto*4-((i-1)*ancho*4); x+=4)
+			for(int z=ancho*alto*4-(i*ancho*4); z<ancho*alto*4-((i-1)*ancho*4); z+=4)
 			{
-				fputc(datos[x+2]*255.0, archivo);	//Azul
-				fputc(datos[x+1]*255.0, archivo);	//Verde
-				fputc(datos[x+0]*255.0, archivo);	//Rojo
+				fputc(datos[z+2]*255.0, archivo);	//Azul
+				fputc(datos[z+1]*255.0, archivo);	//Verde
+				fputc(datos[z+0]*255.0, archivo);	//Rojo
 			}
 		}
 		fclose(archivo);

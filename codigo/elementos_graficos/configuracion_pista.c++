@@ -80,12 +80,12 @@ Configuracion_Pista::Configuracion_Pista(int x, int y, int ancho, int alto, Pist
 
 	//Se lee la configuracion del color
 	bool color_encontrado = false;
-	for(int x=0; x<=NUMERO_COLORES_PISTA && !color_encontrado; x++)
+	for(int i=0; i<=NUMERO_COLORES_PISTA && !color_encontrado; i++)
 	{
 		//Se busca el color de la pista
-		if(Pista::Colores_pista[x] == m_datos_pista.color())
+		if(Pista::Colores_pista[i] == m_datos_pista.color())
 		{
-			m_seleccion_color.opcion_predeterminada(x);
+			m_seleccion_color.opcion_predeterminada(i);
 			color_encontrado = true;
 		}
 	}

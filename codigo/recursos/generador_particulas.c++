@@ -40,9 +40,9 @@ Generador_Particulas::Generador_Particulas(Sombreador *sombreador, Textura2D *te
 	m_ultima_particula_activa = 0;
 	m_particulas_activas = 0;
 
-	this->sombreador->activar();
-	this->sombreador->uniforme_float("escala", escala);
-	this->sombreador->uniforme_vector4f("color", 0.0f, 0.0f, 0.0f, 0.0f);
+	m_sombreador->activar();
+	m_sombreador->uniforme_float("escala", escala);
+	m_sombreador->uniforme_vector4f("color", 0.0f, 0.0f, 0.0f, 0.0f);
 	Generador_Particulas::Color_anterior = Color(0.0f, 0.0f, 0.0f);
 	m_escala = escala;
 	Generador_Particulas::Ultima_escala = escala;
@@ -75,7 +75,7 @@ int Generador_Particulas::particula_inactiva()
 void Generador_Particulas::escala(int escala)
 {
 	m_escala = escala;
-	this->sombreador->uniforme_float("escala", escala);
+	m_sombreador->uniforme_float("escala", escala);
 }
 
 void Generador_Particulas::actualizar(float tiempo)
@@ -90,13 +90,13 @@ void Generador_Particulas::dibujar()
 		return;
 
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE);
-	this->sombreador->activar();
+	m_sombreador->activar();
 	m_textura->activar();
 
 	if(Generador_Particulas::Ultima_escala != m_escala)
 	{
 		Generador_Particulas::Ultima_escala = m_escala;
-		this->sombreador->uniforme_int("escala", Generador_Particulas::Ultima_escala);
+		m_sombreador->uniforme_int("escala", Generador_Particulas::Ultima_escala);
 	}
 
 	Particula *p;
@@ -115,9 +115,9 @@ void Generador_Particulas::dibujar()
 			if(Generador_Particulas::Color_anterior != p->color)
 			{
 				Generador_Particulas::Color_anterior = p->color;
-				this->sombreador->uniforme_vector4f("color", p->color.rojo(), p->color.verde(), p->color.azul(), p->color.alfa());
+				m_sombreador->uniforme_vector4f("color", p->color.rojo(), p->color.verde(), p->color.azul(), p->color.alfa());
 			}
-			this->sombreador->uniforme_vector2f("posicion", p->posicion_x, p->posicion_y);
+			m_sombreador->uniforme_vector2f("posicion", p->posicion_x, p->posicion_y);
 
 
 			if(Figura::Ultimo_indice_seleccionado != this->indice_figura)

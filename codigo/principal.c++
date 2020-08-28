@@ -217,5 +217,6 @@ void eventos_taclado(SDL_Window *ventana, Controlador_Juego *controlador, int te
 			else
 				glPolygonMode(GL_FRONT, GL_FILL);
 			break;
+		default: return;
 	}
 }
