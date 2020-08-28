@@ -59,7 +59,7 @@ void Barra_Progreso::dibujar()
 	m_rectangulo->dibujar(this->x()+m_progreso, this->y(), this->ancho() - m_progreso, this->alto(), m_color_fondo);
 
 	m_rectangulo->color(Color(0.5f, 0.5f, 0.5f));
-	for(int i=0; i<m_lineas.size(); i++)
+	for(unsigned int i=0; i<m_lineas.size(); i++)
 	{
 		m_rectangulo->dibujar(((double)m_lineas[i] / (double)m_tiempo_total) * this->ancho(), this->y(), 1, this->alto());
 	}

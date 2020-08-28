@@ -46,7 +46,7 @@ void Barra_Desplazamiento::actualizar(unsigned int diferencia_tiempo)
 {
 	if(m_calcular_posicion)
 		this->actualizar_dimension();
-	for(int i=0; i<m_elementos.size(); i++)
+	for(unsigned int i=0; i<m_elementos.size(); i++)
 	{
 		m_elementos[i]->actualizar(diferencia_tiempo);
 	}
@@ -57,7 +57,7 @@ void Barra_Desplazamiento::dibujar()
 	glScissor(this->x()+this->dx(), Pantalla::Alto-this->y()+this->dy()-this->alto(), this->ancho(), this->alto());
 	glEnable(GL_SCISSOR_TEST);
 	Elemento *e;
-	for(int i=0; i<m_elementos.size(); i++)
+	for(unsigned int i=0; i<m_elementos.size(); i++)
 	{
 		e = m_elementos.at(i);
 		if(e->y() + e->alto() > this->y() && e->y() < this->y() + this->alto() &&
@@ -129,7 +129,7 @@ void Barra_Desplazamiento::evento_raton(Raton *raton)
 		desplazamiento_nuevo_y = m_desplazamiento_y - desplazamiento_anterior_y;
 	}
 
-	for(int i=0; i<m_elementos.size(); i++)
+	for(unsigned int i=0; i<m_elementos.size(); i++)
 	{
 		if(this->alto() < m_alto_actual)
 			m_elementos[i]->y(m_elementos[i]->y() + desplazamiento_nuevo_y);
@@ -149,7 +149,7 @@ void Barra_Desplazamiento::actualizar_dimension()
 	int x_actual = x_inicio;
 	int y_actual = this->y();
 	int contador_columnas = 1;
-	for(int i=0; i<m_elementos.size(); i++)
+	for(unsigned int i=0; i<m_elementos.size(); i++)
 	{
 		m_elementos[i]->x(x_actual);
 		m_elementos[i]->y(y_actual);

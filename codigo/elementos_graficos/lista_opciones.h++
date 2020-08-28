@@ -26,7 +26,7 @@ private:
 
 	int m_centrado_icono;
 	int m_ancho_icono, m_alto_icono;
-	int m_opcion_actual;
+	unsigned int m_opcion_actual;
 public:
 	Lista_Opciones(int x, int y, int ancho, int alto, Administrador_Recursos *recursos);
 	~Lista_Opciones();

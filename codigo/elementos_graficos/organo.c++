@@ -78,7 +78,7 @@ void Organo::negras_presionadas(std::array<Color, 36> *teclas_negras)
 void Organo::actualizar(unsigned int diferencia_tiempo)
 {
 	m_tiempo += diferencia_tiempo;
-	int particulas = m_tiempo / 16666666;//16ms
+	unsigned int particulas = m_tiempo / 16666666;//16ms
 	if(particulas > 0)
 	{
 		if(particulas * 16666666 < m_tiempo)

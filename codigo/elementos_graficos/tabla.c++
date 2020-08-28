@@ -23,7 +23,7 @@ Tabla::~Tabla()
 
 void Tabla::actualizar(unsigned int diferencia_tiempo)
 {
-	for(int x=0; x<m_filas.size(); x++)
+	for(unsigned int x=0; x<m_filas.size(); x++)
 	{
 		m_filas[x]->actualizar(diferencia_tiempo);
 	}
@@ -37,13 +37,13 @@ void Tabla::dibujar()
 	m_rectangulo->textura(false);
 	m_rectangulo->dibujar(this->x()+this->dx(), this->y()+this->dy(), this->ancho(), ANCHO_FILA, m_color_fondo);
 
-	for(int x=0; x<m_titulos.size(); x++)
+	for(unsigned int x=0; x<m_titulos.size(); x++)
 	{
 		m_rectangulo->dibujar(m_titulos[x].texto->x(),m_titulos[x].texto->y(), 10, 40, Color(0.4f, 0.2f, 0.4f));
 		m_titulos[x].texto->dibujar();
 	}
 
-	for(int x=0; x<m_filas.size(); x++)
+	for(unsigned int x=0; x<m_filas.size(); x++)
 	{
 		if(m_filas[x]->y() < this->y()+this->alto())
 			m_filas[x]->dibujar();
@@ -53,7 +53,7 @@ void Tabla::dibujar()
 
 void Tabla::evento_raton(Raton *raton)
 {
-	for(int x=0; x<m_filas.size(); x++)
+	for(unsigned int x=0; x<m_filas.size(); x++)
 	{
 		if(m_filas[x]->y() < this->y()+this->alto())
 		{
@@ -91,7 +91,7 @@ void Tabla::insertar_fila(std::vector<std::string> fila_contenido)
 	if(fila_contenido.size() == m_titulos.size())
 	{
 		Fila *fila_nueva = new Fila(this->x(), this->y()+m_ultima_fila, this->ancho(), ANCHO_FILA-1, m_recursos);
-		for(int x=0; x<fila_contenido.size(); x++)
+		for(unsigned int x=0; x<fila_contenido.size(); x++)
 		{
 			fila_nueva->agregar_celda(new Etiqueta(m_titulos[x].texto->x(), this->y()+m_ultima_fila, false, fila_contenido[x], LetraChica, m_recursos));
 		}
@@ -126,16 +126,25 @@ void Tabla::cambiar_seleccion(int cambio)
 	else
 	{
 		m_filas[m_fila_seleccionada]->deseleccionar();
-		m_fila_seleccionada+=cambio;
-		if(m_fila_seleccionada >= m_filas.size())
-			m_fila_seleccionada = 0;
-		else if(m_fila_seleccionada < 0)
-			m_fila_seleccionada = m_filas.size() - 1;
+
+		if(cambio > 0)
+		{
+			m_fila_seleccionada++;
+			if(m_fila_seleccionada >= m_filas.size())
+				m_fila_seleccionada = 0;
+		}
+		else
+		{
+			if(m_fila_seleccionada == 0)
+				m_fila_seleccionada = m_filas.size() - 1;
+			else
+				m_fila_seleccionada--;
+		}
 		m_filas[m_fila_seleccionada]->seleccionar();
 	}
 }
 
-int Tabla::obtener_seleccion()
+unsigned int Tabla::obtener_seleccion()
 {
 	return m_fila_seleccionada;
 }

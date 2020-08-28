@@ -75,10 +75,11 @@ void VentanaSeleccionMusica::cargar_carpeta(std::string ruta_abrir, bool guardar
 	for(const std::filesystem::directory_entry elemento : std::filesystem::directory_iterator(ruta_abrir))
 	{
 		std::string ruta = std::string(elemento.path());
-		int inicio_archivo = 0;
-		int extencion = ruta.length()-1;
+		unsigned int inicio_archivo = 0;
+		unsigned int extencion = ruta.length()-1;
 		//Se recorre la ruta desde el final
-		for(int i=ruta.length()-1; i>0; i--)
+		bool encontrado = false;
+		for(unsigned int i=ruta.length()-1; i>0 && !encontrado; i--)
 		{
 			//Se busca el punto solo si es un archivo
 			if(!elemento.is_directory() && extencion == ruta.length()-1 && ruta[i] == '.')
@@ -91,6 +92,7 @@ void VentanaSeleccionMusica::cargar_carpeta(std::string ruta_abrir, bool guardar
 			{
 				//Termina al encontrar el inicio del nombre del archivo
 				inicio_archivo = i;
+				encontrado = true;
 				i=0;
 			}
 		}
@@ -138,7 +140,7 @@ void VentanaSeleccionMusica::cargar_carpeta(std::string ruta_abrir, bool guardar
 	std::sort(m_lista_archivos.begin(), m_lista_archivos.end());
 
 	//Crear Tabla
-	for(int i=0; i<m_lista_archivos.size(); i++)
+	for(unsigned int i=0; i<m_lista_archivos.size(); i++)
 	{
 		std::vector<std::string> fila_nueva;
 
@@ -152,7 +154,7 @@ void VentanaSeleccionMusica::cargar_carpeta(std::string ruta_abrir, bool guardar
 
 bool VentanaSeleccionMusica::abrir_archivo_seleccionado()
 {
-	int seleccion_actual = m_tabla_archivos.obtener_seleccion();
+	unsigned int seleccion_actual = m_tabla_archivos.obtener_seleccion();
 	if(seleccion_actual < m_lista_archivos.size())
 	{
 		if(m_lista_archivos[seleccion_actual].es_carpeta)
@@ -186,7 +188,7 @@ void VentanaSeleccionMusica::evento_raton(Raton *raton)
 	m_tabla_archivos.evento_raton(raton);
 
 	//Abrir el archivo con doble clic
-	if(raton->activado(BotonIzquierdo) && raton->numero_clics() == 2 && m_tabla_archivos.obtener_seleccion() >= 0)
+	if(raton->activado(BotonIzquierdo) && raton->numero_clics() == 2)
 	{
 		if(this->abrir_archivo_seleccionado())
 			m_accion = CambiarASeleccionPista;

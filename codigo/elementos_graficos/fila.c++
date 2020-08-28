@@ -34,7 +34,7 @@ void Fila::dibujar()
 {
 	m_rectangulo->textura(false);
 	m_rectangulo->dibujar(this->x()+this->dx(), this->y()+this->dy(), this->ancho(), this->alto(), m_color_actual);
-	for(int x=0; x<m_celda.size(); x++)
+	for(unsigned int x=0; x<m_celda.size(); x++)
 	{
 		m_rectangulo->dibujar(m_celda.at(x)->x(), m_celda.at(x)->y(), 10, 40, Color(0.4f, 0.2f, 0.4f));
 		m_celda.at(x)->dibujar();

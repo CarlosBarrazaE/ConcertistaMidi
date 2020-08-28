@@ -152,7 +152,7 @@ Midi Midi::ReadFromStream(std::istream &stream)
 
 	// Just grab the end of the last note to find out how long the song is
 	microseconds_t largo_final = 0;
-	for(int x=0; x<m.m_translated_notes.size(); x++)
+	for(unsigned int x=0; x<m.m_translated_notes.size(); x++)
 	{
 		if(m.m_translated_notes[x].size() > 0)
 		{

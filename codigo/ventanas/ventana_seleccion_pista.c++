@@ -77,7 +77,7 @@ void VentanaSeleccionPista::cargar_configuracion(Administrador_Recursos *recurso
 {
 	std::vector<Pista> *pistas = m_musica->pistas();
 	Configuracion_Pista *configuracion;
-	for(int i=0; i<pistas->size(); i++)
+	for(unsigned int i=0; i<pistas->size(); i++)
 	{
 		configuracion = new Configuracion_Pista(0, 0, 350, 150, pistas->at(i), recursos);
 		m_configuracion_pistas.push_back(configuracion);
@@ -91,7 +91,7 @@ void VentanaSeleccionPista::guardar_configuracion()
 	std::vector<Pista> pistas;
 
 	int pistas_validas = 0;
-	for(int i=0; i<m_configuracion_pistas.size(); i++)
+	for(unsigned int i=0; i<m_configuracion_pistas.size(); i++)
 	{
 		pistas.push_back(m_configuracion_pistas[i]->pista());
 	}

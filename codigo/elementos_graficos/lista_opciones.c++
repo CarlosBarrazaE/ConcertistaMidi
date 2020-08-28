@@ -142,9 +142,10 @@ void Lista_Opciones::evento_raton(Raton *raton)
 	}
 	else if(m_boton_derecho)
 	{
-		m_opcion_actual--;
-		if(m_opcion_actual < 0)
+		if(m_opcion_actual == 0)
 			m_opcion_actual = m_opciones.size()-1;
+		else
+			m_opcion_actual--;
 		m_texto_seleccion.texto(m_opciones[m_opcion_actual]);
 		m_cambio_opcion_seleccionada = true;
 		m_boton_derecho = false;

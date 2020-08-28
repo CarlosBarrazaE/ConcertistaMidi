@@ -33,7 +33,7 @@ Generador_Particulas::Generador_Particulas(Sombreador *sombreador, Textura2D *te
 	glEnableVertexAttribArray(1);
 	glBindBuffer(GL_ARRAY_BUFFER, 0);
 
-	for(int i=0; i < m_particulas_maximas;  i++)
+	for(unsigned int i=0; i < m_particulas_maximas;  i++)
 		m_particulas.push_back(Particula());
 
 	m_primera_particula_activa = 0;
@@ -100,8 +100,8 @@ void Generador_Particulas::dibujar()
 	}
 
 	Particula *p;
-	int dibujar_particulas = 0;
-	for(int i = m_primera_particula_activa; dibujar_particulas < m_particulas_activas; i++)
+	unsigned int dibujar_particulas = 0;
+	for(int i = (int)m_primera_particula_activa; dibujar_particulas < m_particulas_activas; i++)
 	{
 		p = &m_particulas[i];
 		p->vida -= m_tiempo;
@@ -132,7 +132,7 @@ void Generador_Particulas::dibujar()
 		{
 			m_particulas_activas--;
 
-			if(m_primera_particula_activa == i)
+			if(m_primera_particula_activa == (unsigned int)i)
 				m_primera_particula_activa++;
 
 			//Si es igual al maximo es que tiene que empezar de nuevo el ciclo
@@ -140,15 +140,15 @@ void Generador_Particulas::dibujar()
 				m_primera_particula_activa = 0;
 		}
 
-		if(i == m_particulas.size()-1)//Recorre el arreglo de forma circular
+		if((unsigned int)i == m_particulas.size()-1)//Recorre el arreglo de forma circular
 			i = -1;
 
-		if(dibujar_particulas == m_particulas_activas)
+		if((unsigned int)dibujar_particulas == m_particulas_activas)
 		{
 			if(i < 0)
 				m_ultima_particula_activa = 0;
 			else
-				m_ultima_particula_activa = i;
+				m_ultima_particula_activa = (unsigned int)i;
 		}
 	}
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
@@ -158,7 +158,7 @@ void Generador_Particulas::agregar_particulas(int x, int y, unsigned int cantida
 {
 	float aleatorio, aleatorio2;
 	Particula *particula;
-	for(int n=0; n<cantidad_particulas && m_particulas_activas < m_particulas_maximas; n++)
+	for(unsigned int n=0; n<cantidad_particulas && m_particulas_activas < m_particulas_maximas; n++)
 	{
 		aleatorio = ((rand() % 100) - 50) / 10.0;
 		aleatorio2 = ((rand() % 100) - 50) / 10.0;

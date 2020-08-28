@@ -36,7 +36,7 @@ namespace Archivo
 
 							if(fread(m_datos_imagen, 1, tamanno_imagen, archivo) == tamanno_imagen)
 							{
-								for(unsigned int x=0; x<(int)tamanno_imagen; x+=bpp)
+								for(unsigned int x=0; x<tamanno_imagen; x+=bpp)
 								{
 									temporal = m_datos_imagen[x];
 									m_datos_imagen[x] = m_datos_imagen[x+2];

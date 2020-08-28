@@ -48,7 +48,7 @@ void Tablero_Notas::tiempo(microseconds_t tiempo)
 void Tablero_Notas::notas(NotasPistas notas)
 {
 	m_notas = notas;
-	for(int i=0; i<notas.size(); i++)
+	for(unsigned int i=0; i<notas.size(); i++)
 	{
 		m_ultima_nota.push_back(0);//Se inician todas las pistas en 0
 	}
@@ -92,7 +92,7 @@ void Tablero_Notas::teclado(Teclado_Configuracion *teclado)
 
 void Tablero_Notas::reiniciar()
 {
-	for(int i=0; i<m_ultima_nota.size(); i++)
+	for(unsigned int i=0; i<m_ultima_nota.size(); i++)
 	{
 		m_ultima_nota[i] = 0;
 	}
@@ -136,7 +136,7 @@ void Tablero_Notas::dibujar()
 	m_rectangulo->dibujar(this->x(), this->y(), this->ancho(), 20);
 
 	m_rectangulo->extremos_fijos(false, true);
-	for(int pista=0; pista<m_notas.size(); pista++)
+	for(unsigned int pista=0; pista<m_notas.size(); pista++)
 	{
 		if(m_notas[pista].size() > 0)
 		{
@@ -170,7 +170,7 @@ void Tablero_Notas::dibujar_lineas_horizontales()
 	int posicion_y = 0;
 	Etiqueta *numero_temporal;
 
-	for(int i=0; i<m_lineas.size(); i++)
+	for(unsigned int i=0; i<m_lineas.size(); i++)
 	{
 		numero_linea++;
 		posicion_y = ((m_tiempo_actual_midi - m_lineas[i]) / m_velocidad_caida) + this->alto();
@@ -222,7 +222,7 @@ void Tablero_Notas::dibujar_notas(int pista)
 	int posicion_y = 0;//Es negativo hasta que la tota sale de la pantalla
 	bool es_negra = false;
 
-	for(int n=m_ultima_nota[pista]; n<m_notas[pista].size(); n++)
+	for(unsigned int n=m_ultima_nota[pista]; n<m_notas[pista].size(); n++)
 	{
 		posicion_y = (m_tiempo_actual_midi - m_notas[pista][n].start) / m_velocidad_caida;
 		if(posicion_y < -this->alto())

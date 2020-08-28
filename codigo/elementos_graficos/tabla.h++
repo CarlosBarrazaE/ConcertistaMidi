@@ -25,7 +25,7 @@ private:
 	std::vector<Celda> m_titulos;//Fila titulo
 	std::vector<Fila*> m_filas;
 
-	int m_fila_seleccionada;
+	unsigned int m_fila_seleccionada;
 
 	//Etiqueta m_textos;
 	Rectangulo *m_rectangulo;
@@ -48,7 +48,7 @@ public:
 	void eliminar_contenido();
 
 	void cambiar_seleccion(int cambio);
-	int obtener_seleccion();
+	unsigned int obtener_seleccion();
 };
 
 #endif

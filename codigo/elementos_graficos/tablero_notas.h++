@@ -35,7 +35,7 @@ private:
 	std::array<double, 52> m_tiempo_espera_blancas;
 	std::array<double, 36> m_tiempo_espera_negras;
 
-	std::vector<int> m_ultima_nota;//Ultima nota por cada pista
+	std::vector<unsigned int> m_ultima_nota;//Ultima nota por cada pista
 
 	std::vector<Pista> *m_pistas;
 
