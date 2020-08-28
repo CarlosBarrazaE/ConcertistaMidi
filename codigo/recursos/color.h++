@@ -13,6 +13,7 @@ private:
 	void establecer_valores(float rojo, float verde, float azul, float alfa);
 public:
 	Color();
+	Color(const Color&);
 	Color(int rojo, int verde, int azul);
 	Color(float rojo, float verde, float azul);
 

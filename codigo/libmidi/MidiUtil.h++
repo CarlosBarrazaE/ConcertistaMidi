@@ -78,7 +78,7 @@ public:
 	const MidiErrorCode m_error;
 
 private:
-	MidiError operator =(const MidiError&);
+	MidiError& operator =(const MidiError&) = default;
 };
 
 enum MidiEventType

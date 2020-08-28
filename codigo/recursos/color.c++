@@ -5,6 +5,14 @@ Color::Color()
 	this->establecer_valores(0.0f, 0.0f, 0.0f, 1.0f);
 }
 
+Color::Color(const Color &c)
+{
+	m_rojo = c.m_rojo;
+	m_verde = c.m_verde;
+	m_azul = c.m_azul;
+	m_alfa = c.m_alfa;
+}
+
 Color::Color(int rojo, int verde, int azul)
 {
 	this->establecer_valores(rojo / 254.0f, verde / 254.0f, azul / 254.0f, 1.0);

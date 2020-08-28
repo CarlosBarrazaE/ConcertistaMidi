@@ -25,7 +25,7 @@ set(todo
 		${codigo}
 )
 #-Wsign-compare -Wswitch-default -Wdeprecated-copy -Wshadow -Wsign-promo -Wmaybe-uninitialized -Wtype-limits -Wreorder -Wparentheses -Wcatch-value=
-set(advertencias "-Wdelete-non-virtual-dtor")
+set(advertencias "-Wdelete-non-virtual-dtor -Wdeprecated-copy")
 #-Wall -Wextra -Wno-unused -Wcast-align -Wctor-dtor-privacy -Wdisabled-optimization -Winit-self -Wlogical-op -Wmissing-declarations -Wmissing-include-dirs -Wnoexcept -Woverloaded-virtual -Wredundant-decls -Wshadow -Wsign-promo -Wstrict-null-sentinel -Wswitch-default -Wundef -Wformat=2
 #-Werror
 set(depuracion "-g3")
