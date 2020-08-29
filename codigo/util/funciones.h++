@@ -7,6 +7,6 @@
 namespace Funciones
 {
 	std::string milisegundos_a_texto(microseconds_t ms);
-};
+}
 
 #endif

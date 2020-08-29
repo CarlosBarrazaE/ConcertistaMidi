@@ -22,4 +22,4 @@ namespace Funciones
 
 		return std::to_string(horas) + ":" + tminutos + ":" + tsegundos;
 	}
-};
+}

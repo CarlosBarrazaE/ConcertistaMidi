@@ -24,9 +24,7 @@ add_subdirectory(codigo)
 set(todo
 		${codigo}
 )
-set(advertencias "-Wall -Wextra -Wdelete-non-virtual-dtor -Wswitch-default -Wshadow -Wsign-promo -Wctor-dtor-privacy -Wcast-align -Wdisabled-optimization -Wlogical-op -Wmissing-declarations -Wmissing-include-dirs")
-#-Wnoexcept -Woverloaded-virtual -Wredundant-decls -Wstrict-null-sentinel -Wundef -Wformat=2
-#-Werror
+set(advertencias "-Wall -Wextra -Wdelete-non-virtual-dtor -Wswitch-default -Wshadow -Wsign-promo -Wctor-dtor-privacy -Wcast-align -Wdisabled-optimization -Wlogical-op -Wmissing-declarations -Wmissing-include-dirs -Wnoexcept -Woverloaded-virtual -Wredundant-decls -Wstrict-null-sentinel -Wundef -Wformat=2 -Wunused-macros -Wno-endif-labels")
 set(depuracion "-g3")
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -O2 -march=native -std=c++17 -lstdc++fs ${advertencias} ${depuracion}")
 add_executable(${PROJECT_NAME} ${todo})

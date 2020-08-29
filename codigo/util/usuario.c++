@@ -23,4 +23,4 @@ namespace Usuario
 		return std::string("");
 	#endif
 	}
-};
+}
