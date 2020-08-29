@@ -79,14 +79,13 @@ Configuracion_Pista::Configuracion_Pista(int x, int y, int ancho, int alto, Pist
 	m_boton_sonido->color_boton(Color(1.0f, 1.0f, 1.0f));
 
 	//Se lee la configuracion del color
-	bool color_encontrado = false;
-	for(int i=0; i<=NUMERO_COLORES_PISTA && !color_encontrado; i++)
+	for(int i=0; i<=NUMERO_COLORES_PISTA; i++)
 	{
 		//Se busca el color de la pista
 		if(Pista::Colores_pista[i] == m_datos_pista.color())
 		{
 			m_seleccion_color.opcion_predeterminada(i);
-			color_encontrado = true;
+			i = NUMERO_COLORES_PISTA;//Termina el ciclo
 		}
 	}
 
