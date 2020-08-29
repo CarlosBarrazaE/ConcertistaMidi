@@ -24,9 +24,8 @@ add_subdirectory(codigo)
 set(todo
 		${codigo}
 )
-#-Wsign-compare=
-set(advertencias "-Wdelete-non-virtual-dtor -Wdeprecated-copy -Wswitch-default -Wshadow -Wsign-promo -Wreorder -Wparentheses -Wmaybe-uninitialized -Wtype-limits -Wcatch-value -Wsign-compare")
-#-Wall -Wextra -Wctor-dtor-privacy -Wdisabled-optimization -Winit-self -Wlogical-op -Wmissing-declarations -Wmissing-include-dirs -Wnoexcept -Woverloaded-virtual -Wredundant-decls -Wstrict-null-sentinel -Wswitch-default -Wundef -Wformat=2
+set(advertencias "-Wall -Wextra -Wdelete-non-virtual-dtor -Wswitch-default -Wshadow -Wsign-promo -Wctor-dtor-privacy -Wcast-align -Wdisabled-optimization -Wlogical-op -Wmissing-declarations -Wmissing-include-dirs")
+#-Wnoexcept -Woverloaded-virtual -Wredundant-decls -Wstrict-null-sentinel -Wundef -Wformat=2
 #-Werror
 set(depuracion "-g3")
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -O2 -march=native -std=c++17 -lstdc++fs ${advertencias} ${depuracion}")

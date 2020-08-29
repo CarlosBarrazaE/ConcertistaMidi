@@ -19,7 +19,7 @@ Fila::~Fila()
 	}
 }
 
-void Fila::actualizar(unsigned int diferencia_tiempo)
+void Fila::actualizar(unsigned int /*diferencia_tiempo*/)
 {
 	if(m_boton_seleccionado)
 		m_color_actual = m_color_seleccion;
@@ -65,7 +65,7 @@ void Fila::evento_raton(Raton *raton)
 	}
 }
 
-void Fila::evento_pantalla(int ancho, int alto)
+void Fila::evento_pantalla(int /*ancho*/, int /*alto*/)
 {
 
 }

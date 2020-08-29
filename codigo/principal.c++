@@ -18,7 +18,7 @@ void eventos_raton_posicion(Controlador_Juego *controlador, int x, int y);
 void eventos_taclado(SDL_Window *ventana, Controlador_Juego *controlador, int tecla, bool estado);
 void controlar_eventos(SDL_Window *ventana, Controlador_Juego *controlador, SDL_Event *evento);
 
-int main (int n, char **argumentos)
+int main (int /*n*/, char **/*argumentos*/)
 {
 	Pantalla::Ancho = ANCHO;
 	Pantalla::Alto = ALTO;
@@ -29,7 +29,7 @@ int main (int n, char **argumentos)
 	//error: ‘SDL_HINT_VIDEO_X11_NET_WM_BYPASS_COMPOSITOR’ was not declared in this scope (devuan mate)
 	SDL_SetHint(SDL_HINT_VIDEO_MINIMIZE_ON_FOCUS_LOSS, "0");
 	SDL_Window *ventana = SDL_CreateWindow("Concertista Midi", 0, 0, ANCHO, ALTO, SDL_WINDOW_OPENGL | SDL_WINDOW_RESIZABLE);
-	SDL_GLContext contexto = SDL_GL_CreateContext(ventana);
+	/*SDL_GLContext contexto = */SDL_GL_CreateContext(ventana);
 	SDL_GL_SetSwapInterval(1);//Limita a 60 fps
 
 	glewExperimental = GL_TRUE;

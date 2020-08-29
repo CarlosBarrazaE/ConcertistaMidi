@@ -215,6 +215,6 @@ void Configuracion_Pista::evento_raton(Raton *raton)
 	}
 }
 
-void Configuracion_Pista::evento_pantalla(int ancho, int alto)
+void Configuracion_Pista::evento_pantalla(int /*ancho*/, int /*alto*/)
 {
 }

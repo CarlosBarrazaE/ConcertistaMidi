@@ -48,7 +48,7 @@ void Etiqueta::limpiar()
 	}
 }
 
-void Etiqueta::actualizar(unsigned int diferencia_tiempo)
+void Etiqueta::actualizar(unsigned int /*diferencia_tiempo*/)
 {
 }
 
@@ -101,11 +101,11 @@ void Etiqueta::dibujar()
 	glDrawArrays(GL_TRIANGLES, 0, m_texto.length()*6);
 }
 
-void Etiqueta::evento_raton(Raton *raton)
+void Etiqueta::evento_raton(Raton */*raton*/)
 {
 }
 
-void Etiqueta::evento_pantalla(int ancho, int alto)
+void Etiqueta::evento_pantalla(int /*ancho*/, int /*alto*/)
 {
 }
 

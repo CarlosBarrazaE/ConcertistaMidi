@@ -66,7 +66,7 @@ bool Lista_Opciones::cambio_opcion_seleccionada()
 	return estado;
 }
 
-void Lista_Opciones::actualizar(unsigned int diferencia_tiempo)
+void Lista_Opciones::actualizar(unsigned int /*diferencia_tiempo*/)
 {
 	if(m_usar_iconos)
 		m_texto_seleccion.posicion(this->x() + this->dx(), this->y() + this->dy()+47);
@@ -152,6 +152,6 @@ void Lista_Opciones::evento_raton(Raton *raton)
 	}
 }
 
-void Lista_Opciones::evento_pantalla(int ancho, int alto)
+void Lista_Opciones::evento_pantalla(int /*ancho*/, int /*alto*/)
 {
 }

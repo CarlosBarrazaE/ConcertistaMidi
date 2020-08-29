@@ -104,7 +104,7 @@ void Tablero_Notas::reiniciar()
 	}
 }
 
-void Tablero_Notas::actualizar(unsigned int diferencia_tiempo)
+void Tablero_Notas::actualizar(unsigned int /*diferencia_tiempo*/)
 {
 	for(int i=0; i<52; i++)
 	{
@@ -147,11 +147,11 @@ void Tablero_Notas::dibujar()
 	m_rectangulo->extremos_fijos(false, false);
 }
 
-void Tablero_Notas::evento_raton(Raton *raton)
+void Tablero_Notas::evento_raton(Raton */*raton*/)
 {
 }
 
-void Tablero_Notas::evento_pantalla(int ancho, int alto)
+void Tablero_Notas::evento_pantalla(int /*ancho*/, int /*alto*/)
 {
 }
 

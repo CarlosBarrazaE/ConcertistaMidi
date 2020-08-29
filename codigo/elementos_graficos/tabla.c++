@@ -67,7 +67,7 @@ void Tabla::evento_raton(Raton *raton)
 	}
 }
 
-void Tabla::evento_pantalla(int ancho, int alto)
+void Tabla::evento_pantalla(int /*ancho*/, int /*alto*/)
 {
 
 }

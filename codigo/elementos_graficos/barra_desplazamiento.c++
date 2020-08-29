@@ -137,7 +137,7 @@ void Barra_Desplazamiento::evento_raton(Raton *raton)
 	}
 }
 
-void Barra_Desplazamiento::evento_pantalla(int ancho, int alto)
+void Barra_Desplazamiento::evento_pantalla(int /*ancho*/, int /*alto*/)
 {
 }
 

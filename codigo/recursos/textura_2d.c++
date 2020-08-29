@@ -26,7 +26,7 @@ unsigned int Textura2D::o_indice()
 	return m_indice_textura;
 }
 
-void Textura2D::generar(unsigned int ancho, unsigned int alto, unsigned int bits, unsigned int formato_entrada, unsigned char *datos)
+void Textura2D::generar(unsigned int ancho, unsigned int alto, unsigned int bits, unsigned char *datos)
 {
 	m_ancho = ancho;
 	m_alto = alto;

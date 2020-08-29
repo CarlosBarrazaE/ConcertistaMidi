@@ -64,7 +64,7 @@ void Boton::centrado(bool centrado)
 	m_texto.posicion(this->x()+this->dx(), this->y()+this->dy());
 }
 
-void Boton::actualizar(unsigned int diferencia_tiempo)
+void Boton::actualizar(unsigned int /*diferencia_tiempo*/)
 {
 }
 
@@ -104,7 +104,7 @@ void Boton::evento_raton(Raton *raton)
 	}
 }
 
-void Boton::evento_pantalla(int ancho, int alto)
+void Boton::evento_pantalla(int /*ancho*/, int /*alto*/)
 {
 	m_texto.posicion(this->x()+this->dx(), this->y()+this->dy());
 }

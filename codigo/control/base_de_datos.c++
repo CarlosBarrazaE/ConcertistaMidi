@@ -58,7 +58,12 @@ std::string Base_de_Datos::consulta_texto(std::string consulta)
 bool Base_de_Datos::abrir(std::string direccion)
 {
 	int respuesta = sqlite3_open(direccion.c_str(), &m_base_de_datos);
-	return true;//Fala comprobar si se abre correctamente la base de datos
+	if(respuesta != SQLITE_OK)
+	{
+		Registro::Error("No se puede abrir o crear la base de datos.");
+		return true;
+	}
+	return false;
 }
 
 void Base_de_Datos::crear()
@@ -74,7 +79,7 @@ void Base_de_Datos::actualizar()
 	//Verificar version de la base de datos
 	std::string version_texto = this->leer_configuracion("version_base_de_datos");
 	std::replace(version_texto.begin(), version_texto.end(), '.', ',');
-	double version_bd = std::strtod(version_texto.c_str(), NULL);
+	//double version_bd = std::strtod(version_texto.c_str(), NULL);
 
 	Registro::Nota("Version de la base de datos: " + version_texto);
 }

@@ -113,11 +113,11 @@ void Organo::dibujar()
 	m_generador_particulas->dibujar();
 }
 
-void Organo::evento_raton(Raton *raton)
+void Organo::evento_raton(Raton */*raton*/)
 {
 }
 
-void Organo::evento_pantalla(int ancho, int alto)
+void Organo::evento_pantalla(int /*ancho*/, int /*alto*/)
 {
 }
 

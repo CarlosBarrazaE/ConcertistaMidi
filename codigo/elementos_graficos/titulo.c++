@@ -95,7 +95,7 @@ void Titulo::dibujar()
 	m_autor.dibujar();
 }
 
-void Titulo::evento_raton(Raton *raton)
+void Titulo::evento_raton(Raton */*raton*/)
 {
 }
 

@@ -31,6 +31,7 @@ void midiStop();
 
 // Emulate MIDI keyboard using PC keyboard
 void sendNote(const unsigned char note, bool on);
+void doRetrieveDevices(unsigned int perms, MidiCommDescriptionList& devices);
 
 // Once you create a MidiCommIn object.  Use the Read() function
 // to grab one event at a time from the buffer.

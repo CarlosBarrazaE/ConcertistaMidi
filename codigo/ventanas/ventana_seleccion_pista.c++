@@ -90,7 +90,6 @@ void VentanaSeleccionPista::guardar_configuracion()
 {
 	std::vector<Pista> pistas;
 
-	int pistas_validas = 0;
 	for(unsigned int i=0; i<m_configuracion_pistas.size(); i++)
 	{
 		pistas.push_back(m_configuracion_pistas[i]->pista());

@@ -41,7 +41,7 @@ microseconds_t Barra_Progreso::o_tiempo_seleccionado()
 	return m_tiempo_nuevo;
 }
 
-void Barra_Progreso::actualizar(unsigned int diferencia_tiempo)
+void Barra_Progreso::actualizar(unsigned int /*diferencia_tiempo*/)
 {
 	m_progreso = ((double)m_tiempo_actual / (double)m_tiempo_total) * this->ancho();
 	if(m_progreso > this->ancho())
@@ -104,7 +104,7 @@ void Barra_Progreso::evento_raton(Raton *raton)
 	}
 }
 
-void Barra_Progreso::evento_pantalla(int ancho, int alto)
+void Barra_Progreso::evento_pantalla(int ancho, int /*alto*/)
 {
 	m_texto_final.posicion(ancho - (4 + m_texto_final.largo_texto()), this->y() + this->alto() - 12);
 }

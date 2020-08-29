@@ -22,7 +22,7 @@ public:
 	Textura2D();
 	~Textura2D();
 	unsigned int o_indice();
-	void generar(unsigned int ancho, unsigned int alto, unsigned int bits, unsigned int formato_entrada, unsigned char *datos);
+	void generar(unsigned int ancho, unsigned int alto, unsigned int bits, unsigned char *datos);
 	void activar();
 
 	void envolver_horizontal(unsigned int valor);

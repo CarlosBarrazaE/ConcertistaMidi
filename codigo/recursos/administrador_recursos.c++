@@ -89,7 +89,7 @@ Textura2D *Administrador_Recursos::textura(Textura valor)
 		Archivo::Tga textura_nueva(m_archivo_texturas[valor]);
 
 		temporal = new Textura2D();
-		temporal->generar(textura_nueva.ancho(), textura_nueva.alto(), textura_nueva.bytes(), GL_BGR, textura_nueva.imagen());
+		temporal->generar(textura_nueva.ancho(), textura_nueva.alto(), textura_nueva.bytes(), textura_nueva.imagen());
 
 		m_lista_texturas[valor] = temporal;
 
@@ -125,7 +125,7 @@ Sombreador *Administrador_Recursos::sombreador(SombreadorVF valor)
 
 Rectangulo *Administrador_Recursos::figura(FiguraGeometrica valor)
 {
-	return m_lista_figuras[F_Rectangulo];
+	return m_lista_figuras[valor];
 }
 
 Tipografia *Administrador_Recursos::tipografia(ModeloLetra tipo)
