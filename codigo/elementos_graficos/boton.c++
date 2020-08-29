@@ -5,14 +5,7 @@ Boton::Boton(int x, int y, int ancho, int alto, std::string texto, Administrador
 	m_rectangulo = recursos->figura(F_Rectangulo);
 	m_textura_boton = recursos->textura(T_Boton);
 
-	m_sobre_boton = false;
-	m_boton_pre_activado = false;
-	m_boton_activado = false;
-
-	Color color(1.0f, 1.0f, 1.0f);
-	m_color_boton_normal = color;
-	m_color_boton_actual = color;
-	m_color_boton_sobre.color(color.rojo()-0.1f, color.verde()-0.1f, color.azul()-0.1f);
+	this->inicializar();
 
 	m_texto.texto(texto);
 	m_texto.tipografia(recursos->tipografia(LetraMediana));
@@ -21,8 +14,34 @@ Boton::Boton(int x, int y, int ancho, int alto, std::string texto, Administrador
 	m_texto.centrado(true);
 }
 
+Boton::Boton(int x, int y, int ancho, int alto, std::string texto, ModeloLetra modelo_letra, Administrador_Recursos *recursos) : Elemento(x, y, ancho, alto), m_texto(recursos)
+{
+	m_rectangulo = recursos->figura(F_Rectangulo);
+	m_textura_boton = recursos->textura(T_Boton);
+
+	this->inicializar();
+
+	m_texto.texto(texto);
+	m_texto.tipografia(recursos->tipografia(modelo_letra));
+	m_texto.posicion(this->x()+this->dx(), this->y()+this->dy());
+	m_texto.dimension(ancho, alto);
+	m_texto.centrado(true);
+}
+
 Boton::~Boton()
 {
+}
+
+void Boton::inicializar()
+{
+	m_sobre_boton = false;
+	m_boton_pre_activado = false;
+	m_boton_activado = false;
+
+	Color color(1.0f, 1.0f, 1.0f);
+	m_color_boton_normal = color;
+	m_color_boton_actual = color;
+	m_color_boton_sobre.color(color.rojo()-0.1f, color.verde()-0.1f, color.azul()-0.1f);
 }
 
 void Boton::textura(Textura2D *textura)

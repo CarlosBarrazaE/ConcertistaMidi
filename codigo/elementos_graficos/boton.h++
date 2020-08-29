@@ -20,8 +20,11 @@ private:
 	bool m_boton_pre_activado;
 	bool m_boton_activado;
 
+	void inicializar();
+
 public:
 	Boton(int x, int y, int ancho, int alto, std::string texto, Administrador_Recursos *recursos);
+	Boton(int x, int y, int ancho, int alto, std::string texto, ModeloLetra modelo_letra, Administrador_Recursos *recursos);
 	//Boton(int x, int y, int ancho, int alto, std::string texto, Textura2D *textura, Color color, bool centrado, Administrador_Recursos *recursos);
 	~Boton();
 	void textura(Textura2D *textura);

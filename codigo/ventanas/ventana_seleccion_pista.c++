@@ -6,15 +6,12 @@ VentanaSeleccionPista::VentanaSeleccionPista(Configuracion *configuracion, Datos
 	m_musica = musica;
 
 	m_rectangulo = recursos->figura(F_Rectangulo);
-	Tipografia *texto_boton = recursos->tipografia(LetraChica);
 
-	m_boton_atras = new Boton(10, Pantalla::Alto - 32, 120, 25, "Atrás", recursos);
+	m_boton_atras = new Boton(10, Pantalla::Alto - 32, 120, 25, "Atrás", LetraChica, recursos);
 	m_boton_atras->color_boton(Color(0.9f, 0.9f, 0.9f));
-	m_boton_atras->tipografia(texto_boton);
 
-	m_boton_continuar = new Boton(Pantalla::Ancho - 130, Pantalla::Alto - 32, 120, 25, "Continuar", recursos);
+	m_boton_continuar = new Boton(Pantalla::Ancho - 130, Pantalla::Alto - 32, 120, 25, "Continuar", LetraChica, recursos);
 	m_boton_continuar->color_boton(Color(0.9f, 0.9f, 0.9f));
-	m_boton_continuar->tipografia(texto_boton);
 
 	m_texto_titulo.texto("Selección de Pistas");
 	m_texto_titulo.tipografia(recursos->tipografia(LetraTitulo));

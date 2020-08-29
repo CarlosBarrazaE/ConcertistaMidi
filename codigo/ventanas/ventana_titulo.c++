@@ -28,11 +28,6 @@ VentanaTitulo::VentanaTitulo(Administrador_Recursos *recursos) : Ventana(), m_te
 	m_texto_version.tipografia(recursos->tipografia(LetraChica));
 	m_texto_version.color(Color(1.0f, 1.0f, 1.0f));
 	m_texto_version.posicion(20, Pantalla::Alto - 26);
-/*
-    for(int x=0; x<1; x++)
-    {
-        etiquetas_prueba.push_back(new Etiqueta(0, 0, false, "Versión: 0.1 Hola este es un texto de ejemplo con la nueva tipografia y la nueva etiqueta", LetraChica, recursos));
-    }*/
 }
 
 VentanaTitulo::~VentanaTitulo()
