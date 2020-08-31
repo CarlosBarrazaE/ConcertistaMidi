@@ -78,10 +78,13 @@ void Base_de_Datos::actualizar()
 {
 	//Verificar version de la base de datos
 	std::string version_texto = this->leer_configuracion("version_base_de_datos");
-	std::replace(version_texto.begin(), version_texto.end(), '.', ',');
-	//double version_bd = std::strtod(version_texto.c_str(), NULL);
-
 	Registro::Nota("Version de la base de datos: " + version_texto);
+	if(version_texto != "")
+	{
+		/*
+		double version_bd = std::stod(version_texto, NULL);
+		*/
+	}
 }
 
 //Tabla configuracion

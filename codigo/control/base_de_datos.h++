@@ -4,7 +4,6 @@
 #include <sqlite3.h>
 #include <string>
 #include <vector>
-#include <algorithm>//std::replace
 
 #include "../registro.h++"
 #include "../version.h++"
