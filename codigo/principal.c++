@@ -46,6 +46,12 @@ int main (int /*n*/, char **/*argumentos*/)
 	Administrador_Recursos recursos;
 	Controlador_Juego controlador(&recursos);
 
+	//Se actualiza segun la configuracion
+	if(controlador.es_pantalla_completa())
+		SDL_SetWindowFullscreen(ventana, SDL_WINDOW_FULLSCREEN_DESKTOP);
+	else
+		SDL_SetWindowFullscreen(ventana, 0);
+
 	while (!controlador.terminar())
 	{
 		SDL_Event evento;

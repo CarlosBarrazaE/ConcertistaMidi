@@ -7,9 +7,14 @@ Controlador_Juego::Controlador_Juego(Administrador_Recursos *recursos) : m_texto
 	m_fps = 0;
 	m_contador_inactividad = 0;
 	m_mostrar_fps = false;
-	m_pantalla_completa = false;
 	m_modo_alambre = false;
 	m_finalizar = false;
+
+	std::string resultado_pantalla_completa = m_configuracion.leer("pantalla_completa");
+	if(resultado_pantalla_completa == "verdadero")
+		m_pantalla_completa = true;
+	else
+		m_pantalla_completa = false;
 
 	m_texto_fps.tipografia(recursos->tipografia(LetraChica));
 	m_texto_fps.posicion(10, 20);
@@ -142,7 +147,13 @@ void Controlador_Juego::eventos_teclado(Tecla tecla, bool estado)
 	if(tecla == TECLA_F10 && estado)
 		m_mostrar_fps = !m_mostrar_fps;
 	else if(tecla == TECLA_F11 && estado)
+	{
 		m_pantalla_completa = !m_pantalla_completa;
+		if(m_pantalla_completa)
+			m_configuracion.escribir("pantalla_completa", "verdadero");
+		else
+			m_configuracion.escribir("pantalla_completa", "falso");
+	}
 	else if(tecla == TECLA_F12 && estado)
 		m_modo_alambre = !m_modo_alambre;
 	else

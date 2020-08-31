@@ -6,11 +6,11 @@
 
 enum TipoTeclado
 {
-	Teclas88 = 0,
-	Teclas76,
-	Teclas61,
-	Teclas49,
-	Teclas37
+	Teclas88 = 88,
+	Teclas76 = 76,
+	Teclas61 = 61,
+	Teclas49 = 49,
+	Teclas37 = 37
 };
 
 class Tipo_Teclado

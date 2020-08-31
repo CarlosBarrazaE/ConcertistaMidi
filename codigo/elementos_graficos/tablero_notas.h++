@@ -26,7 +26,7 @@ private:
 	microseconds_t m_tiempo_actual_midi;
 	int m_ancho_blanca, m_ancho_negra;
 	int m_ajuste_x;
-	int m_velocidad_caida;
+	int m_duracion_nota;
 	NotasPistas m_notas;
 	MidiEventMicrosecondList m_lineas;
 	std::array<Color, 52> m_teclas_activas_blancas;
@@ -56,7 +56,9 @@ public:
 	void lineas(MidiEventMicrosecondList lineas);
 	void pistas(std::vector<Pista> *pistas);
 	void dimension(int ancho, int alto);
-	void velocidad_caida(int valor);
+	void duracion_nota(int valor);
+	void modificar_duracion_nota(int valor);
+	int duracion_nota();
 	void teclado(Teclado_Configuracion *teclado);
 	void reiniciar();
 

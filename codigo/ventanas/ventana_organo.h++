@@ -34,6 +34,11 @@ private:
 	bool m_cambio_velocidad;
 	bool m_pausa;
 
+	//Para saver si es necesario guardar
+	bool m_guardar_velocidad;
+	bool m_guardar_duracion_nota;
+	bool m_guardar_tipo_teclado;
+
 	//Datos
 	Configuracion *m_configuracion;
 	Datos_Musica *m_musica;
@@ -41,6 +46,9 @@ private:
 	std::array<Color, 36> *m_teclas_activas_negras;
 	std::set<int> m_notas_tocadas_blanca;
 	std::set<int> m_notas_tocadas_negra;
+	TipoTeclado m_teclado_actual;
+
+	void guardar_configuracion();
 
 public:
 	VentanaOrgano(Configuracion *configuracion, Datos_Musica *musica, Administrador_Recursos *recursos);

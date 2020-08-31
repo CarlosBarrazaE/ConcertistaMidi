@@ -3,7 +3,7 @@
 Tablero_Notas::Tablero_Notas(int x, int y, int ancho, int alto, Teclado_Configuracion *teclado, Administrador_Recursos *recursos)
 : Elemento(x, y, ancho, alto)
 {
-	m_velocidad_caida = 6500;
+	m_duracion_nota = 6500;
 	m_teclado = teclado;
 	this->calcular_tamannos();
 
@@ -71,17 +71,32 @@ void Tablero_Notas::dimension(int ancho, int alto)
 	this->calcular_tamannos();
 }
 
-void Tablero_Notas::velocidad_caida(int valor)
+void Tablero_Notas::duracion_nota(int valor)
 {
 	if(valor < 0)
-		m_velocidad_caida = m_velocidad_caida - 100;
+		m_duracion_nota = m_duracion_nota - 100;
 	else
-		m_velocidad_caida = m_velocidad_caida + 100;
+		m_duracion_nota = m_duracion_nota + 100;
 
-	if(m_velocidad_caida < 1500)
-		m_velocidad_caida = 1500;
-	else if(m_velocidad_caida > 14000)
-		m_velocidad_caida = 14000;
+	if(m_duracion_nota < 1500)
+		m_duracion_nota = 1500;
+	else if(m_duracion_nota > 14000)
+		m_duracion_nota = 14000;
+}
+
+void Tablero_Notas::modificar_duracion_nota(int valor)
+{
+	m_duracion_nota = valor;
+
+	if(m_duracion_nota < 1500)
+		m_duracion_nota = 1500;
+	else if(m_duracion_nota > 14000)
+		m_duracion_nota = 14000;
+}
+
+int Tablero_Notas::duracion_nota()
+{
+	return m_duracion_nota;
 }
 
 void Tablero_Notas::teclado(Teclado_Configuracion *teclado)
@@ -173,7 +188,7 @@ void Tablero_Notas::dibujar_lineas_horizontales()
 	for(unsigned int i=0; i<m_lineas.size(); i++)
 	{
 		numero_linea++;
-		posicion_y = ((m_tiempo_actual_midi - m_lineas[i]) / m_velocidad_caida) + this->alto();
+		posicion_y = ((m_tiempo_actual_midi - m_lineas[i]) / m_duracion_nota) + this->alto();
 		if(posicion_y < 0)
 			break;
 		else if(posicion_y > this->alto())
@@ -224,12 +239,12 @@ void Tablero_Notas::dibujar_notas(int pista)
 
 	for(unsigned int n=m_ultima_nota[pista]; n<m_notas[pista].size(); n++)
 	{
-		posicion_y = (m_tiempo_actual_midi - m_notas[pista][n].start) / m_velocidad_caida;
+		posicion_y = (m_tiempo_actual_midi - m_notas[pista][n].start) / m_duracion_nota;
 		if(posicion_y < -this->alto())
 		{
 			break;//No se dibujan las notas que aun no entran en la pantalla
 		}
-		largo_nota = (m_notas[pista][n].end - m_notas[pista][n].start) / m_velocidad_caida;
+		largo_nota = (m_notas[pista][n].end - m_notas[pista][n].start) / m_duracion_nota;
 
 		//Alto minimo de la nota a mostrar es 20
 		if((posicion_y-largo_nota > 0 && largo_nota >= 20) || (posicion_y > 20 && largo_nota < 20) || largo_nota == 0)//La nota n salio de la pantalla
@@ -238,8 +253,8 @@ void Tablero_Notas::dibujar_notas(int pista)
 				m_ultima_nota[pista] = n+1;
 			else if(n == m_ultima_nota[pista]+1)//Comprueba que la nota anterior haya terminado
 			{
-				int posicion_y_anterior = (m_tiempo_actual_midi - m_notas[pista][m_ultima_nota[pista]].start) / m_velocidad_caida;
-				int largo_nota_anterior = (m_notas[pista][m_ultima_nota[pista]].end - m_notas[pista][m_ultima_nota[pista]].start) / m_velocidad_caida;
+				int posicion_y_anterior = (m_tiempo_actual_midi - m_notas[pista][m_ultima_nota[pista]].start) / m_duracion_nota;
+				int largo_nota_anterior = (m_notas[pista][m_ultima_nota[pista]].end - m_notas[pista][m_ultima_nota[pista]].start) / m_duracion_nota;
 				if(posicion_y_anterior-largo_nota_anterior > 0)
 				{
 					m_ultima_nota[pista] = n+1;
