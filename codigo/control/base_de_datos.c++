@@ -2,16 +2,22 @@
 
 Base_de_Datos::Base_de_Datos()
 {
+	m_base_de_datos_abierta = false;
 }
 
 Base_de_Datos::~Base_de_Datos()
 {
-	//Cerrar solo si esta abierta
-	sqlite3_close(m_base_de_datos);
+	if(m_base_de_datos_abierta)
+		sqlite3_close(m_base_de_datos);
 }
 
 bool Base_de_Datos::consulta(std::string consulta_entrada)
 {
+	if(!m_base_de_datos_abierta)
+	{
+		Registro::Error("La base de datos no esta abierta");
+		return false;
+	}
 	char *error = 0;
 	int respuesta = sqlite3_exec(m_base_de_datos, consulta_entrada.c_str(), NULL, 0, &error);
 	if(!respuesta == SQLITE_OK)
@@ -25,6 +31,11 @@ bool Base_de_Datos::consulta(std::string consulta_entrada)
 
 int Base_de_Datos::consulta_int(std::string consulta)
 {
+	if(!m_base_de_datos_abierta)
+	{
+		Registro::Error("La base de datos no esta abierta");
+		return 0;
+	}
 	sqlite3_stmt * respuesta_consulta;
 	int respuesta = sqlite3_prepare(m_base_de_datos, consulta.c_str(), -1, &respuesta_consulta, NULL);
 	int resultado = 0;
@@ -39,6 +50,11 @@ int Base_de_Datos::consulta_int(std::string consulta)
 
 std::string Base_de_Datos::consulta_texto(std::string consulta)
 {
+	if(!m_base_de_datos_abierta)
+	{
+		Registro::Error("La base de datos no esta abierta");
+		return "";
+	}
 	sqlite3_stmt * respuesta_consulta;
 	int respuesta = sqlite3_prepare(m_base_de_datos, consulta.c_str(), -1, &respuesta_consulta, NULL);
 	if(respuesta == SQLITE_OK)
@@ -61,8 +77,10 @@ bool Base_de_Datos::abrir(std::string direccion)
 	if(respuesta != SQLITE_OK)
 	{
 		Registro::Error("No se puede abrir o crear la base de datos.");
+		m_base_de_datos_abierta = false;
 		return true;
 	}
+	m_base_de_datos_abierta = true;
 	return false;
 }
 

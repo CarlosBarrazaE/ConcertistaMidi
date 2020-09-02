@@ -11,6 +11,7 @@
 class Base_de_Datos
 {
 	private:
+		bool m_base_de_datos_abierta;
 		sqlite3 *m_base_de_datos;
 		bool consulta(std::string consulta);
 		int consulta_int(std::string consulta);
