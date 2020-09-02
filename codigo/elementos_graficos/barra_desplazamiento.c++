@@ -54,6 +54,7 @@ void Barra_Desplazamiento::actualizar(unsigned int diferencia_tiempo)
 
 void Barra_Desplazamiento::dibujar()
 {
+
 	glScissor(this->x()+this->dx(), Pantalla::Alto-this->y()+this->dy()-this->alto(), this->ancho(), this->alto());
 	glEnable(GL_SCISSOR_TEST);
 	Elemento *e;

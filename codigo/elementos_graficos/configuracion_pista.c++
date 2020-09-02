@@ -125,15 +125,15 @@ Pista Configuracion_Pista::pista()
 
 void Configuracion_Pista::actualizar(unsigned int diferencia_tiempo)
 {
-	m_seleccion_modo.actualizar(diferencia_tiempo);
-	m_seleccion_color.actualizar(diferencia_tiempo);
-	m_vista_previa->actualizar(diferencia_tiempo);
-	m_boton_sonido->actualizar(diferencia_tiempo);
-
 	m_seleccion_modo.ajuste(this->x(), this->y());
 	m_seleccion_color.ajuste(this->x(), this->y());
 	m_vista_previa->ajuste(this->x(), this->y());
 	m_boton_sonido->ajuste(this->x(), this->y());
+
+	m_seleccion_modo.actualizar(diferencia_tiempo);
+	m_seleccion_color.actualizar(diferencia_tiempo);
+	m_vista_previa->actualizar(diferencia_tiempo);
+	m_boton_sonido->actualizar(diferencia_tiempo);
 
 	m_texto_instrumento.posicion(this->x()+20, this->y()+15);
 	m_texto_notas.posicion(this->x()+20, this->y()+35);
