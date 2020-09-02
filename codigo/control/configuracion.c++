@@ -1,6 +1,6 @@
 #include "configuracion.h++"
 
-Configuracion::Configuracion()
+Configuracion::Configuracion() : m_entrada(NULL), m_salida(NULL)
 {
 	int id_dispositivo_entrada = 0;
 	int id_dispositivo_salida = 0;
