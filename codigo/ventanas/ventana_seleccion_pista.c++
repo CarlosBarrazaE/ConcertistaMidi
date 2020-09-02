@@ -13,7 +13,7 @@ VentanaSeleccionPista::VentanaSeleccionPista(Configuracion *configuracion, Datos
 	m_boton_continuar = new Boton(Pantalla::Ancho - 130, Pantalla::Alto - 32, 120, 25, "Continuar", LetraChica, recursos);
 	m_boton_continuar->color_boton(Color(0.9f, 0.9f, 0.9f));
 
-	m_texto_titulo.texto("Selección de Pistas");
+	m_texto_titulo.texto(m_musica->nombre_musica());
 	m_texto_titulo.tipografia(recursos->tipografia(LetraTitulo));
 	m_texto_titulo.color(Color(1.0f, 1.0f, 1.0f));
 	m_texto_titulo.posicion(0, 0);
