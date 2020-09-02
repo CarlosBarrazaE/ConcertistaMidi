@@ -77,6 +77,9 @@ void Etiqueta::dibujar()
 	if(m_texto.length() == 0)
 		return;
 
+	if(m_tipografia == NULL)
+		return;
+
 	int nueva_x = 0;
 	int nueva_y = 0;
 	if(m_centrado)
