@@ -10,7 +10,7 @@ Lista_Opciones::Lista_Opciones(int x, int y, int ancho, int alto, Administrador_
 	m_cambio_opcion_seleccionada = false;
 
 	m_texto_seleccion.color(Color(1.0f, 1.0f, 1.0f));
-	m_texto_seleccion.posicion(x, y);
+	m_texto_seleccion.posicion(0, 0);
 	m_texto_seleccion.dimension(ancho, alto);
 	m_texto_seleccion.centrado(true);
 }
@@ -38,6 +38,7 @@ void Lista_Opciones::opciones_iconos(std::vector<Textura2D*> iconos)
 	m_iconos = iconos;
 	m_usar_iconos = true;
 	m_texto_seleccion.alto(0);//Para anular centrado vertical
+	m_texto_seleccion.posicion(0, 43);//Posicion para iconos
 }
 
 void Lista_Opciones::tipografia(Tipografia *tipografia)
@@ -68,10 +69,7 @@ bool Lista_Opciones::cambio_opcion_seleccionada()
 
 void Lista_Opciones::actualizar(unsigned int /*diferencia_tiempo*/)
 {
-	if(m_usar_iconos)
-		m_texto_seleccion.posicion(this->x(), this->y()+47);
-	else
-		m_texto_seleccion.posicion(this->x(), this->y());
+	m_texto_seleccion.ajuste(this->x(), this->y());
 }
 
 void Lista_Opciones::dibujar()
