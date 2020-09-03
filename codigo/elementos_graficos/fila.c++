@@ -28,6 +28,11 @@ void Fila::actualizar(unsigned int /*diferencia_tiempo*/)
 
 	if(m_sobre_boton)
 		m_color_actual = Color(m_color_actual.rojo()-0.08f, m_color_actual.verde()-0.08f, m_color_actual.azul()-0.08f);
+
+	for(Etiqueta* e : m_celda)
+	{
+		e->y(this->y());
+	}
 }
 
 void Fila::dibujar()
@@ -36,7 +41,7 @@ void Fila::dibujar()
 	m_rectangulo->dibujar(this->x()+this->dx(), this->y()+this->dy(), this->ancho(), this->alto(), m_color_actual);
 	for(unsigned int x=0; x<m_celda.size(); x++)
 	{
-		m_rectangulo->dibujar(m_celda.at(x)->x(), m_celda.at(x)->y(), 10, 40, Color(0.4f, 0.2f, 0.4f));
+		m_rectangulo->dibujar(m_celda.at(x)->x()+m_celda.at(x)->dx(), m_celda.at(x)->y()+m_celda.at(x)->dy(), 10, 40, Color(0.4f, 0.2f, 0.4f));
 		m_celda.at(x)->dibujar();
 	}
 }

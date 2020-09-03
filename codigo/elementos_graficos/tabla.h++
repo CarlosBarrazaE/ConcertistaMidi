@@ -6,6 +6,7 @@
 #include "elemento.h++"
 #include "etiqueta.h++"
 #include "fila.h++"
+#include "barra_desplazamiento.h++"
 #include "../dispositivos/pantalla.h++"
 
 #include <vector>
@@ -30,6 +31,7 @@ private:
 	//Etiqueta m_textos;
 	Rectangulo *m_rectangulo;
 	Color m_color_fondo;
+	Barra_Desplazamiento *m_barra_desplazamiento;
 
 	int m_ultima_columna;
 	int m_ultima_fila;
