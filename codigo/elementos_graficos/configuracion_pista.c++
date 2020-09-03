@@ -8,15 +8,18 @@ Configuracion_Pista::Configuracion_Pista(int x, int y, int ancho, int alto, Pist
 	m_texto_instrumento.texto(m_datos_pista.instrumento());
 	m_texto_instrumento.tipografia(recursos->tipografia(LetraMediana));
 	m_texto_instrumento.color(Color(1.0f, 1.0f, 1.0f));
+	m_texto_instrumento.posicion(20, 15);
 
 	m_texto_notas.texto(std::to_string(m_datos_pista.numero_notas()) + " notas");
 	m_texto_notas.tipografia(recursos->tipografia(LetraMuyChica));
 	m_texto_notas.color(Color(1.0f, 1.0f, 1.0f));
+	m_texto_notas.posicion(20, 35);
 
 	m_texto_sonido.tipografia(recursos->tipografia(LetraMuyChica));
 	m_texto_sonido.color(Color(1.0f, 1.0f, 1.0f));
 	m_texto_sonido.dimension(100, 8);
 	m_texto_sonido.centrado(true);
+	m_texto_sonido.posicion(242, 128);
 
 	m_textura_fondo = recursos->textura(T_ConfiguracionPista);
 
@@ -129,15 +132,14 @@ void Configuracion_Pista::actualizar(unsigned int diferencia_tiempo)
 	m_seleccion_color.ajuste(this->x(), this->y());
 	m_vista_previa->ajuste(this->x(), this->y());
 	m_boton_sonido->ajuste(this->x(), this->y());
+	m_texto_instrumento.ajuste(this->x(), this->y());
+	m_texto_notas.ajuste(this->x(), this->y());
+	m_texto_sonido.ajuste(this->x(), this->y());
 
 	m_seleccion_modo.actualizar(diferencia_tiempo);
 	m_seleccion_color.actualizar(diferencia_tiempo);
 	m_vista_previa->actualizar(diferencia_tiempo);
 	m_boton_sonido->actualizar(diferencia_tiempo);
-
-	m_texto_instrumento.posicion(this->x()+20, this->y()+15);
-	m_texto_notas.posicion(this->x()+20, this->y()+35);
-	m_texto_sonido.posicion(this->x()+242, this->y()+128);
 }
 
 void Configuracion_Pista::dibujar()

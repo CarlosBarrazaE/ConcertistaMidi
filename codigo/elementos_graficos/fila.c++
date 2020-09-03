@@ -38,18 +38,18 @@ void Fila::actualizar(unsigned int /*diferencia_tiempo*/)
 void Fila::dibujar()
 {
 	m_rectangulo->textura(false);
-	m_rectangulo->dibujar(this->x()+this->dx(), this->y()+this->dy(), this->ancho(), this->alto(), m_color_actual);
+	m_rectangulo->dibujar(this->x(), this->y(), this->ancho(), this->alto(), m_color_actual);
 	for(unsigned int x=0; x<m_celda.size(); x++)
 	{
-		m_rectangulo->dibujar(m_celda.at(x)->x()+m_celda.at(x)->dx(), m_celda.at(x)->y()+m_celda.at(x)->dy(), 10, 40, Color(0.4f, 0.2f, 0.4f));
+		m_rectangulo->dibujar(m_celda.at(x)->x(), m_celda.at(x)->y(), 10, 40, Color(0.4f, 0.2f, 0.4f));
 		m_celda.at(x)->dibujar();
 	}
 }
 
 void Fila::evento_raton(Raton *raton)
 {
-	if(raton->x() >= this->x()+this->dx() && raton->x() <= this->x()+this->dx() + this->ancho() &&
-		raton->y() >= this->y()+this->dy() && raton->y() <= this->y()+this->dy() + this->alto())
+	if(raton->x() >= this->x() && raton->x() <= this->x() + this->ancho() &&
+		raton->y() >= this->y() && raton->y() <= this->y() + this->alto())
 	{
 		if(raton->activado(BotonIzquierdo) && m_sobre_boton)
 			m_boton_pre_activado = true;

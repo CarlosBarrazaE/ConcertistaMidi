@@ -9,7 +9,7 @@ Boton::Boton(int x, int y, int ancho, int alto, std::string texto, Administrador
 
 	m_texto.texto(texto);
 	m_texto.tipografia(recursos->tipografia(LetraMediana));
-	m_texto.posicion(this->x()+this->dx(), this->y()+this->dy());
+	m_texto.posicion(this->x(), this->y());
 	m_texto.dimension(ancho, alto);
 	m_texto.centrado(true);
 }
@@ -23,7 +23,7 @@ Boton::Boton(int x, int y, int ancho, int alto, std::string texto, ModeloLetra m
 
 	m_texto.texto(texto);
 	m_texto.tipografia(recursos->tipografia(modelo_letra));
-	m_texto.posicion(this->x()+this->dx(), this->y()+this->dy());
+	m_texto.posicion(this->x(), this->y());
 	m_texto.dimension(ancho, alto);
 	m_texto.centrado(true);
 }
@@ -80,7 +80,7 @@ void Boton::centrado(bool centrado)
 		if(centrado_actual)//Revierte el centrado
 			this->m_x = this->x() + (this->ancho() / 2.0);
 	}
-	m_texto.posicion(this->x()+this->dx(), this->y()+this->dy());
+	m_texto.posicion(this->x(), this->y());
 }
 
 void Boton::actualizar(unsigned int /*diferencia_tiempo*/)
@@ -91,15 +91,15 @@ void Boton::dibujar()
 {
 	m_textura_boton->activar();
 	m_rectangulo->textura(true);
-	m_rectangulo->dibujar(this->x()+this->dx(), this->y()+this->dy(), this->ancho(), this->alto(), m_color_boton_actual);
+	m_rectangulo->dibujar(this->x(), this->y(), this->ancho(), this->alto(), m_color_boton_actual);
 
 	m_texto.dibujar();
 }
 
 void Boton::evento_raton(Raton *raton)
 {
-	if(raton->x() >= this->x()+this->dx() && raton->x() <= this->x()+this->dx() + this->ancho() &&
-		raton->y() >= this->y()+this->dy() && raton->y() <= this->y()+this->dy() + this->alto())
+	if(raton->x() >= this->x() && raton->x() <= this->x() + this->ancho() &&
+		raton->y() >= this->y() && raton->y() <= this->y() + this->alto())
 	{
 		if(raton->activado(BotonIzquierdo) && m_sobre_boton)
 			m_boton_pre_activado = true;
@@ -125,7 +125,7 @@ void Boton::evento_raton(Raton *raton)
 
 void Boton::evento_pantalla(int /*ancho*/, int /*alto*/)
 {
-	m_texto.posicion(this->x()+this->dx(), this->y()+this->dy());
+	m_texto.posicion(this->x(), this->y());
 }
 
 bool Boton::esta_activado()

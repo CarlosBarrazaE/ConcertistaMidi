@@ -9,7 +9,7 @@ class Elemento
 protected:
 	int m_x = 0, m_y = 0;
 	int m_ancho = 0, m_alto = 0;
-	int m_dx = 0, m_dy = 0;
+	int m_ax = 0, m_ay = 0;
 	bool m_centrado = false;
 public:
 	Elemento(int x, int y, int ancho, int alto);
@@ -25,8 +25,6 @@ public:
 	int y();
 	int ancho();
 	int alto();
-	int dx();
-	int dy();
 
 	void centrado(bool centrado);
 	void posicion(int x, int y);
@@ -37,9 +35,7 @@ public:
 	void ancho(int ancho);
 	void alto(int alto);
 
-	void ajuste(int dx, int dy);
-	void dx(int dx);
-	void dy(int dy);
+	void ajuste(int x, int y);
 };
 
 #endif

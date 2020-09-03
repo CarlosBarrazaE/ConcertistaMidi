@@ -69,29 +69,29 @@ bool Lista_Opciones::cambio_opcion_seleccionada()
 void Lista_Opciones::actualizar(unsigned int /*diferencia_tiempo*/)
 {
 	if(m_usar_iconos)
-		m_texto_seleccion.posicion(this->x() + this->dx(), this->y() + this->dy()+47);
+		m_texto_seleccion.posicion(this->x(), this->y()+47);
 	else
-		m_texto_seleccion.posicion(this->x() + this->dx(), this->y() + this->dy());
+		m_texto_seleccion.posicion(this->x(), this->y());
 }
 
 void Lista_Opciones::dibujar()
 {
 	//m_rectangulo->textura(false);
-	//m_rectangulo->dibujar(this->x()+this->dx(), this->y()+this->dy(), this->ancho(), this->alto(), Color(1.0f, 0.0f, 1.0f, 0.5f));
-	//m_rectangulo->dibujar(this->x()+this->dx(), this->y()+this->dy(), m_ancho_icono, m_alto_icono, Color(0.0f, 1.0f, 1.0f, 0.5f));
+	//m_rectangulo->dibujar(this->x(), this->y(), this->ancho(), this->alto(), Color(1.0f, 0.0f, 1.0f, 0.5f));
+	//m_rectangulo->dibujar(this->x(), this->y(), m_ancho_icono, m_alto_icono, Color(0.0f, 1.0f, 1.0f, 0.5f));
 	if(m_usar_iconos)
 	{
 		m_rectangulo->textura(true);
 		m_iconos[m_opcion_actual]->activar();
-		m_rectangulo->dibujar(this->x()+this->dx()+m_centrado_icono, this->y()+this->dy(), m_ancho_icono, m_alto_icono, Color(1.0f, 1.0f, 1.0f));
+		m_rectangulo->dibujar(this->x()+m_centrado_icono, this->y(), m_ancho_icono, m_alto_icono, Color(1.0f, 1.0f, 1.0f));
 	}
 	m_texto_seleccion.dibujar();
 }
 
 void Lista_Opciones::evento_raton(Raton *raton)
 {
-	if(raton->x() >= this->x()+this->dx() && raton->x() <= this->x()+this->dx() + this->ancho() &&
-		raton->y() >= this->y()+this->dy() && raton->y() <= this->y()+this->dy() + this->alto())
+	if(raton->x() >= this->x() && raton->x() <= this->x() + this->ancho() &&
+		raton->y() >= this->y() && raton->y() <= this->y() + this->alto())
 	{
 		if((raton->activado(BotonIzquierdo) || raton->activado(BotonDerecho) || raton->activado(BotonCentral)) && m_sobre_boton)
 			m_boton_pre_activado = raton->boton_activado();

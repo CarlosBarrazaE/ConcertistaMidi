@@ -7,8 +7,6 @@ Elemento::Elemento(int x, int y, int ancho, int alto)
 	m_ancho = ancho;
 	m_alto = alto;
 	m_centrado = false;
-	m_dx = 0;
-	m_dy = 0;
 }
 
 Elemento::Elemento(int x, int y, int ancho, int alto, bool centrado)
@@ -22,8 +20,6 @@ Elemento::Elemento(int x, int y, int ancho, int alto, bool centrado)
 	m_ancho = ancho;
 	m_alto = alto;
 	m_centrado = centrado;
-	m_dx = 0;
-	m_dy = 0;
 }
 
 Elemento::~Elemento()
@@ -32,12 +28,12 @@ Elemento::~Elemento()
 
 int Elemento::x()
 {
-	return m_x;
+	return m_x+m_ax;
 }
 
 int Elemento::y()
 {
-	return m_y;
+	return m_y+m_ay;
 }
 
 int Elemento::ancho()
@@ -88,16 +84,6 @@ void Elemento::y(int y)
 	m_y = y;
 }
 
-int Elemento::dx()
-{
-	return m_dx;
-}
-
-int Elemento::dy()
-{
-	return m_dy;
-}
-
 void Elemento::dimension(int ancho, int alto)
 {
 	m_ancho = ancho;
@@ -123,18 +109,8 @@ void Elemento::alto(int alto)
 	m_alto = alto;
 }
 
-void Elemento::ajuste(int dx, int dy)
+void Elemento::ajuste(int x, int y)
 {
-	m_dx = dx;
-	m_dy = dy;
-}
-
-void Elemento::dx(int dx)
-{
-	m_dx = dx;
-}
-
-void Elemento::dy(int dy)
-{
-	m_dy = dy;
+	m_ax = x;
+	m_ay = y;
 }

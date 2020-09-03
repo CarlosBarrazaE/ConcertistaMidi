@@ -79,8 +79,8 @@ void Titulo::actualizar(unsigned int diferencia_tiempo)
 		}
 	}
 
-	m_titulo.posicion(this->x()+this->dx()+m_posicion_texto, this->y()+this->dy()+this->alto()/2-m_titulo.alto_texto());
-	m_autor.posicion(this->x()+this->dx()-m_posicion_texto, this->y()+this->dy()+this->alto()/2+20);
+	m_titulo.posicion(this->x()+m_posicion_texto, this->y()+this->alto()/2-m_titulo.alto_texto());
+	m_autor.posicion(this->x()-m_posicion_texto, this->y()+this->alto()/2+20);
 }
 
 void Titulo::dibujar()
@@ -89,7 +89,7 @@ void Titulo::dibujar()
 		return;
 	m_fondo->activar();
 	m_rectangulo->textura(true);
-	m_rectangulo->dibujar(this->x()+this->dx(), this->y()+this->dy()+this->alto()/2-100, this->ancho(), 200, Color(1.0f, 1.0f, 1.0f, m_alfa));
+	m_rectangulo->dibujar(this->x(), this->y()+this->alto()/2-100, this->ancho(), 200, Color(1.0f, 1.0f, 1.0f, m_alfa));
 
 	m_titulo.dibujar();
 	m_autor.dibujar();
@@ -103,9 +103,9 @@ void Titulo::evento_pantalla(int ancho, int alto)
 {
 	this->dimension(ancho, alto);
 
-	m_titulo.posicion(this->x()+this->dx(), this->y()+this->dy()+this->alto()/2-m_titulo.alto_texto());
+	m_titulo.posicion(this->x(), this->y()+this->alto()/2-m_titulo.alto_texto());
 	m_titulo.ancho(ancho);
 
-	m_autor.posicion(this->x()+this->dx(), this->y()+this->dy()+this->alto()/2+20);
+	m_autor.posicion(this->x(), this->y()+this->alto()/2+20);
 	m_autor.ancho(ancho);
 }

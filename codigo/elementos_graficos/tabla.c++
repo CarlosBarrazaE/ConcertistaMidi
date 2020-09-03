@@ -35,10 +35,10 @@ void Tabla::actualizar(unsigned int diferencia_tiempo)
 void Tabla::dibujar()
 {
 	//Dibuja solo lo que esta dentro del cuadro
-	//glScissor(this->x()+this->dx(), Pantalla::Alto-this->y()+this->dy()-this->alto(), this->ancho(), this->alto());
+	//glScissor(this->x(), Pantalla::Alto-this->y()-this->alto(), this->ancho(), this->alto());
 	//glEnable(GL_SCISSOR_TEST);
 	m_rectangulo->textura(false);
-	m_rectangulo->dibujar(this->x()+this->dx(), this->y()+this->dy(), this->ancho(), ANCHO_FILA, m_color_fondo);
+	m_rectangulo->dibujar(this->x(), this->y(), this->ancho(), ANCHO_FILA, m_color_fondo);
 
 	for(unsigned int x=0; x<m_titulos.size(); x++)
 	{

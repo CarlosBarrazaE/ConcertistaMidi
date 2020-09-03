@@ -86,19 +86,19 @@ void Etiqueta::dibujar()
 	{
 		if(this->alto() == 0)
 		{
-			nueva_x = this->x()+this->dx()+this->ancho()/2.0 - m_ancho_texto / 2.0;
-			nueva_y = this->y()+this->dy()+m_tipografia->alto_texto();
+			nueva_x = this->x()+this->ancho()/2.0 - m_ancho_texto / 2.0;
+			nueva_y = this->y()+m_tipografia->alto_texto();
 		}
 		else
 		{
-			nueva_x = this->x()+this->dx()+this->ancho()/2.0 - m_ancho_texto / 2.0;
-			nueva_y = this->y()+this->dy()+m_tipografia->alto_texto()+this->alto()/2.0-m_tipografia->alto_texto()/2.0;
+			nueva_x = this->x()+this->ancho()/2.0 - m_ancho_texto / 2.0;
+			nueva_y = this->y()+m_tipografia->alto_texto()+this->alto()/2.0-m_tipografia->alto_texto()/2.0;
 		}
 	}
 	else
 	{
-		nueva_x = this->x()+this->dx();
-		nueva_y = this->y()+this->dy()+m_tipografia->alto_texto();
+		nueva_x = this->x();
+		nueva_y = this->y()+m_tipografia->alto_texto();
 	}
 
 
