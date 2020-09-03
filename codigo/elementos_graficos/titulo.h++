@@ -24,10 +24,11 @@ public:
 	~Titulo();
 
 	void datos(Datos_Musica *datos_musica);
-	void actualizar(unsigned int diferencia_tiempo);
-	void dibujar();
-	void evento_raton(Raton *raton);
-	void evento_pantalla(int ancho, int alto);
+
+	void actualizar(unsigned int diferencia_tiempo) override;
+	void dibujar() override;
+	void evento_raton(Raton *raton) override;
+	void evento_pantalla(int ancho, int alto) override;
 };
 
 #endif
