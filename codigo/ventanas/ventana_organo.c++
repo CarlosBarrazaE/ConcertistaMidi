@@ -165,9 +165,9 @@ void VentanaOrgano::actualizar(unsigned int diferencia_tiempo)
 
 
 	//Si selecciono un nuevo tiempo en la barra de progreso, se cambia la posicion.
-	if(m_barra->o_tiempo_seleccionado() > 0)
+	if(m_barra->tiempo_seleccionado() > 0)
 	{
-		m_musica->musica()->GoTo(m_barra->o_tiempo_seleccionado());
+		m_musica->musica()->GoTo(m_barra->tiempo_seleccionado());
 		m_tablero->reiniciar();
 		if(m_configuracion->dispositivo_salida() != NULL)
 			m_configuracion->dispositivo_salida()->Reset();

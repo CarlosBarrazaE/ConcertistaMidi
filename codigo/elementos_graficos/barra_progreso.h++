@@ -34,7 +34,7 @@ public:
 	void dimension(int ancho, int alto) override;
 
 	void tiempo(microseconds_t tiempo_actual);
-	microseconds_t o_tiempo_seleccionado();
+	microseconds_t tiempo_seleccionado();
 };
 
 #endif

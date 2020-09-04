@@ -105,7 +105,7 @@ void Barra_Progreso::tiempo(microseconds_t tiempo_actual)
 		m_tiempo_actual = tiempo_actual;
 }
 
-microseconds_t Barra_Progreso::o_tiempo_seleccionado()
+microseconds_t Barra_Progreso::tiempo_seleccionado()
 {
 	return m_tiempo_nuevo;
 }
