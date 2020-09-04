@@ -36,7 +36,6 @@ void VentanaConfiguracion::evento_teclado(Tecla tecla, bool estado)
 		m_accion = CambiarATitulo;
 }
 
-void VentanaConfiguracion::evento_pantalla(int ancho, int alto)
+void VentanaConfiguracion::evento_pantalla(int /*ancho*/, int /*alto*/)
 {
-	m_boton_atras->evento_pantalla(ancho, alto);
 }

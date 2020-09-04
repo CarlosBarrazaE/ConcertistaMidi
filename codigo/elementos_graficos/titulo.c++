@@ -23,14 +23,6 @@ Titulo::~Titulo()
 {
 }
 
-void Titulo::datos(Datos_Musica *datos_musica)
-{
-	m_datos = datos_musica;
-	m_titulo.texto(m_datos->nombre_musica());
-	m_autor.texto(m_datos->autor());
-	m_posicion_texto = this->ancho() / 2 + m_titulo.largo_texto() / 2;
-}
-
 void Titulo::actualizar(unsigned int diferencia_tiempo)
 {
 	if(m_estado == 5)
@@ -99,13 +91,21 @@ void Titulo::evento_raton(Raton */*raton*/)
 {
 }
 
-void Titulo::evento_pantalla(int ancho, int alto)
+void Titulo::dimension(int ancho, int alto)
 {
-	this->dimension(ancho, alto);
+	this->_dimension(ancho, alto);
 
-	m_titulo.posicion(this->x(), this->y()+this->alto()/2-m_titulo.alto_texto());
+	m_titulo.posicion(this->x(), this->y()+alto/2-m_titulo.alto_texto());
 	m_titulo.dimension(ancho, 0);
 
-	m_autor.posicion(this->x(), this->y()+this->alto()/2+20);
+	m_autor.posicion(this->x(), this->y()+alto/2+20);
 	m_autor.dimension(ancho, 0);
+}
+
+void Titulo::datos(Datos_Musica *datos_musica)
+{
+	m_datos = datos_musica;
+	m_titulo.texto(m_datos->nombre_musica());
+	m_autor.texto(m_datos->autor());
+	m_posicion_texto = this->ancho() / 2 + m_titulo.largo_texto() / 2;
 }

@@ -234,13 +234,8 @@ void VentanaSeleccionMusica::evento_teclado(Tecla tecla, bool estado)
 void VentanaSeleccionMusica::evento_pantalla(int ancho, int alto)
 {
 	m_texto_titulo.dimension(Pantalla::Ancho, 40);
-
 	m_tabla_archivos.dimension(ancho-20, alto-100);
-	m_tabla_archivos.evento_pantalla(ancho, alto);
 
 	m_boton_atras->posicion(m_boton_atras->x(), alto - 32);
-	m_boton_atras->evento_pantalla(ancho, alto);
-
 	m_boton_continuar->posicion(ancho - 130, alto - 32);
-	m_boton_continuar->evento_pantalla(ancho, alto);
 }

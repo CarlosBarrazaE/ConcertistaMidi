@@ -43,7 +43,6 @@ public:
 	void actualizar(unsigned int diferencia_tiempo) override;
 	void dibujar() override;
 	void evento_raton(Raton *raton) override;
-	void evento_pantalla(int ancho, int alto) override;
 
 	void agregar_columna(std::string nombre, double ancho);
 	void insertar_fila(std::vector<std::string> fila_contenido);

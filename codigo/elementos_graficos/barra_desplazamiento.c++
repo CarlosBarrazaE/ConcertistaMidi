@@ -30,17 +30,6 @@ Barra_Desplazamiento::~Barra_Desplazamiento()
 
 }
 
-void Barra_Desplazamiento::agregar_elemento(Elemento *e)
-{
-	m_elementos.push_back(e);
-}
-
-void Barra_Desplazamiento::dimension(int ancho, int alto)
-{
-	this->_dimension(ancho, alto);
-	m_calcular_posicion = true;
-}
-
 void Barra_Desplazamiento::actualizar(unsigned int diferencia_tiempo)
 {
 	if(m_calcular_posicion)
@@ -137,10 +126,6 @@ void Barra_Desplazamiento::evento_raton(Raton *raton)
 	}
 }
 
-void Barra_Desplazamiento::evento_pantalla(int /*ancho*/, int /*alto*/)
-{
-}
-
 void Barra_Desplazamiento::actualizar_dimension()
 {
 	int numero_columnas = this->ancho() / (m_columna + m_margen_columna);
@@ -172,4 +157,15 @@ void Barra_Desplazamiento::actualizar_dimension()
 	m_calcular_posicion = false;
 	if(this->alto() < m_alto_actual)
 		m_proporcion = (double)(this->alto()-20) / (double)m_alto_actual;
+}
+
+void Barra_Desplazamiento::dimension(int ancho, int alto)
+{
+	this->_dimension(ancho, alto);
+	m_calcular_posicion = true;
+}
+
+void Barra_Desplazamiento::agregar_elemento(Elemento *e)
+{
+	m_elementos.push_back(e);
 }

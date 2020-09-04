@@ -31,6 +31,12 @@ public:
 	Lista_Opciones(int x, int y, int ancho, int alto, Administrador_Recursos *recursos);
 	~Lista_Opciones();
 
+	void actualizar(unsigned int diferencia_tiempo) override;
+	void dibujar() override;
+	void evento_raton(Raton *raton) override;
+
+	void posicion(int x, int y) override;
+
 	void dimension_icono(int ancho, int alto);
 	void opciones_textos(std::vector<std::string> opciones);
 	void opciones_iconos(std::vector<Textura2D*> iconos);
@@ -38,13 +44,6 @@ public:
 	void opcion_predeterminada(unsigned int opcion);
 	int opcion_seleccionada();
 	bool cambio_opcion_seleccionada();
-
-	void actualizar(unsigned int diferencia_tiempo) override;
-	void dibujar() override;
-	void evento_raton(Raton *raton) override;
-	void evento_pantalla(int ancho, int alto) override;
-
-	void posicion(int x, int y) override;
 };
 
 #endif

@@ -44,45 +44,6 @@ void Boton::inicializar()
 	m_color_boton_sobre.color(color.rojo()-0.1f, color.verde()-0.1f, color.azul()-0.1f);
 }
 
-void Boton::textura(Textura2D *textura)
-{
-	m_textura_boton = textura;
-}
-
-void Boton::color_boton(Color color)
-{
-	m_color_boton_normal = color;
-	m_color_boton_actual = color;
-	m_color_boton_sobre.color(color.rojo()-0.1f, color.verde()-0.1f, color.azul()-0.1f);
-}
-
-void Boton::color_texto(Color color)
-{
-	m_texto.color(color);
-}
-
-void Boton::tipografia(Tipografia *tipografia)
-{
-	m_texto.tipografia(tipografia);
-}
-
-void Boton::centrado(bool centrado)
-{
-	bool centrado_actual = m_centrado;
-	m_centrado = centrado;
-	if(m_centrado)
-	{
-		if(!centrado_actual)//Centra el objeto
-			this->m_x = this->x() - (this->ancho() / 2.0);
-	}
-	else
-	{
-		if(centrado_actual)//Revierte el centrado
-			this->m_x = this->x() + (this->ancho() / 2.0);
-	}
-	m_texto.posicion(this->x(), this->y());
-}
-
 void Boton::actualizar(unsigned int /*diferencia_tiempo*/)
 {
 }
@@ -123,8 +84,15 @@ void Boton::evento_raton(Raton *raton)
 	}
 }
 
-void Boton::evento_pantalla(int /*ancho*/, int /*alto*/)
+void Boton::posicion(int x, int y)
 {
+	this->_posicion(x, y);
+	m_texto.posicion(this->x(), this->y());
+}
+
+void Boton::centrado(bool centrado)
+{
+	this->_centrado(centrado);
 	m_texto.posicion(this->x(), this->y());
 }
 
@@ -133,4 +101,26 @@ bool Boton::esta_activado()
 	bool estado = m_boton_activado;
 	m_boton_activado = false;
 	return estado;
+}
+
+void Boton::textura(Textura2D *textura)
+{
+	m_textura_boton = textura;
+}
+
+void Boton::color_boton(Color color)
+{
+	m_color_boton_normal = color;
+	m_color_boton_actual = color;
+	m_color_boton_sobre.color(color.rojo()-0.1f, color.verde()-0.1f, color.azul()-0.1f);
+}
+
+void Boton::color_texto(Color color)
+{
+	m_texto.color(color);
+}
+
+void Boton::tipografia(Tipografia *tipografia)
+{
+	m_texto.tipografia(tipografia);
 }

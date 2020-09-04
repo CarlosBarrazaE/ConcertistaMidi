@@ -46,17 +46,7 @@ void Elemento::_dimension(int ancho, int alto)
 	m_alto = alto;
 }
 
-void Elemento::posicion(int x, int y)
-{
-	this->_posicion(x, y);
-}
-
-void Elemento::dimension(int ancho, int alto)
-{
-	this->_dimension(ancho, alto);
-}
-
-void Elemento::centrado(bool centrado)
+void Elemento::_centrado(bool centrado)
 {
 	bool centrado_actual = m_centrado;
 	m_centrado = centrado;
@@ -70,6 +60,21 @@ void Elemento::centrado(bool centrado)
 		if(centrado_actual)//Revierte el centrado
 			m_x = m_x + (m_ancho / 2);
 	}
+}
+
+void Elemento::posicion(int x, int y)
+{
+	this->_posicion(x, y);
+}
+
+void Elemento::dimension(int ancho, int alto)
+{
+	this->_dimension(ancho, alto);
+}
+
+void Elemento::centrado(bool centrado)
+{
+	this->_centrado(centrado);
 }
 
 int Elemento::x()

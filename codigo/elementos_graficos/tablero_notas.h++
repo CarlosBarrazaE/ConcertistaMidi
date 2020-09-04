@@ -48,6 +48,12 @@ public:
 	Tablero_Notas(int x, int y, int alto, int ancho, Teclado_Configuracion *teclado, Administrador_Recursos *recursos);
 	~Tablero_Notas();
 
+	void actualizar(unsigned int diferencia_tiempo) override;
+	void dibujar() override;
+	void evento_raton(Raton *raton) override;
+
+	void dimension(int ancho, int alto) override;
+
 	std::array<Color, 52> *blancas_presionadas();
 	std::array<Color, 36> *negras_presionadas();
 
@@ -55,17 +61,13 @@ public:
 	void notas(NotasPistas notas);
 	void lineas(MidiEventMicrosecondList lineas);
 	void pistas(std::vector<Pista> *pistas);
-	void dimension(int ancho, int alto) override;
 	void duracion_nota(int valor);
 	void modificar_duracion_nota(int valor);
 	int duracion_nota();
 	void teclado(Teclado_Configuracion *teclado);
 	void reiniciar();
 
-	void actualizar(unsigned int diferencia_tiempo) override;
-	void dibujar() override;
-	void evento_raton(Raton *raton) override;
-	void evento_pantalla(int ancho, int alto) override;
+
 };
 
 #endif

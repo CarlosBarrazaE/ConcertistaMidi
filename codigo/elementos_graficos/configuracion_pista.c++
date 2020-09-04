@@ -121,11 +121,6 @@ Configuracion_Pista::~Configuracion_Pista()
 	delete m_boton_sonido;
 }
 
-Pista Configuracion_Pista::pista()
-{
-	return m_datos_pista;
-}
-
 void Configuracion_Pista::actualizar(unsigned int diferencia_tiempo)
 {
 	m_seleccion_modo.actualizar(diferencia_tiempo);
@@ -208,10 +203,6 @@ void Configuracion_Pista::evento_raton(Raton *raton)
 	}
 }
 
-void Configuracion_Pista::evento_pantalla(int /*ancho*/, int /*alto*/)
-{
-}
-
 void Configuracion_Pista::posicion(int x, int y)
 {
 	this->_posicion(x, y);
@@ -223,4 +214,9 @@ void Configuracion_Pista::posicion(int x, int y)
 	m_texto_instrumento.posicion(x+20, y+15);
 	m_texto_notas.posicion(x+20, y+35);
 	m_texto_sonido.posicion(x+242, y+128);
+}
+
+Pista Configuracion_Pista::pista()
+{
+	return m_datos_pista;
 }

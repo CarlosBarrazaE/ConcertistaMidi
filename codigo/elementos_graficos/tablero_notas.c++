@@ -30,145 +30,6 @@ Tablero_Notas::~Tablero_Notas()
 	m_texto_numeros.clear();
 }
 
-std::array<Color, 52> *Tablero_Notas::blancas_presionadas()
-{
-	return &m_teclas_activas_blancas;
-}
-
-std::array<Color, 36> *Tablero_Notas::negras_presionadas()
-{
-	return &m_teclas_activas_negras;
-}
-
-void Tablero_Notas::tiempo(microseconds_t tiempo)
-{
-	m_tiempo_actual_midi = tiempo;
-}
-
-void Tablero_Notas::notas(NotasPistas notas)
-{
-	m_notas = notas;
-	for(unsigned int i=0; i<notas.size(); i++)
-	{
-		m_ultima_nota.push_back(0);//Se inician todas las pistas en 0
-	}
-}
-
-void Tablero_Notas::lineas(MidiEventMicrosecondList lineas)
-{
-	m_lineas = lineas;
-}
-
-void Tablero_Notas::pistas(std::vector<Pista> *pistas)
-{
-	m_pistas = pistas;
-}
-
-void Tablero_Notas::dimension(int ancho, int alto)
-{
-	this->_dimension(ancho, alto);
-	this->calcular_tamannos();
-}
-
-void Tablero_Notas::duracion_nota(int valor)
-{
-	if(valor < 0)
-		m_duracion_nota = m_duracion_nota - 100;
-	else
-		m_duracion_nota = m_duracion_nota + 100;
-
-	if(m_duracion_nota < 1500)
-		m_duracion_nota = 1500;
-	else if(m_duracion_nota > 14000)
-		m_duracion_nota = 14000;
-}
-
-void Tablero_Notas::modificar_duracion_nota(int valor)
-{
-	m_duracion_nota = valor;
-
-	if(m_duracion_nota < 1500)
-		m_duracion_nota = 1500;
-	else if(m_duracion_nota > 14000)
-		m_duracion_nota = 14000;
-}
-
-int Tablero_Notas::duracion_nota()
-{
-	return m_duracion_nota;
-}
-
-void Tablero_Notas::teclado(Teclado_Configuracion *teclado)
-{
-	m_teclado = teclado;
-	this->calcular_tamannos();
-}
-
-void Tablero_Notas::reiniciar()
-{
-	for(unsigned int i=0; i<m_ultima_nota.size(); i++)
-	{
-		m_ultima_nota[i] = 0;
-	}
-	for(int i=0; i<52; i++)
-	{
-		m_tiempo_espera_blancas[i] = 0;
-		if(i<36)
-			m_tiempo_espera_negras[i] = 0;
-	}
-}
-
-void Tablero_Notas::actualizar(unsigned int /*diferencia_tiempo*/)
-{
-	for(int i=0; i<52; i++)
-	{
-		if(m_tiempo_espera_blancas[i] > 0)
-		{
-			m_tiempo_espera_blancas[i] -= 1;
-		}
-		if(i<36)
-		{
-			if(m_tiempo_espera_negras[i] > 0)
-			{
-				m_tiempo_espera_negras[i] -= 1;
-			}
-		}
-	}
-}
-
-void Tablero_Notas::dibujar()
-{
-	m_rectangulo->textura(false);
-	m_rectangulo->dibujar(this->x(), this->y(), this->ancho(), this->alto(), Color(0.95f, 0.95f, 0.95f));
-
-	m_rectangulo->color(Color(0.7f, 0.7f, 0.7f));
-	this->dibujar_lineas_horizontales();
-	this->dibujar_lineas_verticales();
-
-	m_rectangulo->textura(true);
-	m_textura_sombra->activar();
-	m_rectangulo->dibujar(this->x(), this->y(), this->ancho(), 20);
-
-	m_rectangulo->extremos_fijos(false, true);
-	for(unsigned int pista=0; pista<m_notas.size(); pista++)
-	{
-		if(m_notas[pista].size() > 0)
-		{
-			if(m_pistas->at(pista).visible())
-				this->dibujar_notas(pista);//Dibuja la nota
-		}
-	}
-	m_rectangulo->extremos_fijos(false, false);
-}
-
-void Tablero_Notas::evento_raton(Raton */*raton*/)
-{
-}
-
-void Tablero_Notas::evento_pantalla(int /*ancho*/, int /*alto*/)
-{
-}
-
 void Tablero_Notas::calcular_tamannos()
 {
 	m_ancho_blanca = (this->ancho() / m_teclado->numero_blancas());
@@ -348,5 +209,140 @@ void Tablero_Notas::dibujar_notas(int pista)
 			m_rectangulo->color(Color(1.0f, 1.0f, 1.0f));
 			m_rectangulo->dibujar_estirable(this->x()+m_ajuste_x + posicion_blanca * m_ancho_blanca + ajuste_negra, this->y()+this->alto()+posicion_y-largo_nota, ancho_tecla, largo_final_nota, 0, 10);
 		}
+	}
+}
+
+void Tablero_Notas::actualizar(unsigned int /*diferencia_tiempo*/)
+{
+	for(int i=0; i<52; i++)
+	{
+		if(m_tiempo_espera_blancas[i] > 0)
+		{
+			m_tiempo_espera_blancas[i] -= 1;
+		}
+		if(i<36)
+		{
+			if(m_tiempo_espera_negras[i] > 0)
+			{
+				m_tiempo_espera_negras[i] -= 1;
+			}
+		}
+	}
+}
+
+void Tablero_Notas::dibujar()
+{
+	m_rectangulo->textura(false);
+	m_rectangulo->dibujar(this->x(), this->y(), this->ancho(), this->alto(), Color(0.95f, 0.95f, 0.95f));
+
+	m_rectangulo->color(Color(0.7f, 0.7f, 0.7f));
+	this->dibujar_lineas_horizontales();
+	this->dibujar_lineas_verticales();
+
+	m_rectangulo->textura(true);
+	m_textura_sombra->activar();
+	m_rectangulo->dibujar(this->x(), this->y(), this->ancho(), 20);
+
+	m_rectangulo->extremos_fijos(false, true);
+	for(unsigned int pista=0; pista<m_notas.size(); pista++)
+	{
+		if(m_notas[pista].size() > 0)
+		{
+			if(m_pistas->at(pista).visible())
+				this->dibujar_notas(pista);//Dibuja la nota
+		}
+	}
+	m_rectangulo->extremos_fijos(false, false);
+}
+
+void Tablero_Notas::evento_raton(Raton */*raton*/)
+{
+}
+
+void Tablero_Notas::dimension(int ancho, int alto)
+{
+	this->_dimension(ancho, alto);
+	this->calcular_tamannos();
+}
+
+std::array<Color, 52> *Tablero_Notas::blancas_presionadas()
+{
+	return &m_teclas_activas_blancas;
+}
+
+std::array<Color, 36> *Tablero_Notas::negras_presionadas()
+{
+	return &m_teclas_activas_negras;
+}
+
+void Tablero_Notas::tiempo(microseconds_t tiempo)
+{
+	m_tiempo_actual_midi = tiempo;
+}
+
+void Tablero_Notas::notas(NotasPistas notas)
+{
+	m_notas = notas;
+	for(unsigned int i=0; i<notas.size(); i++)
+	{
+		m_ultima_nota.push_back(0);//Se inician todas las pistas en 0
+	}
+}
+
+void Tablero_Notas::lineas(MidiEventMicrosecondList lineas)
+{
+	m_lineas = lineas;
+}
+
+void Tablero_Notas::pistas(std::vector<Pista> *pistas)
+{
+	m_pistas = pistas;
+}
+
+void Tablero_Notas::duracion_nota(int valor)
+{
+	if(valor < 0)
+		m_duracion_nota = m_duracion_nota - 100;
+	else
+		m_duracion_nota = m_duracion_nota + 100;
+
+	if(m_duracion_nota < 1500)
+		m_duracion_nota = 1500;
+	else if(m_duracion_nota > 14000)
+		m_duracion_nota = 14000;
+}
+
+void Tablero_Notas::modificar_duracion_nota(int valor)
+{
+	m_duracion_nota = valor;
+
+	if(m_duracion_nota < 1500)
+		m_duracion_nota = 1500;
+	else if(m_duracion_nota > 14000)
+		m_duracion_nota = 14000;
+}
+
+int Tablero_Notas::duracion_nota()
+{
+	return m_duracion_nota;
+}
+
+void Tablero_Notas::teclado(Teclado_Configuracion *teclado)
+{
+	m_teclado = teclado;
+	this->calcular_tamannos();
+}
+
+void Tablero_Notas::reiniciar()
+{
+	for(unsigned int i=0; i<m_ultima_nota.size(); i++)
+	{
+		m_ultima_nota[i] = 0;
+	}
+	for(int i=0; i<52; i++)
+	{
+		m_tiempo_espera_blancas[i] = 0;
+		if(i<36)
+			m_tiempo_espera_negras[i] = 0;
 	}
 }

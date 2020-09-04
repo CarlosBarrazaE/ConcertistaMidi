@@ -70,11 +70,6 @@ void Fila::evento_raton(Raton *raton)
 	}
 }
 
-void Fila::evento_pantalla(int /*ancho*/, int /*alto*/)
-{
-
-}
-
 void Fila::agregar_celda(Etiqueta *celda)
 {
 	m_celda.push_back(celda);

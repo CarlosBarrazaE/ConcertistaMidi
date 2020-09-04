@@ -36,13 +36,12 @@ public:
 	void actualizar(unsigned int diferencia_tiempo) override;
 	void dibujar() override;
 	void evento_raton(Raton *raton) override;
-	void evento_pantalla(int ancho, int alto) override;
+
+	void centrado(bool centrado) override;
 
 	void texto(std::string texto);
 	void color(Color color);
 	void tipografia(Tipografia *tipografia);
-	void centrado(bool centrado);
-
 	int largo_texto();
 	int alto_texto();
 	std::string texto();

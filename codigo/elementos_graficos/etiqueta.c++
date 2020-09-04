@@ -39,20 +39,6 @@ Etiqueta::~Etiqueta()
 	this->limpiar();
 }
 
-void Etiqueta::limpiar()
-{
-	if(m_indice_figura > 0)
-	{
-		glBindVertexArray(0);
-		glDeleteVertexArrays(1, &m_indice_figura);
-	}
-	if(m_indice_objeto > 0)
-	{
-		glBindBuffer(GL_ARRAY_BUFFER, 0);
-		glDeleteBuffers(1, &m_indice_objeto);
-	}
-}
-
 void Etiqueta::actualizar_texto()
 {
 	if(m_tipografia != NULL && m_texto.length() > 0)
@@ -65,6 +51,20 @@ void Etiqueta::actualizar_texto()
 	{
 		m_ancho_texto = 0;
 		m_alto_texto = 0;
+	}
+}
+
+void Etiqueta::limpiar()
+{
+	if(m_indice_figura > 0)
+	{
+		glBindVertexArray(0);
+		glDeleteVertexArrays(1, &m_indice_figura);
+	}
+	if(m_indice_objeto > 0)
+	{
+		glBindBuffer(GL_ARRAY_BUFFER, 0);
+		glDeleteBuffers(1, &m_indice_objeto);
 	}
 }
 
@@ -128,8 +128,9 @@ void Etiqueta::evento_raton(Raton */*raton*/)
 {
 }
 
-void Etiqueta::evento_pantalla(int /*ancho*/, int /*alto*/)
+void Etiqueta::centrado(bool centrado)
 {
+	m_centrado = centrado;
 }
 
 void Etiqueta::texto(std::string texto)
@@ -153,11 +154,6 @@ void Etiqueta::tipografia(Tipografia *tipografia)
 	m_tipografia = tipografia;
 	m_alto_texto = m_tipografia->alto_texto();
 	this->actualizar_texto();
-}
-
-void Etiqueta::centrado(bool centrado)
-{
-	m_centrado = centrado;
 }
 
 int Etiqueta::largo_texto()

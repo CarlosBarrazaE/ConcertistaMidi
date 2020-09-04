@@ -36,14 +36,13 @@ public:
 	Configuracion_Pista(int x, int y, int ancho, int alto, Pista pista, Administrador_Recursos *recursos);
 	~Configuracion_Pista();
 
-	Pista pista();
-
 	void actualizar(unsigned int diferencia_tiempo) override;
 	void dibujar() override;
 	void evento_raton(Raton *raton) override;
-	void evento_pantalla(int ancho, int alto) override;
 
 	void posicion(int x, int y) override;
+
+	Pista pista();
 };
 
 #endif

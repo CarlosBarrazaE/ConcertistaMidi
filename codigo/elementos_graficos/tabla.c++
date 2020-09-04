@@ -72,11 +72,6 @@ void Tabla::evento_raton(Raton *raton)
 	}
 }
 
-void Tabla::evento_pantalla(int ancho, int alto)
-{
-	m_barra_desplazamiento->evento_pantalla(ancho, alto);
-}
-
 void Tabla::agregar_columna(std::string nombre, double ancho)
 {
 	if(ancho > 1)

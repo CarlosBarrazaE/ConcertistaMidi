@@ -315,12 +315,8 @@ void VentanaOrgano::evento_pantalla(int ancho, int alto)
 	m_organo->posicion(m_organo->x(), alto);
 	m_organo->dimension(ancho, m_organo->alto());
 	m_tablero->dimension(ancho, alto - (m_organo->alto() + m_barra->alto()+40));
+	m_titulo_musica->dimension(Pantalla::Ancho, Pantalla::Alto - (m_organo->alto() + m_barra->alto() + 40));
 
 	m_texto_velocidad.dimension(ancho, 40);
 	m_texto_pausa.dimension(ancho, 40);
-
-	m_barra->evento_pantalla(ancho, alto);
-	m_organo->evento_pantalla(ancho, alto);
-	m_tablero->evento_pantalla(ancho, alto);
-	m_titulo_musica->evento_pantalla(Pantalla::Ancho, Pantalla::Alto - (m_organo->alto() + m_barra->alto() + 40));
 }

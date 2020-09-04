@@ -27,13 +27,14 @@ public:
 	Barra_Progreso(int x, int y, int ancho, int alto, microseconds_t tiempo_total, MidiEventMicrosecondList lineas, Administrador_Recursos *recursos);
 	~Barra_Progreso();
 
-	void tiempo(microseconds_t tiempo_actual);
-	microseconds_t o_tiempo_seleccionado();
-
 	void actualizar(unsigned int diferencia_tiempo) override;
 	void dibujar() override;
 	void evento_raton(Raton *raton) override;
-	void evento_pantalla(int ancho, int alto) override;
+
+	void dimension(int ancho, int alto) override;
+
+	void tiempo(microseconds_t tiempo_actual);
+	microseconds_t o_tiempo_seleccionado();
 };
 
 #endif

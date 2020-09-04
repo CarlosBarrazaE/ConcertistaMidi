@@ -29,86 +29,6 @@ Organo::~Organo()
 {
 }
 
-void Organo::calcular_tamannos()
-{
-	m_ancho_tecla_blanca = (this->ancho() / m_teclado->numero_blancas());
-	m_alto_tecla_blanca = m_ancho_tecla_blanca * PROPORCION_BLANCA;
-	if(m_alto_tecla_blanca > 250)
-		m_alto_tecla_blanca = 250;
-
-	m_ancho_tecla_negra = m_ancho_tecla_blanca * PROPORCION_ANCHO_NEGRA;
-	m_alto_tecla_negra = m_alto_tecla_blanca * PROPORCION_NEGRA;
-
-	this->_dimension(this->ancho(), m_alto_tecla_blanca + 11);
-
-	//Diferencia producida porque no se puede dibujar menos de un pixel
-	m_ancho_real = m_ancho_tecla_blanca * m_teclado->numero_blancas();
-	m_ajuste_x = (this->ancho() - m_ancho_real) / 2;
-}
-
-void Organo::teclado(Teclado_Configuracion *teclado)
-{
-	m_teclado = teclado;
-	this->calcular_tamannos();
-	m_generador_particulas->escala(m_ancho_tecla_blanca);
-}
-
-void Organo::blancas_presionadas(std::array<Color, 52> *teclas_blancas)
-{
-	m_teclas_activas_blancas = teclas_blancas;
-}
-
-void Organo::negras_presionadas(std::array<Color, 36> *teclas_negras)
-{
-	m_teclas_activas_negras = teclas_negras;
-}
-
-void Organo::actualizar(unsigned int diferencia_tiempo)
-{
-	m_tiempo += diferencia_tiempo;
-	unsigned int particulas = m_tiempo / 16666666;//16ms
-	if(particulas > 0)
-	{
-		if(particulas * 16666666 < m_tiempo)
-			m_tiempo -= particulas * 16666666;
-		m_numero_particulas = particulas*2;
-	}
-	else
-		m_numero_particulas = 0;
-	m_generador_particulas->actualizar(((double)diferencia_tiempo/1000000000.0)*3);
-}
-
-void Organo::dibujar()
-{
-	m_rectangulo->textura(false);
-	m_rectangulo->dibujar(this->x(), this->y() - this->alto(), this->ancho(), this->alto(), Color(0.0f, 0.0f, 0.0f));
-
-	m_tecla_blanca->activar();
-	m_rectangulo->textura(true);
-	m_rectangulo->color(Color(1.0f, 1.0f, 1.0f));
-	this->dibujar_blancas(this->x() + this->m_ajuste_x, this->y() - this->alto() + 10, m_teclado->numero_blancas());
-
-	m_tecla_negra->activar();
-	this->dibujar_negras(this->x() + this->m_ajuste_x, this->y() - this->alto() + 10, m_teclado->numero_negras());
-
-	m_borde_negro->activar();
-	m_rectangulo->color(Color(1.0f, 1.0f, 1.0f));
-	m_rectangulo->dibujar(this->x(), this->y() - this->alto(), this->ancho(), 5);
-
-	m_borde_rojo->activar();
-	m_rectangulo->dibujar(this->x() + this->m_ajuste_x, this->y() - this->alto() + 5, m_ancho_real-1, 5);
-
-	m_generador_particulas->dibujar();
-}
-
-void Organo::evento_raton(Raton */*raton*/)
-{
-}
-
-void Organo::evento_pantalla(int /*ancho*/, int /*alto*/)
-{
-}
-
 void Organo::dibujar_blancas(int x, int y, int numero_teclas)
 {
 	int desplazamiento = x;
@@ -185,9 +105,85 @@ void Organo::dibujar_negras(int x, int y, int numero_teclas)
 	}
 }
 
+void Organo::calcular_tamannos()
+{
+	m_ancho_tecla_blanca = (this->ancho() / m_teclado->numero_blancas());
+	m_alto_tecla_blanca = m_ancho_tecla_blanca * PROPORCION_BLANCA;
+	if(m_alto_tecla_blanca > 250)
+		m_alto_tecla_blanca = 250;
+
+	m_ancho_tecla_negra = m_ancho_tecla_blanca * PROPORCION_ANCHO_NEGRA;
+	m_alto_tecla_negra = m_alto_tecla_blanca * PROPORCION_NEGRA;
+
+	this->_dimension(this->ancho(), m_alto_tecla_blanca + 11);
+
+	//Diferencia producida porque no se puede dibujar menos de un pixel
+	m_ancho_real = m_ancho_tecla_blanca * m_teclado->numero_blancas();
+	m_ajuste_x = (this->ancho() - m_ancho_real) / 2;
+}
+
+void Organo::actualizar(unsigned int diferencia_tiempo)
+{
+	m_tiempo += diferencia_tiempo;
+	unsigned int particulas = m_tiempo / 16666666;//16ms
+	if(particulas > 0)
+	{
+		if(particulas * 16666666 < m_tiempo)
+			m_tiempo -= particulas * 16666666;
+		m_numero_particulas = particulas*2;
+	}
+	else
+		m_numero_particulas = 0;
+	m_generador_particulas->actualizar(((double)diferencia_tiempo/1000000000.0)*3);
+}
+
+void Organo::dibujar()
+{
+	m_rectangulo->textura(false);
+	m_rectangulo->dibujar(this->x(), this->y() - this->alto(), this->ancho(), this->alto(), Color(0.0f, 0.0f, 0.0f));
+
+	m_tecla_blanca->activar();
+	m_rectangulo->textura(true);
+	m_rectangulo->color(Color(1.0f, 1.0f, 1.0f));
+	this->dibujar_blancas(this->x() + this->m_ajuste_x, this->y() - this->alto() + 10, m_teclado->numero_blancas());
+
+	m_tecla_negra->activar();
+	this->dibujar_negras(this->x() + this->m_ajuste_x, this->y() - this->alto() + 10, m_teclado->numero_negras());
+
+	m_borde_negro->activar();
+	m_rectangulo->color(Color(1.0f, 1.0f, 1.0f));
+	m_rectangulo->dibujar(this->x(), this->y() - this->alto(), this->ancho(), 5);
+
+	m_borde_rojo->activar();
+	m_rectangulo->dibujar(this->x() + this->m_ajuste_x, this->y() - this->alto() + 5, m_ancho_real-1, 5);
+
+	m_generador_particulas->dibujar();
+}
+
+void Organo::evento_raton(Raton */*raton*/)
+{
+}
+
 void Organo::dimension(int ancho, int alto)
 {
 	this->_dimension(ancho, alto);
 	this->calcular_tamannos();
 	m_generador_particulas->escala(m_ancho_tecla_blanca);
+}
+
+void Organo::teclado(Teclado_Configuracion *teclado)
+{
+	m_teclado = teclado;
+	this->calcular_tamannos();
+	m_generador_particulas->escala(m_ancho_tecla_blanca);
+}
+
+void Organo::blancas_presionadas(std::array<Color, 52> *teclas_blancas)
+{
+	m_teclas_activas_blancas = teclas_blancas;
+}
+
+void Organo::negras_presionadas(std::array<Color, 36> *teclas_negras)
+{
+	m_teclas_activas_negras = teclas_negras;
 }

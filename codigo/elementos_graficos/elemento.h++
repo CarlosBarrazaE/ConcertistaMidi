@@ -13,6 +13,7 @@ protected:
 
 	void _posicion(int x, int y);
 	void _dimension(int ancho, int alto);
+	void _centrado(bool centrado);
 public:
 	Elemento(int x, int y, int ancho, int alto);
 	Elemento(int x, int y, int ancho, int alto, bool centrado);
@@ -21,11 +22,10 @@ public:
 	virtual void actualizar(unsigned int diferencia_tiempo) = 0;
 	virtual void dibujar() = 0;
 	virtual void evento_raton(Raton *raton) = 0;
-	virtual void evento_pantalla(int ancho, int alto) = 0;
 
 	virtual void posicion(int x, int y);
 	virtual void dimension(int ancho, int alto);
-	void centrado(bool centrado);
+	virtual void centrado(bool centrado);
 
 	int x();
 	int y();

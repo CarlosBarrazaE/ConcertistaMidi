@@ -28,19 +28,6 @@ Barra_Progreso::~Barra_Progreso()
 {
 }
 
-void Barra_Progreso::tiempo(microseconds_t tiempo_actual)
-{
-	if(tiempo_actual < 0)
-		m_tiempo_actual = 0;
-	else
-		m_tiempo_actual = tiempo_actual;
-}
-
-microseconds_t Barra_Progreso::o_tiempo_seleccionado()
-{
-	return m_tiempo_nuevo;
-}
-
 void Barra_Progreso::actualizar(unsigned int /*diferencia_tiempo*/)
 {
 	m_progreso = ((double)m_tiempo_actual / (double)m_tiempo_total) * this->ancho();
@@ -104,7 +91,21 @@ void Barra_Progreso::evento_raton(Raton *raton)
 	}
 }
 
-void Barra_Progreso::evento_pantalla(int ancho, int /*alto*/)
+void Barra_Progreso::dimension(int ancho, int alto)
 {
+	this->_dimension(ancho, alto);
 	m_texto_final.posicion(ancho - (4 + m_texto_final.largo_texto()), this->y() + this->alto() - 12);
+}
+
+void Barra_Progreso::tiempo(microseconds_t tiempo_actual)
+{
+	if(tiempo_actual < 0)
+		m_tiempo_actual = 0;
+	else
+		m_tiempo_actual = tiempo_actual;
+}
+
+microseconds_t Barra_Progreso::o_tiempo_seleccionado()
+{
+	return m_tiempo_nuevo;
 }

@@ -29,13 +29,13 @@ public:
 	Barra_Desplazamiento(int x, int y, int ancho, int alto, int columna, int fila, int margen_columna, int margen_fila, Administrador_Recursos *recursos);
 	~Barra_Desplazamiento();
 
-	void agregar_elemento(Elemento *e);
-	void dimension(int ancho, int alto) override;
-
 	void actualizar(unsigned int diferencia_tiempo) override;
 	void dibujar() override;
 	void evento_raton(Raton *raton) override;
-	void evento_pantalla(int ancho, int alto) override;
+
+	void dimension(int ancho, int alto) override;
+
+	void agregar_elemento(Elemento *e);
 };
 
 #endif

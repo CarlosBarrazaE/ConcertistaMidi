@@ -145,9 +145,7 @@ void Controlador_Juego::eventos_raton()
 
 void Controlador_Juego::eventos_teclado(Tecla tecla, bool estado)
 {
-	if(tecla == TECLA_ESCAPE && estado)
-		this->evento_salir();
-	else if(tecla == TECLA_F10 && estado)
+	if(tecla == TECLA_F10 && estado)
 		m_mostrar_fps = !m_mostrar_fps;
 	else if(tecla == TECLA_F11 && estado)
 	{

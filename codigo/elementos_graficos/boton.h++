@@ -27,16 +27,18 @@ public:
 	Boton(int x, int y, int ancho, int alto, std::string texto, ModeloLetra modelo_letra, Administrador_Recursos *recursos);
 	//Boton(int x, int y, int ancho, int alto, std::string texto, Textura2D *textura, Color color, bool centrado, Administrador_Recursos *recursos);
 	~Boton();
-	void textura(Textura2D *textura);
-	void color_boton(Color color);
-	void color_texto(Color color);
-	void tipografia(Tipografia *tipografia);
-	void centrado(bool centrado);
 
 	void actualizar(unsigned int diferencia_tiempo) override;
 	void dibujar() override;
 	void evento_raton(Raton *raton) override;
-	void evento_pantalla(int ancho, int alto) override;
+
+	void posicion(int x, int y) override;
+	void centrado(bool centrado) override;
+
+	void textura(Textura2D *textura);
+	void color_boton(Color color);
+	void color_texto(Color color);
+	void tipografia(Tipografia *tipografia);
 
 	bool esta_activado();
 };

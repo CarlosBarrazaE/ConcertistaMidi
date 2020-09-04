@@ -23,12 +23,13 @@ public:
 	Titulo(int x, int y, int ancho, int alto, Administrador_Recursos *recursos);
 	~Titulo();
 
-	void datos(Datos_Musica *datos_musica);
-
 	void actualizar(unsigned int diferencia_tiempo) override;
 	void dibujar() override;
 	void evento_raton(Raton *raton) override;
-	void evento_pantalla(int ancho, int alto) override;
+
+	void dimension(int ancho, int alto) override;
+
+	void datos(Datos_Musica *datos_musica);
 };
 
 #endif

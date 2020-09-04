@@ -20,53 +20,6 @@ Lista_Opciones::~Lista_Opciones()
 
 }
 
-void Lista_Opciones::dimension_icono(int ancho, int alto)
-{
-	m_ancho_icono = ancho;
-	m_alto_icono = alto;
-	m_centrado_icono = (m_ancho - m_ancho_icono)/2;
-}
-
-void Lista_Opciones::opciones_textos(std::vector<std::string> opciones)
-{
-	m_opciones = opciones;
-	m_texto_seleccion.texto(m_opciones[m_opcion_actual]);
-}
-
-void Lista_Opciones::opciones_iconos(std::vector<Textura2D*> iconos)
-{
-	m_iconos = iconos;
-	m_usar_iconos = true;
-	m_texto_seleccion.dimension(m_texto_seleccion.ancho(), 0);//Para anular centrado vertical
-	m_texto_seleccion.posicion(0, 43);//Posicion para iconos
-}
-
-void Lista_Opciones::tipografia(Tipografia *tipografia)
-{
-	m_texto_seleccion.tipografia(tipografia);
-}
-
-void Lista_Opciones::opcion_predeterminada(unsigned int opcion)
-{
-	if(opcion < m_opciones.size())
-	{
-		m_opcion_actual = opcion;
-		m_texto_seleccion.texto(m_opciones[m_opcion_actual]);
-	}
-}
-
-int Lista_Opciones::opcion_seleccionada()
-{
-	return m_opcion_actual;
-}
-
-bool Lista_Opciones::cambio_opcion_seleccionada()
-{
-	bool estado = m_cambio_opcion_seleccionada;
-	m_cambio_opcion_seleccionada = false;
-	return estado;
-}
-
 void Lista_Opciones::actualizar(unsigned int /*diferencia_tiempo*/)
 {
 }
@@ -149,10 +102,6 @@ void Lista_Opciones::evento_raton(Raton *raton)
 	}
 }
 
-void Lista_Opciones::evento_pantalla(int /*ancho*/, int /*alto*/)
-{
-}
-
 void Lista_Opciones::posicion(int x, int y)
 {
 	this->_posicion(x, y);
@@ -160,4 +109,51 @@ void Lista_Opciones::posicion(int x, int y)
 		m_texto_seleccion.posicion(x, y+43);
 	else
 		m_texto_seleccion.posicion(x, y);
+}
+
+void Lista_Opciones::dimension_icono(int ancho, int alto)
+{
+	m_ancho_icono = ancho;
+	m_alto_icono = alto;
+	m_centrado_icono = (m_ancho - m_ancho_icono)/2;
+}
+
+void Lista_Opciones::opciones_textos(std::vector<std::string> opciones)
+{
+	m_opciones = opciones;
+	m_texto_seleccion.texto(m_opciones[m_opcion_actual]);
+}
+
+void Lista_Opciones::opciones_iconos(std::vector<Textura2D*> iconos)
+{
+	m_iconos = iconos;
+	m_usar_iconos = true;
+	m_texto_seleccion.dimension(m_texto_seleccion.ancho(), 0);//Para anular centrado vertical
+	m_texto_seleccion.posicion(0, 43);//Posicion para iconos
+}
+
+void Lista_Opciones::tipografia(Tipografia *tipografia)
+{
+	m_texto_seleccion.tipografia(tipografia);
+}
+
+void Lista_Opciones::opcion_predeterminada(unsigned int opcion)
+{
+	if(opcion < m_opciones.size())
+	{
+		m_opcion_actual = opcion;
+		m_texto_seleccion.texto(m_opciones[m_opcion_actual]);
+	}
+}
+
+int Lista_Opciones::opcion_seleccionada()
+{
+	return m_opcion_actual;
+}
+
+bool Lista_Opciones::cambio_opcion_seleccionada()
+{
+	bool estado = m_cambio_opcion_seleccionada;
+	m_cambio_opcion_seleccionada = false;
+	return estado;
 }
