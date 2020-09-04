@@ -96,10 +96,10 @@ void VentanaTitulo::evento_teclado(Tecla tecla, bool estado)
 
 void VentanaTitulo::evento_pantalla(int ancho, int alto)
 {
-	m_boton_tocar->x(Pantalla::Centro_horizontal());
-	m_boton_practicar->x(Pantalla::Centro_horizontal());
-	m_boton_configurar->x(Pantalla::Centro_horizontal());
-	m_boton_salir->x(Pantalla::Centro_horizontal());
+	m_boton_tocar->posicion(Pantalla::Centro_horizontal(), m_boton_tocar->y());
+	m_boton_practicar->posicion(Pantalla::Centro_horizontal(), m_boton_practicar->y());
+	m_boton_configurar->posicion(Pantalla::Centro_horizontal(), m_boton_configurar->y());
+	m_boton_salir->posicion(Pantalla::Centro_horizontal(), m_boton_salir->y());
 
 	m_boton_tocar->evento_pantalla(ancho, alto);
 	m_boton_practicar->evento_pantalla(ancho, alto);

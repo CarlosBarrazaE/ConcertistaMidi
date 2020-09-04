@@ -26,24 +26,34 @@ Elemento::~Elemento()
 {
 }
 
-int Elemento::x()
+void Elemento::_posicion(int x, int y)
 {
-	return m_x+m_ax;
+	if(m_centrado)
+		m_x = x - (m_ancho / 2);
+	else
+		m_x = x;
+	m_y = y;
 }
 
-int Elemento::y()
+void Elemento::_dimension(int ancho, int alto)
 {
-	return m_y+m_ay;
+	m_ancho = ancho;
+    if(m_centrado)
+		m_x = m_x - (m_ancho / 2);
+	else
+		m_x = m_x;
+
+	m_alto = alto;
 }
 
-int Elemento::ancho()
+void Elemento::posicion(int x, int y)
 {
-	return m_ancho;
+	this->_posicion(x, y);
 }
 
-int Elemento::alto()
+void Elemento::dimension(int ancho, int alto)
 {
-	return m_alto;
+	this->_dimension(ancho, alto);
 }
 
 void Elemento::centrado(bool centrado)
@@ -62,55 +72,22 @@ void Elemento::centrado(bool centrado)
 	}
 }
 
-void Elemento::posicion(int x, int y)
+int Elemento::x()
 {
-	if(m_centrado)
-		m_x = x - (m_ancho / 2);
-	else
-		m_x = x;
-	m_y = y;
+	return m_x;
 }
 
-void Elemento::x(int x)
+int Elemento::y()
 {
-	if(m_centrado)
-		m_x = x - (m_ancho / 2);
-	else
-		m_x = x;
+	return m_y;
 }
 
-void Elemento::y(int y)
+int Elemento::ancho()
 {
-	m_y = y;
+	return m_ancho;
 }
 
-void Elemento::dimension(int ancho, int alto)
+int Elemento::alto()
 {
-	m_ancho = ancho;
-    if(m_centrado)
-		m_x = m_x - (m_ancho / 2);
-	else
-		m_x = m_x;
-
-	m_alto = alto;
-}
-
-void Elemento::ancho(int ancho)
-{
-	m_ancho = ancho;
-    if(m_centrado)
-		m_x = m_x - (m_ancho / 2);
-	else
-		m_x = m_x;
-}
-
-void Elemento::alto(int alto)
-{
-	m_alto = alto;
-}
-
-void Elemento::ajuste(int x, int y)
-{
-	m_ax = x;
-	m_ay = y;
+	return m_alto;
 }

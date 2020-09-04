@@ -39,23 +39,11 @@ void Organo::calcular_tamannos()
 	m_ancho_tecla_negra = m_ancho_tecla_blanca * PROPORCION_ANCHO_NEGRA;
 	m_alto_tecla_negra = m_alto_tecla_blanca * PROPORCION_NEGRA;
 
-	this->alto(m_alto_tecla_blanca + 11);
+	this->_dimension(this->ancho(), m_alto_tecla_blanca + 11);
 
 	//Diferencia producida porque no se puede dibujar menos de un pixel
 	m_ancho_real = m_ancho_tecla_blanca * m_teclado->numero_blancas();
 	m_ajuste_x = (this->ancho() - m_ancho_real) / 2;
-}
-
-void Organo::ancho(int valor)
-{
-	m_ancho = valor;
-	this->calcular_tamannos();
-	m_generador_particulas->escala(m_ancho_tecla_blanca);
-}
-
-int Organo::ancho()
-{
-	return m_ancho;
 }
 
 void Organo::teclado(Teclado_Configuracion *teclado)
@@ -195,4 +183,11 @@ void Organo::dibujar_negras(int x, int y, int numero_teclas)
 		//El ancho de la tecla mas el ancho de la sombra
 		m_rectangulo->dibujar(desplazamiento, y, m_ancho_tecla_negra + m_ancho_tecla_negra * 0.22, m_alto_tecla_negra);
 	}
+}
+
+void Organo::dimension(int ancho, int alto)
+{
+	this->_dimension(ancho, alto);
+	this->calcular_tamannos();
+	m_generador_particulas->escala(m_ancho_tecla_blanca);
 }

@@ -311,9 +311,9 @@ void VentanaOrgano::evento_teclado(Tecla tecla, bool estado)
 
 void VentanaOrgano::evento_pantalla(int ancho, int alto)
 {
-	m_barra->ancho(ancho);
-	m_organo->y(alto);
-	m_organo->ancho(ancho);
+	m_barra->dimension(ancho, m_barra->alto());
+	m_organo->posicion(m_organo->x(), alto);
+	m_organo->dimension(ancho, m_organo->alto());
 	m_tablero->dimension(ancho, alto - (m_organo->alto() + m_barra->alto()+40));
 
 	m_texto_velocidad.dimension(ancho, 40);

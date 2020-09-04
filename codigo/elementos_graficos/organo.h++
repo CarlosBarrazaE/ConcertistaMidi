@@ -46,8 +46,6 @@ public:
 	Organo(int x, int y, int ancho, Teclado_Configuracion *teclado, Administrador_Recursos *recursos);
 	~Organo();
 
-	void ancho(int valor);
-	int ancho();
 	void teclado(Teclado_Configuracion *teclado);
 
 	void blancas_presionadas(std::array<Color, 52> *teclas_blancas);
@@ -57,6 +55,8 @@ public:
 	void dibujar() override;
 	void evento_raton(Raton *raton) override;
 	void evento_pantalla(int ancho, int alto) override;
+
+	void dimension(int ancho, int alto) override;
 };
 
 #endif

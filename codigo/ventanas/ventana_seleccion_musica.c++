@@ -238,7 +238,7 @@ void VentanaSeleccionMusica::evento_pantalla(int ancho, int alto)
 	m_tabla_archivos.dimension(ancho-20, alto-100);
 	m_tabla_archivos.evento_pantalla(ancho, alto);
 
-	m_boton_atras->y(alto - 32);
+	m_boton_atras->posicion(m_boton_atras->x(), alto - 32);
 	m_boton_atras->evento_pantalla(ancho, alto);
 
 	m_boton_continuar->posicion(ancho - 130, alto - 32);

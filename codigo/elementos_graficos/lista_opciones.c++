@@ -37,7 +37,7 @@ void Lista_Opciones::opciones_iconos(std::vector<Textura2D*> iconos)
 {
 	m_iconos = iconos;
 	m_usar_iconos = true;
-	m_texto_seleccion.alto(0);//Para anular centrado vertical
+	m_texto_seleccion.dimension(m_texto_seleccion.ancho(), 0);//Para anular centrado vertical
 	m_texto_seleccion.posicion(0, 43);//Posicion para iconos
 }
 
@@ -69,7 +69,6 @@ bool Lista_Opciones::cambio_opcion_seleccionada()
 
 void Lista_Opciones::actualizar(unsigned int /*diferencia_tiempo*/)
 {
-	m_texto_seleccion.ajuste(this->x(), this->y());
 }
 
 void Lista_Opciones::dibujar()
@@ -152,4 +151,13 @@ void Lista_Opciones::evento_raton(Raton *raton)
 
 void Lista_Opciones::evento_pantalla(int /*ancho*/, int /*alto*/)
 {
+}
+
+void Lista_Opciones::posicion(int x, int y)
+{
+	this->_posicion(x, y);
+	if(m_usar_iconos)
+		m_texto_seleccion.posicion(x, y+43);
+	else
+		m_texto_seleccion.posicion(x, y);
 }

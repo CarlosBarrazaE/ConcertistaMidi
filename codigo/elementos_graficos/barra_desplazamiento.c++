@@ -37,8 +37,7 @@ void Barra_Desplazamiento::agregar_elemento(Elemento *e)
 
 void Barra_Desplazamiento::dimension(int ancho, int alto)
 {
-	this->ancho(ancho);
-	this->alto(alto);
+	this->_dimension(ancho, alto);
 	m_calcular_posicion = true;
 }
 
@@ -133,7 +132,7 @@ void Barra_Desplazamiento::evento_raton(Raton *raton)
 	for(unsigned int i=0; i<m_elementos.size(); i++)
 	{
 		if(this->alto() < m_alto_actual)
-			m_elementos[i]->y(m_elementos[i]->y() + desplazamiento_nuevo_y);
+			m_elementos[i]->posicion(m_elementos[i]->x(), m_elementos[i]->y() + desplazamiento_nuevo_y);
 		m_elementos[i]->evento_raton(raton);
 	}
 }
@@ -152,8 +151,7 @@ void Barra_Desplazamiento::actualizar_dimension()
 	int contador_columnas = 1;
 	for(unsigned int i=0; i<m_elementos.size(); i++)
 	{
-		m_elementos[i]->x(x_actual);
-		m_elementos[i]->y(y_actual);
+		m_elementos[i]->posicion(x_actual, y_actual);
 
 		if(contador_columnas < numero_columnas)
 		{

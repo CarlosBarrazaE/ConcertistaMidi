@@ -66,8 +66,7 @@ void Tablero_Notas::pistas(std::vector<Pista> *pistas)
 
 void Tablero_Notas::dimension(int ancho, int alto)
 {
-	this->ancho(ancho);
-	this->alto(alto);
+	this->_dimension(ancho, alto);
 	this->calcular_tamannos();
 }
 
@@ -202,8 +201,7 @@ void Tablero_Notas::dibujar_lineas_horizontales()
 
 		m_rectangulo->dibujar(this->x(), this->y()+posicion_y, this->ancho(), 1);
 
-		numero_temporal->x(this->x()+10);
-		numero_temporal->y(this->y()+posicion_y-m_tipografia->alto_texto());
+		numero_temporal->posicion(this->x()+10, this->y()+posicion_y-m_tipografia->alto_texto());
 		numero_temporal->dibujar();
 	}
 }

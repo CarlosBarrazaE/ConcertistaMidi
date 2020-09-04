@@ -6,12 +6,12 @@ Titulo::Titulo(int x, int y, int ancho, int alto, Administrador_Recursos *recurs
 	m_fondo = recursos->textura(T_TituloMusica);
 
 	m_titulo.tipografia(recursos->tipografia(LetraTituloGrande));
-	m_titulo.ancho(ancho);
+	m_titulo.dimension(ancho, 0);
 	m_titulo.color(Color(1.0f, 1.0f, 1.0f));
 	m_titulo.centrado(true);
 
 	m_autor.tipografia(recursos->tipografia(LetraTitulo));
-	m_autor.ancho(ancho);
+	m_autor.dimension(ancho, 0);
 	m_autor.color(Color(1.0f, 1.0f, 1.0f));
 	m_autor.centrado(true);
 
@@ -104,8 +104,8 @@ void Titulo::evento_pantalla(int ancho, int alto)
 	this->dimension(ancho, alto);
 
 	m_titulo.posicion(this->x(), this->y()+this->alto()/2-m_titulo.alto_texto());
-	m_titulo.ancho(ancho);
+	m_titulo.dimension(ancho, 0);
 
 	m_autor.posicion(this->x(), this->y()+this->alto()/2+20);
-	m_autor.ancho(ancho);
+	m_autor.dimension(ancho, 0);
 }

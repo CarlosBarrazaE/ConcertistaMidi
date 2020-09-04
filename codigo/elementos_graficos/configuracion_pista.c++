@@ -128,14 +128,6 @@ Pista Configuracion_Pista::pista()
 
 void Configuracion_Pista::actualizar(unsigned int diferencia_tiempo)
 {
-	m_seleccion_modo.ajuste(this->x(), this->y());
-	m_seleccion_color.ajuste(this->x(), this->y());
-	m_vista_previa->ajuste(this->x(), this->y());
-	m_boton_sonido->ajuste(this->x(), this->y());
-	m_texto_instrumento.ajuste(this->x(), this->y());
-	m_texto_notas.ajuste(this->x(), this->y());
-	m_texto_sonido.ajuste(this->x(), this->y());
-
 	m_seleccion_modo.actualizar(diferencia_tiempo);
 	m_seleccion_color.actualizar(diferencia_tiempo);
 	m_vista_previa->actualizar(diferencia_tiempo);
@@ -218,4 +210,17 @@ void Configuracion_Pista::evento_raton(Raton *raton)
 
 void Configuracion_Pista::evento_pantalla(int /*ancho*/, int /*alto*/)
 {
+}
+
+void Configuracion_Pista::posicion(int x, int y)
+{
+	this->_posicion(x, y);
+	//20, 85, 70, 55, recursos), m_seleccion_color(137, 85,
+	m_seleccion_modo.posicion(x+20, y+85);
+	m_seleccion_color.posicion(x+137, y+85);
+	m_vista_previa->posicion(x+300, y+22);
+	m_boton_sonido->posicion(x+272, y+87);
+	m_texto_instrumento.posicion(x+20, y+15);
+	m_texto_notas.posicion(x+20, y+35);
+	m_texto_sonido.posicion(x+242, y+128);
 }

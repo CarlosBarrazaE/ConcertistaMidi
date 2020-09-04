@@ -55,7 +55,7 @@ public:
 	void notas(NotasPistas notas);
 	void lineas(MidiEventMicrosecondList lineas);
 	void pistas(std::vector<Pista> *pistas);
-	void dimension(int ancho, int alto);
+	void dimension(int ancho, int alto) override;
 	void duracion_nota(int valor);
 	void modificar_duracion_nota(int valor);
 	int duracion_nota();

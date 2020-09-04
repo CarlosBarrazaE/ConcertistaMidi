@@ -31,7 +31,7 @@ void Fila::actualizar(unsigned int /*diferencia_tiempo*/)
 
 	for(Etiqueta* e : m_celda)
 	{
-		e->y(this->y());
+		e->posicion(e->x(), this->y());
 	}
 }
 

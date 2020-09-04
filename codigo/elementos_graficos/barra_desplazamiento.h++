@@ -30,7 +30,7 @@ public:
 	~Barra_Desplazamiento();
 
 	void agregar_elemento(Elemento *e);
-	void dimension(int ancho, int alto);
+	void dimension(int ancho, int alto) override;
 
 	void actualizar(unsigned int diferencia_tiempo) override;
 	void dibujar() override;
