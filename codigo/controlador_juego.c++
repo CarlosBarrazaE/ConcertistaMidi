@@ -9,6 +9,7 @@ Controlador_Juego::Controlador_Juego(Administrador_Recursos *recursos) : m_texto
 	m_mostrar_fps = false;
 	m_modo_alambre = false;
 	m_finalizar = false;
+	m_guardar_cambios = false;
 
 	std::string resultado_pantalla_completa = m_configuracion.leer("pantalla_completa");
 	if(resultado_pantalla_completa == "verdadero")
@@ -92,7 +93,7 @@ void Controlador_Juego::actualizar()
 		cambio_ventana = true;
 	}
 	else if(m_ventana_actual->obtener_accion() == Salir)
-		m_finalizar = true;
+		this->evento_salir();
 
 	if(cambio_ventana)
 	{
@@ -144,15 +145,14 @@ void Controlador_Juego::eventos_raton()
 
 void Controlador_Juego::eventos_teclado(Tecla tecla, bool estado)
 {
-	if(tecla == TECLA_F10 && estado)
+	if(tecla == TECLA_ESCAPE && estado)
+		this->evento_salir();
+	else if(tecla == TECLA_F10 && estado)
 		m_mostrar_fps = !m_mostrar_fps;
 	else if(tecla == TECLA_F11 && estado)
 	{
 		m_pantalla_completa = !m_pantalla_completa;
-		if(m_pantalla_completa)
-			m_configuracion.escribir("pantalla_completa", "verdadero");
-		else
-			m_configuracion.escribir("pantalla_completa", "falso");
+		m_guardar_cambios = !m_guardar_cambios;
 	}
 	else if(tecla == TECLA_F12 && estado)
 		m_modo_alambre = !m_modo_alambre;
@@ -195,6 +195,14 @@ void Controlador_Juego::evento_ventana(int ancho, int alto)
 void Controlador_Juego::evento_salir()
 {
 	m_finalizar = true;
+	//Se guarda solo si hay cambios
+	if(m_guardar_cambios)
+	{
+		if(m_pantalla_completa)
+			m_configuracion.escribir("pantalla_completa", "verdadero");
+		else
+			m_configuracion.escribir("pantalla_completa", "falso");
+	}
 }
 
 void Controlador_Juego::control_fps(bool activo)

@@ -88,9 +88,7 @@ void VentanaTitulo::evento_raton(Raton *raton)
 
 void VentanaTitulo::evento_teclado(Tecla tecla, bool estado)
 {
-	if(tecla == TECLA_ESCAPE && estado)
-		m_accion = Salir;
-	else if(tecla == TECLA_ENTRAR && !estado)
+	if(tecla == TECLA_ENTRAR && !estado)
 		m_accion = CambiarASeleccionMusica;
 }
 

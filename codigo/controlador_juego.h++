@@ -37,6 +37,7 @@ private:
 	bool m_pantalla_completa;
 	bool m_modo_alambre;
 	bool m_finalizar;
+	bool m_guardar_cambios;
 	std::set<int> m_teclas_pulsadas;
 
 	//Eventos
