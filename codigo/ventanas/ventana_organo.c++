@@ -124,50 +124,53 @@ void VentanaOrgano::actualizar(unsigned int diferencia_tiempo)
 				m_configuracion->dispositivo_salida()->Write(i->second);
 			}
 		}
+	}
 
-		//NOTE probando la entrada midi
-		MidiEvent evento = m_configuracion->dispositivo_entrada()->Read();
-		evento.SetChannel(1);
-		evento.SetVelocity(120);
+	//NOTE probando la entrada midi
+	MidiEvent evento = m_configuracion->dispositivo_entrada()->Read();
+	evento.SetChannel(1);
+	evento.SetVelocity(120);
+
+	if(m_configuracion->dispositivo_salida() != NULL)
 		m_configuracion->dispositivo_salida()->Write(evento);
 
-		//Almacena las notas tocadas por el jugador
-		if(evento.NoteNumber() != 0)
+	//Almacena las notas tocadas por el jugador
+	if(evento.NoteNumber() != 0)
+	{
+		//Almacena la notas cuando recive el evento NoteOn
+		if(evento.Type() == MidiEventType_NoteOn)
 		{
-			//Almacena la notas cuando recive el evento NoteOn
-			if(evento.Type() == MidiEventType_NoteOn)
-			{
-				if(!Octava::es_negra(evento.NoteNumber()))
-					m_notas_tocadas_blanca.insert(Octava::prosicion_nota(evento.NoteNumber()));
-				else
-					m_notas_tocadas_negra.insert(Octava::prosicion_nota_negra(evento.NoteNumber()));
-			}
-			//Elimina las notas cuando recive el evento NoteOff
-			else if(evento.Type() == MidiEventType_NoteOff)
-			{
-				if(!Octava::es_negra(evento.NoteNumber()))
-					m_notas_tocadas_blanca.erase(Octava::prosicion_nota(evento.NoteNumber()));
-				else
-					m_notas_tocadas_negra.erase(Octava::prosicion_nota_negra(evento.NoteNumber()));
-			}
+			if(!Octava::es_negra(evento.NoteNumber()))
+				m_notas_tocadas_blanca.insert(Octava::prosicion_nota(evento.NoteNumber()));
+			else
+				m_notas_tocadas_negra.insert(Octava::prosicion_nota_negra(evento.NoteNumber()));
 		}
-
-		//Establece el color en gris para las notas tocadas por el jugador
-		//Sera sobreescrito por el tablero de notas en la etapa de dibujo si la nota tocada es correcta
-		for(int id_nota : m_notas_tocadas_blanca)
-			m_teclas_activas_blancas->at(id_nota) = Color(0.7f, 0.7f, 0.7f);
-
-		for(int id_nota : m_notas_tocadas_negra)
-			m_teclas_activas_negras->at(id_nota) = Color(0.7f, 0.7f, 0.7f);
-
-
-		//Si selecciono un nuevo tiempo en la barra de progreso, se cambia la posicion.
-		if(m_barra->o_tiempo_seleccionado() > 0)
+		//Elimina las notas cuando recive el evento NoteOff
+		else if(evento.Type() == MidiEventType_NoteOff)
 		{
-			m_musica->musica()->GoTo(m_barra->o_tiempo_seleccionado());
-			m_tablero->reiniciar();
+			if(!Octava::es_negra(evento.NoteNumber()))
+				m_notas_tocadas_blanca.erase(Octava::prosicion_nota(evento.NoteNumber()));
+			else
+				m_notas_tocadas_negra.erase(Octava::prosicion_nota_negra(evento.NoteNumber()));
+		}
+	}
+
+	//Establece el color en gris para las notas tocadas por el jugador
+	//Sera sobreescrito por el tablero de notas en la etapa de dibujo si la nota tocada es correcta
+	for(int id_nota : m_notas_tocadas_blanca)
+		m_teclas_activas_blancas->at(id_nota) = Color(0.7f, 0.7f, 0.7f);
+
+	for(int id_nota : m_notas_tocadas_negra)
+		m_teclas_activas_negras->at(id_nota) = Color(0.7f, 0.7f, 0.7f);
+
+
+	//Si selecciono un nuevo tiempo en la barra de progreso, se cambia la posicion.
+	if(m_barra->o_tiempo_seleccionado() > 0)
+	{
+		m_musica->musica()->GoTo(m_barra->o_tiempo_seleccionado());
+		m_tablero->reiniciar();
+		if(m_configuracion->dispositivo_salida() != NULL)
 			m_configuracion->dispositivo_salida()->Reset();
-		}
 	}
 
 	//Cambio de velocidad de la musica
