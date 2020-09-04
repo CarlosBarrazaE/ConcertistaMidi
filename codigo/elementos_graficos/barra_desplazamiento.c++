@@ -169,3 +169,8 @@ void Barra_Desplazamiento::agregar_elemento(Elemento *e)
 {
 	m_elementos.push_back(e);
 }
+
+void Barra_Desplazamiento::vaciar()
+{
+	m_elementos.clear();
+}

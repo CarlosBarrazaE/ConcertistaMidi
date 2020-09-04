@@ -28,11 +28,6 @@ void Fila::actualizar(unsigned int /*diferencia_tiempo*/)
 
 	if(m_sobre_boton)
 		m_color_actual = Color(m_color_actual.rojo()-0.08f, m_color_actual.verde()-0.08f, m_color_actual.azul()-0.08f);
-
-	for(Etiqueta* e : m_celda)
-	{
-		e->posicion(e->x(), this->y());
-	}
 }
 
 void Fila::dibujar()
@@ -67,6 +62,15 @@ void Fila::evento_raton(Raton *raton)
 	{
 		m_sobre_boton = false;
 		m_boton_pre_activado = false;
+	}
+}
+
+void Fila::posicion(int x, int y)
+{
+	this->_posicion(x, y);
+	for(Etiqueta* e : m_celda)
+	{
+		e->posicion(e->x(), this->y());
 	}
 }
 

@@ -22,6 +22,8 @@ public:
 	void dibujar() override;
 	void evento_raton(Raton *raton) override;
 
+	void posicion(int x, int y) override;
+
 	void agregar_celda(Etiqueta *celda);
 
 	bool esta_seleccionado();

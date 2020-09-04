@@ -160,7 +160,7 @@ bool VentanaSeleccionMusica::abrir_archivo_seleccionado()
 
 			//Limpia la lista y la tabla
 			m_lista_archivos.clear();
-			m_tabla_archivos.eliminar_contenido();
+			m_tabla_archivos.vaciar();
 
 			//Carga la lista de archivos de la carpeta seleccionada
 			Registro::Nota("Abriendo carpeta: " + ruta_nueva);
@@ -217,7 +217,7 @@ void VentanaSeleccionMusica::evento_teclado(Tecla tecla, bool estado)
 		if(m_rutas.size() > 1)
 		{
 			m_lista_archivos.clear();
-			m_tabla_archivos.eliminar_contenido();
+			m_tabla_archivos.vaciar();
 
 			//Carga la lista de archivos de la carpeta seleccionada
 			m_rutas.erase(m_rutas.end());//Borra el ultimo, para cargar el anterior

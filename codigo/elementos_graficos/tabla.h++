@@ -46,7 +46,7 @@ public:
 
 	void agregar_columna(std::string nombre, double ancho);
 	void insertar_fila(std::vector<std::string> fila_contenido);
-	void eliminar_contenido();
+	void vaciar();
 
 	void cambiar_seleccion(int cambio);
 	unsigned int obtener_seleccion();

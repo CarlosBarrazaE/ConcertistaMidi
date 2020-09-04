@@ -36,6 +36,7 @@ public:
 	void dimension(int ancho, int alto) override;
 
 	void agregar_elemento(Elemento *e);
+	void vaciar();
 };
 
 #endif

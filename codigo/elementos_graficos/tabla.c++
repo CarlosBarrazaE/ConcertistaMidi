@@ -24,19 +24,12 @@ Tabla::~Tabla()
 }
 
 void Tabla::actualizar(unsigned int diferencia_tiempo)
-{/*
-	for(unsigned int x=0; x<m_filas.size(); x++)
-	{
-		m_filas[x]->actualizar(diferencia_tiempo);
-	}*/
+{
 	m_barra_desplazamiento->actualizar(diferencia_tiempo);
 }
 
 void Tabla::dibujar()
 {
-	//Dibuja solo lo que esta dentro del cuadro
-	//glScissor(this->x(), Pantalla::Alto-this->y()-this->alto(), this->ancho(), this->alto());
-	//glEnable(GL_SCISSOR_TEST);
 	m_rectangulo->textura(false);
 	m_rectangulo->dibujar(this->x(), this->y(), this->ancho(), ANCHO_FILA, m_color_fondo);
 
@@ -45,14 +38,8 @@ void Tabla::dibujar()
 		m_rectangulo->dibujar(m_titulos[x].texto->x(),m_titulos[x].texto->y(), 10, 40, Color(0.4f, 0.2f, 0.4f));
 		m_titulos[x].texto->dibujar();
 	}
-/*
-	for(unsigned int x=0; x<m_filas.size(); x++)
-	{
-		if(m_filas[x]->y() < this->y()+this->alto())
-			m_filas[x]->dibujar();
-	}*/
+
 	m_barra_desplazamiento->dibujar();
-	//glDisable(GL_SCISSOR_TEST);
 }
 
 void Tabla::evento_raton(Raton *raton)
@@ -62,7 +49,6 @@ void Tabla::evento_raton(Raton *raton)
 	{
 		if(m_filas[x]->y() < this->y()+this->alto())
 		{
-			//m_filas[x]->evento_raton(raton);
 			if(m_filas[x]->esta_seleccionado() && x != m_fila_seleccionada)
 			{
 				m_filas[m_fila_seleccionada]->deseleccionar();
@@ -103,9 +89,10 @@ void Tabla::insertar_fila(std::vector<std::string> fila_contenido)
 		Registro::Error("No coincide el numero de columnas en la tabla");
 }
 
-void Tabla::eliminar_contenido()
+void Tabla::vaciar()
 {
 	//Se eliminan las filas al cambiar de carpeta
+	m_barra_desplazamiento->vaciar();
 	for(Fila *m : m_filas)
 	{
 		delete m;
