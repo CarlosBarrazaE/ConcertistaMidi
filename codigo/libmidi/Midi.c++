@@ -124,6 +124,13 @@ Midi Midi::ReadFromStream(std::istream &stream)
 		m.m_tracks.push_back(MidiTrack::ReadFromStream(stream));
 	}
 
+	if(format == MidiFormat0)
+	{
+		//Dividir las pistas
+		std::vector<MidiTrack> pistas_divididas = MidiTrack::DividirPistas(m.m_tracks[0]);
+		m.m_tracks = pistas_divididas;
+	}
+
 	m.BuildTempoTrack();
 
 	// Tell our tracks their IDs

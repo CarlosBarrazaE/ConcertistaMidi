@@ -23,6 +23,7 @@ class MidiTrack
 {
 public:
 	static MidiTrack ReadFromStream(std::istream &stream);
+	static std::vector<MidiTrack> DividirPistas(MidiTrack pista);
 	static MidiTrack CreateBlankTrack();
 	MidiEventList &Events();
 	MidiEventPulsesList &EventPulses();

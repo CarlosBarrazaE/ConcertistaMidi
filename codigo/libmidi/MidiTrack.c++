@@ -70,6 +70,48 @@ MidiTrack MidiTrack::ReadFromStream(std::istream &stream)
 	return t;
 }
 
+std::vector<MidiTrack> MidiTrack::DividirPistas(MidiTrack pista_dividir)
+{
+	std::vector<MidiTrack> pistas_nuevas;
+	std::map<unsigned char, unsigned int> instrumentos_pistas;
+
+	unsigned int contador_pistas = 0;
+	unsigned char canal = 0;
+	for(unsigned int x = 0; x<pista_dividir.m_events.size(); x++)
+	{
+		canal = pista_dividir.m_events[x].Channel();
+		if(instrumentos_pistas.count(canal) == 0)
+		{
+			instrumentos_pistas[canal] = contador_pistas;
+
+			//Se crea una nueva pista
+			MidiTrack p;
+
+			p.m_events.push_back(pista_dividir.m_events[x]);
+			p.m_event_pulses.push_back(pista_dividir.m_event_pulses[x]);
+
+			pistas_nuevas.push_back(p);
+
+			contador_pistas++;
+		}
+		else
+		{
+			//Se inserta en la pista existente
+			unsigned int numero_pista = instrumentos_pistas[canal];
+			pistas_nuevas[numero_pista].m_events.push_back(pista_dividir.m_events[x]);
+			pistas_nuevas[numero_pista].m_event_pulses.push_back(pista_dividir.m_event_pulses[x]);
+		}
+	}
+
+	for(unsigned int x = 0; x < pistas_nuevas.size(); x++)
+	{
+		pistas_nuevas[x].BuildNoteSet();
+		pistas_nuevas[x].DiscoverInstrument();
+	}
+
+	return pistas_nuevas;
+}
+
 MidiTrack MidiTrack::CreateBlankTrack()
 {
 	return MidiTrack();
@@ -174,7 +216,7 @@ void MidiTrack::BuildNoteSet()
 	// begin a new one.
 	//
 	// A note_on with velocity 0 is a note_off
-	std::map<NoteId, NoteInfo> m_active_notes;
+	std::map<NoteId, NoteInfo> active_notes;
 
 	for (size_t i = 0; i < m_events.size(); ++i)
 	{
@@ -186,8 +228,8 @@ void MidiTrack::BuildNoteSet()
 		NoteId id = ev.NoteNumber();
 
 		// Check for an active note
-		std::map<NoteId, NoteInfo>::iterator find_ret = m_active_notes.find(id);
-		bool active_event = (find_ret !=  m_active_notes.end());
+		std::map<NoteId, NoteInfo>::iterator find_ret = active_notes.find(id);
+		bool active_event = (find_ret !=  active_notes.end());
 
 		// Close off the last event if there was one
 		if (active_event)
@@ -205,7 +247,7 @@ void MidiTrack::BuildNoteSet()
 
 			// Add a note and remove this NoteId from the active list
 			m_note_set.insert(n);
-			m_active_notes.erase(find_ret);
+			active_notes.erase(find_ret);
 		}
 
 		// We've handled any active events.  If this was a note_off we're done.
@@ -218,10 +260,10 @@ void MidiTrack::BuildNoteSet()
 		info.velocity = ev.NoteVelocity();
 		info.pulses = m_event_pulses[i];
 
-		m_active_notes[id] = info;
+		active_notes[id] = info;
 	}
 
-	if (m_active_notes.size() > 0)
+	if (active_notes.size() > 0)
 	{
 		// LOGTODO!
 
