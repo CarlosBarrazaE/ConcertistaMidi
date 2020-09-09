@@ -20,6 +20,9 @@ Barra_Desplazamiento::Barra_Desplazamiento(int x, int y, int ancho, int alto, in
 	m_sobre_barra = false;
 	m_boton_activado = false;
 	m_proporcion = 0;
+
+	//Un evento de raton ficticio con una posicion muy lejana
+	m_raton_ficticio.actualizar_posicion(std::numeric_limits<int>::max(), std::numeric_limits<int>::max());
 }
 
 Barra_Desplazamiento::~Barra_Desplazamiento()
@@ -72,7 +75,26 @@ void Barra_Desplazamiento::dibujar()
 
 void Barra_Desplazamiento::evento_raton(Raton *raton)
 {
-	int dy = raton->dy();
+	//Solo si el raton esta dentro del espacio del componente se envian el evento
+	Raton *evento_enviar;
+	if(raton->x() >= this->x() && raton->x() <= this->x() + this->ancho() &&
+		raton->y() >= this->y() && raton->y() <= this->y() + this->alto())
+	{
+		evento_enviar = raton;
+		m_enviar_evento = true;
+	}
+	else
+		evento_enviar = &m_raton_ficticio;
+
+	//Eventos fuera del area no se envian
+	if(!m_enviar_evento)
+		return;
+
+	//Se envia un evento de raton ficticio solo una vez para desmarcar los componentes
+	if(evento_enviar == &m_raton_ficticio)
+		m_enviar_evento = false;
+
+	int dy = evento_enviar->dy();
 	int desplazamiento_nuevo_y = 0;
 	int desplazamiento_anterior_y = 0;
 	if(this->alto() < m_alto_actual)
@@ -82,33 +104,25 @@ void Barra_Desplazamiento::evento_raton(Raton *raton)
 		{
 			m_desplazamiento_y += dy*20;
 		}
-		else if(raton->x() >= this->x()+this->ancho()-10 && raton->x() <= this->x()+this->ancho() &&
-		raton->y() >= this->y()+10 && raton->y() <= this->y() + this->alto()-20)
+		else if(evento_enviar->x() >= this->x()+this->ancho()-10 && evento_enviar->x() <= this->x()+this->ancho() &&
+		evento_enviar->y() >= this->y()+10 && evento_enviar->y() <= this->y() + this->alto()-20)
 		{
-			if(raton->activado(BotonIzquierdo) && m_sobre_barra)
+			if(evento_enviar->activado(BotonIzquierdo) && m_sobre_barra)
 			{
 				m_boton_activado = true;
 				//El inicio de la barra esta en this->y() + 20, el centro de la barra desplazable esta en (this->alto() * m_proporcion) / 2)
-				m_desplazamiento_y = -(raton->y() - (this->y() + 20 + (this->alto() * m_proporcion) / 2)) / m_proporcion;
+				m_desplazamiento_y = -(evento_enviar->y() - (this->y() + 20 + (this->alto() * m_proporcion) / 2)) / m_proporcion;
 			}
-			else if(!raton->activado(BotonIzquierdo))
-			{
+			else if(!evento_enviar->activado(BotonIzquierdo))
 				m_sobre_barra = true;
-			}
 		}
 		else if(m_boton_activado)
-		{
-			m_desplazamiento_y = -(raton->y() - (this->y() + 20 + (this->alto() * m_proporcion) / 2)) / m_proporcion;
-		}
+			m_desplazamiento_y = -(evento_enviar->y() - (this->y() + 20 + (this->alto() * m_proporcion) / 2)) / m_proporcion;
 		else
-		{
 			m_sobre_barra = false;
-		}
 
-		if(!raton->activado(BotonIzquierdo) && m_boton_activado)
-		{
+		if(!evento_enviar->activado(BotonIzquierdo) && m_boton_activado)
 			m_boton_activado = false;
-		}
 
 		if(m_desplazamiento_y > 0)
 				m_desplazamiento_y = 0;
@@ -122,8 +136,14 @@ void Barra_Desplazamiento::evento_raton(Raton *raton)
 	{
 		if(this->alto() < m_alto_actual)
 			m_elementos[i]->posicion(m_elementos[i]->x(), m_elementos[i]->y() + desplazamiento_nuevo_y);
-		m_elementos[i]->evento_raton(raton);
+		m_elementos[i]->evento_raton(evento_enviar);
 	}
+}
+
+void Barra_Desplazamiento::dimension(int ancho, int alto)
+{
+	this->_dimension(ancho, alto);
+	m_calcular_posicion = true;
 }
 
 void Barra_Desplazamiento::actualizar_dimension()
@@ -159,12 +179,6 @@ void Barra_Desplazamiento::actualizar_dimension()
 		m_proporcion = (double)(this->alto()-20) / (double)m_alto_actual;
 }
 
-void Barra_Desplazamiento::dimension(int ancho, int alto)
-{
-	this->_dimension(ancho, alto);
-	m_calcular_posicion = true;
-}
-
 void Barra_Desplazamiento::agregar_elemento(Elemento *e)
 {
 	m_elementos.push_back(e);
@@ -173,4 +187,5 @@ void Barra_Desplazamiento::agregar_elemento(Elemento *e)
 void Barra_Desplazamiento::vaciar()
 {
 	m_elementos.clear();
+	m_calcular_posicion = true;
 }

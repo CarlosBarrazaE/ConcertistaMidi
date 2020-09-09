@@ -69,9 +69,7 @@ void Fila::posicion(int x, int y)
 {
 	this->_posicion(x, y);
 	for(Etiqueta* e : m_celda)
-	{
 		e->posicion(e->x(), this->y());
-	}
 }
 
 void Fila::agregar_celda(Etiqueta *celda)

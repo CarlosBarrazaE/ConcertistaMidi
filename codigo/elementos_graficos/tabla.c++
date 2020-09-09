@@ -14,13 +14,10 @@ Tabla::Tabla(int x, int y, int ancho, int alto, Administrador_Recursos *recursos
 Tabla::~Tabla()
 {
 	for(Celda c : m_titulos)
-	{
 		delete c.texto;
-	}
-	for(Fila *m : m_filas)
-	{
-		delete m;
-	}
+
+	for(Fila *f : m_filas)
+		delete f;
 }
 
 void Tabla::actualizar(unsigned int diferencia_tiempo)
@@ -56,6 +53,15 @@ void Tabla::evento_raton(Raton *raton)
 			}
 		}
 	}
+}
+
+void Tabla::dimension(int ancho, int alto)
+{
+	this->_dimension(ancho, alto);
+	m_barra_desplazamiento->dimension(ancho, alto-ANCHO_FILA);
+
+	for(Fila *m : m_filas)
+		m->dimension(this->ancho(), ANCHO_FILA-1);
 }
 
 void Tabla::agregar_columna(std::string nombre, double ancho)

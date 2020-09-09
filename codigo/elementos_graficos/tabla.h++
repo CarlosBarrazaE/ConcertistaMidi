@@ -44,6 +44,8 @@ public:
 	void dibujar() override;
 	void evento_raton(Raton *raton) override;
 
+	void dimension(int ancho, int alto) override;
+
 	void agregar_columna(std::string nombre, double ancho);
 	void insertar_fila(std::vector<std::string> fila_contenido);
 	void vaciar();

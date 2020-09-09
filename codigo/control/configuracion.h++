@@ -18,6 +18,7 @@ public:
 	Configuracion();
 	~Configuracion();
 
+	Base_de_Datos* base_de_datos();
 	std::string leer(std::string atributo);
 	bool escribir(std::string atributo, std::string valor);
 

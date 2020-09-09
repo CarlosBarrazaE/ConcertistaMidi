@@ -21,6 +21,8 @@ private:
 
 	bool m_sobre_barra;
 	bool m_boton_activado;
+	bool m_enviar_evento;
+	Raton m_raton_ficticio;
 
 	std::vector<Elemento*> m_elementos;
 

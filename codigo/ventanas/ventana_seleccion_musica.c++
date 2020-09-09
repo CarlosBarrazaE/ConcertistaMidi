@@ -4,6 +4,7 @@ VentanaSeleccionMusica::VentanaSeleccionMusica(Configuracion *configuracion, Dat
 {
 	m_configuracion = configuracion;
 	m_musica = musica;
+	m_datos = configuracion->base_de_datos();
 
 	m_rectangulo = recursos->figura(F_Rectangulo);
 
@@ -26,14 +27,16 @@ VentanaSeleccionMusica::VentanaSeleccionMusica(Configuracion *configuracion, Dat
 	m_tabla_archivos.agregar_columna("Veces", 0.1);
 	m_tabla_archivos.agregar_columna("Fecha", 0.1);
 
-	//Falta guardar la pila de rutas anteriores
-	std::string ultima_carpeta_activa = m_configuracion->leer("ultima_carpeta_activa");
-	if(ultima_carpeta_activa != "" && std::ifstream(ultima_carpeta_activa))//Verifica que la carpeta aun exista
-	{
-		this->cargar_carpeta(ultima_carpeta_activa, true);
-	}
+	m_carpeta_inicial = m_configuracion->leer("carpeta_inicial");
+	m_carpeta_activa = m_configuracion->leer("carpeta_activa");
+
+	m_es_carpeta_inicial = false;
+	if(m_carpeta_inicial == "-")
+		m_carpeta_activa = "-";
+	if(m_carpeta_activa == "-")
+		this->crear_tabla("");
 	else
-		this->cargar_carpeta("../musica", true);
+		this->crear_tabla(m_carpeta_activa);
 }
 
 VentanaSeleccionMusica::~VentanaSeleccionMusica()
@@ -62,13 +65,23 @@ void VentanaSeleccionMusica::dibujar()
 	m_boton_continuar->dibujar();
 }
 
-void VentanaSeleccionMusica::cargar_carpeta(std::string ruta_abrir, bool guardar_ruta)
+void VentanaSeleccionMusica::cargar_lista_carpetas()
 {
-	//La primera vez no se guarda la base de datos porque se acaba de leer
-	if(m_rutas.size() > 0)
-		m_configuracion->escribir("ultima_carpeta_activa", ruta_abrir);
-	if(guardar_ruta)
-		m_rutas.push_back(ruta_abrir);//Para guardar solo cuando va hacia delante y no cuando se retrocede
+	std::vector<std::vector<std::string>> ruta_carpetas = m_datos->ruta_carpetas();
+	for(unsigned int i=0; i<ruta_carpetas.size(); i++)
+	{
+		Datos_Archivos actual;
+		actual.es_carpeta = true;
+		actual.nombre = ruta_carpetas[i][0];
+		actual.ruta = ruta_carpetas[i][1];
+
+		//Todo Filtrar archivos Midi
+		m_lista_archivos.push_back(actual);
+	}
+}
+
+void VentanaSeleccionMusica::cargar_contenido_carpeta(std::string ruta_abrir)
+{
 	for(const std::filesystem::directory_entry elemento : std::filesystem::directory_iterator(ruta_abrir))
 	{
 		std::string ruta = std::string(elemento.path());
@@ -132,7 +145,55 @@ void VentanaSeleccionMusica::cargar_carpeta(std::string ruta_abrir, bool guardar
 			m_lista_archivos.push_back(actual);
 		}
 	}
+}
 
+void VentanaSeleccionMusica::crear_tabla(std::string ruta_abrir)
+{
+	m_tabla_archivos.vaciar();//Se vacia la tabla
+	if(ruta_abrir != "" && std::ifstream(ruta_abrir))
+	{
+		Registro::Nota("Abriendo la carpeta: " + ruta_abrir);
+		//Limpia la lista de archivos
+		m_lista_archivos.clear();
+
+		//Almacena la carpeta raiz para retroceder
+		if(m_es_carpeta_inicial)
+		{
+			m_carpeta_inicial = ruta_abrir;
+			m_configuracion->escribir("carpeta_inicial", ruta_abrir);
+			m_es_carpeta_inicial = false;
+		}
+		m_carpeta_activa = ruta_abrir;
+		m_configuracion->escribir("carpeta_activa", ruta_abrir);
+
+		this->cargar_contenido_carpeta(ruta_abrir);
+	}
+	else if(ruta_abrir != "")
+	{
+		Registro::Aviso("La carpeta: " + ruta_abrir + " no existe");
+		//NOTE mostrar aviso en pantalla que la carpeta no existe
+	}
+	else
+	{
+		Registro::Nota("Mostrando la lista de carpetas");
+		//Limpia la lista de archivos
+		m_lista_archivos.clear();
+
+		m_es_carpeta_inicial = true;
+		m_carpeta_inicial = "-";
+		m_carpeta_activa = "-";
+		m_configuracion->escribir("carpeta_inicial", "-");
+		m_configuracion->escribir("carpeta_activa", "-");
+
+		this->cargar_lista_carpetas();
+	}
+
+
+	if(m_lista_archivos.size() == 0)
+	{
+		Registro::Aviso("No hay archivos disponibles");
+		return;
+	}
 	//Ordenar Lista
 	std::sort(m_lista_archivos.begin(), m_lista_archivos.end());
 
@@ -158,13 +219,8 @@ bool VentanaSeleccionMusica::abrir_archivo_seleccionado()
 		{
 			std::string ruta_nueva = m_lista_archivos[seleccion_actual].ruta;
 
-			//Limpia la lista y la tabla
-			m_lista_archivos.clear();
-			m_tabla_archivos.vaciar();
-
 			//Carga la lista de archivos de la carpeta seleccionada
-			Registro::Nota("Abriendo carpeta: " + ruta_nueva);
-			this->cargar_carpeta(ruta_nueva, true);
+			this->crear_tabla(ruta_nueva);
 			return false;
 		}
 		else
@@ -214,16 +270,26 @@ void VentanaSeleccionMusica::evento_teclado(Tecla tecla, bool estado)
 	}
 	else if((tecla == TECLA_BORRAR || tecla == TECLA_FLECHA_IZQUIERDA) && !estado)
 	{
-		if(m_rutas.size() > 1)
+		if(m_carpeta_inicial.length() > 0 && m_carpeta_inicial != "-" && m_carpeta_inicial.length() < m_carpeta_activa.length())
 		{
-			m_lista_archivos.clear();
-			m_tabla_archivos.vaciar();
+ 			unsigned int recorte = m_carpeta_activa.length()-2;
+			bool termino_busqueda = false;
+			for(unsigned int x = m_carpeta_activa.length()-2; x > 1 && !termino_busqueda; x--)
+			{
+				//NOTE no creo que esto funcione en windows
+				if(m_carpeta_activa[x] == '/')
+				{
+					recorte = x;
+					termino_busqueda = true;
+				}
+			}
 
+			m_carpeta_activa = m_carpeta_activa.substr(0, recorte);
 			//Carga la lista de archivos de la carpeta seleccionada
-			m_rutas.erase(m_rutas.end());//Borra el ultimo, para cargar el anterior
-			Registro::Nota("Abriendo anterior: " + m_rutas[m_rutas.size()-1]);
-			this->cargar_carpeta(m_rutas[m_rutas.size()-1], false);
+			this->crear_tabla(m_carpeta_activa);
 		}
+		else if(m_carpeta_inicial.length() >= m_carpeta_activa.length() && m_carpeta_inicial != "-")
+			this->crear_tabla("");
 	}
 	else if(tecla == TECLA_FLECHA_ABAJO && !estado)
 		m_tabla_archivos.cambiar_seleccion(1);

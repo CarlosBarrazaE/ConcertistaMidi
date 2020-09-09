@@ -37,6 +37,11 @@ Configuracion::~Configuracion()
 {
 }
 
+Base_de_Datos* Configuracion::base_de_datos()
+{
+	return &m_datos;
+}
+
 std::string Configuracion::leer(std::string atributo)
 {
 	return m_datos.leer_configuracion(atributo);

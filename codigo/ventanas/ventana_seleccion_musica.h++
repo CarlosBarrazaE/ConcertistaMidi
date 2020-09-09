@@ -8,6 +8,7 @@
 #include "../elementos_graficos/etiqueta.h++"
 #include "../elementos_graficos/tabla.h++"
 #include "../control/configuracion.h++"
+#include "../control/base_de_datos.h++"
 #include "../control/datos_musica.h++"
 #include "../control/datos_archivos.h++"
 
@@ -22,15 +23,20 @@ private:
 	//Datos
 	Configuracion *m_configuracion;
 	Datos_Musica *m_musica;
+	Base_de_Datos *m_datos;
 
 	std::vector<Datos_Archivos> m_lista_archivos;
-	std::vector<std::string> m_rutas;
+	std::string m_carpeta_inicial;
+	std::string m_carpeta_activa;
+	bool m_es_carpeta_inicial;
 
 	//Componentes
 	Boton *m_boton_atras;
 	Boton *m_boton_continuar;
 
-	void cargar_carpeta(std::string ruta_abrir, bool guardar_ruta);
+	void cargar_lista_carpetas();
+	void cargar_contenido_carpeta(std::string ruta_abrir);
+	void crear_tabla(std::string ruta_abrir);
 	bool abrir_archivo_seleccionado();
 
 public:
