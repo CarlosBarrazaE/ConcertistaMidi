@@ -12,13 +12,14 @@ private:
 	Rectangulo *m_rectangulo;
 	Textura2D *m_barra;
 
-	int m_ancho_actual, m_alto_actual;
+	int m_alto_actual;
 	int m_desplazamiento_x, m_desplazamiento_y;
 	int m_columna, m_fila;
 	int m_margen_columna, m_margen_fila;
 	bool m_calcular_posicion;
 	double m_proporcion;
 
+	float m_animacion = 1;
 	bool m_sobre_barra;
 	bool m_boton_activado;
 	bool m_enviar_evento;
@@ -26,8 +27,10 @@ private:
 
 	std::vector<Elemento*> m_elementos;
 
+	void inicializar(Administrador_Recursos *recursos);
 	void actualizar_dimension();
 public:
+	Barra_Desplazamiento(int x, int y, int ancho, int alto, int fila, int margen_fila, Administrador_Recursos *recursos);
 	Barra_Desplazamiento(int x, int y, int ancho, int alto, int columna, int fila, int margen_columna, int margen_fila, Administrador_Recursos *recursos);
 	~Barra_Desplazamiento();
 
@@ -36,6 +39,8 @@ public:
 	void evento_raton(Raton *raton) override;
 
 	void dimension(int ancho, int alto) override;
+
+	void desplazar_y(int dy);
 
 	void agregar_elemento(Elemento *e);
 	void vaciar();

@@ -7,8 +7,9 @@ Etiqueta::Etiqueta(Administrador_Recursos *recursos) : Elemento(0, 0, 0, 0)
 	m_sombreador = recursos->sombreador(S_Texto);
 }
 
-Etiqueta::Etiqueta(int x, int y, bool centrado, std::string texto, ModeloLetra tipografia, Administrador_Recursos *recursos) : Elemento(x, y, 0, 0, centrado)
+Etiqueta::Etiqueta(int x, int y, bool centrado, std::string texto, ModeloLetra tipografia, Administrador_Recursos *recursos) : Elemento(x, y, 0, 0)
 {
+	m_centrado_horizontal = centrado;
 	m_texto_actual = texto;
 	m_texto = texto.c_str();
 	m_tipografia = recursos->tipografia(tipografia);
@@ -16,8 +17,9 @@ Etiqueta::Etiqueta(int x, int y, bool centrado, std::string texto, ModeloLetra t
 	this->actualizar_texto();
 }
 
-Etiqueta::Etiqueta(int x, int y, bool centrado, std::string texto, Tipografia *tipografia, Administrador_Recursos *recursos) : Elemento(x, y, 0, 0, centrado)
+Etiqueta::Etiqueta(int x, int y, bool centrado, std::string texto, Tipografia *tipografia, Administrador_Recursos *recursos) : Elemento(x, y, 0, 0)
 {
+	m_centrado_horizontal = centrado;
 	m_texto_actual = texto;
 	m_texto = texto.c_str();
 	m_tipografia = tipografia;
@@ -25,8 +27,9 @@ Etiqueta::Etiqueta(int x, int y, bool centrado, std::string texto, Tipografia *t
 	this->actualizar_texto();
 }
 
-Etiqueta::Etiqueta(int x, int y, int ancho, int alto, bool centrado, std::string texto, ModeloLetra tipografia, Administrador_Recursos *recursos) : Elemento(x, y, ancho, alto, centrado)
+Etiqueta::Etiqueta(int x, int y, int ancho, int alto, bool centrado, std::string texto, ModeloLetra tipografia, Administrador_Recursos *recursos) : Elemento(x, y, ancho, alto)
 {
+	m_centrado_horizontal = centrado;
 	m_texto_actual = texto;
 	m_texto = texto.c_str();
 	m_tipografia = recursos->tipografia(tipografia);
@@ -82,25 +85,15 @@ void Etiqueta::dibujar()
 
 	int nueva_x = 0;
 	int nueva_y = 0;
-	if(m_centrado)
-	{
-		if(this->alto() == 0)
-		{
-			nueva_x = this->x()+this->ancho()/2.0 - m_ancho_texto / 2.0;
-			nueva_y = this->y()+m_tipografia->alto_texto();
-		}
-		else
-		{
-			nueva_x = this->x()+this->ancho()/2.0 - m_ancho_texto / 2.0;
-			nueva_y = this->y()+m_tipografia->alto_texto()+this->alto()/2.0-m_tipografia->alto_texto()/2.0;
-		}
-	}
+	if(m_centrado_horizontal)
+		nueva_x = this->x()+this->ancho()/2.0 - m_ancho_texto / 2.0;
 	else
-	{
-		nueva_x = this->x();
-		nueva_y = this->y()+m_tipografia->alto_texto();
-	}
+		nueva_x = this->x()+m_margen;
 
+	if(m_centrado_vertical)
+		nueva_y = this->y()+m_tipografia->alto_texto()+this->alto()/2.0-m_tipografia->alto_texto()/2.0;
+	else
+		nueva_y = this->y()+m_tipografia->alto_texto()+m_margen;
 
 	//TODO ¿Esto deberia estar a cargo de la tipografia?
 	glm::mat4 modelo = glm::mat4(1.0f);
@@ -130,7 +123,23 @@ void Etiqueta::evento_raton(Raton */*raton*/)
 
 void Etiqueta::centrado(bool centrado)
 {
-	m_centrado = centrado;
+	m_centrado_horizontal = centrado;
+	m_centrado_vertical = centrado;
+}
+
+void Etiqueta::centrado_horizontal(bool centrado_h)
+{
+	m_centrado_horizontal = centrado_h;
+}
+
+void Etiqueta::centrado_vertical(bool centrado_v)
+{
+	m_centrado_vertical = centrado_v;
+}
+
+void Etiqueta::margen(int margen)
+{
+	m_margen = margen;
 }
 
 void Etiqueta::texto(std::string texto)

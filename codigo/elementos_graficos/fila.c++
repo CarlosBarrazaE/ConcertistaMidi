@@ -8,15 +8,13 @@ Fila::Fila(int x, int y, int ancho, int alto, Administrador_Recursos *recursos) 
 	m_boton_seleccionado = false;
 
 	m_color_actual = m_color_fondo;
-	m_color_seleccion = Color(m_color_fondo.rojo()-0.05f, m_color_fondo.verde()-0.05f, m_color_fondo.azul()-0.05f);
+	m_color_seleccion = Color(m_color_fondo.rojo()-0.045f, m_color_fondo.verde()-0.045f, m_color_fondo.azul()-0.045f);
 }
 
 Fila::~Fila()
 {
 	for(Etiqueta* e : m_celda)
-	{
 		delete e;
-	}
 }
 
 void Fila::actualizar(unsigned int /*diferencia_tiempo*/)
@@ -36,15 +34,15 @@ void Fila::dibujar()
 	m_rectangulo->dibujar(this->x(), this->y(), this->ancho(), this->alto(), m_color_actual);
 	for(unsigned int x=0; x<m_celda.size(); x++)
 	{
-		m_rectangulo->dibujar(m_celda.at(x)->x(), m_celda.at(x)->y(), 10, 40, Color(0.4f, 0.2f, 0.4f));
 		m_celda.at(x)->dibujar();
 	}
+	m_rectangulo->dibujar(this->x(), this->y()+this->alto()-1, this->ancho(), 1, Color(0.9f, 0.9f, 0.9f));
 }
 
 void Fila::evento_raton(Raton *raton)
 {
-	if(raton->x() >= this->x() && raton->x() <= this->x() + this->ancho() &&
-		raton->y() >= this->y() && raton->y() <= this->y() + this->alto())
+	if(raton->x() >= this->x() && raton->x() < this->x() + this->ancho() &&
+		raton->y() >= this->y() && raton->y() < this->y() + this->alto())
 	{
 		if(raton->activado(BotonIzquierdo) && m_sobre_boton)
 			m_boton_pre_activado = true;
@@ -75,6 +73,11 @@ void Fila::posicion(int x, int y)
 void Fila::agregar_celda(Etiqueta *celda)
 {
 	m_celda.push_back(celda);
+}
+
+std::vector<Etiqueta *> *Fila::celdas()
+{
+	return &m_celda;
 }
 
 bool Fila::esta_seleccionado()

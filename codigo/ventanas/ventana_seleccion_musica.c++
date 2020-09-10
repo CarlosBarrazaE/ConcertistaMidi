@@ -1,6 +1,6 @@
 #include "ventana_seleccion_musica.h++"
 
-VentanaSeleccionMusica::VentanaSeleccionMusica(Configuracion *configuracion, Datos_Musica *musica, Administrador_Recursos *recursos) : Ventana(), m_texto_titulo(recursos), m_tabla_archivos(10, 50, Pantalla::Ancho-20, Pantalla::Alto-100, recursos)
+VentanaSeleccionMusica::VentanaSeleccionMusica(Configuracion *configuracion, Datos_Musica *musica, Administrador_Recursos *recursos) : Ventana(), m_texto_titulo(recursos), m_tabla_archivos(10, 50, Pantalla::Ancho-20, Pantalla::Alto-100, 40, recursos)
 {
 	m_configuracion = configuracion;
 	m_musica = musica;
@@ -22,10 +22,10 @@ VentanaSeleccionMusica::VentanaSeleccionMusica(Configuracion *configuracion, Dat
 	m_texto_titulo.centrado(true);
 
 	//Fila titulo
-	m_tabla_archivos.agregar_columna("Nombre Archivo", 0.7);
-	m_tabla_archivos.agregar_columna("Tamaño", 0.1);
-	m_tabla_archivos.agregar_columna("Veces", 0.1);
-	m_tabla_archivos.agregar_columna("Fecha", 0.1);
+	m_tabla_archivos.agregar_columna("Nombre Archivo", false, 5);
+	m_tabla_archivos.agregar_columna("Tamaño", true, 1);
+	m_tabla_archivos.agregar_columna("Veces", true, 1);
+	m_tabla_archivos.agregar_columna("Fecha", true, 1);
 
 	m_carpeta_inicial = m_configuracion->leer("carpeta_inicial");
 	m_carpeta_activa = m_configuracion->leer("carpeta_activa");
@@ -139,7 +139,7 @@ void VentanaSeleccionMusica::cargar_contenido_carpeta(std::string ruta_abrir)
 			{
 				//Archivo
 				actual.tamanno = elemento.file_size();
-				actual.fecha = "Fecha_archivo";
+				actual.fecha = "09/09/2020";
 			}
 			//Todo Filtrar archivos Midi
 			m_lista_archivos.push_back(actual);

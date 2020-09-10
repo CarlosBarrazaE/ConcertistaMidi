@@ -40,8 +40,8 @@ void Lista_Opciones::dibujar()
 
 void Lista_Opciones::evento_raton(Raton *raton)
 {
-	if(raton->x() >= this->x() && raton->x() <= this->x() + this->ancho() &&
-		raton->y() >= this->y() && raton->y() <= this->y() + this->alto())
+	if(raton->x() >= this->x() && raton->x() < this->x() + this->ancho() &&
+		raton->y() >= this->y() && raton->y() < this->y() + this->alto())
 	{
 		if((raton->activado(BotonIzquierdo) || raton->activado(BotonDerecho) || raton->activado(BotonCentral)) && m_sobre_boton)
 			m_boton_pre_activado = raton->boton_activado();

@@ -25,6 +25,7 @@ public:
 	void posicion(int x, int y) override;
 
 	void agregar_celda(Etiqueta *celda);
+	std::vector<Etiqueta *> *celdas();
 
 	bool esta_seleccionado();
 	void seleccionar();

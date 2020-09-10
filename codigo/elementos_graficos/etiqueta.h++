@@ -15,9 +15,11 @@ private:
 	Color m_color;
 	icu::UnicodeString m_texto;
 	std::string m_texto_actual;
-	bool m_centrado = false;
+	bool m_centrado_horizontal = false;
+	bool m_centrado_vertical = false;
 	int m_ancho_texto = 0;
 	int m_alto_texto = 0;
+	int m_margen = 0;
 
 	Sombreador *m_sombreador;
 	unsigned int m_indice_figura = 0;
@@ -38,6 +40,10 @@ public:
 	void evento_raton(Raton *raton) override;
 
 	void centrado(bool centrado) override;
+	void centrado_horizontal(bool centrado_h);
+	void centrado_vertical(bool centrado_v);
+
+	void margen(int margen);
 
 	void texto(std::string texto);
 	void color(Color color);
