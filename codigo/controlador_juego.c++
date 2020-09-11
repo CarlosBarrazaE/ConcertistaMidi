@@ -47,6 +47,10 @@ void Controlador_Juego::actualizar()
 	m_fps = Fps::Calcular_tiempo();
 	unsigned int diferencia_tiempo = Fps::Obtener_nanosegundos();
 	//unsigned int diferencia_tiempo = (1.0/60.0)*1000000000;
+
+	//Reconecta los dispositivos midis si es necesario
+	m_configuracion.reconectar();
+
 	m_ventana_actual->actualizar(diferencia_tiempo);
 	m_notificaciones.actualizar(diferencia_tiempo);
 	m_ventana_actual->dibujar();
@@ -112,7 +116,6 @@ void Controlador_Juego::actualizar()
 	{
 		//Reenvia el ultimo evento del raton
 		m_ventana_actual->evento_raton(&m_raton);
-		m_notificaciones.quitar_notificaciones();
 	}
 
 	if(m_fotograma >= 0)

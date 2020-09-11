@@ -93,3 +93,17 @@ MidiCommOut *Configuracion::dispositivo_salida()
 {
 	return m_salida;
 }
+
+void Configuracion::reconectar()
+{
+	//Reconecta los dispositivos midis si es necesario
+	if(m_entrada != NULL)
+	{
+		if(m_entrada->ShouldReconnect())
+		{
+			m_entrada->Reconnect();
+			if(m_salida != NULL)
+				m_salida->Reconnect();
+		}
+	}
+}

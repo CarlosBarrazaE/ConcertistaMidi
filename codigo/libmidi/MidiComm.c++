@@ -222,10 +222,16 @@ MidiEvent MidiCommIn::Read()
 			break;
 		case SND_SEQ_EVENT_PORT_EXIT:// USB device is disconnected - the input client is closed
 		{
-			Notificacion::Aviso("El dispositivo MIDI se desconectó", 20);
-			//int lost_client = ev->data.addr.client;
-			//int lost_port   = ev->data.addr.port;
-			// TODO add better error reporting
+			int lost_client = ev->data.addr.client;
+			int lost_port   = ev->data.addr.port;
+
+			Registro::Aviso("Dispositivo MIDI desconectado cliente: " + std::to_string(lost_client) + ", puerto=" + std::to_string(lost_port));
+
+			Notificacion::Aviso("Dispositivo MIDI desconectado", 10);
+
+			MidiCommIn::UpdateDeviceList();
+			MidiCommOut::UpdateDeviceList();
+
 			break;
 		}
 		case SND_SEQ_EVENT_PORT_START:
@@ -245,6 +251,9 @@ MidiEvent MidiCommIn::Read()
 			int client = snd_seq_port_info_get_client(pinfo);
 			Registro::Nota("Informacion puerto cliente: " + std::to_string(client) + " puerto: " + std::to_string(port));
 			Notificacion::Nota("Nuevo dispositivo MIDI: " + std::string(snd_seq_port_info_get_name(pinfo)), 10);
+
+			MidiCommIn::UpdateDeviceList();
+			MidiCommOut::UpdateDeviceList();
 
 			m_should_reconnect = true;
 			break;// unknown type, do nothing

@@ -28,6 +28,7 @@ public:
 
 	MidiCommIn *dispositivo_entrada();
 	MidiCommOut *dispositivo_salida();
+	void reconectar();
 };
 
 #endif
