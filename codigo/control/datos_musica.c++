@@ -11,11 +11,22 @@ Datos_Musica::~Datos_Musica()
 {
 }
 
-void Datos_Musica::cargar_midi(std::string direccion)
+bool Datos_Musica::cargar_midi(std::string direccion)
 {
-	m_musica = new Midi(Midi::ReadFromFile(direccion));
+	try
+	{
+		m_musica = new Midi(Midi::ReadFromFile(direccion));
+	}
+	catch(const MidiError &e)
+	{
+		Notificacion::Error("No se puede abrir el archivo MIDI", 5);
+		Registro::Error(e.GetErrorDescription());
+		m_musica = NULL;
+		return false;
+	}
 	this->reiniciar();
 	m_pistas.clear();
+	return true;
 }
 
 void Datos_Musica::pistas(std::vector<Pista> pistas)

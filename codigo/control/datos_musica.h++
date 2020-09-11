@@ -4,6 +4,7 @@
 #include <vector>
 #include "../control/pista.h++"
 #include "../libmidi/Midi.h++"
+#include "../elementos_graficos/notificacion.h++"
 
 class Datos_Musica
 {
@@ -17,7 +18,7 @@ public:
 	Datos_Musica();
 	~Datos_Musica();
 
-	void cargar_midi(std::string direccion);
+	bool cargar_midi(std::string direccion);
 	void pistas(std::vector<Pista> pistas);
 	void nombre_musica(std::string nombre);
 	void autor(std::string autor);

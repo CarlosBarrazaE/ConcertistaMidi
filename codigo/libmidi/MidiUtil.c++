@@ -45,7 +45,7 @@ std::string MidiError::GetErrorDescription() const
 	switch (m_error)
 	{
 		case MidiError_UnknownHeaderType:
-			return "Se encontró un tipi de encabezado desconocido, es probable que no sea un archivo MIDI.";
+			return "Se encontró un tipo de encabezado desconocido, es probable que no sea un archivo MIDI.";
 		case MidiError_BadFilename:
 			return "No se pudo abir el archivo de entrada, compruebe que el archivo existe";
 		case MidiError_NoHeader:

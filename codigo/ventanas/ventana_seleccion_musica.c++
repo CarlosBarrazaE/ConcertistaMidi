@@ -169,7 +169,7 @@ void VentanaSeleccionMusica::crear_tabla(std::string ruta_abrir)
 		this->cargar_contenido_carpeta(ruta_abrir);
 	}
 	else if(ruta_abrir != "")
-		Notificacion::Aviso("La carpeta: " + ruta_abrir + " no existe", 5);
+		Notificacion::Aviso("La carpeta: \"" + ruta_abrir + "\" no existe", 5);
 	else
 	{
 		Registro::Nota("Mostrando la lista de carpetas");
@@ -188,7 +188,7 @@ void VentanaSeleccionMusica::crear_tabla(std::string ruta_abrir)
 
 	if(m_lista_archivos.size() == 0)
 	{
-		Registro::Aviso("No hay archivos disponibles");
+		Notificacion::Aviso("Esta carpeta no contiene archivos MIDI", 5);
 		return;
 	}
 	//Ordenar Lista
@@ -224,10 +224,13 @@ bool VentanaSeleccionMusica::abrir_archivo_seleccionado()
 		{
 			//Abre el archivo seleccionado
 			Registro::Nota("Abriendo archivo: " + m_lista_archivos[seleccion_actual].ruta);
-			m_musica->cargar_midi(m_lista_archivos[seleccion_actual].ruta);
-			m_musica->nombre_musica(m_lista_archivos[seleccion_actual].nombre);
-			m_musica->autor("Autor");
-			return true;
+			if(m_musica->cargar_midi(m_lista_archivos[seleccion_actual].ruta))
+			{
+				m_musica->nombre_musica(m_lista_archivos[seleccion_actual].nombre);
+				m_musica->autor("Autor");
+				return true;
+			}
+			return false;
 		}
 	}
 	return false;
