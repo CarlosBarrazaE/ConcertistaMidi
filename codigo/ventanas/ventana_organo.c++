@@ -127,31 +127,35 @@ void VentanaOrgano::actualizar(unsigned int diferencia_tiempo)
 	}
 
 	//NOTE probando la entrada midi
-	MidiEvent evento = m_configuracion->dispositivo_entrada()->Read();
-	evento.SetChannel(1);
-	evento.SetVelocity(120);
-
-	if(m_configuracion->dispositivo_salida() != NULL)
-		m_configuracion->dispositivo_salida()->Write(evento);
-
-	//Almacena las notas tocadas por el jugador
-	if(evento.NoteNumber() != 0)
+	while(m_configuracion->dispositivo_entrada() != NULL && m_configuracion->dispositivo_entrada()->KeepReading())
 	{
-		//Almacena la notas cuando recive el evento NoteOn
-		if(evento.Type() == MidiEventType_NoteOn)
+		//Leer todos los eventos
+		MidiEvent evento = m_configuracion->dispositivo_entrada()->Read();
+		evento.SetChannel(1);
+		evento.SetVelocity(120);
+
+		if(m_configuracion->dispositivo_salida() != NULL)
+			m_configuracion->dispositivo_salida()->Write(evento);
+
+		//Almacena las notas tocadas por el jugador
+		if(evento.NoteNumber() != 0)
 		{
-			if(!Octava::es_negra(evento.NoteNumber()))
-				m_notas_tocadas_blanca.insert(Octava::prosicion_nota(evento.NoteNumber()));
-			else
-				m_notas_tocadas_negra.insert(Octava::prosicion_nota_negra(evento.NoteNumber()));
-		}
-		//Elimina las notas cuando recive el evento NoteOff
-		else if(evento.Type() == MidiEventType_NoteOff)
-		{
-			if(!Octava::es_negra(evento.NoteNumber()))
-				m_notas_tocadas_blanca.erase(Octava::prosicion_nota(evento.NoteNumber()));
-			else
-				m_notas_tocadas_negra.erase(Octava::prosicion_nota_negra(evento.NoteNumber()));
+			//Almacena la notas cuando recive el evento NoteOn
+			if(evento.Type() == MidiEventType_NoteOn)
+			{
+				if(!Octava::es_negra(evento.NoteNumber()))
+					m_notas_tocadas_blanca.insert(Octava::prosicion_nota(evento.NoteNumber()));
+				else
+					m_notas_tocadas_negra.insert(Octava::prosicion_nota_negra(evento.NoteNumber()));
+			}
+			//Elimina las notas cuando recive el evento NoteOff
+			else if(evento.Type() == MidiEventType_NoteOff)
+			{
+				if(!Octava::es_negra(evento.NoteNumber()))
+					m_notas_tocadas_blanca.erase(Octava::prosicion_nota(evento.NoteNumber()));
+				else
+					m_notas_tocadas_negra.erase(Octava::prosicion_nota_negra(evento.NoteNumber()));
+			}
 		}
 	}
 
