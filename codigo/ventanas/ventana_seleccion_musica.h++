@@ -7,6 +7,7 @@
 #include "../elementos_graficos/boton.h++"
 #include "../elementos_graficos/etiqueta.h++"
 #include "../elementos_graficos/tabla.h++"
+#include "../elementos_graficos/notificacion.h++"
 #include "../control/configuracion.h++"
 #include "../control/base_de_datos.h++"
 #include "../control/datos_musica.h++"

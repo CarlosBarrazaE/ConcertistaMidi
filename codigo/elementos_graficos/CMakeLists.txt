@@ -11,5 +11,6 @@ set(elementos_graficos
 	${CMAKE_CURRENT_SOURCE_DIR}/titulo.c++
 	${CMAKE_CURRENT_SOURCE_DIR}/fila.c++
 	${CMAKE_CURRENT_SOURCE_DIR}/tabla.c++
+	${CMAKE_CURRENT_SOURCE_DIR}/notificacion.c++
 	PARENT_SCOPE
 )

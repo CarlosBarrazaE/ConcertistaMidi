@@ -169,10 +169,7 @@ void VentanaSeleccionMusica::crear_tabla(std::string ruta_abrir)
 		this->cargar_contenido_carpeta(ruta_abrir);
 	}
 	else if(ruta_abrir != "")
-	{
-		Registro::Aviso("La carpeta: " + ruta_abrir + " no existe");
-		//NOTE mostrar aviso en pantalla que la carpeta no existe
-	}
+		Notificacion::Aviso("La carpeta: " + ruta_abrir + " no existe", 5);
 	else
 	{
 		Registro::Nota("Mostrando la lista de carpetas");

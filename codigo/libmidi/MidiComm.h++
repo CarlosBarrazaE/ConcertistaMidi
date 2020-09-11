@@ -13,6 +13,7 @@
 #include <alsa/asoundlib.h>
 
 #include "MidiEvent.h++"
+#include "../elementos_graficos/notificacion.h++"
 #include "../registro.h++"
 
 struct MidiCommDescription

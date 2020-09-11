@@ -5,6 +5,7 @@
 
 #include "base_de_datos.h++"
 #include "../util/usuario.h++"
+#include "../elementos_graficos/notificacion.h++"
 
 class Configuracion
 {

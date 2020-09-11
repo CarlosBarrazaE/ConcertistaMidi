@@ -1,12 +1,12 @@
 #include "controlador_juego.h++"
 #include <SDL2/SDL.h>
 
-Controlador_Juego::Controlador_Juego(Administrador_Recursos *recursos) : m_texto_fps(recursos)
+Controlador_Juego::Controlador_Juego(Administrador_Recursos *recursos) : m_texto_fps(recursos), m_notificaciones(recursos)
 {
 	m_recursos = recursos;
 	m_fps = 0;
 	m_contador_inactividad = 0;
-	m_mostrar_fps = false;
+	m_depurar = false;
 	m_modo_alambre = false;
 	m_finalizar = false;
 	m_guardar_cambios = false;
@@ -18,13 +18,18 @@ Controlador_Juego::Controlador_Juego(Administrador_Recursos *recursos) : m_texto
 		m_pantalla_completa = false;
 
 	m_texto_fps.tipografia(recursos->tipografia(LetraChica));
-	m_texto_fps.posicion(10, 20);
+	m_texto_fps.posicion(10, 0);
+	m_texto_fps.dimension(40, 40);
+	m_texto_fps.centrado_vertical(true);
 
 	m_ventana_actual = new VentanaTitulo(recursos);
 
 	m_fotograma = -1;
 	m_fps_reducido = false;
 	m_fps_reducido_desactivado = false;
+
+	m_rectangulo = recursos->figura(F_Rectangulo);
+	m_notificaciones.posicion(Pantalla::Centro_horizontal(), 165);
 }
 
 Controlador_Juego::~Controlador_Juego()
@@ -40,15 +45,23 @@ Administrador_Recursos *Controlador_Juego::obtener_administrador_recursos()
 void Controlador_Juego::actualizar()
 {
 	m_fps = Fps::Calcular_tiempo();
-	m_ventana_actual->actualizar(Fps::Obtener_nanosegundos());
-	//m_ventana_actual->actualizar((1.0/60.0)*1000000000);
+	unsigned int diferencia_tiempo = Fps::Obtener_nanosegundos();
+	//unsigned int diferencia_tiempo = (1.0/60.0)*1000000000;
+	m_ventana_actual->actualizar(diferencia_tiempo);
+	m_notificaciones.actualizar(diferencia_tiempo);
 	m_ventana_actual->dibujar();
+	m_notificaciones.dibujar();
 
-	if(m_mostrar_fps)
+	if(m_depurar)
 	{
 		if(Fps::Actualizar_fps())
 			m_texto_fps.texto("FPS: " + std::to_string((int)m_fps));
 		m_texto_fps.dibujar();
+
+		//Dibuja Raton
+		m_rectangulo->textura(false);
+		m_rectangulo->dibujar(m_raton.x()-11, m_raton.y(), 21, 1, Color(1.0f, 0.0f, 0.0f));
+		m_rectangulo->dibujar(m_raton.x(), m_raton.y()-11, 1, 21, Color(1.0f, 0.0f, 0.0f));
 	}
 
 	bool cambio_ventana = false;
@@ -99,6 +112,7 @@ void Controlador_Juego::actualizar()
 	{
 		//Reenvia el ultimo evento del raton
 		m_ventana_actual->evento_raton(&m_raton);
+		m_notificaciones.quitar_notificaciones();
 	}
 
 	if(m_fotograma >= 0)
@@ -146,7 +160,7 @@ void Controlador_Juego::eventos_raton()
 void Controlador_Juego::eventos_teclado(Tecla tecla, bool estado)
 {
 	if(tecla == TECLA_F10 && estado)
-		m_mostrar_fps = !m_mostrar_fps;
+		m_depurar = !m_depurar;
 	else if(tecla == TECLA_F11 && estado)
 	{
 		m_pantalla_completa = !m_pantalla_completa;
@@ -187,6 +201,7 @@ void Controlador_Juego::evento_ventana(int ancho, int alto)
 	Pantalla::Alto = alto;
 	m_recursos->actualizar_pantalla(ancho, alto);
 	m_ventana_actual->evento_pantalla(ancho, alto);
+	m_notificaciones.posicion(Pantalla::Centro_horizontal(), 165);
 	this->control_fps(true);
 }
 

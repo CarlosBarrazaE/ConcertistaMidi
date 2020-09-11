@@ -4,6 +4,7 @@
 #include "recursos/administrador_recursos.h++"
 #include "archivos/imagen_tga.h++"
 #include "elementos_graficos/etiqueta.h++"
+#include "elementos_graficos/notificacion.h++"
 #include "dispositivos/teclas.h++"
 #include "dispositivos/teclado.h++"
 #include "dispositivos/raton.h++"
@@ -27,13 +28,15 @@ class Controlador_Juego
 private:
 	Administrador_Recursos *m_recursos;
 	Etiqueta m_texto_fps;
+	Notificacion m_notificaciones;
 	double m_fps;
 	bool m_fps_reducido;
 	bool m_fps_reducido_desactivado;
 	int m_contador_inactividad;
+	Rectangulo *m_rectangulo;
 
 	//Control
-	bool m_mostrar_fps;
+	bool m_depurar;
 	bool m_pantalla_completa;
 	bool m_modo_alambre;
 	bool m_finalizar;

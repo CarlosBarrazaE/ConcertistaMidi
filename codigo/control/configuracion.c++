@@ -65,7 +65,7 @@ void Configuracion::dispositivo_entrada(unsigned int id_entrada)
 		m_entrada = new MidiCommIn(id);
 	}
 	else
-		Registro::Nota("No se pudo conectar al dispositivo de entrada");
+		Notificacion::Aviso("No se pudo conectar al dispositivo MIDI de entrada", 10);
 }
 
 void Configuracion::dispositivo_salida(unsigned int id_salida)
@@ -81,7 +81,7 @@ void Configuracion::dispositivo_salida(unsigned int id_salida)
 		m_salida = new MidiCommOut(id);
 	}
 	else
-		Registro::Nota("No se pudo conectar al dispositivo de salida");
+		Notificacion::Aviso("No se pudo conectar al dispositivo MIDI de salida", 10);
 }
 
 MidiCommIn *Configuracion::dispositivo_entrada()

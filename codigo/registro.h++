@@ -8,16 +8,14 @@
 #define IMPRIMIR_TERMINAL 1
 #define NIVEL_REGISTRO 3
 
-namespace
+enum CodigoEstado
 {
-	enum CodigoEstado
-	{
-		EstadoError = 0,
-		EstadoAviso = 1,
-		EstadoNota = 2,
-		EstadoDepurar = 3
-	};
-}
+	EstadoError = 0,
+	EstadoAviso = 1,
+	EstadoNota = 2,
+	EstadoDepurar = 3,
+	EstadoNinguno = 4
+};
 
 class Registro
 {

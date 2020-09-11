@@ -49,6 +49,7 @@ void VentanaTitulo::actualizar(unsigned int diferencia_tiempo)
 void VentanaTitulo::dibujar()
 {
 	m_textura_fondo->activar();
+	m_rectangulo->textura(true);
 	m_rectangulo->color(Color(1.0f, 1.0f, 1.0f));
 	m_rectangulo->dibujar(0, 0, Pantalla::Ancho, 150);
 	m_rectangulo->dibujar(0, Pantalla::Alto - 40, Pantalla::Ancho, 40);
@@ -62,11 +63,6 @@ void VentanaTitulo::dibujar()
 	m_boton_salir->dibujar();
 
 	m_texto_version.dibujar();
-    /*
-    for(int x=0; x<etiquetas_prueba.size(); x++)
-    {
-        etiquetas_prueba.at(x)->dibujar();
-    }*/
 }
 
 void VentanaTitulo::evento_raton(Raton *raton)
