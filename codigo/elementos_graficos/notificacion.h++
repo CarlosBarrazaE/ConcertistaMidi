@@ -54,7 +54,7 @@ public:
 	void dibujar() override;
 	void evento_raton(Raton *raton) override;
 
-	void posicion(int x, int y) override;
+	bool mostrando_notificaciones();
 
 	static void Error(std::string texto, int tiempo);
 	static void Aviso(std::string texto, int tiempo);

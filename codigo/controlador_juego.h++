@@ -27,13 +27,15 @@ class Controlador_Juego
 {
 private:
 	Administrador_Recursos *m_recursos;
+	Rectangulo *m_rectangulo;
 	Etiqueta m_texto_fps;
 	Notificacion m_notificaciones;
-	double m_fps;
+
+	//Control de fps
+	bool m_fps_dinamico;
 	bool m_fps_reducido;
-	bool m_fps_reducido_desactivado;
-	int m_contador_inactividad;
-	Rectangulo *m_rectangulo;
+	float m_contador_inactividad;
+
 
 	//Control
 	bool m_depurar;
@@ -52,10 +54,7 @@ private:
 
 	int m_fotograma;
 
-	//Configuracion bd
-	//Usuario
-
-	void control_fps(bool activo);
+	void reiniciar_contador_inactividad();
 public:
 	Controlador_Juego(Administrador_Recursos *recursos);
 	~Controlador_Juego();

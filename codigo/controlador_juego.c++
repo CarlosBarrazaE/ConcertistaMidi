@@ -4,8 +4,24 @@
 Controlador_Juego::Controlador_Juego(Administrador_Recursos *recursos) : m_texto_fps(recursos), m_notificaciones(recursos)
 {
 	m_recursos = recursos;
-	m_fps = 0;
+	m_rectangulo = recursos->figura(F_Rectangulo);
+	m_notificaciones.posicion(Pantalla::Centro_horizontal(), 165);
+
+	m_texto_fps.tipografia(recursos->tipografia(LetraChica));
+	m_texto_fps.posicion(10, 0);
+	m_texto_fps.dimension(40, 40);
+	m_texto_fps.centrado_vertical(true);
+
+	m_ventana_actual = new VentanaTitulo(recursos);
+
+	//Control dinamico de fps
+	m_fps_dinamico = true;
+	m_fps_reducido = false;
 	m_contador_inactividad = 0;
+
+	//Grabar pantalla
+	m_fotograma = -1;
+
 	m_depurar = false;
 	m_modo_alambre = false;
 	m_finalizar = false;
@@ -16,20 +32,6 @@ Controlador_Juego::Controlador_Juego(Administrador_Recursos *recursos) : m_texto
 		m_pantalla_completa = true;
 	else
 		m_pantalla_completa = false;
-
-	m_texto_fps.tipografia(recursos->tipografia(LetraChica));
-	m_texto_fps.posicion(10, 0);
-	m_texto_fps.dimension(40, 40);
-	m_texto_fps.centrado_vertical(true);
-
-	m_ventana_actual = new VentanaTitulo(recursos);
-
-	m_fotograma = -1;
-	m_fps_reducido = false;
-	m_fps_reducido_desactivado = false;
-
-	m_rectangulo = recursos->figura(F_Rectangulo);
-	m_notificaciones.posicion(Pantalla::Centro_horizontal(), 165);
 }
 
 Controlador_Juego::~Controlador_Juego()
@@ -44,7 +46,7 @@ Administrador_Recursos *Controlador_Juego::obtener_administrador_recursos()
 
 void Controlador_Juego::actualizar()
 {
-	m_fps = Fps::Calcular_tiempo();
+	unsigned int fps = Fps::Calcular_tiempo();
 	unsigned int diferencia_tiempo = Fps::Obtener_nanosegundos();
 	//unsigned int diferencia_tiempo = (1.0/60.0)*1000000000;
 
@@ -59,7 +61,7 @@ void Controlador_Juego::actualizar()
 	if(m_depurar)
 	{
 		if(Fps::Actualizar_fps())
-			m_texto_fps.texto("FPS: " + std::to_string((int)m_fps));
+			m_texto_fps.texto("FPS: " + std::to_string(fps));
 		m_texto_fps.dibujar();
 
 		//Dibuja Raton
@@ -73,21 +75,21 @@ void Controlador_Juego::actualizar()
 	if(m_ventana_actual->obtener_accion() == CambiarATitulo)
 	{
 		delete m_ventana_actual;
-		m_fps_reducido_desactivado = false;
+		m_fps_dinamico = true;
 		m_ventana_actual = new VentanaTitulo(m_recursos);
 		cambio_ventana = true;
 	}
 	else if(m_ventana_actual->obtener_accion() == CambiarASeleccionMusica)
 	{
 		delete m_ventana_actual;
-		m_fps_reducido_desactivado = false;
+		m_fps_dinamico = true;
 		m_ventana_actual = new VentanaSeleccionMusica(&m_configuracion, &m_musica, m_recursos);
 		cambio_ventana = true;
 	}
 	else if(m_ventana_actual->obtener_accion() == CambiarASeleccionPista)
 	{
 		delete m_ventana_actual;
-		m_fps_reducido_desactivado = false;
+		m_fps_dinamico = true;
 		m_ventana_actual = new VentanaSeleccionPista(&m_configuracion, &m_musica, m_recursos);
 		cambio_ventana = true;
 
@@ -96,7 +98,7 @@ void Controlador_Juego::actualizar()
 	else if(m_ventana_actual->obtener_accion() == CambiarAOrgano)
 	{
 		delete m_ventana_actual;
-		m_fps_reducido_desactivado = true;
+		m_fps_dinamico = false;
 		m_ventana_actual = new VentanaOrgano(&m_configuracion, &m_musica, m_recursos);
 		cambio_ventana = true;
 
@@ -105,7 +107,7 @@ void Controlador_Juego::actualizar()
 	else if(m_ventana_actual->obtener_accion() == CambiarAConfiguracion)
 	{
 		delete m_ventana_actual;
-		m_fps_reducido_desactivado = false;
+		m_fps_dinamico = true;
 		m_ventana_actual = new VentanaConfiguracion(&m_configuracion, m_recursos);
 		cambio_ventana = true;
 	}
@@ -131,7 +133,18 @@ void Controlador_Juego::actualizar()
 		}
 	}
 
-	this->control_fps(false);
+	if(m_notificaciones.mostrando_notificaciones())
+		this->reiniciar_contador_inactividad();
+
+	if(!m_fps_reducido)
+		m_contador_inactividad += (diferencia_tiempo/1000000000.0);
+
+	if(m_contador_inactividad > 5 && !m_fps_reducido && m_fps_dinamico)
+	{
+		//Reduce a 1/4 los fps si se mantiene inactivo durante 5 segundos
+		m_fps_reducido = true;
+		SDL_GL_SetSwapInterval(4);
+	}
 }
 
 bool Controlador_Juego::es_pantalla_completa()
@@ -157,7 +170,7 @@ Raton *Controlador_Juego::raton()
 void Controlador_Juego::eventos_raton()
 {
 	m_ventana_actual->evento_raton(&m_raton);
-	this->control_fps(true);
+	this->reiniciar_contador_inactividad();
 }
 
 void Controlador_Juego::eventos_teclado(Tecla tecla, bool estado)
@@ -195,7 +208,7 @@ void Controlador_Juego::eventos_teclado(Tecla tecla, bool estado)
 			}
 		}
 	}
-	this->control_fps(true);
+	this->reiniciar_contador_inactividad();
 }
 
 void Controlador_Juego::evento_ventana(int ancho, int alto)
@@ -205,7 +218,7 @@ void Controlador_Juego::evento_ventana(int ancho, int alto)
 	m_recursos->actualizar_pantalla(ancho, alto);
 	m_ventana_actual->evento_pantalla(ancho, alto);
 	m_notificaciones.posicion(Pantalla::Centro_horizontal(), 165);
-	this->control_fps(true);
+	this->reiniciar_contador_inactividad();
 }
 
 void Controlador_Juego::evento_salir()
@@ -221,22 +234,13 @@ void Controlador_Juego::evento_salir()
 	}
 }
 
-void Controlador_Juego::control_fps(bool activo)
+void Controlador_Juego::reiniciar_contador_inactividad()
 {
-
-	if(activo)
-		m_contador_inactividad = 0;
-	else if(m_contador_inactividad < 70)
-		m_contador_inactividad++;
-
-	if(m_contador_inactividad > 60 && m_fps_reducido && !m_fps_reducido_desactivado)
+	//Vuelve a los fps maximo
+	m_contador_inactividad = 0;
+	if(m_fps_reducido)
 	{
 		m_fps_reducido = false;
-		SDL_GL_SetSwapInterval(4);
-	}
-	else if(m_contador_inactividad == 0 && !m_fps_reducido)
-	{
-		m_fps_reducido = true;
 		SDL_GL_SetSwapInterval(1);
 	}
 }

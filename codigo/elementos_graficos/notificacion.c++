@@ -111,9 +111,11 @@ void Notificacion::evento_raton(Raton */*raton*/)
 
 }
 
-void Notificacion::posicion(int x, int y)
+bool Notificacion::mostrando_notificaciones()
 {
-	this->_posicion(x, y);
+	if(Notificacion::notificaciones.size() > 0)
+		return true;
+	return false;
 }
 
 void Notificacion::Registrar(std::string texto, int tiempo, CodigoEstado estado)
