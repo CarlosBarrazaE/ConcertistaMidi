@@ -121,12 +121,9 @@ Caracter *Tipografia::obtener_caracter(unsigned int caracter)
 	return m_caracteres[caracter];
 }
 
-int Tipografia::crear_texto(icu::UnicodeString texto, unsigned int *figura_actual, unsigned int *indice_objeto)
+int Tipografia::crear_texto(icu::UnicodeString texto, unsigned int *indice_objeto)
 {
 	int x=0, y=0;
-	glGenVertexArrays(1, figura_actual);
-	glBindVertexArray(*figura_actual);
-	Figura::Ultimo_indice_seleccionado = *figura_actual;
 
 	int x_inicial = x;
 

@@ -4,10 +4,11 @@
 #include <string>
 #include <unicode/unistr.h>
 #include "elemento.h++"
+#include "../recursos/figura.h++"
 #include "../recursos/tipografia.h++"
 #include "../registro.h++"
 
-class Etiqueta : public Elemento
+class Etiqueta : public Elemento, public Figura
 {
 private:
 	static Color Ultimo_color;
@@ -21,8 +22,6 @@ private:
 	int m_alto_texto = 0;
 	int m_margen = 0;
 
-	Sombreador *m_sombreador;
-	unsigned int m_indice_figura = 0;
 	unsigned int m_indice_objeto = 0;
 
 	void actualizar_texto();

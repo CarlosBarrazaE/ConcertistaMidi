@@ -9,7 +9,6 @@
 
 #include <unicode/unistr.h>
 
-#include "figura.h++"
 #include "textura_2d.h++"
 
 #include "../registro.h++"
@@ -52,8 +51,8 @@ private:
 public:
 	Tipografia(Formato formato, int tamanno_letra);
 	~Tipografia();
-    
-	int crear_texto(icu::UnicodeString texto, unsigned int *indice_figura, unsigned int *indice_objeto);
+
+	int crear_texto(icu::UnicodeString texto, unsigned int *indice_objeto);
 	int alto_texto();
 	void activar();
 };

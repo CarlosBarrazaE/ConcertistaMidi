@@ -16,11 +16,6 @@ Generador_Particulas::Generador_Particulas(Sombreador *sombreador, Textura2D *te
 		0.0f,	0.0f,	0.0f,	0.0f		//Abajo Izquierda
 	};
 
-	this->indice_figura = 0;//Matriz de vertice de objeto
-	glGenVertexArrays(1, &this->indice_figura);
-	glBindVertexArray(this->indice_figura);
-	Figura::Ultimo_indice_seleccionado = this->indice_figura;
-
 	m_indice_objeto = 0; //Vertice temporal de objeto
 	glGenBuffers(1, &m_indice_objeto);
 	glBindBuffer(GL_ARRAY_BUFFER, m_indice_objeto);
@@ -50,9 +45,8 @@ Generador_Particulas::Generador_Particulas(Sombreador *sombreador, Textura2D *te
 
 Generador_Particulas::~Generador_Particulas()
 {
-	glBindVertexArray(0);
+	this->seleccionar_figura();
 	glBindBuffer(GL_ARRAY_BUFFER, 0);
-	glDeleteVertexArrays(1, &this->indice_figura);
 	glDeleteBuffers(1, &m_indice_objeto);
 }
 
@@ -120,11 +114,7 @@ void Generador_Particulas::dibujar()
 			m_sombreador->uniforme_vector2f("posicion", p->posicion_x, p->posicion_y);
 
 
-			if(Figura::Ultimo_indice_seleccionado != this->indice_figura)
-			{
-				glBindVertexArray(this->indice_figura);
-				Figura::Ultimo_indice_seleccionado = this->indice_figura;
-			}
+			this->seleccionar_figura();
 			glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
 			dibujar_particulas++;
 		}

@@ -10,11 +10,6 @@ Rectangulo::Rectangulo(Sombreador *sombreador) : Figura(sombreador)
 		0.0f,	0.0f,	0.0f,	0.0f		//Abajo Izquierda
 	};
 
-	this->indice_figura = 0;//Matriz de vertice de objeto
-	glGenVertexArrays(1, &this->indice_figura);
-	glBindVertexArray(this->indice_figura);
-	Figura::Ultimo_indice_seleccionado = this->indice_figura;
-
 	m_indice_objeto = 0; //Vertice temporal de objeto
 	glGenBuffers(1, &m_indice_objeto);
 	glBindBuffer(GL_ARRAY_BUFFER, m_indice_objeto);
@@ -40,11 +35,7 @@ Rectangulo::Rectangulo(Sombreador *sombreador) : Figura(sombreador)
 
 Rectangulo::~Rectangulo()
 {
-	glBindVertexArray(0);
-	glDeleteVertexArrays(1, &this->indice_figura);
-	if(Figura::Ultimo_indice_seleccionado != 0)
-		Figura::Ultimo_indice_seleccionado = 0;
-
+	this->seleccionar_figura();
 	glBindBuffer(GL_ARRAY_BUFFER, 0);
 	glDeleteBuffers(1, &m_indice_objeto);
 }
@@ -95,11 +86,7 @@ void Rectangulo::dibujar(float x, float y, float ancho, float alto)
 	modelo = glm::scale(modelo, glm::vec3(ancho, alto, 1.0f));
 	this->m_sombreador->uniforme_matriz4("modelo", modelo);
 
-	if(Figura::Ultimo_indice_seleccionado != this->indice_figura)
-	{
-		glBindVertexArray(this->indice_figura);
-		Figura::Ultimo_indice_seleccionado = this->indice_figura;
-	}
+	this->seleccionar_figura();
 	glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
 }
 

@@ -52,6 +52,7 @@ Sombreador::~Sombreador()
 {
 	glUseProgram(0);
 	glDeleteProgram(m_indice_programa);
+	Sombreador::Ultimo_indice_seleccionado = 0;
 }
 
 void Sombreador::activar()

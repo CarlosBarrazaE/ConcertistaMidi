@@ -19,6 +19,7 @@ Textura2D::~Textura2D()
 {
 	glBindTexture(GL_TEXTURE_2D, 0);
 	glDeleteTextures(1, &m_indice_textura);
+	Textura2D::Ultimo_indice_seleccionado = 0;
 }
 
 unsigned int Textura2D::o_indice()

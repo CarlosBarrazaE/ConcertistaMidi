@@ -3,38 +3,34 @@
 
 Color Etiqueta::Ultimo_color;
 
-Etiqueta::Etiqueta(Administrador_Recursos *recursos) : Elemento(0, 0, 0, 0)
+Etiqueta::Etiqueta(Administrador_Recursos *recursos) : Elemento(0, 0, 0, 0), Figura(recursos->sombreador(S_Texto))
 {
-	m_sombreador = recursos->sombreador(S_Texto);
 }
 
-Etiqueta::Etiqueta(int x, int y, bool centrado, std::string texto, ModeloLetra tipografia, Administrador_Recursos *recursos) : Elemento(x, y, 0, 0)
+Etiqueta::Etiqueta(int x, int y, bool centrado, std::string texto, ModeloLetra tipografia, Administrador_Recursos *recursos) : Elemento(x, y, 0, 0), Figura(recursos->sombreador(S_Texto))
 {
 	m_centrado_horizontal = centrado;
 	m_texto_actual = texto;
 	m_texto = texto.c_str();
 	m_tipografia = recursos->tipografia(tipografia);
-	m_sombreador = recursos->sombreador(S_Texto);
 	this->actualizar_texto();
 }
 
-Etiqueta::Etiqueta(int x, int y, bool centrado, std::string texto, Tipografia *tipografia, Administrador_Recursos *recursos) : Elemento(x, y, 0, 0)
+Etiqueta::Etiqueta(int x, int y, bool centrado, std::string texto, Tipografia *tipografia, Administrador_Recursos *recursos) : Elemento(x, y, 0, 0), Figura(recursos->sombreador(S_Texto))
 {
 	m_centrado_horizontal = centrado;
 	m_texto_actual = texto;
 	m_texto = texto.c_str();
 	m_tipografia = tipografia;
-	m_sombreador = recursos->sombreador(S_Texto);
 	this->actualizar_texto();
 }
 
-Etiqueta::Etiqueta(int x, int y, int ancho, int alto, bool centrado, std::string texto, ModeloLetra tipografia, Administrador_Recursos *recursos) : Elemento(x, y, ancho, alto)
+Etiqueta::Etiqueta(int x, int y, int ancho, int alto, bool centrado, std::string texto, ModeloLetra tipografia, Administrador_Recursos *recursos) : Elemento(x, y, ancho, alto), Figura(recursos->sombreador(S_Texto))
 {
 	m_centrado_horizontal = centrado;
 	m_texto_actual = texto;
 	m_texto = texto.c_str();
 	m_tipografia = recursos->tipografia(tipografia);
-	m_sombreador = recursos->sombreador(S_Texto);
 	this->actualizar_texto();
 }
 
@@ -48,7 +44,8 @@ void Etiqueta::actualizar_texto()
 	if(m_tipografia != NULL && m_texto.length() > 0)
 	{
 		this->limpiar();
-		m_ancho_texto = m_tipografia->crear_texto(m_texto, &m_indice_figura, &m_indice_objeto);
+		this->seleccionar_figura();
+		m_ancho_texto = m_tipografia->crear_texto(m_texto, &m_indice_objeto);
 		m_alto_texto = m_tipografia->alto_texto();
 	}
 	else
@@ -60,17 +57,13 @@ void Etiqueta::actualizar_texto()
 
 void Etiqueta::limpiar()
 {
-	if(m_indice_figura > 0)
-	{
-		glBindVertexArray(0);
-		glDeleteVertexArrays(1, &m_indice_figura);
-		if(Figura::Ultimo_indice_seleccionado != 0)
-			Figura::Ultimo_indice_seleccionado = 0;
-	}
+
 	if(m_indice_objeto > 0)
 	{
+		this->seleccionar_figura();
 		glBindBuffer(GL_ARRAY_BUFFER, 0);
 		glDeleteBuffers(1, &m_indice_objeto);
+		m_indice_objeto = 0;
 	}
 }
 
@@ -111,11 +104,7 @@ void Etiqueta::dibujar()
 		Etiqueta::Ultimo_color = m_color;
 	}
 
-	if(Figura::Ultimo_indice_seleccionado != m_indice_figura)
-	{
-		glBindVertexArray(m_indice_figura);
-		Figura::Ultimo_indice_seleccionado = m_indice_figura;
-	}
+	this->seleccionar_figura();
 	m_tipografia->activar();
 	glDrawArrays(GL_TRIANGLES, 0, m_texto.length()*6);
 }
