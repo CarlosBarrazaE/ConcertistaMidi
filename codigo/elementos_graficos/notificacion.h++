@@ -12,8 +12,12 @@ struct Mensaje
 {
 	Etiqueta *etiqueta = NULL;
 	std::string texto = "";
-	int tiempo = 0;
+	float tiempo = 0.0f;
 	CodigoEstado estado = EstadoNinguno;
+
+	float opacidad = 0;
+	float posicion_y = 0;
+	float mover = 0;
 
 	Mensaje(Etiqueta *etiqueta_2, std::string texto_2, int tiempo_2, CodigoEstado estado_2)
 	{

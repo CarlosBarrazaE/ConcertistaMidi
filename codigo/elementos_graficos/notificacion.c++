@@ -17,25 +17,55 @@ Notificacion::~Notificacion()
 
 void Notificacion::actualizar(unsigned int diferencia_tiempo)
 {
-	//Maximo 7 notificaciones a la vez
 	unsigned int contador = 0;
-	for(unsigned int x=0; x<Notificacion::notificaciones.size() && contador < MAXIMAS_NOTIFICACIONES; x++)
+	float mover = 0;
+	Mensaje *actual = NULL;
+	for(unsigned int x=0; x<Notificacion::notificaciones.size(); x++)
 	{
-		if(Notificacion::notificaciones[x]->etiqueta == NULL)
+		actual = Notificacion::notificaciones.at(x);
+		if(actual->etiqueta == NULL)
 		{
-			Notificacion::notificaciones[x]->etiqueta = new Etiqueta(0, 0, 400, 40, true, Notificacion::notificaciones[x]->texto, LetraChica, m_recursos);
-			Notificacion::notificaciones[x]->etiqueta->centrado_vertical(true);
-			Notificacion::notificaciones[x]->etiqueta->color(Color(1.0f, 1.0f, 1.0f));
+			actual->etiqueta = new Etiqueta(0, 0, 400, 40, true, Notificacion::notificaciones[x]->texto, LetraChica, m_recursos);
+			actual->etiqueta->centrado_vertical(true);
+			actual->etiqueta->color(Color(1.0f, 1.0f, 1.0f));
 		}
-		else if(Notificacion::notificaciones[x]->tiempo > 0)
+		if(actual->tiempo > 0)
 		{
-			Notificacion::notificaciones[x]->tiempo -= (diferencia_tiempo / 1000000000.0) * 60;
-			if(Notificacion::notificaciones[x]->tiempo <= 0)
+			if(contador < MAXIMAS_NOTIFICACIONES)
+			{
+				actual->tiempo -= (diferencia_tiempo / 1000000000.0);
+				//0.25 Segundos para aparecer
+
+				if(actual->tiempo > 1 && actual->opacidad < 1)
+					actual->opacidad += (diferencia_tiempo / 1000000000.0)*4;//0.25 Segundos para aparecer
+				else if(actual->tiempo <= 0.25 && actual->opacidad > 0)
+					actual->opacidad -= (diferencia_tiempo / 1000000000.0)*4;//0.25 Segundos para desaparecer
+			}
+
+			if(mover > 0)
+				actual->mover += mover;
+
+			//Animacion moviendo hacia arriba
+			if(actual->mover > 0)
+			{
+				//Se mueve 45 pixeles en 0.25 segundos
+				actual->posicion_y -= (diferencia_tiempo / 1000000000.0)*180;
+				actual->mover -= (diferencia_tiempo / 1000000000.0)*180;
+				if(actual->mover < 0)
+				{
+					actual->posicion_y += actual->mover*-1;
+					actual->mover = 0;
+				}
+			}
+
+			if(actual->tiempo <= 0)
 			{
 				//Eliminar esta notificacion
-				delete Notificacion::notificaciones.at(x);
+				delete actual;
+				actual = NULL;
 				Notificacion::notificaciones.erase(Notificacion::notificaciones.begin()+x);
 				x--;
+				mover += 45;
 			}
 			else
 				contador++;
@@ -48,28 +78,32 @@ void Notificacion::dibujar()
 	if(Notificacion::notificaciones.size() == 0)
 		return;
 
-	int posicion_y = 0;
-
 	m_rectangulo->textura(true);
 	m_rectangulo->extremos_fijos(true, true);
 	for(unsigned int x=0; x<Notificacion::notificaciones.size() && x < MAXIMAS_NOTIFICACIONES; x++)
 	{
-		if(Notificacion::notificaciones[x]->estado == EstadoError)
-			m_rectangulo->color(Color(0.7f, 0.0f, 0.0f));
-		else if(Notificacion::notificaciones[x]->estado == EstadoAviso)
-			m_rectangulo->color(Color(0.9f, 0.5f, 0.0f));
-		else if(Notificacion::notificaciones[x]->estado == EstadoNota)
-			m_rectangulo->color(Color(0.0f, 0.598f, 0.0f));
-		else if(Notificacion::notificaciones[x]->estado == EstadoDepurar)
-			m_rectangulo->color(Color(0.145f, 0.707f, 1.0f));
+		Mensaje *actual = Notificacion::notificaciones[x];
+		if(actual->etiqueta == NULL)
+			continue;
+
+		if(actual->estado == EstadoError)
+			m_rectangulo->color(Color(0.7f, 0.0f, 0.0f, actual->opacidad));
+		else if(actual->estado == EstadoAviso)
+			m_rectangulo->color(Color(0.9f, 0.5f, 0.0f, actual->opacidad));
+		else if(actual->estado == EstadoNota)
+			m_rectangulo->color(Color(0.0f, 0.598f, 0.0f, actual->opacidad));
+		else if(actual->estado == EstadoDepurar)
+			m_rectangulo->color(Color(0.145f, 0.707f, 1.0f, actual->opacidad));
 
 		m_textura_fondo->activar();
-		m_rectangulo->dibujar_estirable(this->x(), this->y() + posicion_y, this->ancho(), this->alto(), 15.0f, 12.0f);
-		m_rectangulo->extremos_fijos(false, false);
-		Notificacion::notificaciones[x]->etiqueta->posicion(this->x(), this->y() + posicion_y);
-		Notificacion::notificaciones[x]->etiqueta->dibujar();
-		posicion_y += 45;
+		m_rectangulo->dibujar_estirable(this->x(), this->y() + (int)actual->posicion_y, this->ancho(), this->alto(), 15.0f, 12.0f);
+
+		if(actual->opacidad < 1)
+			actual->etiqueta->color(Color(1.0f, 1.0f, 1.0f, actual->opacidad));
+		actual->etiqueta->posicion(this->x(), this->y() + (int)actual->posicion_y);
+		actual->etiqueta->dibujar();
 	}
+	m_rectangulo->extremos_fijos(false, false);
 }
 
 void Notificacion::evento_raton(Raton */*raton*/)
@@ -84,7 +118,19 @@ void Notificacion::posicion(int x, int y)
 
 void Notificacion::Registrar(std::string texto, int tiempo, CodigoEstado estado)
 {
-	Notificacion::notificaciones.push_back(new Mensaje(NULL, texto, tiempo*60, estado));
+	if(tiempo < 3)
+		tiempo = 3;
+
+	Notificacion::notificaciones.push_back(new Mensaje(NULL, texto, (float)tiempo, estado));
+
+	//Se actualiza la posicion del ultimo elemento agregado
+	if(Notificacion::notificaciones.size() > 1)
+	{
+		int posicion = Notificacion::notificaciones.size()-1;
+
+		Notificacion::notificaciones[posicion]->posicion_y = Notificacion::notificaciones[posicion-1]->posicion_y + 45;
+		Notificacion::notificaciones[posicion]->mover = Notificacion::notificaciones[posicion-1]->mover;
+	}
 }
 
 void Notificacion::Error(std::string texto, int tiempo)
