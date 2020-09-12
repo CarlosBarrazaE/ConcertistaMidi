@@ -36,6 +36,7 @@ public:
 	bool IsPercussion() const;
 	const NoteSet &Notes() const;
 	void SetTrackId(size_t track_id);
+	unsigned char canal();
 
 	// Reports whether this track contains any Note-On MIDI events
 	// (vs. just being an information track with a title or copyright)
@@ -62,6 +63,7 @@ private:
 	NoteSet m_note_set;
 
 	int m_instrument_id;
+	unsigned char m_canal;
 
 	microseconds_t m_running_microseconds;
 	long m_last_event;

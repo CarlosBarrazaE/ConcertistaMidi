@@ -12,7 +12,7 @@ class Configuracion_Pista : public Elemento
 {
 private:
 	//Recursos
-	Etiqueta m_texto_instrumento, m_texto_notas, m_texto_sonido;
+	Etiqueta m_texto_instrumento, m_texto_datos, m_texto_sonido;
 	Rectangulo *m_rectangulo;
 	Textura2D *m_textura_fondo;
 	Textura2D *m_textura_sonido_activado;

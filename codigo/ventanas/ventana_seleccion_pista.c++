@@ -58,13 +58,13 @@ void VentanaSeleccionPista::crear_configuracion(Administrador_Recursos *recursos
 				color_usado++;
 			}
 
-			configuracion = new Configuracion_Pista(0, 0, 350, 150, Pista(pista_actual.InstrumentName(), pista_actual.Notes().size(), color_pista, Fondo, visible, true), recursos);
+			configuracion = new Configuracion_Pista(0, 0, 350, 150, Pista(pista_actual.InstrumentName(), pista_actual.Notes().size(), pista_actual.canal(), color_pista, Fondo, visible, true), recursos);
 			m_configuracion_pistas.push_back(configuracion);
 			m_barra_desplazamiento->agregar_elemento(configuracion);
 		}
 		else
 		{
-			configuracion = new Configuracion_Pista(0, 0, 350, 150, Pista(pista_actual.InstrumentName(), pista_actual.Notes().size(), Color(0.0f, 0.0f, 0.0f), Fondo, false, false), recursos);
+			configuracion = new Configuracion_Pista(0, 0, 350, 150, Pista(pista_actual.InstrumentName(), pista_actual.Notes().size(), 0, Color(0.0f, 0.0f, 0.0f), Fondo, false, false), recursos);
 			m_configuracion_pistas.push_back(configuracion);
 		}
 	}

@@ -1,7 +1,7 @@
 #include "configuracion_pista.h++"
 
 Configuracion_Pista::Configuracion_Pista(int x, int y, int ancho, int alto, Pista pista, Administrador_Recursos *recursos)
-: Elemento(x, y, ancho, alto), m_texto_instrumento(recursos), m_texto_notas(recursos), m_texto_sonido(recursos), m_seleccion_modo(20, 85, 70, 55, recursos), m_seleccion_color(137, 85, 70, 55, recursos), m_datos_pista(pista)
+: Elemento(x, y, ancho, alto), m_texto_instrumento(recursos), m_texto_datos(recursos), m_texto_sonido(recursos), m_seleccion_modo(20, 85, 70, 55, recursos), m_seleccion_color(137, 85, 70, 55, recursos), m_datos_pista(pista)
 {
 	m_rectangulo = recursos->figura(F_Rectangulo);
 
@@ -10,10 +10,10 @@ Configuracion_Pista::Configuracion_Pista(int x, int y, int ancho, int alto, Pist
 	m_texto_instrumento.color(Color(1.0f, 1.0f, 1.0f));
 	m_texto_instrumento.posicion(20, 15);
 
-	m_texto_notas.texto(std::to_string(m_datos_pista.numero_notas()) + " notas");
-	m_texto_notas.tipografia(recursos->tipografia(LetraMuyChica));
-	m_texto_notas.color(Color(1.0f, 1.0f, 1.0f));
-	m_texto_notas.posicion(20, 35);
+	m_texto_datos.texto(std::to_string(m_datos_pista.numero_notas()) + " notas - Canal " + std::to_string((unsigned int)m_datos_pista.canal()));
+	m_texto_datos.tipografia(recursos->tipografia(LetraMuyChica));
+	m_texto_datos.color(Color(1.0f, 1.0f, 1.0f));
+	m_texto_datos.posicion(20, 35);
 
 	m_texto_sonido.tipografia(recursos->tipografia(LetraMuyChica));
 	m_texto_sonido.color(Color(1.0f, 1.0f, 1.0f));
@@ -143,7 +143,7 @@ void Configuracion_Pista::dibujar()
 	m_seleccion_color.dibujar();
 
 	m_texto_instrumento.dibujar();
-	m_texto_notas.dibujar();
+	m_texto_datos.dibujar();
 	m_texto_sonido.dibujar();
 }
 
@@ -212,7 +212,7 @@ void Configuracion_Pista::posicion(int x, int y)
 	m_vista_previa->posicion(x+300, y+22);
 	m_boton_sonido->posicion(x+272, y+87);
 	m_texto_instrumento.posicion(x+20, y+15);
-	m_texto_notas.posicion(x+20, y+35);
+	m_texto_datos.posicion(x+20, y+35);
 	m_texto_sonido.posicion(x+242, y+128);
 }
 

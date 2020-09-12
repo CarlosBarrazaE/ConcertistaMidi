@@ -291,6 +291,7 @@ void MidiTrack::DiscoverInstrument()
 	bool any_note_uses_percussion = false;
 	bool any_note_does_not_use_percussion = false;
 
+	bool canal_encontrado = false;
 	for (size_t i = 0; i < m_events.size(); ++i)
 	{
 		const MidiEvent &ev = m_events[i];
@@ -303,6 +304,12 @@ void MidiTrack::DiscoverInstrument()
 
 		if (ev.Channel() != PercussionChannel1 && ev.Channel() != PercussionChannel2)
 			any_note_does_not_use_percussion = true;
+
+		if(!canal_encontrado)
+		{
+			canal_encontrado = true;
+			m_canal = ev.Channel()+1;
+		}
 	}
 
 	if (any_note_uses_percussion && !any_note_does_not_use_percussion)
@@ -352,6 +359,11 @@ void MidiTrack::SetTrackId(size_t track_id)
 
 		m_note_set.insert(n);
 	}
+}
+
+unsigned char MidiTrack::canal()
+{
+	return m_canal;
 }
 
 void MidiTrack::Reset()
