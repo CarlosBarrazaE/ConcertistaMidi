@@ -41,8 +41,11 @@ Rectangulo::Rectangulo(Sombreador *sombreador) : Figura(sombreador)
 Rectangulo::~Rectangulo()
 {
 	glBindVertexArray(0);
-	glBindBuffer(GL_ARRAY_BUFFER, 0);
 	glDeleteVertexArrays(1, &this->indice_figura);
+	if(Figura::Ultimo_indice_seleccionado != 0)
+		Figura::Ultimo_indice_seleccionado = 0;
+
+	glBindBuffer(GL_ARRAY_BUFFER, 0);
 	glDeleteBuffers(1, &m_indice_objeto);
 }
 

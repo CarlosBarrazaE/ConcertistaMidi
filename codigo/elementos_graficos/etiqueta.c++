@@ -1,4 +1,5 @@
 #include "etiqueta.h++"
+//#include "../registro.h++"
 
 Color Etiqueta::Ultimo_color;
 
@@ -63,6 +64,8 @@ void Etiqueta::limpiar()
 	{
 		glBindVertexArray(0);
 		glDeleteVertexArrays(1, &m_indice_figura);
+		if(Figura::Ultimo_indice_seleccionado != 0)
+			Figura::Ultimo_indice_seleccionado = 0;
 	}
 	if(m_indice_objeto > 0)
 	{
@@ -108,10 +111,10 @@ void Etiqueta::dibujar()
 		Etiqueta::Ultimo_color = m_color;
 	}
 
-	if(Figura::Ultimo_indice_seleccionado != m_indice_objeto)
+	if(Figura::Ultimo_indice_seleccionado != m_indice_figura)
 	{
-		glBindVertexArray(m_indice_objeto);
-		Figura::Ultimo_indice_seleccionado = m_indice_objeto;
+		glBindVertexArray(m_indice_figura);
+		Figura::Ultimo_indice_seleccionado = m_indice_figura;
 	}
 	m_tipografia->activar();
 	glDrawArrays(GL_TRIANGLES, 0, m_texto.length()*6);
