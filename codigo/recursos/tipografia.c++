@@ -48,14 +48,14 @@ void Tipografia::generar_caracteres()
 		letra_actual = FT_Get_Char_Index(m_tipografia, idioma_espannol[n]);
 		if(letra_actual == 0)
 		{
-			Registro::Aviso("Caracter unicode desconocido \"" + std::to_string((unsigned int)idioma_espannol[n]) + "\" se requiere otra tipografia.");
+			Registro::Aviso("Caracter unicode desconocido \"" + std::to_string(static_cast<unsigned int>(idioma_espannol[n])) + "\" se requiere otra tipografia.");
 			continue;
 		}
 
 		error = FT_Load_Glyph(m_tipografia, letra_actual, FT_LOAD_RENDER);
 		if(error)
 		{
-			Registro::Error("Error al cargar el caracter: " + std::to_string((unsigned int)idioma_espannol[n]));
+			Registro::Error("Error al cargar el caracter: " + std::to_string(static_cast<unsigned int>(idioma_espannol[n])));
 			continue;
 		}
 
@@ -87,14 +87,14 @@ void Tipografia::generar_caracteres()
 		letra_actual = FT_Get_Char_Index(m_tipografia, idioma_espannol[n]);
 		if(letra_actual == 0)
 		{
-			Registro::Aviso("Caracter unicode desconocido \"" + std::to_string((unsigned int)idioma_espannol[n]) + "\" se requiere otra tipografia.");
+			Registro::Aviso("Caracter unicode desconocido \"" + std::to_string(static_cast<unsigned int>(idioma_espannol[n])) + "\" se requiere otra tipografia.");
 			continue;
 		}
 
 		error = FT_Load_Glyph(m_tipografia, letra_actual, FT_LOAD_RENDER);
 		if(error)
 		{
-			Registro::Error("Error al cargar el caracter: " + std::to_string((unsigned int)idioma_espannol[n]));
+			Registro::Error("Error al cargar el caracter: " + std::to_string(static_cast<unsigned int>(idioma_espannol[n])));
 			continue;
 		}
 
@@ -140,7 +140,7 @@ int Tipografia::crear_texto(icu::UnicodeString texto, unsigned int *indice_objet
 
 	for(int n=0; n<texto.length(); n++)
 	{
-		letra = obtener_caracter((unsigned int)texto[n]);
+		letra = obtener_caracter(static_cast<unsigned int>(texto[n]));
 		if(!letra)
 			continue;
 
@@ -160,37 +160,37 @@ int Tipografia::crear_texto(icu::UnicodeString texto, unsigned int *indice_objet
 		float al = letra->alto;
 		vertices[posicion_arreglo][0] = xpos + an;
 		vertices[posicion_arreglo][1] = ypos;
-		vertices[posicion_arreglo][2] = (letra->textura_x + an) / (float)m_ancho_atlas;//mi valor / total
+		vertices[posicion_arreglo][2] = (letra->textura_x + an) / static_cast<float>(m_ancho_atlas);//mi valor / total
 		vertices[posicion_arreglo][3] = 0.0f;
 		posicion_arreglo++;
 
 		vertices[posicion_arreglo][0] = xpos;
 		vertices[posicion_arreglo][1] = ypos;
-		vertices[posicion_arreglo][2] = letra->textura_x / (float)m_ancho_atlas;
+		vertices[posicion_arreglo][2] = letra->textura_x / static_cast<float>(m_ancho_atlas);
 		vertices[posicion_arreglo][3] = 0.0f;
 		posicion_arreglo++;
 
 		vertices[posicion_arreglo][0] = xpos + an;
 		vertices[posicion_arreglo][1] = ypos + al;
-		vertices[posicion_arreglo][2] = (letra->textura_x + an) / (float)m_ancho_atlas;
-		vertices[posicion_arreglo][3] = al / (float)m_alto_atlas;
+		vertices[posicion_arreglo][2] = (letra->textura_x + an) / static_cast<float>(m_ancho_atlas);
+		vertices[posicion_arreglo][3] = al / static_cast<float>(m_alto_atlas);
 		posicion_arreglo++;
 
 		vertices[posicion_arreglo][0] = xpos;
 		vertices[posicion_arreglo][1] = ypos + al;
-		vertices[posicion_arreglo][2] = letra->textura_x / (float)m_ancho_atlas;
-		vertices[posicion_arreglo][3] = al / (float)m_alto_atlas;
+		vertices[posicion_arreglo][2] = letra->textura_x / static_cast<float>(m_ancho_atlas);
+		vertices[posicion_arreglo][3] = al / static_cast<float>(m_alto_atlas);
 		posicion_arreglo++;
 
 		vertices[posicion_arreglo][0] = xpos + an;
 		vertices[posicion_arreglo][1] = ypos + al;
-		vertices[posicion_arreglo][2] = (letra->textura_x + an) / (float)m_ancho_atlas;
-		vertices[posicion_arreglo][3] = al / (float)m_alto_atlas;
+		vertices[posicion_arreglo][2] = (letra->textura_x + an) / static_cast<float>(m_ancho_atlas);
+		vertices[posicion_arreglo][3] = al / static_cast<float>(m_alto_atlas);
 		posicion_arreglo++;
 
 		vertices[posicion_arreglo][0] = xpos;
 		vertices[posicion_arreglo][1] = ypos;
-		vertices[posicion_arreglo][2] = letra->textura_x / (float)m_ancho_atlas;
+		vertices[posicion_arreglo][2] = letra->textura_x / static_cast<float>(m_ancho_atlas);
 		vertices[posicion_arreglo][3] = 0.0f;
 		posicion_arreglo++;
 

@@ -10,7 +10,7 @@ Configuracion_Pista::Configuracion_Pista(int x, int y, int ancho, int alto, Pist
 	m_texto_instrumento.color(Color(1.0f, 1.0f, 1.0f));
 	m_texto_instrumento.posicion(20, 15);
 
-	m_texto_datos.texto(std::to_string(m_datos_pista.numero_notas()) + " notas - Canal " + std::to_string((unsigned int)m_datos_pista.canal()));
+	m_texto_datos.texto(std::to_string(m_datos_pista.numero_notas()) + " notas - Canal " + std::to_string(static_cast<unsigned int>(m_datos_pista.canal())));
 	m_texto_datos.tipografia(recursos->tipografia(LetraMuyChica));
 	m_texto_datos.color(Color(1.0f, 1.0f, 1.0f));
 	m_texto_datos.posicion(20, 35);

@@ -25,7 +25,7 @@ unsigned int Fps::Calcular_tiempo()
 		Fps::Tiempo_anterior_fotogramas = Fps::Tiempo_actual;
 		Fps::Mostrar_fps = true;
 
-		return 1000000000.0/((double)Fps::Nanosegundos_fotogramas/(double)fps_total);//Retorna FPS
+		return 1000000000.0/(static_cast<double>(Fps::Nanosegundos_fotogramas)/static_cast<double>(fps_total));//Retorna FPS
 	}
 	else
 	{

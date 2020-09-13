@@ -84,7 +84,7 @@ void Barra_Desplazamiento::actualizar_dimension()
 	m_desplazamiento_y = 0;
 	m_calcular_posicion = false;
 	if(this->alto() < m_alto_actual)
-		m_proporcion = (double)(this->alto()-20) / (double)m_alto_actual;
+		m_proporcion = static_cast<double>(this->alto()-20) / static_cast<double>(m_alto_actual);
 }
 
 void Barra_Desplazamiento::actualizar(unsigned int diferencia_tiempo)

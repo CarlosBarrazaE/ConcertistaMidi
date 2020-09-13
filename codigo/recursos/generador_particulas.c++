@@ -21,10 +21,10 @@ Generador_Particulas::Generador_Particulas(Sombreador *sombreador, Textura2D *te
 	glBindBuffer(GL_ARRAY_BUFFER, m_indice_objeto);
 	glBufferData(GL_ARRAY_BUFFER, sizeof(puntos), puntos, GL_STATIC_DRAW);
 
-	glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, 4 * sizeof(float), (void*)0);
+	glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, 4 * sizeof(float), reinterpret_cast<void*>(0));
 	glEnableVertexAttribArray(0);
 
-	glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 4 * sizeof(float), (void*)(2 * sizeof(float)));
+	glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 4 * sizeof(float), reinterpret_cast<void*>(2 * sizeof(float)));
 	glEnableVertexAttribArray(1);
 	glBindBuffer(GL_ARRAY_BUFFER, 0);
 
@@ -95,7 +95,7 @@ void Generador_Particulas::dibujar()
 
 	Particula *p;
 	unsigned int dibujar_particulas = 0;
-	for(int i = (int)m_primera_particula_activa; dibujar_particulas < m_particulas_activas; i++)
+	for(int i = static_cast<int>(m_primera_particula_activa); dibujar_particulas < m_particulas_activas; i++)
 	{
 		p = &m_particulas[i];
 		p->vida -= m_tiempo;
@@ -122,7 +122,7 @@ void Generador_Particulas::dibujar()
 		{
 			m_particulas_activas--;
 
-			if(m_primera_particula_activa == (unsigned int)i)
+			if(m_primera_particula_activa == static_cast<unsigned int>(i))
 				m_primera_particula_activa++;
 
 			//Si es igual al maximo es que tiene que empezar de nuevo el ciclo
@@ -130,15 +130,15 @@ void Generador_Particulas::dibujar()
 				m_primera_particula_activa = 0;
 		}
 
-		if((unsigned int)i == m_particulas.size()-1)//Recorre el arreglo de forma circular
+		if(static_cast<unsigned int>(i) == m_particulas.size()-1)//Recorre el arreglo de forma circular
 			i = -1;
 
-		if((unsigned int)dibujar_particulas == m_particulas_activas)
+		if(static_cast<unsigned int>(dibujar_particulas) == m_particulas_activas)
 		{
 			if(i < 0)
 				m_ultima_particula_activa = 0;
 			else
-				m_ultima_particula_activa = (unsigned int)i;
+				m_ultima_particula_activa = static_cast<unsigned int>(i);
 		}
 	}
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);

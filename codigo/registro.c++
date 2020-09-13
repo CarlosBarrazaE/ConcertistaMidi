@@ -105,6 +105,6 @@ void Registro::Mostrar_detalles()
 
 	unsigned char estereo = 0;
 	glGetBooleanv(GL_STEREO, &estereo);
-	Registro::Depurar("GL_STEREO " + std::to_string((unsigned int)estereo));
+	Registro::Depurar("GL_STEREO " + std::to_string(static_cast<unsigned int>(estereo)));
 	Registro::Depurar("---------------------------------------");
 }

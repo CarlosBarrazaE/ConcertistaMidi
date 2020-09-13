@@ -62,7 +62,7 @@ std::string Base_de_Datos::consulta_texto(std::string consulta)
 		sqlite3_step(respuesta_consulta);
 		if(sqlite3_column_text(respuesta_consulta, 0) != 0)
 		{
-			std::string texto = std::string((char*)sqlite3_column_text(respuesta_consulta, 0));
+			std::string texto = std::string(reinterpret_cast<const char*>(sqlite3_column_text(respuesta_consulta, 0)));
 			sqlite3_finalize(respuesta_consulta);
 			return texto;
 		}
@@ -85,7 +85,7 @@ std::vector<std::vector<std::string>> Base_de_Datos::consulta_tabla(std::string 
 			tabla.push_back(std::vector<std::string>());
 			for(int c=0; c<columnas; c++)
 			{
-				tabla[x].push_back(std::string((char*)sqlite3_column_text(respuesta_consulta, c)));
+				tabla[x].push_back(std::string(reinterpret_cast<const char*>(sqlite3_column_text(respuesta_consulta, c))));
 			}
 			sqlite3_step(respuesta_consulta);
 			x++;

@@ -30,7 +30,7 @@ Barra_Progreso::~Barra_Progreso()
 
 void Barra_Progreso::actualizar(unsigned int /*diferencia_tiempo*/)
 {
-	m_progreso = ((double)m_tiempo_actual / (double)m_tiempo_total) * this->ancho();
+	m_progreso = (static_cast<double>(m_tiempo_actual) / static_cast<double>(m_tiempo_total)) * this->ancho();
 	if(m_progreso > this->ancho())
 		m_progreso = this->ancho();
 	else if(m_progreso < 0)
@@ -48,7 +48,7 @@ void Barra_Progreso::dibujar()
 	m_rectangulo->color(Color(0.5f, 0.5f, 0.5f));
 	for(unsigned int i=0; i<m_lineas.size(); i++)
 	{
-		m_rectangulo->dibujar(((double)m_lineas[i] / (double)m_tiempo_total) * this->ancho(), this->y(), 1, this->alto());
+		m_rectangulo->dibujar((static_cast<double>(m_lineas[i]) / static_cast<double>(m_tiempo_total)) * this->ancho(), this->y(), 1, this->alto());
 	}
 
 	m_rectangulo->color(Color(0.15f, 0.15f, 0.15f));
@@ -73,7 +73,7 @@ void Barra_Progreso::evento_raton(Raton *raton)
 			if(m_x_anterior != raton->x())
 			{
 				m_x_anterior = raton->x();
-				m_tiempo_nuevo = ((double)raton->x() / (double)this->ancho()) * m_tiempo_total;
+				m_tiempo_nuevo = (static_cast<double>(raton->x()) / static_cast<double>(this->ancho())) * m_tiempo_total;
 			}
 			else
 				m_tiempo_nuevo = -1;

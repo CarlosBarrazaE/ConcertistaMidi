@@ -177,7 +177,7 @@ void Tabla::cambiar_seleccion(int cambio)
 		m_filas[m_fila_seleccionada]->seleccionar();
 	}
 
-	if(m_filas[m_fila_seleccionada]->y() < this->y()+(int)m_alto_fila)
+	if(m_filas[m_fila_seleccionada]->y() < this->y()+static_cast<int>(m_alto_fila))
 	{
 		//Desplaza la barra cuando se sale por arriba
 		int inicio_tabla = this->y()+m_alto_fila;

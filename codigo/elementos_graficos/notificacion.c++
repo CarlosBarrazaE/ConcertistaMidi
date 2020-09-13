@@ -96,11 +96,11 @@ void Notificacion::dibujar()
 			m_rectangulo->color(Color(0.145f, 0.707f, 1.0f, actual->opacidad));
 
 		m_textura_fondo->activar();
-		m_rectangulo->dibujar_estirable(this->x(), this->y() + (int)actual->posicion_y, this->ancho(), this->alto(), 15.0f, 12.0f);
+		m_rectangulo->dibujar_estirable(this->x(), this->y() + static_cast<int>(actual->posicion_y), this->ancho(), this->alto(), 15.0f, 12.0f);
 
 		if(actual->opacidad < 1)
 			actual->etiqueta->color(Color(1.0f, 1.0f, 1.0f, actual->opacidad));
-		actual->etiqueta->posicion(this->x(), this->y() + (int)actual->posicion_y);
+		actual->etiqueta->posicion(this->x(), this->y() + static_cast<int>(actual->posicion_y));
 		actual->etiqueta->dibujar();
 	}
 	m_rectangulo->extremos_fijos(false, false);
@@ -123,7 +123,7 @@ void Notificacion::Registrar(std::string texto, int tiempo, CodigoEstado estado)
 	if(tiempo < 3)
 		tiempo = 3;
 
-	Notificacion::notificaciones.push_back(new Mensaje(NULL, texto, (float)tiempo, estado));
+	Notificacion::notificaciones.push_back(new Mensaje(NULL, texto, static_cast<float>(tiempo), estado));
 
 	//Se actualiza la posicion del ultimo elemento agregado
 	if(Notificacion::notificaciones.size() > 1)

@@ -47,7 +47,7 @@ VentanaOrgano::VentanaOrgano(Configuracion *configuracion, Datos_Musica *musica,
 	m_titulo_musica = new Titulo(0, m_barra->alto()+40, Pantalla::Ancho, Pantalla::Alto - (m_organo->alto() + m_barra->alto() + 40), recursos);
 	m_titulo_musica->datos(musica);
 
-	m_texto_velocidad.texto(std::to_string((int)(m_velocidad_musica*100)) + "%");
+	m_texto_velocidad.texto(std::to_string(static_cast<int>(m_velocidad_musica*100)) + "%");
 	m_texto_velocidad.tipografia(recursos->tipografia(LetraTitulo));
 	m_texto_velocidad.color(Color(1.0f, 1.0f, 1.0f));
 	m_texto_velocidad.posicion(0, 0);
@@ -181,7 +181,7 @@ void VentanaOrgano::actualizar(unsigned int diferencia_tiempo)
 	if(m_cambio_velocidad)
 	{
 		m_cambio_velocidad = false;
-		m_texto_velocidad.texto(std::to_string((int)(m_velocidad_musica*100)) + "%");
+		m_texto_velocidad.texto(std::to_string(static_cast<int>(m_velocidad_musica*100)) + "%");
 	}
 
 	//Se actualizan los componentes
@@ -215,7 +215,7 @@ void VentanaOrgano::guardar_configuracion()
 	if(m_guardar_duracion_nota)
 		m_configuracion->escribir("duracion_nota", std::to_string(m_tablero->duracion_nota()));//modificar_duracion_nota
 	if(m_guardar_tipo_teclado)
-		m_configuracion->escribir("tipo_teclado", std::to_string((int)m_teclado_actual));
+		m_configuracion->escribir("tipo_teclado", std::to_string(static_cast<int>(m_teclado_actual)));
 }
 
 void VentanaOrgano::evento_raton(Raton *raton)

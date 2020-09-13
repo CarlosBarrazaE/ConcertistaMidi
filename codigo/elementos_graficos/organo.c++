@@ -134,7 +134,7 @@ void Organo::actualizar(unsigned int diferencia_tiempo)
 	}
 	else
 		m_numero_particulas = 0;
-	m_generador_particulas->actualizar(((double)diferencia_tiempo/1000000000.0)*3);
+	m_generador_particulas->actualizar((static_cast<double>(diferencia_tiempo)/1000000000.0)*3.0);
 }
 
 void Organo::dibujar()
