@@ -23,8 +23,6 @@ public:
 
 	void activar();
 
-	unsigned int o_indice();
-
 	void uniforme_bool(const std::string &nombre, bool valor);
 	void uniforme_int(const std::string &nombre, int valor);
 	void uniforme_float(const std::string &nombre, float valor);

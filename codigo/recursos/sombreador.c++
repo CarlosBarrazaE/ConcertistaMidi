@@ -64,11 +64,6 @@ void Sombreador::activar()
 	}
 }
 
-unsigned int Sombreador::o_indice()
-{
-	return m_indice_programa;
-}
-
 void Sombreador::uniforme_bool(const std::string &nombre, bool valor)
 {
 	this->activar();
