@@ -89,3 +89,11 @@ int Raton::dy()
 	m_desplazamiento_y = 0;
 	return desplazamiento;
 }
+
+bool Raton::esta_sobre(int x, int y, int ancho, int alto)
+{
+	if(this->x() >= x && this->x() < x + ancho &&
+		this->y() >= y && this->y() < y + alto)
+		return true;
+	return false;
+}

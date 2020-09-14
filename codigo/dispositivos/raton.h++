@@ -29,6 +29,8 @@ public:
 	int y();
 	int dx();
 	int dy();
+
+	bool esta_sobre(int x, int y, int ancho, int alto);
 };
 
 #endif

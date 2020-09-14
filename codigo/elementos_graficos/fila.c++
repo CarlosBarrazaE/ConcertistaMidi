@@ -41,8 +41,7 @@ void Fila::dibujar()
 
 void Fila::evento_raton(Raton *raton)
 {
-	if(raton->x() >= this->x() && raton->x() < this->x() + this->ancho() &&
-		raton->y() >= this->y() && raton->y() < this->y() + this->alto())
+	if(raton->esta_sobre(this->x(), this->y(), this->ancho(), this->alto()))
 	{
 		if(raton->activado(BotonIzquierdo) && m_sobre_boton)
 			m_boton_pre_activado = true;

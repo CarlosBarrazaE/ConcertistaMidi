@@ -137,8 +137,7 @@ void Barra_Desplazamiento::evento_raton(Raton *raton)
 {
 	//Solo si el raton esta dentro del espacio del componente se envian el evento
 	Raton *evento_raton;
-	if(raton->x() >= this->x() && raton->x() < this->x() + this->ancho() &&
-		raton->y() >= this->y() && raton->y() < this->y() + this->alto())
+	if(raton->esta_sobre(this->x(), this->y(), this->ancho(), this->alto()))
 	{
 		evento_raton = raton;
 		m_enviar_evento = true;
@@ -165,8 +164,7 @@ void Barra_Desplazamiento::evento_raton(Raton *raton)
 			//Desplazamiento con ruedita
 			m_desplazamiento_y += dy*20;
 		}
-		else if(evento_raton->x() >= this->x()+this->ancho()-10 && evento_raton->x() <= this->x()+this->ancho() &&
-		evento_raton->y() >= this->y()+10 && evento_raton->y() <= this->y() + this->alto()-20)
+		else if(raton->esta_sobre(this->x()+this->ancho()-10, this->y()+10, this->ancho(), this->alto()-20))
 		{
 			//Desplazamiento con clic en la barra
 			if(evento_raton->activado(BotonIzquierdo) && m_sobre_barra)
