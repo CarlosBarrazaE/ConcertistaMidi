@@ -1,6 +1,6 @@
 #include "configuracion_pista.h++"
 
-Configuracion_Pista::Configuracion_Pista(int x, int y, int ancho, int alto, Pista pista, Administrador_Recursos *recursos)
+Configuracion_Pista::Configuracion_Pista(float x, float y, float ancho, float alto, Pista pista, Administrador_Recursos *recursos)
 : Elemento(x, y, ancho, alto), m_texto_instrumento(recursos), m_texto_datos(recursos), m_texto_sonido(recursos), m_seleccion_modo(20, 85, 70, 55, recursos), m_seleccion_color(137, 85, 70, 55, recursos), m_datos_pista(pista)
 {
 	m_rectangulo = recursos->figura(F_Rectangulo);
@@ -82,7 +82,7 @@ Configuracion_Pista::Configuracion_Pista(int x, int y, int ancho, int alto, Pist
 	m_boton_sonido->color_boton(Color(1.0f, 1.0f, 1.0f));
 
 	//Se lee la configuracion del color
-	for(int i=0; i<=NUMERO_COLORES_PISTA; i++)
+	for(unsigned int i=0; i<=NUMERO_COLORES_PISTA; i++)
 	{
 		//Se busca el color de la pista
 		if(Pista::Colores_pista[i] == m_datos_pista.color())
@@ -131,11 +131,13 @@ void Configuracion_Pista::actualizar(unsigned int diferencia_tiempo)
 
 void Configuracion_Pista::dibujar()
 {
-	m_rectangulo->textura(true);
+	//Dibuja el fondo
 	m_textura_fondo->activar();
+	m_rectangulo->textura(true);
 	m_rectangulo->dibujar(this->x(), this->y(), this->ancho(), this->alto(), m_datos_pista.color());
 	//m_rectangulo->dibujar(this->x(), this->y()+128, this->ancho(), 8, Color(0.8f, 0.2f, 0.7f)); //Para alinear el texto
 
+	//Dibuja los componentes
 	m_vista_previa->dibujar();
 	m_boton_sonido->dibujar();
 
@@ -203,7 +205,7 @@ void Configuracion_Pista::evento_raton(Raton *raton)
 	}
 }
 
-void Configuracion_Pista::posicion(int x, int y)
+void Configuracion_Pista::posicion(float x, float y)
 {
 	this->_posicion(x, y);
 	//20, 85, 70, 55, recursos), m_seleccion_color(137, 85,

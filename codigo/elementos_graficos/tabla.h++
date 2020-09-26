@@ -14,7 +14,7 @@ struct Celda
 	//TODO posiblemente deberia agregar un campo para saber si es ocultable cuando la tabla es muy chica
 	Etiqueta *texto;
 	bool centrado;
-	unsigned int n_espacio;//Porcentaje reprecentado de 0 a 1 en relacion al ancho de la fila
+	unsigned int numero_espacio;
 };
 
 class Tabla : public Elemento
@@ -24,7 +24,7 @@ private:
 	std::vector<Celda> m_fila_titulo;//Fila titulo
 	std::vector<Fila*> m_filas;
 
-	unsigned int m_alto_fila;
+	float m_alto_fila;
 	unsigned int m_fila_seleccionada;
 
 	//Etiqueta m_textos;
@@ -37,16 +37,16 @@ private:
 	void actualizar_ancho_columnas();
 
 public:
-	Tabla(int x, int y, int ancho, int alto, unsigned int alto_fila, Administrador_Recursos *recursos);
+	Tabla(float x, float y, float ancho, float alto, float alto_fila, Administrador_Recursos *recursos);
 	~Tabla();
 
 	void actualizar(unsigned int diferencia_tiempo) override;
 	void dibujar() override;
 	void evento_raton(Raton *raton) override;
 
-	void dimension(int ancho, int alto) override;
+	void dimension(float ancho, float alto) override;
 
-	void agregar_columna(std::string texto, bool centrado, unsigned int n_espacio);
+	void agregar_columna(std::string texto, bool centrado, unsigned int numero_espacio);
 	void insertar_fila(std::vector<std::string> texto);
 	void vaciar();
 

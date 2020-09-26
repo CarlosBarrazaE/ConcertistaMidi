@@ -1,6 +1,6 @@
 #include "titulo.h++"
 
-Titulo::Titulo(int x, int y, int ancho, int alto, Administrador_Recursos *recursos) : Elemento(x, y, ancho, alto), m_titulo(recursos), m_autor(recursos)
+Titulo::Titulo(float x, float y, float ancho, float alto, Administrador_Recursos *recursos) : Elemento(x, y, ancho, alto), m_titulo(recursos), m_autor(recursos)
 {
 	m_rectangulo = recursos->figura(F_Rectangulo);
 	m_fondo = recursos->textura(T_TituloMusica);
@@ -25,11 +25,11 @@ Titulo::~Titulo()
 
 void Titulo::actualizar(unsigned int diferencia_tiempo)
 {
-	if(m_estado == 5)
+	if(m_estado == 5)//Invisible y no se actualiza mas
 		return;
 
-	float valocidad_alfa = diferencia_tiempo*3.0/1000000000.0;//0.05 a 60 fps
-	int velocidad_pixeles = diferencia_tiempo*18.0/10000000.0;//1800 = 60 fps * 30 px
+	float valocidad_alfa = diferencia_tiempo*3.0/1000000000.0f;//0.05 a 60 fps
+	float velocidad_pixeles = diferencia_tiempo*18.0/10000000.0f;//1800 = 60 fps * 30 px
 
 	if(m_estado == 0)//Aparecer
 	{
@@ -77,7 +77,7 @@ void Titulo::actualizar(unsigned int diferencia_tiempo)
 
 void Titulo::dibujar()
 {
-	if(m_estado == 5)
+	if(m_estado == 5)//Invisible
 		return;
 	m_fondo->activar();
 	m_rectangulo->textura(true);
@@ -91,7 +91,7 @@ void Titulo::evento_raton(Raton */*raton*/)
 {
 }
 
-void Titulo::dimension(int ancho, int alto)
+void Titulo::dimension(float ancho, float alto)
 {
 	this->_dimension(ancho, alto);
 

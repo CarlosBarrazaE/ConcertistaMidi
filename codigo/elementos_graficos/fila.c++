@@ -1,5 +1,5 @@
 #include "fila.h++"
-Fila::Fila(int x, int y, int ancho, int alto, Administrador_Recursos *recursos) : Elemento(x, y, ancho, alto), m_color_fondo(0.95f, 0.95f, 0.95f)
+Fila::Fila(float x, float y, float ancho, float alto, Administrador_Recursos *recursos) : Elemento(x, y, ancho, alto), m_color_fondo(0.95f, 0.95f, 0.95f)
 {
 	m_rectangulo = recursos->figura(F_Rectangulo);
 
@@ -30,12 +30,17 @@ void Fila::actualizar(unsigned int /*diferencia_tiempo*/)
 
 void Fila::dibujar()
 {
+	//Dibuja el color de fondo
 	m_rectangulo->textura(false);
 	m_rectangulo->dibujar(this->x(), this->y(), this->ancho(), this->alto(), m_color_actual);
+
+	//Dibuja cada una de las celdas
 	for(unsigned int x=0; x<m_celda.size(); x++)
 	{
 		m_celda.at(x)->dibujar();
 	}
+
+	//Dibula el borde de abajo
 	m_rectangulo->dibujar(this->x(), this->y()+this->alto()-1, this->ancho(), 1, Color(0.9f, 0.9f, 0.9f));
 }
 
@@ -62,7 +67,7 @@ void Fila::evento_raton(Raton *raton)
 	}
 }
 
-void Fila::posicion(int x, int y)
+void Fila::posicion(float x, float y)
 {
 	this->_posicion(x, y);
 	for(Etiqueta* e : m_celda)

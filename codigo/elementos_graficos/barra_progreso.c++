@@ -1,6 +1,6 @@
 #include "barra_progreso.h++"
 
-Barra_Progreso::Barra_Progreso(int x, int y, int ancho, int alto, microseconds_t tiempo_total, MidiEventMicrosecondList lineas, Administrador_Recursos *recursos)
+Barra_Progreso::Barra_Progreso(float x, float y, float ancho, float alto, microseconds_t tiempo_total, MidiEventMicrosecondList lineas, Administrador_Recursos *recursos)
 : Elemento(x, y, ancho, alto), m_texto_inicial(recursos), m_texto_final(recursos), m_color_fondo(0.8f, 0.8f, 0.8f), m_color_progreso(0.0f, 0.761f, 0.467f)
 {
 	m_tiempo_total = tiempo_total;
@@ -30,7 +30,7 @@ Barra_Progreso::~Barra_Progreso()
 
 void Barra_Progreso::actualizar(unsigned int /*diferencia_tiempo*/)
 {
-	m_progreso = (static_cast<double>(m_tiempo_actual) / static_cast<double>(m_tiempo_total)) * this->ancho();
+	m_progreso = (static_cast<float>(m_tiempo_actual) / static_cast<float>(m_tiempo_total)) * this->ancho();
 	if(m_progreso > this->ancho())
 		m_progreso = this->ancho();
 	else if(m_progreso < 0)
@@ -41,24 +41,29 @@ void Barra_Progreso::actualizar(unsigned int /*diferencia_tiempo*/)
 
 void Barra_Progreso::dibujar()
 {
+	//Dibuja el fondo (progreso/fondo)
 	m_rectangulo->textura(false);
 	m_rectangulo->dibujar(this->x(), this->y(), m_progreso, this->alto(), m_color_progreso);
 	m_rectangulo->dibujar(this->x()+m_progreso, this->y(), this->ancho() - m_progreso, this->alto(), m_color_fondo);
 
+	//Dibuja las lineas verticales
 	m_rectangulo->color(Color(0.5f, 0.5f, 0.5f));
 	for(unsigned int i=0; i<m_lineas.size(); i++)
 	{
-		m_rectangulo->dibujar((static_cast<double>(m_lineas[i]) / static_cast<double>(m_tiempo_total)) * this->ancho(), this->y(), 1, this->alto());
+		m_rectangulo->dibujar((static_cast<float>(m_lineas[i]) / static_cast<float>(m_tiempo_total)) * this->ancho(), this->y(), 1, this->alto());
 	}
 
+	//Dibuja los bordes de arriba y abajo
 	m_rectangulo->color(Color(0.15f, 0.15f, 0.15f));
 	m_rectangulo->dibujar(this->x(), this->y(), this->ancho(), 1);
 	m_rectangulo->dibujar(this->x(), this->y()+this->alto()-1, this->ancho(), 1);
 
+	//Dibuja el brillo
 	m_frente->activar();
 	m_rectangulo->textura(true);
 	m_rectangulo->dibujar(this->x(), this->y(), this->ancho(), this->alto(), Color(1.0f, 1.0f, 1.0f));
 
+	//Dibuja el tiempo inicial y el tiempo restante
 	m_texto_inicial.dibujar();
 	m_texto_final.dibujar();
 }
@@ -90,7 +95,7 @@ void Barra_Progreso::evento_raton(Raton *raton)
 	}
 }
 
-void Barra_Progreso::dimension(int ancho, int alto)
+void Barra_Progreso::dimension(float ancho, float alto)
 {
 	this->_dimension(ancho, alto);
 	m_texto_final.posicion(ancho - (4 + m_texto_final.largo_texto()), this->y() + this->alto() - 12);

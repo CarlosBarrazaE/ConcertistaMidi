@@ -27,6 +27,7 @@ public:
 
 	void envolver_horizontal(unsigned int valor);
 	void envolver_vertical(unsigned int valor);
+	void envolver(unsigned int s, unsigned int t);
 
 	void filtro_minimizar(unsigned int valor);
 	void filtro_maximizar(unsigned int valor);

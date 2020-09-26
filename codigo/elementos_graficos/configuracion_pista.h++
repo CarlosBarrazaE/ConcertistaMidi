@@ -33,14 +33,14 @@ private:
 	Pista m_datos_pista;
 
 public:
-	Configuracion_Pista(int x, int y, int ancho, int alto, Pista pista, Administrador_Recursos *recursos);
+	Configuracion_Pista(float x, float y, float ancho, float alto, Pista pista, Administrador_Recursos *recursos);
 	~Configuracion_Pista();
 
 	void actualizar(unsigned int diferencia_tiempo) override;
 	void dibujar() override;
 	void evento_raton(Raton *raton) override;
 
-	void posicion(int x, int y) override;
+	void posicion(float x, float y) override;
 
 	Pista pista();
 };

@@ -15,14 +15,14 @@ private:
 	Rectangulo *m_rectangulo;
 	Color m_color_fondo, m_color_seleccion, m_color_sobre, m_color_actual;
 public:
-	Fila(int x, int y, int ancho, int alto, Administrador_Recursos *recursos);
+	Fila(float x, float y, float ancho, float alto, Administrador_Recursos *recursos);
 	~Fila();
 
 	void actualizar(unsigned int diferencia_tiempo) override;
 	void dibujar() override;
 	void evento_raton(Raton *raton) override;
 
-	void posicion(int x, int y) override;
+	void posicion(float x, float y) override;
 
 	void agregar_celda(Etiqueta *celda);
 	std::vector<Etiqueta *> *celdas();

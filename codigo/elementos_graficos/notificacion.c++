@@ -75,6 +75,7 @@ void Notificacion::actualizar(unsigned int diferencia_tiempo)
 
 void Notificacion::dibujar()
 {
+	//Si no hay notificaciones se omite
 	if(Notificacion::notificaciones.size() == 0)
 		return;
 
@@ -86,6 +87,7 @@ void Notificacion::dibujar()
 		if(actual->etiqueta == NULL)
 			continue;
 
+		//Selecciona el color de fonde deacuero al tipo de mensaje
 		if(actual->estado == EstadoError)
 			m_rectangulo->color(Color(0.7f, 0.0f, 0.0f, actual->opacidad));
 		else if(actual->estado == EstadoAviso)
@@ -95,12 +97,16 @@ void Notificacion::dibujar()
 		else if(actual->estado == EstadoDepurar)
 			m_rectangulo->color(Color(0.145f, 0.707f, 1.0f, actual->opacidad));
 
+		//Dibuja el fondo
 		m_textura_fondo->activar();
-		m_rectangulo->dibujar_estirable(this->x(), this->y() + static_cast<int>(actual->posicion_y), this->ancho(), this->alto(), 15.0f, 12.0f);
+		m_rectangulo->dibujar_estirable(this->x(), this->y() + actual->posicion_y, this->ancho(), this->alto(), 15.0f, 12.0f);
 
+		//Animacion de opacidad
 		if(actual->opacidad < 1)
 			actual->etiqueta->color(Color(1.0f, 1.0f, 1.0f, actual->opacidad));
-		actual->etiqueta->posicion(this->x(), this->y() + static_cast<int>(actual->posicion_y));
+
+		//Dibuja el texto
+		actual->etiqueta->posicion(this->x(), this->y() + actual->posicion_y);
 		actual->etiqueta->dibujar();
 	}
 	m_rectangulo->extremos_fijos(false, false);

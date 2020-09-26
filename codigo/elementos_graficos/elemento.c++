@@ -1,6 +1,6 @@
 #include "elemento.h++"
 
-Elemento::Elemento(int x, int y, int ancho, int alto)
+Elemento::Elemento(float x, float y, float ancho, float alto)
 {
 	m_x = x;
 	m_y = y;
@@ -9,7 +9,7 @@ Elemento::Elemento(int x, int y, int ancho, int alto)
 	m_centrado = false;
 }
 
-Elemento::Elemento(int x, int y, int ancho, int alto, bool centrado)
+Elemento::Elemento(float x, float y, float ancho, float alto, bool centrado)
 {
 	if(centrado)
 		m_x = x - (m_ancho / 2);
@@ -26,7 +26,7 @@ Elemento::~Elemento()
 {
 }
 
-void Elemento::_posicion(int x, int y)
+void Elemento::_posicion(float x, float y)
 {
 	if(m_centrado)
 		m_x = x - (m_ancho / 2);
@@ -35,7 +35,7 @@ void Elemento::_posicion(int x, int y)
 	m_y = y;
 }
 
-void Elemento::_dimension(int ancho, int alto)
+void Elemento::_dimension(float ancho, float alto)
 {
 	m_ancho = ancho;
     if(m_centrado)
@@ -62,12 +62,12 @@ void Elemento::_centrado(bool centrado)
 	}
 }
 
-void Elemento::posicion(int x, int y)
+void Elemento::posicion(float x, float y)
 {
 	this->_posicion(x, y);
 }
 
-void Elemento::dimension(int ancho, int alto)
+void Elemento::dimension(float ancho, float alto)
 {
 	this->_dimension(ancho, alto);
 }
@@ -77,22 +77,22 @@ void Elemento::centrado(bool centrado)
 	this->_centrado(centrado);
 }
 
-int Elemento::x()
+float Elemento::x()
 {
 	return m_x;
 }
 
-int Elemento::y()
+float Elemento::y()
 {
 	return m_y;
 }
 
-int Elemento::ancho()
+float Elemento::ancho()
 {
 	return m_ancho;
 }
 
-int Elemento::alto()
+float Elemento::alto()
 {
 	return m_alto;
 }

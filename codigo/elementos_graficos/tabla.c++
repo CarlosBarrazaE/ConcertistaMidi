@@ -1,6 +1,6 @@
 #include "tabla.h++"
 
-Tabla::Tabla(int x, int y, int ancho, int alto, unsigned int alto_fila, Administrador_Recursos *recursos) : Elemento(x, y, ancho, alto), m_color_fondo(0.9f, 0.9f, 0.9f)
+Tabla::Tabla(float x, float y, float ancho, float alto, float alto_fila, Administrador_Recursos *recursos) : Elemento(x, y, ancho, alto), m_color_fondo(0.9f, 0.9f, 0.9f)
 {
 	m_recursos = recursos;
 	m_rectangulo = recursos->figura(F_Rectangulo);
@@ -28,7 +28,7 @@ void Tabla::actualizar_ancho_columnas()
 	for(Celda c : m_fila_titulo)
 	{
 		c.texto->posicion(posicion_actual, this->y());
-		unsigned int ancho_actual = (c.n_espacio * this->ancho()) / m_espacio_total_columnas;
+		unsigned int ancho_actual = (c.numero_espacio * this->ancho()) / m_espacio_total_columnas;
 		c.texto->dimension(ancho_actual, m_alto_fila);
 		posicion_actual += ancho_actual;
 	}
@@ -53,15 +53,18 @@ void Tabla::actualizar(unsigned int diferencia_tiempo)
 
 void Tabla::dibujar()
 {
+	//Dibuja el color de fondo
 	m_rectangulo->textura(false);
 	m_rectangulo->dibujar(this->x(), this->y(), this->ancho(), m_alto_fila, m_color_fondo);
 
+	//Dibuja las filas
 	for(unsigned int x=0; x<m_fila_titulo.size(); x++)
 	{
 		//m_rectangulo->dibujar(m_fila_titulo[x].texto->x(),m_fila_titulo[x].texto->y(), 10, 40, Color(0.8f, 0.9f, 0.8f));
 		m_fila_titulo[x].texto->dibujar();
 	}
 
+	//Dibuja los bordes laterales
 	m_barra_desplazamiento->dibujar();
 	m_rectangulo->dibujar(this->x(), this->y(), 1, this->alto(), m_color_fondo);
 	m_rectangulo->dibujar(this->x()+this->ancho()-1, this->y(), 1, this->alto(), m_color_fondo);
@@ -80,7 +83,7 @@ void Tabla::evento_raton(Raton *raton)
 	}
 }
 
-void Tabla::dimension(int ancho, int alto)
+void Tabla::dimension(float ancho, float alto)
 {
 	this->_dimension(ancho, alto);
 	this->actualizar_ancho_columnas();
@@ -91,17 +94,20 @@ void Tabla::dimension(int ancho, int alto)
 		m->dimension(this->ancho(), m_alto_fila);
 }
 
-void Tabla::agregar_columna(std::string texto, bool centrado, unsigned int n_espacio)
+void Tabla::agregar_columna(std::string texto, bool centrado, unsigned int numero_espacio)
 {
-	if(n_espacio == 0)
-		n_espacio = 1;
-	m_espacio_total_columnas += n_espacio;
+	//numero_espacio representa el espacio que ocupa la columna actual en relacion con el espacio total de todas las columnas
+	if(numero_espacio == 0)
+		numero_espacio = 1;
+	m_espacio_total_columnas += numero_espacio;
 
 	Etiqueta *titulo_celda = new Etiqueta(this->x(), this->y(), centrado, texto, LetraChica, m_recursos);
 	titulo_celda->centrado_vertical(true);
+
+	//Si no esta centrado se le agrega un margen
 	if(!centrado)
 		titulo_celda->margen(10);
-	Celda celda_actual = {titulo_celda, centrado, n_espacio};
+	Celda celda_actual = {titulo_celda, centrado, numero_espacio};
 
 	m_fila_titulo.push_back(celda_actual);
 
@@ -116,7 +122,7 @@ void Tabla::insertar_fila(std::vector<std::string> texto)
 		return;
 	}
 
-	int posicion_fila_y = this->y();
+	float posicion_fila_y = this->y();
 	if(m_filas.size() > 0)
 		posicion_fila_y = m_filas[m_filas.size()-1]->y()+m_alto_fila;//Obtiene la posicion de la fila anterior
 
@@ -124,6 +130,7 @@ void Tabla::insertar_fila(std::vector<std::string> texto)
 	Etiqueta *nueva_etiqueta;
 	for(unsigned int x=0; x<texto.size(); x++)
 	{
+		//Se crean las celdas de la fila
 		nueva_etiqueta = new Etiqueta(m_fila_titulo[x].texto->x(), posicion_fila_y, m_fila_titulo[x].centrado, texto[x], LetraChica, m_recursos);
 		nueva_etiqueta->centrado_vertical(true);
 		if(!m_fila_titulo[x].centrado)
@@ -177,18 +184,18 @@ void Tabla::cambiar_seleccion(int cambio)
 		m_filas[m_fila_seleccionada]->seleccionar();
 	}
 
-	if(m_filas[m_fila_seleccionada]->y() < this->y()+static_cast<int>(m_alto_fila))
+	if(m_filas[m_fila_seleccionada]->y() < this->y()+m_alto_fila)
 	{
 		//Desplaza la barra cuando se sale por arriba
-		int inicio_tabla = this->y()+m_alto_fila;
-		int inicio_fila = m_filas[m_fila_seleccionada]->y();
+		float inicio_tabla = this->y()+m_alto_fila;
+		float inicio_fila = m_filas[m_fila_seleccionada]->y();
 		m_barra_desplazamiento->desplazar_y(inicio_tabla - inicio_fila);
 	}
 	else if(m_filas[m_fila_seleccionada]->y() + m_filas[m_fila_seleccionada]->alto() > this->y()+this->alto())
 	{
 		//Desplaza la barra cuando se sale por abajo
-		int final_tabla = this->y()+this->alto();
-		int final_fila = m_filas[m_fila_seleccionada]->y() + m_filas[m_fila_seleccionada]->alto();
+		float final_tabla = this->y()+this->alto();
+		float final_fila = m_filas[m_fila_seleccionada]->y() + m_filas[m_fila_seleccionada]->alto();
 		m_barra_desplazamiento->desplazar_y(final_tabla - final_fila);
 	}
 

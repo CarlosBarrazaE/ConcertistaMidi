@@ -1,6 +1,6 @@
 #include "lista_opciones.h++"
 
-Lista_Opciones::Lista_Opciones(int x, int y, int ancho, int alto, Administrador_Recursos *recursos) : Elemento(x, y, ancho, alto), m_texto_seleccion(recursos)
+Lista_Opciones::Lista_Opciones(float x, float y, float ancho, float alto, Administrador_Recursos *recursos) : Elemento(x, y, ancho, alto), m_texto_seleccion(recursos)
 {
 	m_rectangulo = recursos->figura(F_Rectangulo);
 	m_opcion_actual = 0;
@@ -31,10 +31,12 @@ void Lista_Opciones::dibujar()
 	//m_rectangulo->dibujar(this->x(), this->y(), m_ancho_icono, m_alto_icono, Color(0.0f, 1.0f, 1.0f, 0.5f));
 	if(m_usar_iconos)
 	{
+		//Dibuja el icono si existe
 		m_rectangulo->textura(true);
 		m_iconos[m_opcion_actual]->activar();
 		m_rectangulo->dibujar(this->x()+m_centrado_icono, this->y(), m_ancho_icono, m_alto_icono, Color(1.0f, 1.0f, 1.0f));
 	}
+	//Dibuja el texto
 	m_texto_seleccion.dibujar();
 }
 
@@ -101,7 +103,7 @@ void Lista_Opciones::evento_raton(Raton *raton)
 	}
 }
 
-void Lista_Opciones::posicion(int x, int y)
+void Lista_Opciones::posicion(float x, float y)
 {
 	this->_posicion(x, y);
 	if(m_usar_iconos)
@@ -110,7 +112,7 @@ void Lista_Opciones::posicion(int x, int y)
 		m_texto_seleccion.posicion(x, y);
 }
 
-void Lista_Opciones::dimension_icono(int ancho, int alto)
+void Lista_Opciones::dimension_icono(float ancho, float alto)
 {
 	m_ancho_icono = ancho;
 	m_alto_icono = alto;
@@ -145,7 +147,7 @@ void Lista_Opciones::opcion_predeterminada(unsigned int opcion)
 	}
 }
 
-int Lista_Opciones::opcion_seleccionada()
+unsigned int Lista_Opciones::opcion_seleccionada()
 {
 	return m_opcion_actual;
 }

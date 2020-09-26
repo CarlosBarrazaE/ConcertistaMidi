@@ -24,16 +24,15 @@ private:
 
 	Teclado_Configuracion *m_teclado;
 	microseconds_t m_tiempo_actual_midi;
-	int m_ancho_blanca, m_ancho_negra;
-	int m_ajuste_x;
+	float m_ancho_blanca, m_ancho_negra;
 	int m_duracion_nota;
 	NotasPistas m_notas;
 	MidiEventMicrosecondList m_lineas;
 	std::array<Color, 52> m_teclas_activas_blancas;
 	std::array<Color, 36> m_teclas_activas_negras;
 
-	std::array<double, 52> m_tiempo_espera_blancas;
-	std::array<double, 36> m_tiempo_espera_negras;
+	std::array<float, 52> m_tiempo_espera_blancas;
+	std::array<float, 36> m_tiempo_espera_negras;
 
 	std::vector<unsigned int> m_ultima_nota;//Ultima nota por cada pista
 
@@ -45,14 +44,14 @@ private:
 	void dibujar_notas(int pista);
 
 public:
-	Tablero_Notas(int x, int y, int alto, int ancho, Teclado_Configuracion *teclado, Administrador_Recursos *recursos);
+	Tablero_Notas(float x, float y, float alto, float ancho, Teclado_Configuracion *teclado, Administrador_Recursos *recursos);
 	~Tablero_Notas();
 
 	void actualizar(unsigned int diferencia_tiempo) override;
 	void dibujar() override;
 	void evento_raton(Raton *raton) override;
 
-	void dimension(int ancho, int alto) override;
+	void dimension(float ancho, float alto) override;
 
 	std::array<Color, 52> *blancas_presionadas();
 	std::array<Color, 36> *negras_presionadas();

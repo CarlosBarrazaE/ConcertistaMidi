@@ -1,6 +1,6 @@
 #include "boton.h++"
 
-Boton::Boton(int x, int y, int ancho, int alto, std::string texto, Administrador_Recursos *recursos) : Elemento(x, y, ancho, alto), m_texto(recursos)
+Boton::Boton(float x, float y, float ancho, float alto, std::string texto, Administrador_Recursos *recursos) : Elemento(x, y, ancho, alto), m_texto(recursos)
 {
 	m_rectangulo = recursos->figura(F_Rectangulo);
 	m_textura_boton = recursos->textura(T_Boton);
@@ -14,7 +14,7 @@ Boton::Boton(int x, int y, int ancho, int alto, std::string texto, Administrador
 	m_texto.centrado(true);
 }
 
-Boton::Boton(int x, int y, int ancho, int alto, std::string texto, ModeloLetra modelo_letra, Administrador_Recursos *recursos) : Elemento(x, y, ancho, alto), m_texto(recursos)
+Boton::Boton(float x, float y, float ancho, float alto, std::string texto, ModeloLetra modelo_letra, Administrador_Recursos *recursos) : Elemento(x, y, ancho, alto), m_texto(recursos)
 {
 	m_rectangulo = recursos->figura(F_Rectangulo);
 	m_textura_boton = recursos->textura(T_Boton);
@@ -50,10 +50,12 @@ void Boton::actualizar(unsigned int /*diferencia_tiempo*/)
 
 void Boton::dibujar()
 {
+	//Dibuja el fondo
 	m_textura_boton->activar();
 	m_rectangulo->textura(true);
 	m_rectangulo->dibujar(this->x(), this->y(), this->ancho(), this->alto(), m_color_boton_actual);
 
+	//Dibuja el texto
 	m_texto.dibujar();
 }
 
@@ -83,7 +85,7 @@ void Boton::evento_raton(Raton *raton)
 	}
 }
 
-void Boton::posicion(int x, int y)
+void Boton::posicion(float x, float y)
 {
 	this->_posicion(x, y);
 	m_texto.posicion(this->x(), this->y());

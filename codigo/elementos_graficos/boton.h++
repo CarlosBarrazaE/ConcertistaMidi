@@ -23,16 +23,16 @@ private:
 	void inicializar();
 
 public:
-	Boton(int x, int y, int ancho, int alto, std::string texto, Administrador_Recursos *recursos);
-	Boton(int x, int y, int ancho, int alto, std::string texto, ModeloLetra modelo_letra, Administrador_Recursos *recursos);
-	//Boton(int x, int y, int ancho, int alto, std::string texto, Textura2D *textura, Color color, bool centrado, Administrador_Recursos *recursos);
+	Boton(float x, float y, float ancho, float alto, std::string texto, Administrador_Recursos *recursos);
+	Boton(float x, float y, float ancho, float alto, std::string texto, ModeloLetra modelo_letra, Administrador_Recursos *recursos);
+	//Boton(float x, float y, float ancho, float alto, std::string texto, Textura2D *textura, Color color, bool centrado, Administrador_Recursos *recursos);
 	~Boton();
 
 	void actualizar(unsigned int diferencia_tiempo) override;
 	void dibujar() override;
 	void evento_raton(Raton *raton) override;
 
-	void posicion(int x, int y) override;
+	void posicion(float x, float y) override;
 	void centrado(bool centrado) override;
 
 	void textura(Textura2D *textura);

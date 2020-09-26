@@ -1,7 +1,7 @@
 #include "barra_desplazamiento.h++"
 #include "../registro.h++"
 
-Barra_Desplazamiento::Barra_Desplazamiento(int x, int y, int ancho, int alto, int fila, int margen_fila, Administrador_Recursos *recursos) : Elemento(x, y, ancho, alto)
+Barra_Desplazamiento::Barra_Desplazamiento(float x, float y, float ancho, float alto, float fila, float margen_fila, Administrador_Recursos *recursos) : Elemento(x, y, ancho, alto)
 {
 	m_columna = 0;
 	m_margen_columna = 0;
@@ -11,7 +11,7 @@ Barra_Desplazamiento::Barra_Desplazamiento(int x, int y, int ancho, int alto, in
 	this->inicializar(recursos);
 }
 
-Barra_Desplazamiento::Barra_Desplazamiento(int x, int y, int ancho, int alto, int columna, int fila, int margen_columna, int margen_fila, Administrador_Recursos *recursos)
+Barra_Desplazamiento::Barra_Desplazamiento(float x, float y, float ancho, float alto, float columna, float fila, float margen_columna, float margen_fila, Administrador_Recursos *recursos)
 : Elemento(x, y, ancho, alto)
 {
 	m_columna = columna;
@@ -51,16 +51,16 @@ void Barra_Desplazamiento::inicializar(Administrador_Recursos *recursos)
 void Barra_Desplazamiento::actualizar_dimension()
 {
 	int numero_columnas = 1;
-	int x_inicio = this->x();
+	float x_inicio = this->x();
 	//Si m_columna es mayor a cero, puede existir mas de una columna y es centrado
 	if(m_columna > 0)
 	{
 		numero_columnas = this->ancho() / (m_columna + m_margen_columna);
-		int ancho_actual = (numero_columnas * m_columna) + ((numero_columnas - 1) * m_margen_columna);
+		float ancho_actual = (numero_columnas * m_columna) + ((numero_columnas - 1) * m_margen_columna);
 		x_inicio = (this->ancho() - ancho_actual) / 2 + this->x();
 	}
-	int x_actual = x_inicio;
-	int y_actual = this->y();
+	float x_actual = x_inicio;
+	float y_actual = this->y();
 	int contador_columnas = 1;
 	for(unsigned int i=0; i<m_elementos.size(); i++)
 	{
@@ -84,7 +84,7 @@ void Barra_Desplazamiento::actualizar_dimension()
 	m_desplazamiento_y = 0;
 	m_calcular_posicion = false;
 	if(this->alto() < m_alto_actual)
-		m_proporcion = static_cast<double>(this->alto()-20) / static_cast<double>(m_alto_actual);
+		m_proporcion = (this->alto()-20) / m_alto_actual;
 }
 
 void Barra_Desplazamiento::actualizar(unsigned int diferencia_tiempo)
@@ -98,9 +98,9 @@ void Barra_Desplazamiento::actualizar(unsigned int diferencia_tiempo)
 
 	//0.05 de opacidad por fotograma
 	if(m_enviar_evento && m_animacion < 1)
-		m_animacion += (diferencia_tiempo/1000000000.0) * 3;
+		m_animacion += (diferencia_tiempo/1000000000.0f) * 3;
 	else if(!m_enviar_evento && m_animacion > 0)
-		m_animacion -= (diferencia_tiempo/1000000000.0) * 3;
+		m_animacion -= (diferencia_tiempo/1000000000.0f) * 3;
 }
 
 void Barra_Desplazamiento::dibujar()
@@ -154,8 +154,8 @@ void Barra_Desplazamiento::evento_raton(Raton *raton)
 		m_enviar_evento = false;
 
 	int dy = evento_raton->dy();
-	int desplazamiento_nuevo_y = 0;
-	int desplazamiento_anterior_y = 0;
+	float desplazamiento_nuevo_y = 0;
+	float desplazamiento_anterior_y = 0;
 	if(this->alto() < m_alto_actual)
 	{
 		desplazamiento_anterior_y = m_desplazamiento_y;
@@ -200,7 +200,7 @@ void Barra_Desplazamiento::evento_raton(Raton *raton)
 	}
 }
 
-void Barra_Desplazamiento::dimension(int ancho, int alto)
+void Barra_Desplazamiento::dimension(float ancho, float alto)
 {
 	this->_dimension(ancho, alto);
 	m_calcular_posicion = true;
@@ -208,7 +208,7 @@ void Barra_Desplazamiento::dimension(int ancho, int alto)
 
 void Barra_Desplazamiento::desplazar_y(int dy)
 {
-	int nuevo_desplazamiento = m_desplazamiento_y + dy;
+	float nuevo_desplazamiento = m_desplazamiento_y + dy;
 	if(nuevo_desplazamiento > 0)
 		nuevo_desplazamiento = 0;
 	else if(nuevo_desplazamiento < this->alto() - m_alto_actual)

@@ -14,7 +14,7 @@ private:
 	microseconds_t m_tiempo_actual;
 	microseconds_t m_tiempo_nuevo;
 	int m_x_anterior;
-	int m_progreso;
+	float m_progreso;
 	bool m_sobre_barra;
 
 	Textura2D *m_frente;
@@ -24,14 +24,14 @@ private:
 	Color m_color_fondo;
 	Color m_color_progreso;
 public:
-	Barra_Progreso(int x, int y, int ancho, int alto, microseconds_t tiempo_total, MidiEventMicrosecondList lineas, Administrador_Recursos *recursos);
+	Barra_Progreso(float x, float y, float ancho, float alto, microseconds_t tiempo_total, MidiEventMicrosecondList lineas, Administrador_Recursos *recursos);
 	~Barra_Progreso();
 
 	void actualizar(unsigned int diferencia_tiempo) override;
 	void dibujar() override;
 	void evento_raton(Raton *raton) override;
 
-	void dimension(int ancho, int alto) override;
+	void dimension(float ancho, float alto) override;
 
 	void tiempo(microseconds_t tiempo_actual);
 	microseconds_t tiempo_seleccionado();

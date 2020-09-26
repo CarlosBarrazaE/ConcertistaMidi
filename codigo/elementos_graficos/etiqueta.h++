@@ -18,9 +18,9 @@ private:
 	std::string m_texto_actual;
 	bool m_centrado_horizontal = false;
 	bool m_centrado_vertical = false;
-	int m_ancho_texto = 0;
-	int m_alto_texto = 0;
-	int m_margen = 0;
+	float m_ancho_texto = 0;
+	float m_alto_texto = 0;
+	float m_margen = 0;
 
 	unsigned int m_indice_objeto = 0;
 
@@ -29,9 +29,9 @@ private:
 
 public:
 	Etiqueta(Administrador_Recursos *recursos);
-	Etiqueta(int x, int y, bool centrado, std::string texto, ModeloLetra tipografia, Administrador_Recursos *recursos);
-	Etiqueta(int x, int y, bool centrado, std::string texto, Tipografia *tipografia, Administrador_Recursos *recursos);
-	Etiqueta(int x, int y, int ancho, int alto, bool centrado, std::string texto, ModeloLetra tipografia, Administrador_Recursos *recursos);
+	Etiqueta(float x, float y, bool centrado, std::string texto, ModeloLetra tipografia, Administrador_Recursos *recursos);
+	Etiqueta(float x, float y, bool centrado, std::string texto, Tipografia *tipografia, Administrador_Recursos *recursos);
+	Etiqueta(float x, float y, float ancho, float alto, bool centrado, std::string texto, ModeloLetra tipografia, Administrador_Recursos *recursos);
 	~Etiqueta();
 
 	void actualizar(unsigned int diferencia_tiempo) override;
@@ -42,13 +42,13 @@ public:
 	void centrado_horizontal(bool centrado_h);
 	void centrado_vertical(bool centrado_v);
 
-	void margen(int margen);
+	void margen(float margen);
 
 	void texto(std::string texto);
 	void color(Color color);
 	void tipografia(Tipografia *tipografia);
-	int largo_texto();
-	int alto_texto();
+	float largo_texto();
+	float alto_texto();
 	std::string texto();
 };
 

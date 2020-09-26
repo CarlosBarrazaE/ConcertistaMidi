@@ -1,5 +1,4 @@
 #include "etiqueta.h++"
-//#include "../registro.h++"
 
 Color Etiqueta::Ultimo_color;
 
@@ -7,7 +6,7 @@ Etiqueta::Etiqueta(Administrador_Recursos *recursos) : Elemento(0, 0, 0, 0), Fig
 {
 }
 
-Etiqueta::Etiqueta(int x, int y, bool centrado, std::string texto, ModeloLetra tipografia, Administrador_Recursos *recursos) : Elemento(x, y, 0, 0), Figura(recursos->sombreador(S_Texto))
+Etiqueta::Etiqueta(float x, float y, bool centrado, std::string texto, ModeloLetra tipografia, Administrador_Recursos *recursos) : Elemento(x, y, 0, 0), Figura(recursos->sombreador(S_Texto))
 {
 	m_centrado_horizontal = centrado;
 	m_texto_actual = texto;
@@ -16,7 +15,7 @@ Etiqueta::Etiqueta(int x, int y, bool centrado, std::string texto, ModeloLetra t
 	this->actualizar_texto();
 }
 
-Etiqueta::Etiqueta(int x, int y, bool centrado, std::string texto, Tipografia *tipografia, Administrador_Recursos *recursos) : Elemento(x, y, 0, 0), Figura(recursos->sombreador(S_Texto))
+Etiqueta::Etiqueta(float x, float y, bool centrado, std::string texto, Tipografia *tipografia, Administrador_Recursos *recursos) : Elemento(x, y, 0, 0), Figura(recursos->sombreador(S_Texto))
 {
 	m_centrado_horizontal = centrado;
 	m_texto_actual = texto;
@@ -25,7 +24,7 @@ Etiqueta::Etiqueta(int x, int y, bool centrado, std::string texto, Tipografia *t
 	this->actualizar_texto();
 }
 
-Etiqueta::Etiqueta(int x, int y, int ancho, int alto, bool centrado, std::string texto, ModeloLetra tipografia, Administrador_Recursos *recursos) : Elemento(x, y, ancho, alto), Figura(recursos->sombreador(S_Texto))
+Etiqueta::Etiqueta(float x, float y, float ancho, float alto, bool centrado, std::string texto, ModeloLetra tipografia, Administrador_Recursos *recursos) : Elemento(x, y, ancho, alto), Figura(recursos->sombreador(S_Texto))
 {
 	m_centrado_horizontal = centrado;
 	m_texto_actual = texto;
@@ -82,12 +81,12 @@ void Etiqueta::dibujar()
 	int nueva_x = 0;
 	int nueva_y = 0;
 	if(m_centrado_horizontal)
-		nueva_x = this->x()+this->ancho()/2.0 - m_ancho_texto / 2.0;
+		nueva_x = this->x()+this->ancho()/2.0f - m_ancho_texto / 2.0f;
 	else
 		nueva_x = this->x()+m_margen;
 
 	if(m_centrado_vertical)
-		nueva_y = this->y()+m_tipografia->alto_texto()+this->alto()/2.0-m_tipografia->alto_texto()/2.0;
+		nueva_y = this->y()+m_tipografia->alto_texto()+this->alto()/2.0f-m_tipografia->alto_texto()/2.0f;
 	else
 		nueva_y = this->y()+m_tipografia->alto_texto()+m_margen;
 
@@ -129,7 +128,7 @@ void Etiqueta::centrado_vertical(bool centrado_v)
 	m_centrado_vertical = centrado_v;
 }
 
-void Etiqueta::margen(int margen)
+void Etiqueta::margen(float margen)
 {
 	m_margen = margen;
 }
@@ -157,12 +156,12 @@ void Etiqueta::tipografia(Tipografia *tipografia)
 	this->actualizar_texto();
 }
 
-int Etiqueta::largo_texto()
+float Etiqueta::largo_texto()
 {
 	return m_ancho_texto;
 }
 
-int Etiqueta::alto_texto()
+float Etiqueta::alto_texto()
 {
 	return m_alto_texto;
 }

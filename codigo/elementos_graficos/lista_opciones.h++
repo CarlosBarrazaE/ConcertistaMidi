@@ -24,25 +24,25 @@ private:
 	bool m_boton_derecho;
 	bool m_cambio_opcion_seleccionada;
 
-	int m_centrado_icono;
-	int m_ancho_icono, m_alto_icono;
+	float m_centrado_icono;
+	float m_ancho_icono, m_alto_icono;
 	unsigned int m_opcion_actual;
 public:
-	Lista_Opciones(int x, int y, int ancho, int alto, Administrador_Recursos *recursos);
+	Lista_Opciones(float x, float y, float ancho, float alto, Administrador_Recursos *recursos);
 	~Lista_Opciones();
 
 	void actualizar(unsigned int diferencia_tiempo) override;
 	void dibujar() override;
 	void evento_raton(Raton *raton) override;
 
-	void posicion(int x, int y) override;
+	void posicion(float x, float y) override;
 
-	void dimension_icono(int ancho, int alto);
+	void dimension_icono(float ancho, float alto);
 	void opciones_textos(std::vector<std::string> opciones);
 	void opciones_iconos(std::vector<Textura2D*> iconos);
 	void tipografia(Tipografia *tipografia);
 	void opcion_predeterminada(unsigned int opcion);
-	int opcion_seleccionada();
+	unsigned int opcion_seleccionada();
 	bool cambio_opcion_seleccionada();
 };
 
