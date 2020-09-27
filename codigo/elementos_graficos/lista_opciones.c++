@@ -75,6 +75,10 @@ void Lista_Opciones::evento_raton(Raton *raton)
 		m_boton_derecho = false;
 	}
 
+	//Si no hay opciones se omite
+	if(m_opciones.size() == 0)
+		return;
+
 	if(m_boton_izquierdo)
 	{
 		m_opcion_actual++;
@@ -138,7 +142,7 @@ void Lista_Opciones::tipografia(Tipografia *tipografia)
 	m_texto_seleccion.tipografia(tipografia);
 }
 
-void Lista_Opciones::opcion_predeterminada(unsigned int opcion)
+void Lista_Opciones::opcion_predeterminada(unsigned long int opcion)
 {
 	if(opcion < m_opciones.size())
 	{
@@ -147,7 +151,7 @@ void Lista_Opciones::opcion_predeterminada(unsigned int opcion)
 	}
 }
 
-unsigned int Lista_Opciones::opcion_seleccionada()
+unsigned long int Lista_Opciones::opcion_seleccionada()
 {
 	return m_opcion_actual;
 }

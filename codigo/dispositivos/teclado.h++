@@ -7,7 +7,7 @@
 class Teclado
 {
 	public:
-		static int Tecla_a_nota(int tecla);
+		static unsigned char Tecla_a_nota(int tecla);
 };
 
 #endif

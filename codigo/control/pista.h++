@@ -21,11 +21,11 @@ private:
 	bool m_visible;
 	bool m_sonido;
 	std::string m_instrumento;
-	unsigned int m_numero_notas;
+	unsigned long int m_numero_notas;
 	unsigned char m_canal;
 public:
 	static Color Colores_pista[NUMERO_COLORES_PISTA+1];
-	Pista(std::string instrumento, unsigned int numero_notas, unsigned char canal, Color color, Modo modo, bool visible, bool sonido);
+	Pista(std::string instrumento, unsigned long int numero_notas, unsigned char canal, Color color, Modo modo, bool visible, bool sonido);
 	~Pista();
 
 	void color(Color color);
@@ -39,7 +39,7 @@ public:
 	bool visible();
 	bool sonido();
 	std::string instrumento();
-	unsigned int numero_notas();
+	unsigned long int numero_notas();
 	unsigned char canal();
 };
 

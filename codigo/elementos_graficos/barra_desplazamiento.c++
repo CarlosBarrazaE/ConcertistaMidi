@@ -55,8 +55,8 @@ void Barra_Desplazamiento::actualizar_dimension()
 	//Si m_columna es mayor a cero, puede existir mas de una columna y es centrado
 	if(m_columna > 0)
 	{
-		numero_columnas = this->ancho() / (m_columna + m_margen_columna);
-		float ancho_actual = (numero_columnas * m_columna) + ((numero_columnas - 1) * m_margen_columna);
+		numero_columnas = static_cast<int>(this->ancho() / (m_columna + m_margen_columna));
+		float ancho_actual = (static_cast<float>(numero_columnas) * m_columna) + (static_cast<float>(numero_columnas - 1) * m_margen_columna);
 		x_inicio = (this->ancho() - ancho_actual) / 2 + this->x();
 	}
 	float x_actual = x_inicio;
@@ -98,15 +98,15 @@ void Barra_Desplazamiento::actualizar(unsigned int diferencia_tiempo)
 
 	//0.05 de opacidad por fotograma
 	if(m_enviar_evento && m_animacion < 1)
-		m_animacion += (diferencia_tiempo/1000000000.0f) * 3;
+		m_animacion += (static_cast<float>(diferencia_tiempo)/1000000000.0f) * 3;
 	else if(!m_enviar_evento && m_animacion > 0)
-		m_animacion -= (diferencia_tiempo/1000000000.0f) * 3;
+		m_animacion -= (static_cast<float>(diferencia_tiempo)/1000000000.0f) * 3;
 }
 
 void Barra_Desplazamiento::dibujar()
 {
 
-	glScissor(this->x(), Pantalla::Alto-this->y()-this->alto(), this->ancho(), this->alto());
+	glScissor(static_cast<int>(this->x()), static_cast<int>(Pantalla::Alto-this->y()-this->alto()), static_cast<int>(this->ancho()), static_cast<int>(this->alto()));
 	glEnable(GL_SCISSOR_TEST);
 	Elemento *e;
 	for(unsigned int i=0; i<m_elementos.size(); i++)
@@ -162,7 +162,7 @@ void Barra_Desplazamiento::evento_raton(Raton *raton)
 		if(dy != 0)
 		{
 			//Desplazamiento con ruedita
-			m_desplazamiento_y += dy*20;
+			m_desplazamiento_y += static_cast<float>(dy*20);
 		}
 		else if(raton->esta_sobre(this->x()+this->ancho()-10, this->y()+10, this->ancho(), this->alto()-20))
 		{
@@ -171,13 +171,13 @@ void Barra_Desplazamiento::evento_raton(Raton *raton)
 			{
 				m_boton_activado = true;
 				//El inicio de la barra esta en this->y() + 20, el centro de la barra desplazable esta en (this->alto() * m_proporcion) / 2)
-				m_desplazamiento_y = -(evento_raton->y() - (this->y() + 20 + (this->alto() * m_proporcion) / 2)) / m_proporcion;
+				m_desplazamiento_y = -(static_cast<float>(evento_raton->y()) - (this->y() + 20 + (this->alto() * m_proporcion) / 2)) / m_proporcion;
 			}
 			else if(!evento_raton->activado(BotonIzquierdo))
 				m_sobre_barra = true;
 		}
 		else if(m_boton_activado)//Desplazamiento arrastrando la barra
-			m_desplazamiento_y = -(evento_raton->y() - (this->y() + 20 + (this->alto() * m_proporcion) / 2)) / m_proporcion;
+			m_desplazamiento_y = -(static_cast<float>(evento_raton->y()) - (this->y() + 20 + (this->alto() * m_proporcion) / 2)) / m_proporcion;
 		else
 			m_sobre_barra = false;
 
@@ -208,7 +208,7 @@ void Barra_Desplazamiento::dimension(float ancho, float alto)
 
 void Barra_Desplazamiento::desplazar_y(int dy)
 {
-	float nuevo_desplazamiento = m_desplazamiento_y + dy;
+	float nuevo_desplazamiento = m_desplazamiento_y + static_cast<float>(dy);
 	if(nuevo_desplazamiento > 0)
 		nuevo_desplazamiento = 0;
 	else if(nuevo_desplazamiento < this->alto() - m_alto_actual)

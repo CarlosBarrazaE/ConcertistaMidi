@@ -28,8 +28,8 @@ struct Caracter
 	int alto;
 	int ajuste_izquierda;
 	int ajuste_arriba;
-	unsigned int avance_x;
-	unsigned int avance_y;
+	long int avance_x;
+	long int avance_y;
 	unsigned int textura_x;//Posicion dentro del atlas
 };
 

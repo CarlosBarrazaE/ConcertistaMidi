@@ -4,7 +4,7 @@ Administrador_Recursos::Administrador_Recursos()
 {
 	m_ancho = 800;
 	m_alto = 600;
-	m_matriz_proyeccion = glm::ortho(0.0f, static_cast<float>(m_ancho), static_cast<float>(m_alto), 0.0f, -1.0f, 1.0f);
+	m_matriz_proyeccion = glm::ortho(0.0f, m_ancho, m_alto, 0.0f, -1.0f, 1.0f);
 
 	m_archivo_texturas[T_FondoTitulo] = "../texturas/fondo_titulo.tga";
 	m_archivo_texturas[T_Titulo] = "../texturas/titulo.tga";
@@ -133,12 +133,12 @@ Tipografia *Administrador_Recursos::tipografia(ModeloLetra tipo)
 	return m_formato_letras[tipo];
 }
 
-void Administrador_Recursos::actualizar_pantalla(int nuevo_ancho, int nuevo_alto)
+void Administrador_Recursos::actualizar_pantalla(float nuevo_ancho, float nuevo_alto)
 {
 	m_ancho = nuevo_ancho;
 	m_alto = nuevo_alto;
 
-	m_matriz_proyeccion = glm::ortho(0.0f, static_cast<float>(m_ancho), static_cast<float>(m_alto), 0.0f, -1.0f, 1.0f);
+	m_matriz_proyeccion = glm::ortho(0.0f, m_ancho, m_alto, 0.0f, -1.0f, 1.0f);
 
 	for(std::map<SombreadorVF, Sombreador*>::iterator e=m_lista_sombreadores.begin(); e != m_lista_sombreadores.end(); e++)
 	{

@@ -23,6 +23,6 @@ public:
 
 	void evento_raton(Raton *raton) override;
 	void evento_teclado(Tecla tecla, bool estado) override;
-	void evento_pantalla(int ancho, int alto) override;
+	void evento_pantalla(float ancho, float alto) override;
 };
 #endif

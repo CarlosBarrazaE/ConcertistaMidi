@@ -44,8 +44,8 @@ void Etiqueta::actualizar_texto()
 	{
 		this->limpiar();
 		this->seleccionar_figura();
-		m_ancho_texto = m_tipografia->crear_texto(m_texto, &m_indice_objeto);
-		m_alto_texto = m_tipografia->alto_texto();
+		m_ancho_texto = static_cast<float>(m_tipografia->crear_texto(m_texto, &m_indice_objeto));
+		m_alto_texto = static_cast<float>(m_tipografia->alto_texto());
 	}
 	else
 	{
@@ -81,14 +81,14 @@ void Etiqueta::dibujar()
 	int nueva_x = 0;
 	int nueva_y = 0;
 	if(m_centrado_horizontal)
-		nueva_x = this->x()+this->ancho()/2.0f - m_ancho_texto / 2.0f;
+		nueva_x = static_cast<int>(this->x()+this->ancho()/2.0f - m_ancho_texto / 2.0f);
 	else
-		nueva_x = this->x()+m_margen;
+		nueva_x = static_cast<int>(this->x()+m_margen);
 
 	if(m_centrado_vertical)
-		nueva_y = this->y()+m_tipografia->alto_texto()+this->alto()/2.0f-m_tipografia->alto_texto()/2.0f;
+		nueva_y = static_cast<int>(this->y()+m_alto_texto+this->alto()/2.0f-m_alto_texto/2.0f);
 	else
-		nueva_y = this->y()+m_tipografia->alto_texto()+m_margen;
+		nueva_y = static_cast<int>(this->y()+m_alto_texto+m_margen);
 
 	//TODO ¿Esto deberia estar a cargo de la tipografia?
 	glm::mat4 modelo = glm::mat4(1.0f);
@@ -152,7 +152,7 @@ void Etiqueta::color(Color color)
 void Etiqueta::tipografia(Tipografia *tipografia)
 {
 	m_tipografia = tipografia;
-	m_alto_texto = m_tipografia->alto_texto();
+	m_alto_texto = static_cast<float>(m_tipografia->alto_texto());
 	this->actualizar_texto();
 }
 

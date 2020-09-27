@@ -231,7 +231,7 @@ MidiEventType MidiEvent::Type() const
 
 	// The 0x8_ through 0xE_ events contain channel numbers
 	// in the lowest 4 bits
-	unsigned char status_top = m_status >> 4;
+	unsigned char status_top = static_cast<unsigned char>(m_status >> 4);
 
 	switch (status_top)
 	{
@@ -339,7 +339,7 @@ void MidiEvent::ShiftNote(int shift_amount)
 		Type() != MidiEventType_NoteOff)
 		return;
 
-	m_data1 = m_data1 + static_cast<unsigned char>(shift_amount);
+	m_data1 = static_cast<unsigned char>(m_data1 + static_cast<unsigned char>(shift_amount));
 }
 
 int MidiEvent::ProgramNumber() const {

@@ -65,8 +65,8 @@ void midiInit()
 	sender.port = SND_SEQ_PORT_SYSTEM_ANNOUNCE;
 	snd_seq_port_subscribe_set_sender(sub, &sender);
 	// Forward them to our port
-	dest.client = ownid;
-	dest.port = anon_in;
+	dest.client = static_cast<unsigned char>(ownid);
+	dest.port = static_cast<unsigned char>(anon_in);
 	snd_seq_port_subscribe_set_dest(sub, &dest);
 	err = snd_seq_subscribe_port(alsa_seq, sub);
 	if (err<0)
@@ -89,7 +89,7 @@ void sendNote(const unsigned char note, bool on)
 		snd_seq_event_t ev;
 		snd_seq_ev_clear(&ev);
 
-		snd_seq_ev_set_source(&ev, keybd_out);
+		snd_seq_ev_set_source(&ev, static_cast<unsigned char>(keybd_out));
 		snd_seq_ev_set_subs(&ev);
 		snd_seq_ev_set_direct(&ev);
 
@@ -218,7 +218,7 @@ MidiEvent MidiCommIn::Read()
 			break;
 		case SND_SEQ_EVENT_PGMCHANGE:
 			simple.status = 0xC0 | (ev->data.note.channel & 0x0F); // Type and Channel
-			simple.byte1 = ev->data.control.value;                 // Program number
+			simple.byte1 = static_cast<unsigned char>(ev->data.control.value);// Program number
 			break;
 		case SND_SEQ_EVENT_PORT_EXIT:// USB device is disconnected - the input client is closed
 		{
@@ -340,7 +340,7 @@ void MidiCommOut::Write(const MidiEvent &out)
 	snd_seq_ev_clear(&ev);
 
 	// Set my source, to all subscribers, direct delivery
-	snd_seq_ev_set_source(&ev, local_out);
+	snd_seq_ev_set_source(&ev, static_cast<unsigned char>(local_out));
 	snd_seq_ev_set_subs(&ev);
 	snd_seq_ev_set_direct(&ev);
 
@@ -351,7 +351,7 @@ void MidiCommOut::Write(const MidiEvent &out)
 		{
 			int ch = out.Channel();
 			int note = out.NoteNumber();
-			snd_seq_ev_set_noteon(&ev, ch, note, out.NoteVelocity());
+			snd_seq_ev_set_noteon(&ev, static_cast<unsigned char>(ch), static_cast<unsigned char>(note), static_cast<unsigned char>(out.NoteVelocity()));
 
 			// save for reset
 			m_notes_on.push_back(std::pair<int,int>(ch, note));
@@ -361,7 +361,7 @@ void MidiCommOut::Write(const MidiEvent &out)
 		{
 			int note = out.NoteNumber();
 			int ch = out.Channel();
-			snd_seq_ev_set_noteoff(&ev, ch, note, out.NoteVelocity());
+			snd_seq_ev_set_noteoff(&ev, static_cast<unsigned char>(ch), static_cast<unsigned char>(note), static_cast<unsigned char>(out.NoteVelocity()));
 
 			// remove from reset
 			std::pair<int,int> p(ch, note);
@@ -396,14 +396,14 @@ void MidiCommOut::Reset()
 	// Sent Note-Off to every open note
 	snd_seq_event_t ev;
 	snd_seq_ev_clear(&ev);
-	snd_seq_ev_set_source(&ev, local_out);
+	snd_seq_ev_set_source(&ev, static_cast<unsigned char>(local_out));
 	snd_seq_ev_set_subs(&ev);
 	snd_seq_ev_set_direct(&ev);
 
 	std::vector<std::pair<int,int> >::const_iterator i;
 	for (i = m_notes_on.begin(); i != m_notes_on.end(); ++i)
 	{
-		snd_seq_ev_set_noteoff(&ev, i->first, i->second, 0);
+		snd_seq_ev_set_noteoff(&ev, static_cast<unsigned char>(i->first), static_cast<unsigned char>(i->second), 0);
 		snd_seq_event_output(alsa_seq, &ev);
 		snd_seq_drain_output(alsa_seq);
 	}

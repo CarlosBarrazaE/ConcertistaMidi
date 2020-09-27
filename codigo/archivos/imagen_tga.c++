@@ -9,7 +9,7 @@ namespace Archivo
 		unsigned char cabecera[6];
 		unsigned int tamanno_imagen = 0;
 		unsigned int bpp = 0;
-		unsigned int temporal = 0;
+		unsigned char temporal = 0;
 
 		FILE *archivo = fopen(direccion.c_str(), "rb");
 		m_datos_imagen = NULL;
@@ -156,9 +156,9 @@ namespace Archivo
 		{
 			for(int z=ancho*alto*4-(i*ancho*4); z<ancho*alto*4-((i-1)*ancho*4); z+=4)
 			{
-				fputc(datos[z+2]*255.0, archivo);	//Azul
-				fputc(datos[z+1]*255.0, archivo);	//Verde
-				fputc(datos[z+0]*255.0, archivo);	//Rojo
+				fputc(static_cast<int>(datos[z+2]*255.0f), archivo);	//Azul
+				fputc(static_cast<int>(datos[z+1]*255.0f), archivo);	//Verde
+				fputc(static_cast<int>(datos[z+0]*255.0f), archivo);	//Rojo
 			}
 		}
 		fclose(archivo);

@@ -77,7 +77,7 @@ void Barra_Progreso::evento_raton(Raton *raton)
 			if(m_x_anterior != raton->x())
 			{
 				m_x_anterior = raton->x();
-				m_tiempo_nuevo = (static_cast<double>(raton->x()) / static_cast<double>(this->ancho())) * m_tiempo_total;
+				m_tiempo_nuevo = static_cast<microseconds_t>((static_cast<float>(raton->x()) / static_cast<float>(this->ancho())) * static_cast<float>(m_tiempo_total));
 			}
 			else
 				m_tiempo_nuevo = -1;

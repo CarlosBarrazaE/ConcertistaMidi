@@ -30,7 +30,7 @@ public:
 	int dx();
 	int dy();
 
-	bool esta_sobre(int x, int y, int ancho, int alto);
+	bool esta_sobre(float x, float y, float ancho, float alto);
 };
 
 #endif

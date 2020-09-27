@@ -90,8 +90,7 @@ private:
 
 	std::map<ModeloLetra, Tipografia*> m_formato_letras;
 
-	int m_ancho;
-	int m_alto;
+	float m_ancho, m_alto;
 	glm::mat4 m_matriz_proyeccion;
 public:
 	Administrador_Recursos();
@@ -102,7 +101,7 @@ public:
 	Rectangulo *figura(FiguraGeometrica valor);
 	Tipografia *tipografia(ModeloLetra tipo);
 
-	void actualizar_pantalla(int ancho, int alto);
+	void actualizar_pantalla(float ancho, float alto);
 };
 
 #endif

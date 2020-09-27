@@ -14,7 +14,7 @@ Color Pista::Colores_pista[NUMERO_COLORES_PISTA+1] = {
 	Color(0.5f, 0.5f, 0.5f)//127.5    127.5     127.5
 };
 
-Pista::Pista(std::string instrumento, unsigned int numero_notas, unsigned char canal, Color color, Modo modo, bool visible, bool sonido)
+Pista::Pista(std::string instrumento, unsigned long int numero_notas, unsigned char canal, Color color, Modo modo, bool visible, bool sonido)
 {
 	m_color_pista = color;
 	m_modo_pista = modo;
@@ -79,7 +79,7 @@ std::string Pista::instrumento()
 	return m_instrumento;
 }
 
-unsigned int Pista::numero_notas()
+unsigned long int Pista::numero_notas()
 {
 	return m_numero_notas;
 }

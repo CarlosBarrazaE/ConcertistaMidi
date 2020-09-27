@@ -105,7 +105,7 @@ void VentanaOrgano::actualizar(unsigned int diferencia_tiempo)
 	}
 
 	//Se calculan los microsegundos entre fotogramas para actualizar el midi
-	unsigned int microsegundos_actualizar = (diferencia_tiempo / 1000.0) * m_velocidad_musica;
+	unsigned int microsegundos_actualizar = static_cast<unsigned int>((static_cast<double>(diferencia_tiempo) / 1000.0) * m_velocidad_musica);
 
 	if(m_pausa)
 		microsegundos_actualizar = 0;
@@ -313,7 +313,7 @@ void VentanaOrgano::evento_teclado(Tecla tecla, bool estado)
 	}
 }
 
-void VentanaOrgano::evento_pantalla(int ancho, int alto)
+void VentanaOrgano::evento_pantalla(float ancho, float alto)
 {
 	m_barra->dimension(ancho, m_barra->alto());
 	m_organo->posicion(m_organo->x(), alto);

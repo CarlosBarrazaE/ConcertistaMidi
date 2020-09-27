@@ -11,7 +11,7 @@
 class Generador_Particulas : public Figura
 {
 private:
-	static int Ultima_escala;
+	static float Ultima_escala;
 	static Color Color_anterior;
 
 	Textura2D *m_textura;
@@ -25,18 +25,18 @@ private:
 	unsigned int m_ultima_particula_activa;
 
 	float m_tiempo;
-	int m_escala;
+	float m_escala;
 
 	int particula_inactiva();
 
 public:
-	Generador_Particulas(Sombreador *sombreador, Textura2D *textura, unsigned int particulas_maximas, int escala);
+	Generador_Particulas(Sombreador *sombreador, Textura2D *textura, unsigned int particulas_maximas, float escala);
 	~Generador_Particulas();
-	void escala(int escala);
+	void escala(float escala);
 
 	void actualizar(float tiempo);
 	void dibujar();
-	void agregar_particulas(int x, int y, unsigned int cantidad_particulas, Color color);
+	void agregar_particulas(float x, float y, unsigned int cantidad_particulas, Color color);
 };
 
 #endif

@@ -1,10 +1,10 @@
 #include "teclado.h++"
 
-int Teclado::Tecla_a_nota(int tecla)
+unsigned char Teclado::Tecla_a_nota(int tecla)
 {
-	unsigned short int octava = 4;
-	unsigned short int do_primera_octava = octava * 12;
-	unsigned short int do_segunda_octava = (octava+1) * 12;
+	const unsigned char octava = 4;
+	const unsigned char do_primera_octava = octava * 12;
+	const unsigned char do_segunda_octava = (octava+1) * 12;
 
 	switch(tecla)
 	{
@@ -33,7 +33,6 @@ int Teclado::Tecla_a_nota(int tecla)
 		case TECLA_SUMA:				return do_segunda_octava + 9;
 		case TECLA_BORRAR:				return do_segunda_octava + 10;
 		case TECLA_ENTRAR:				return do_segunda_octava + 11;
-		default:						return -1;
+		default:						return 255;
 	}
-	return -1;
 }

@@ -33,13 +33,13 @@ void Notificacion::actualizar(unsigned int diferencia_tiempo)
 		{
 			if(contador < MAXIMAS_NOTIFICACIONES)
 			{
-				actual->tiempo -= (diferencia_tiempo / 1000000000.0);
+				actual->tiempo -= (static_cast<float>(diferencia_tiempo) / 1000000000.0f);
 				//0.25 Segundos para aparecer
 
 				if(actual->tiempo > 1 && actual->opacidad < 1)
-					actual->opacidad += (diferencia_tiempo / 1000000000.0)*4;//0.25 Segundos para aparecer
+					actual->opacidad += (static_cast<float>(diferencia_tiempo) / 1000000000.0f)*4;//0.25 Segundos para aparecer
 				else if(actual->tiempo <= 0.25 && actual->opacidad > 0)
-					actual->opacidad -= (diferencia_tiempo / 1000000000.0)*4;//0.25 Segundos para desaparecer
+					actual->opacidad -= (static_cast<float>(diferencia_tiempo) / 1000000000.0f)*4;//0.25 Segundos para desaparecer
 			}
 
 			if(mover > 0)
@@ -49,8 +49,8 @@ void Notificacion::actualizar(unsigned int diferencia_tiempo)
 			if(actual->mover > 0)
 			{
 				//Se mueve 45 pixeles en 0.25 segundos
-				actual->posicion_y -= (diferencia_tiempo / 1000000000.0)*180;
-				actual->mover -= (diferencia_tiempo / 1000000000.0)*180;
+				actual->posicion_y -= (static_cast<float>(diferencia_tiempo) / 1000000000.0f)*180;
+				actual->mover -= (static_cast<float>(diferencia_tiempo) / 1000000000.0f)*180;
 				if(actual->mover < 0)
 				{
 					actual->posicion_y += actual->mover*-1;
@@ -134,7 +134,7 @@ void Notificacion::Registrar(std::string texto, int tiempo, CodigoEstado estado)
 	//Se actualiza la posicion del ultimo elemento agregado
 	if(Notificacion::notificaciones.size() > 1)
 	{
-		int posicion = Notificacion::notificaciones.size()-1;
+		unsigned long int posicion = Notificacion::notificaciones.size()-1;
 
 		Notificacion::notificaciones[posicion]->posicion_y = Notificacion::notificaciones[posicion-1]->posicion_y + 45;
 		Notificacion::notificaciones[posicion]->mover = Notificacion::notificaciones[posicion-1]->mover;

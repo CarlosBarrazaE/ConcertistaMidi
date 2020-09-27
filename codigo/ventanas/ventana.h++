@@ -29,7 +29,7 @@ public:
 	virtual void dibujar() = 0;
 	virtual void evento_raton(Raton *raton) = 0;
 	virtual void evento_teclado(Tecla tecla, bool estado) = 0;
-	virtual void evento_pantalla(int ancho, int alto) = 0;
+	virtual void evento_pantalla(float ancho, float alto) = 0;
 
 	Accion obtener_accion();
 };

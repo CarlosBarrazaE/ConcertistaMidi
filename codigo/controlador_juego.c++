@@ -66,8 +66,8 @@ void Controlador_Juego::actualizar()
 
 		//Dibuja Raton
 		m_rectangulo->textura(false);
-		m_rectangulo->dibujar(m_raton.x()-11, m_raton.y(), 21, 1, Color(1.0f, 0.0f, 0.0f));
-		m_rectangulo->dibujar(m_raton.x(), m_raton.y()-11, 1, 21, Color(1.0f, 0.0f, 0.0f));
+		m_rectangulo->dibujar(static_cast<float>(m_raton.x())-11, static_cast<float>(m_raton.y()), 21, 1, Color(1.0f, 0.0f, 0.0f));
+		m_rectangulo->dibujar(static_cast<float>(m_raton.x()), static_cast<float>(m_raton.y())-11, 1, 21, Color(1.0f, 0.0f, 0.0f));
 	}
 
 	bool cambio_ventana = false;
@@ -137,7 +137,7 @@ void Controlador_Juego::actualizar()
 		this->reiniciar_contador_inactividad();
 
 	if(!m_fps_reducido)
-		m_contador_inactividad += (diferencia_tiempo/1000000000.0);
+		m_contador_inactividad += (static_cast<float>(diferencia_tiempo)/1000000000.0f);
 
 	if(m_contador_inactividad > 5 && !m_fps_reducido && m_fps_dinamico)
 	{
@@ -187,8 +187,8 @@ void Controlador_Juego::eventos_teclado(Tecla tecla, bool estado)
 	else
 	{
 		m_ventana_actual->evento_teclado(tecla, estado);
-		int nota = Teclado::Tecla_a_nota(tecla);
-		if(nota > 0)
+		unsigned char nota = Teclado::Tecla_a_nota(tecla);
+		if(nota < 255)
 		{
 			if(estado)
 			{
@@ -211,7 +211,7 @@ void Controlador_Juego::eventos_teclado(Tecla tecla, bool estado)
 	this->reiniciar_contador_inactividad();
 }
 
-void Controlador_Juego::evento_ventana(int ancho, int alto)
+void Controlador_Juego::evento_ventana(float ancho, float alto)
 {
 	Pantalla::Ancho = ancho;
 	Pantalla::Alto = alto;

@@ -24,7 +24,7 @@ Tipografia::Tipografia(Formato formato, int tamanno_letra)
 		tamanno_letra = 5;
 	m_tamanno_letra = tamanno_letra;
 
-	FT_Set_Char_Size(m_tipografia, 0, tamanno_letra*64, 91.79, 91.79);
+	FT_Set_Char_Size(m_tipografia, 0, m_tamanno_letra*64, 92, 92);//91.79
 	generar_caracteres();
 }
 
@@ -123,9 +123,9 @@ Caracter *Tipografia::obtener_caracter(unsigned int caracter)
 
 int Tipografia::crear_texto(icu::UnicodeString texto, unsigned int *indice_objeto)
 {
-	int x=0, y=0;
+	long int x=0, y=0;
 
-	int x_inicial = x;
+	long int x_inicial = x;
 
 	if(Textura2D::Ultimo_indice_seleccionado != m_indice_atlas)
 	{
@@ -153,44 +153,44 @@ int Tipografia::crear_texto(icu::UnicodeString texto, unsigned int *indice_objet
 			x += delta.x >> 6;
 		}
 
-		float xpos = x + letra->ajuste_izquierda;
-		float ypos = y - letra->ajuste_arriba;
+		float xpos = static_cast<float>(x + letra->ajuste_izquierda);
+		float ypos = static_cast<float>(y - letra->ajuste_arriba);
 
-		float an = letra->ancho;
-		float al = letra->alto;
+		float an = static_cast<float>(letra->ancho);
+		float al = static_cast<float>(letra->alto);
 		vertices[posicion_arreglo][0] = xpos + an;
 		vertices[posicion_arreglo][1] = ypos;
-		vertices[posicion_arreglo][2] = (letra->textura_x + an) / static_cast<float>(m_ancho_atlas);//mi valor / total
+		vertices[posicion_arreglo][2] = (static_cast<float>(letra->textura_x) + an) / static_cast<float>(m_ancho_atlas);//mi valor / total
 		vertices[posicion_arreglo][3] = 0.0f;
 		posicion_arreglo++;
 
 		vertices[posicion_arreglo][0] = xpos;
 		vertices[posicion_arreglo][1] = ypos;
-		vertices[posicion_arreglo][2] = letra->textura_x / static_cast<float>(m_ancho_atlas);
+		vertices[posicion_arreglo][2] = static_cast<float>(letra->textura_x) / static_cast<float>(m_ancho_atlas);
 		vertices[posicion_arreglo][3] = 0.0f;
 		posicion_arreglo++;
 
 		vertices[posicion_arreglo][0] = xpos + an;
 		vertices[posicion_arreglo][1] = ypos + al;
-		vertices[posicion_arreglo][2] = (letra->textura_x + an) / static_cast<float>(m_ancho_atlas);
+		vertices[posicion_arreglo][2] = (static_cast<float>(letra->textura_x) + an) / static_cast<float>(m_ancho_atlas);
 		vertices[posicion_arreglo][3] = al / static_cast<float>(m_alto_atlas);
 		posicion_arreglo++;
 
 		vertices[posicion_arreglo][0] = xpos;
 		vertices[posicion_arreglo][1] = ypos + al;
-		vertices[posicion_arreglo][2] = letra->textura_x / static_cast<float>(m_ancho_atlas);
+		vertices[posicion_arreglo][2] = static_cast<float>(letra->textura_x) / static_cast<float>(m_ancho_atlas);
 		vertices[posicion_arreglo][3] = al / static_cast<float>(m_alto_atlas);
 		posicion_arreglo++;
 
 		vertices[posicion_arreglo][0] = xpos + an;
 		vertices[posicion_arreglo][1] = ypos + al;
-		vertices[posicion_arreglo][2] = (letra->textura_x + an) / static_cast<float>(m_ancho_atlas);
+		vertices[posicion_arreglo][2] = (static_cast<float>(letra->textura_x) + an) / static_cast<float>(m_ancho_atlas);
 		vertices[posicion_arreglo][3] = al / static_cast<float>(m_alto_atlas);
 		posicion_arreglo++;
 
 		vertices[posicion_arreglo][0] = xpos;
 		vertices[posicion_arreglo][1] = ypos;
-		vertices[posicion_arreglo][2] = letra->textura_x / static_cast<float>(m_ancho_atlas);
+		vertices[posicion_arreglo][2] = static_cast<float>(letra->textura_x) / static_cast<float>(m_ancho_atlas);
 		vertices[posicion_arreglo][3] = 0.0f;
 		posicion_arreglo++;
 
@@ -204,7 +204,7 @@ int Tipografia::crear_texto(icu::UnicodeString texto, unsigned int *indice_objet
 
 	glVertexAttribPointer(0, 4, GL_FLOAT, GL_FALSE, 4 * sizeof(float), 0);
 	glEnableVertexAttribArray(0);
-	return x - x_inicial;
+	return static_cast<int>(x - x_inicial);
 }
 
 int Tipografia::alto_texto()

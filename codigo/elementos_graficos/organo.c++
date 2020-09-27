@@ -42,7 +42,7 @@ void Organo::dibujar_blancas(float x, float y, unsigned int numero_teclas)
 			m_rectangulo->color(m_teclas_activas_blancas->at(n));
 
 			//Se agregan las particulas del mismo color que la nota
-			m_generador_particulas->agregar_particulas(desplazamiento + m_ancho_tecla_blanca/2.0 - m_ancho_tecla_blanca/2, y, m_numero_particulas, m_teclas_activas_blancas->at(n));
+			m_generador_particulas->agregar_particulas(desplazamiento + m_ancho_tecla_blanca/2.0f - m_ancho_tecla_blanca/2.0f, y, m_numero_particulas, m_teclas_activas_blancas->at(n));
 
 			//Se borra el color porque ya se mostro
 			m_teclas_activas_blancas->at(n) = negro;
@@ -97,12 +97,12 @@ void Organo::dibujar_negras(float x, float y, unsigned int numero_teclas)
 		if(n_negra==0 || n_negra == 2)
 		{
 			n_blanca++;
-			desplazamiento = x + n_blanca * m_ancho_tecla_blanca - m_ancho_tecla_negra * 0.667f;
+			desplazamiento = x + static_cast<float>(n_blanca) * m_ancho_tecla_blanca - m_ancho_tecla_negra * 0.667f;
 		}
 		else if(n_negra==1 || n_negra == 4)
-			desplazamiento = x + n_blanca * m_ancho_tecla_blanca - m_ancho_tecla_negra * 0.333f;
+			desplazamiento = x + static_cast<float>(n_blanca) * m_ancho_tecla_blanca - m_ancho_tecla_negra * 0.333f;
 		else if(n_negra==3)
-			desplazamiento = x + n_blanca * m_ancho_tecla_blanca - m_ancho_tecla_negra * 0.5f;
+			desplazamiento = x + static_cast<float>(n_blanca) * m_ancho_tecla_blanca - m_ancho_tecla_negra * 0.5f;
 
 		n_negra++;
 		n_blanca++;
@@ -120,7 +120,7 @@ void Organo::dibujar_negras(float x, float y, unsigned int numero_teclas)
 
 void Organo::calcular_tamannos()
 {
-	m_ancho_tecla_blanca = (this->ancho() / m_teclado->numero_blancas());
+	m_ancho_tecla_blanca = (this->ancho() / static_cast<float>(m_teclado->numero_blancas()));
 	m_alto_tecla_blanca = m_ancho_tecla_blanca * PROPORCION_BLANCA;
 	if(m_alto_tecla_blanca > 250)
 		m_alto_tecla_blanca = 250;
@@ -133,19 +133,19 @@ void Organo::calcular_tamannos()
 
 void Organo::actualizar(unsigned int diferencia_tiempo)
 {
-	m_tiempo += diferencia_tiempo;
+	m_tiempo += static_cast<float>(diferencia_tiempo);
 
 	//Generar particulas
-	unsigned int particulas = m_tiempo / 16666666;//16ms
+	unsigned int particulas = static_cast<unsigned int>(m_tiempo / 16666666.0f);//16ms
 	if(particulas > 0)
 	{
-		if(particulas * 16666666 < m_tiempo)
-			m_tiempo -= particulas * 16666666;
+		if(static_cast<float>(particulas) * 16666666 < m_tiempo)
+			m_tiempo -= static_cast<float>(particulas * 16666666);
 		m_numero_particulas = particulas*2;
 	}
 	else
 		m_numero_particulas = 0;
-	m_generador_particulas->actualizar((static_cast<double>(diferencia_tiempo)/1000000000.0)*3.0);
+	m_generador_particulas->actualizar((static_cast<float>(diferencia_tiempo)/1000000000.0f)*3.0f);
 }
 
 void Organo::dibujar()

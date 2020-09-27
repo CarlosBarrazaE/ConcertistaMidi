@@ -158,7 +158,7 @@ void Configuracion_Pista::evento_raton(Raton *raton)
 
 	if(m_seleccion_modo.cambio_opcion_seleccionada())
 	{
-		int modo_seleccionado = m_seleccion_modo.opcion_seleccionada();
+		unsigned long int modo_seleccionado = m_seleccion_modo.opcion_seleccionada();
 		if(modo_seleccionado == 0)
 			m_datos_pista.modo(ManoIzquierda);
 		else if(modo_seleccionado == 1)

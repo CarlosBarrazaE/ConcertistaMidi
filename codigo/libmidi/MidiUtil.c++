@@ -10,7 +10,7 @@ MidiError::MidiError(MidiErrorCode error) : m_error(error)
 {
 }
 
-unsigned long BigToSystem32(unsigned long x)
+uint32_t BigToSystem32(uint32_t x)
 {
 	return ntohl(x);
 }

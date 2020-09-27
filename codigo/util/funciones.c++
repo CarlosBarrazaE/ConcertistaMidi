@@ -4,7 +4,7 @@ namespace Funciones
 {
 	std::string milisegundos_a_texto(microseconds_t ms)
 	{
-		int seg  = ms / 1000000;
+		int seg  = static_cast<int>(ms / 1000000);
 		int horas = seg / 3600;
 		int minutos = (seg - (horas * 3600)) / 60;
 		int segundos =  (seg - (horas * 3600 + minutos * 60));

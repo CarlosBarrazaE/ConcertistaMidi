@@ -15,7 +15,7 @@ Color::Color(const Color &c)
 
 Color::Color(int rojo, int verde, int azul)
 {
-	this->establecer_valores(rojo / 254.0f, verde / 254.0f, azul / 254.0f, 1.0);
+	this->establecer_valores(static_cast<float>(rojo) / 254.0f, static_cast<float>(verde) / 254.0f, static_cast<float>(azul) / 254.0f, 1.0);
 }
 
 Color::Color(float rojo, float verde, float azul)
@@ -25,7 +25,7 @@ Color::Color(float rojo, float verde, float azul)
 
 Color::Color(int rojo, int verde, int azul, int alfa)
 {
-	this->establecer_valores(rojo / 254.0f, verde / 254.0f, azul / 254.0f, alfa / 254.0f);
+	this->establecer_valores(static_cast<float>(rojo) / 254.0f, static_cast<float>(verde) / 254.0f, static_cast<float>(azul) / 254.0f, static_cast<float>(alfa) / 254.0f);
 }
 
 Color::Color(float rojo, float verde, float azul, float alfa)
@@ -58,7 +58,7 @@ void Color::establecer_valores(float rojo, float verde, float azul, float alfa)
 
 void Color::color(int rojo, int verde, int azul)
 {
-	this->establecer_valores(rojo / 254.0f, verde / 254.0f, azul / 254.0f, 1.0f);
+	this->establecer_valores(static_cast<float>(rojo) / 254.0f, static_cast<float>(verde) / 254.0f, static_cast<float>(azul) / 254.0f, 1.0f);
 }
 
 void Color::color(float rojo, float verde, float azul)
@@ -68,7 +68,7 @@ void Color::color(float rojo, float verde, float azul)
 
 void Color::color(int rojo, int verde, int azul, int alfa)
 {
-	this->establecer_valores(rojo / 254.0f, verde / 254.0f, azul / 254.0f, alfa / 254.0f);
+	this->establecer_valores(static_cast<float>(rojo) / 254.0f, static_cast<float>(verde) / 254.0f, static_cast<float>(azul) / 254.0f, static_cast<float>(alfa) / 254.0f);
 }
 
 void Color::color(float rojo, float verde, float azul, float alfa)

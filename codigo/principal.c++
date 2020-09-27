@@ -72,7 +72,7 @@ void configurar_gl()
 {
 	glEnable (GL_CULL_FACE);
 	glViewport(0, 0, ANCHO, ALTO);
-	glClearColor(0.95, 0.95, 0.95, 1.0);
+	glClearColor(0.95f, 0.95f, 0.95f, 1.0f);
 	glActiveTexture(GL_TEXTURE0);
 	glEnable(GL_BLEND);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
@@ -104,7 +104,7 @@ void controlar_eventos(SDL_Window *ventana, Controlador_Juego *controlador, SDL_
 void ajustar_ventana(Controlador_Juego *controlador, int ancho_nuevo, int alto_nuevo)
 {
 	glViewport(0, 0, ancho_nuevo, alto_nuevo);
-	controlador->evento_ventana(ancho_nuevo, alto_nuevo);
+	controlador->evento_ventana(static_cast<float>(ancho_nuevo), static_cast<float>(alto_nuevo));
 }
 
 void eventos_raton_botones(Controlador_Juego *controlador, int boton, int accion, int numero_clics)

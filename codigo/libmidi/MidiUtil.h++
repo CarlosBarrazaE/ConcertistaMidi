@@ -18,8 +18,8 @@
 
 // Cross-platform Endian conversion functions
 //
-// MIDI is big endian.  Some platforms aren't
-unsigned long BigToSystem32(unsigned long x);
+// MIDI is big endian.  Some platforms aren't uint32_t
+uint32_t BigToSystem32(uint32_t x);
 unsigned short BigToSystem16(unsigned short x);
 
 // MIDI contains these wacky variable length numbers where

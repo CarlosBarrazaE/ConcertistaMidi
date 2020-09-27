@@ -28,8 +28,8 @@ void Titulo::actualizar(unsigned int diferencia_tiempo)
 	if(m_estado == 5)//Invisible y no se actualiza mas
 		return;
 
-	float valocidad_alfa = diferencia_tiempo*3.0/1000000000.0f;//0.05 a 60 fps
-	float velocidad_pixeles = diferencia_tiempo*18.0/10000000.0f;//1800 = 60 fps * 30 px
+	float valocidad_alfa = static_cast<float>(diferencia_tiempo)*3.0f/1000000000.0f;//0.05 a 60 fps
+	float velocidad_pixeles = static_cast<float>(diferencia_tiempo)*18.0f/10000000.0f;//1800 = 60 fps * 30 px
 
 	if(m_estado == 0)//Aparecer
 	{

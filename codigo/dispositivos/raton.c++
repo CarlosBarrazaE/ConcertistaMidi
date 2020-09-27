@@ -90,10 +90,10 @@ int Raton::dy()
 	return desplazamiento;
 }
 
-bool Raton::esta_sobre(int x, int y, int ancho, int alto)
+bool Raton::esta_sobre(float x, float y, float ancho, float alto)
 {
-	if(this->x() >= x && this->x() < x + ancho &&
-		this->y() >= y && this->y() < y + alto)
+	if(this->x() >= static_cast<int>(x) && this->x() < static_cast<int>(x + ancho) &&
+		this->y() >= static_cast<int>(y) && this->y() < static_cast<int>(y + alto))
 		return true;
 	return false;
 }

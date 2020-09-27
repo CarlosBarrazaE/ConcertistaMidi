@@ -25,14 +25,13 @@ private:
 	std::vector<Fila*> m_filas;
 
 	float m_alto_fila;
-	unsigned int m_fila_seleccionada;
+	unsigned long int m_fila_seleccionada;
+	unsigned int m_espacio_total_columnas;
 
 	//Etiqueta m_textos;
 	Rectangulo *m_rectangulo;
 	Color m_color_fondo;
 	Barra_Desplazamiento *m_barra_desplazamiento;
-
-	unsigned int m_espacio_total_columnas;
 
 	void actualizar_ancho_columnas();
 
@@ -51,7 +50,7 @@ public:
 	void vaciar();
 
 	void cambiar_seleccion(int cambio);
-	unsigned int obtener_seleccion();
+	unsigned long int obtener_seleccion();
 };
 
 #endif

@@ -69,7 +69,7 @@ public:
 
 	void eventos_raton();
 	void eventos_teclado(Tecla tecla, bool estado);
-	void evento_ventana(int ancho, int alto);
+	void evento_ventana(float ancho, float alto);
 	void evento_salir();
 };
 

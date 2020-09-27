@@ -308,7 +308,7 @@ void MidiTrack::DiscoverInstrument()
 		if(!canal_encontrado)
 		{
 			canal_encontrado = true;
-			m_canal = ev.Channel()+1;
+			m_canal = static_cast<unsigned char>(ev.Channel()+1);
 		}
 	}
 

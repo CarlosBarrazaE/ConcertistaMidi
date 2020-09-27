@@ -26,7 +26,7 @@ private:
 
 	float m_centrado_icono;
 	float m_ancho_icono, m_alto_icono;
-	unsigned int m_opcion_actual;
+	unsigned long int m_opcion_actual;
 public:
 	Lista_Opciones(float x, float y, float ancho, float alto, Administrador_Recursos *recursos);
 	~Lista_Opciones();
@@ -41,8 +41,8 @@ public:
 	void opciones_textos(std::vector<std::string> opciones);
 	void opciones_iconos(std::vector<Textura2D*> iconos);
 	void tipografia(Tipografia *tipografia);
-	void opcion_predeterminada(unsigned int opcion);
-	unsigned int opcion_seleccionada();
+	void opcion_predeterminada(unsigned long int opcion);
+	unsigned long int opcion_seleccionada();
 	bool cambio_opcion_seleccionada();
 };
 

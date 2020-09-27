@@ -19,7 +19,7 @@ struct Mensaje
 	float posicion_y = 0;
 	float mover = 0;
 
-	Mensaje(Etiqueta *etiqueta_2, std::string texto_2, int tiempo_2, CodigoEstado estado_2)
+	Mensaje(Etiqueta *etiqueta_2, std::string texto_2, float tiempo_2, CodigoEstado estado_2)
 	{
 		etiqueta = etiqueta_2;
 		texto = texto_2;

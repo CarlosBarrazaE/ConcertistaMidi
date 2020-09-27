@@ -1,9 +1,9 @@
 #include "generador_particulas.h++"
 #include <iostream>
-int Generador_Particulas::Ultima_escala = 0;
+float Generador_Particulas::Ultima_escala = 0;
 Color Generador_Particulas::Color_anterior = Color(0.0f, 0.0f, 0.0f);
 
-Generador_Particulas::Generador_Particulas(Sombreador *sombreador, Textura2D *textura, unsigned int particulas_maximas, int escala) : Figura(sombreador)
+Generador_Particulas::Generador_Particulas(Sombreador *sombreador, Textura2D *textura, unsigned int particulas_maximas, float escala) : Figura(sombreador)
 {
 	m_textura = textura;
 	m_particulas_maximas = particulas_maximas;
@@ -66,7 +66,7 @@ int Generador_Particulas::particula_inactiva()
 	return 0;
 }
 
-void Generador_Particulas::escala(int escala)
+void Generador_Particulas::escala(float escala)
 {
 	m_escala = escala;
 	m_sombreador->uniforme_float("escala", escala);
@@ -90,7 +90,7 @@ void Generador_Particulas::dibujar()
 	if(Generador_Particulas::Ultima_escala != m_escala)
 	{
 		Generador_Particulas::Ultima_escala = m_escala;
-		m_sombreador->uniforme_int("escala", Generador_Particulas::Ultima_escala);
+		m_sombreador->uniforme_float("escala", Generador_Particulas::Ultima_escala);
 	}
 
 	Particula *p;
@@ -144,19 +144,19 @@ void Generador_Particulas::dibujar()
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 }
 
-void Generador_Particulas::agregar_particulas(int x, int y, unsigned int cantidad_particulas, Color color)
+void Generador_Particulas::agregar_particulas(float x, float y, unsigned int cantidad_particulas, Color color)
 {
 	float aleatorio, aleatorio2;
 	Particula *particula;
 	for(unsigned int n=0; n<cantidad_particulas && m_particulas_activas < m_particulas_maximas; n++)
 	{
-		aleatorio = ((rand() % 100) - 50) / 10.0;
-		aleatorio2 = ((rand() % 100) - 50) / 10.0;
+		aleatorio = static_cast<float>((rand() % 100) - 50) / 10.0f;
+		aleatorio2 = static_cast<float>((rand() % 100) - 50) / 10.0f;
 		particula = &m_particulas[this->particula_inactiva()];
 		particula->posicion_x = x + aleatorio;
 		particula->posicion_y = y;
 		particula->color = color;
-		particula->vida = 1.0;
+		particula->vida = 1;
 		particula->velocidad_x = aleatorio*10;
 		particula->velocidad_y = aleatorio2*10;
 

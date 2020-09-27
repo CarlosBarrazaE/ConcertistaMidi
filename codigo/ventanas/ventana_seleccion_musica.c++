@@ -85,11 +85,11 @@ void VentanaSeleccionMusica::cargar_contenido_carpeta(std::string ruta_abrir)
 	for(const std::filesystem::directory_entry elemento : std::filesystem::directory_iterator(ruta_abrir))
 	{
 		std::string ruta = std::string(elemento.path());
-		unsigned int inicio_archivo = 0;
-		unsigned int extencion = ruta.length()-1;
+		unsigned long int inicio_archivo = 0;
+		unsigned long int extencion = ruta.length()-1;
 		//Se recorre la ruta desde el final
 		bool encontrado = false;
-		for(unsigned int i=ruta.length()-1; i>0 && !encontrado; i--)
+		for(unsigned long int i=ruta.length()-1; i>0 && !encontrado; i--)
 		{
 			//Se busca el punto solo si es un archivo
 			if(!elemento.is_directory() && extencion == ruta.length()-1 && ruta[i] == '.')
@@ -209,7 +209,7 @@ void VentanaSeleccionMusica::crear_tabla(std::string ruta_abrir)
 
 bool VentanaSeleccionMusica::abrir_archivo_seleccionado()
 {
-	unsigned int seleccion_actual = m_tabla_archivos.obtener_seleccion();
+	unsigned long int seleccion_actual = m_tabla_archivos.obtener_seleccion();
 	if(seleccion_actual < m_lista_archivos.size())
 	{
 		if(m_lista_archivos[seleccion_actual].es_carpeta)
@@ -272,9 +272,9 @@ void VentanaSeleccionMusica::evento_teclado(Tecla tecla, bool estado)
 	{
 		if(m_carpeta_inicial.length() > 0 && m_carpeta_inicial != "-" && m_carpeta_inicial.length() < m_carpeta_activa.length())
 		{
- 			unsigned int recorte = m_carpeta_activa.length()-2;
+ 			unsigned long int recorte = m_carpeta_activa.length()-2;
 			bool termino_busqueda = false;
-			for(unsigned int x = m_carpeta_activa.length()-2; x > 1 && !termino_busqueda; x--)
+			for(unsigned long int x = m_carpeta_activa.length()-2; x > 1 && !termino_busqueda; x--)
 			{
 				//NOTE no creo que esto funcione en windows
 				if(m_carpeta_activa[x] == '/')
@@ -297,7 +297,7 @@ void VentanaSeleccionMusica::evento_teclado(Tecla tecla, bool estado)
 		m_tabla_archivos.cambiar_seleccion(-1);
 }
 
-void VentanaSeleccionMusica::evento_pantalla(int ancho, int alto)
+void VentanaSeleccionMusica::evento_pantalla(float ancho, float alto)
 {
 	m_texto_titulo.dimension(Pantalla::Ancho, 40);
 	m_tabla_archivos.dimension(ancho-20, alto-100);

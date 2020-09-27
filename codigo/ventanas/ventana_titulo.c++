@@ -90,7 +90,7 @@ void VentanaTitulo::evento_teclado(Tecla tecla, bool estado)
 		m_accion = CambiarASeleccionMusica;
 }
 
-void VentanaTitulo::evento_pantalla(int /*ancho*/, int alto)
+void VentanaTitulo::evento_pantalla(float /*ancho*/, float alto)
 {
 	m_boton_tocar->posicion(Pantalla::Centro_horizontal(), m_boton_tocar->y());
 	m_boton_practicar->posicion(Pantalla::Centro_horizontal(), m_boton_practicar->y());

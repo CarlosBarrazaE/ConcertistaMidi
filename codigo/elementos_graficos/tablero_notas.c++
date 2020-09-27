@@ -32,7 +32,7 @@ Tablero_Notas::~Tablero_Notas()
 
 void Tablero_Notas::calcular_tamannos()
 {
-	m_ancho_blanca = (this->ancho() / m_teclado->numero_blancas());
+	m_ancho_blanca = (this->ancho() / static_cast<float>(m_teclado->numero_blancas()));
 	m_ancho_negra = m_ancho_blanca * PROPORCION_ANCHO_NEGRA;
 }
 
@@ -47,7 +47,7 @@ void Tablero_Notas::dibujar_lineas_horizontales()
 		numero_linea++;
 
 		//Dibuja solo las lineas que seran visibles
-		posicion_y = ((m_tiempo_actual_midi - m_lineas[i]) / m_duracion_nota) + this->alto();
+		posicion_y = ((static_cast<float>(m_tiempo_actual_midi) - static_cast<float>(m_lineas[i])) / static_cast<float>(m_duracion_nota)) + this->alto();
 		if(posicion_y < 0)
 			break;
 		else if(posicion_y > this->alto())
@@ -66,14 +66,14 @@ void Tablero_Notas::dibujar_lineas_horizontales()
 		m_rectangulo->dibujar(this->x(), this->y()+posicion_y, this->ancho(), 1);
 
 		//Dibuja el numero de linea
-		numero_temporal->posicion(this->x()+10, this->y()+posicion_y-m_tipografia->alto_texto());
+		numero_temporal->posicion(this->x()+10, this->y()+posicion_y-static_cast<float>(m_tipografia->alto_texto()));
 		numero_temporal->dibujar();
 	}
 }
 
 void Tablero_Notas::dibujar_lineas_verticales()
 {
-	float posicion_x = m_ancho_blanca * m_teclado->primera_barra();
+	float posicion_x = m_ancho_blanca * static_cast<float>(m_teclado->primera_barra());
 	bool en_do = m_teclado->en_do_primera_barra();
 	for(int i=0; i<15 && posicion_x < this->ancho(); i++)
 	{
@@ -100,13 +100,13 @@ void Tablero_Notas::dibujar_notas(int pista)
 
 	for(unsigned int n=m_ultima_nota[pista]; n<m_notas[pista].size(); n++)
 	{
-		posicion_y = (m_tiempo_actual_midi - m_notas[pista][n].start) / m_duracion_nota;
+		posicion_y = static_cast<float>(m_tiempo_actual_midi - m_notas[pista][n].start) / static_cast<float>(m_duracion_nota);
 
 		//No se dibujan las notas que aun no entran en la pantalla
 		if(posicion_y < -this->alto())
 			break;
 
-		largo_nota = (m_notas[pista][n].end - m_notas[pista][n].start) / m_duracion_nota;
+		largo_nota = static_cast<float>(m_notas[pista][n].end - m_notas[pista][n].start) / static_cast<float>(m_duracion_nota);
 
 		//El alto minimo de la nota a mostrar es de 20 pixeles
 		if((posicion_y-largo_nota > 0 && largo_nota >= 20) || (posicion_y > 20 && largo_nota < 20) || largo_nota == 0)//La nota n salio de la pantalla
@@ -115,8 +115,8 @@ void Tablero_Notas::dibujar_notas(int pista)
 				m_ultima_nota[pista] = n+1;
 			else if(n == m_ultima_nota[pista]+1)//Comprueba que la nota anterior haya terminado
 			{
-				int posicion_y_anterior = (m_tiempo_actual_midi - m_notas[pista][m_ultima_nota[pista]].start) / m_duracion_nota;
-				int largo_nota_anterior = (m_notas[pista][m_ultima_nota[pista]].end - m_notas[pista][m_ultima_nota[pista]].start) / m_duracion_nota;
+				float posicion_y_anterior = static_cast<float>(m_tiempo_actual_midi - m_notas[pista][m_ultima_nota[pista]].start) / static_cast<float>(m_duracion_nota);
+				float largo_nota_anterior = static_cast<float>(m_notas[pista][m_ultima_nota[pista]].end - m_notas[pista][m_ultima_nota[pista]].start) / static_cast<float>(m_duracion_nota);
 				if(posicion_y_anterior-largo_nota_anterior > 0)
 				{
 					m_ultima_nota[pista] = n+1;
@@ -129,9 +129,9 @@ void Tablero_Notas::dibujar_notas(int pista)
 		posicion_blanca = Octava::prosicion_nota(m_notas[pista][n].note_id) - m_teclado->desplazamiento_blancas();
 
 		//No dibuja las notas fuera de la pantalla hacia los lados
-		if((posicion_blanca * m_ancho_blanca) > this->ancho())
+		if(static_cast<float>(posicion_blanca) * m_ancho_blanca > this->ancho())
 			continue;
-		if(posicion_blanca * m_ancho_blanca < 0)
+		if(static_cast<float>(posicion_blanca) * m_ancho_blanca < 0)
 			continue;
 
 		if(Octava::es_negra(m_notas[pista][n].note_id))
@@ -197,21 +197,21 @@ void Tablero_Notas::dibujar_notas(int pista)
 
 		//Las notas negras se dibujan un poco mas oscura
 		if(es_negra)
-			m_rectangulo->color(m_pistas->at(pista).color()-0.3);
+			m_rectangulo->color(m_pistas->at(pista).color()-0.3f);
 		else
 			m_rectangulo->color(m_pistas->at(pista).color());
 
 
 
 		m_textura_nota->activar();
-		m_rectangulo->dibujar_estirable(this->x() + posicion_blanca * m_ancho_blanca + ajuste_negra, this->y()+this->alto()+posicion_y-largo_nota, ancho_tecla, largo_final_nota, 0, 10);
+		m_rectangulo->dibujar_estirable(this->x() + static_cast<float>(posicion_blanca) * m_ancho_blanca + ajuste_negra, this->y()+this->alto()+posicion_y-largo_nota, ancho_tecla, largo_final_nota, 0, 10);
 
 		//Agrega una segunda textura a la nota tocada
 		if(posicion_y > 0)
 		{
 			m_textura_nota_resaltada->activar();
 			m_rectangulo->color(Color(1.0f, 1.0f, 1.0f));
-			m_rectangulo->dibujar_estirable(this->x() + posicion_blanca * m_ancho_blanca + ajuste_negra, this->y()+this->alto()+posicion_y-largo_nota, ancho_tecla, largo_final_nota, 0, 10);
+			m_rectangulo->dibujar_estirable(this->x() + static_cast<float>(posicion_blanca) * m_ancho_blanca + ajuste_negra, this->y()+this->alto()+posicion_y-largo_nota, ancho_tecla, largo_final_nota, 0, 10);
 		}
 	}
 }

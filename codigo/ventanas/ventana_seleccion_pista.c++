@@ -36,12 +36,12 @@ VentanaSeleccionPista::~VentanaSeleccionPista()
 
 void VentanaSeleccionPista::crear_configuracion(Administrador_Recursos *recursos)
 {
-	int numero_pistas = m_musica->musica()->Notes().size();
+	unsigned long int numero_pistas = m_musica->musica()->Notes().size();
 	int color_usado = 0;
 	Configuracion_Pista *configuracion;
 	Color color_pista;
 	bool visible = true;
-	for(int i=0; i<numero_pistas; i++)
+	for(unsigned long int i=0; i<numero_pistas; i++)
 	{
 		MidiTrack pista_actual = m_musica->musica()->Tracks()[i];
 		if(pista_actual.Notes().size() > 0)
@@ -140,7 +140,7 @@ void VentanaSeleccionPista::evento_teclado(Tecla tecla, bool estado)
 	}
 }
 
-void VentanaSeleccionPista::evento_pantalla(int ancho, int alto)
+void VentanaSeleccionPista::evento_pantalla(float ancho, float alto)
 {
 	m_texto_titulo.dimension(Pantalla::Ancho, 40);
 	m_barra_desplazamiento->dimension(ancho, alto-100);

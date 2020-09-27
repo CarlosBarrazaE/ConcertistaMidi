@@ -24,11 +24,11 @@ Tabla::~Tabla()
 
 void Tabla::actualizar_ancho_columnas()
 {
-	unsigned int posicion_actual = this->x();
+	float posicion_actual = this->x();
 	for(Celda c : m_fila_titulo)
 	{
 		c.texto->posicion(posicion_actual, this->y());
-		unsigned int ancho_actual = (c.numero_espacio * this->ancho()) / m_espacio_total_columnas;
+		float ancho_actual = (static_cast<float>(c.numero_espacio) * this->ancho()) / static_cast<float>(m_espacio_total_columnas);
 		c.texto->dimension(ancho_actual, m_alto_fila);
 		posicion_actual += ancho_actual;
 	}
@@ -156,6 +156,8 @@ void Tabla::vaciar()
 
 void Tabla::cambiar_seleccion(int cambio)
 {
+	if(m_filas.size() == 0)
+		return;
 	//Se deselecciona la fila anterior y se marca la siguiente
 	//Si llega arriba comienza abajo de nuevo
 	if(!m_filas[m_fila_seleccionada]->esta_seleccionado())
@@ -189,19 +191,19 @@ void Tabla::cambiar_seleccion(int cambio)
 		//Desplaza la barra cuando se sale por arriba
 		float inicio_tabla = this->y()+m_alto_fila;
 		float inicio_fila = m_filas[m_fila_seleccionada]->y();
-		m_barra_desplazamiento->desplazar_y(inicio_tabla - inicio_fila);
+		m_barra_desplazamiento->desplazar_y(static_cast<int>(inicio_tabla - inicio_fila));
 	}
 	else if(m_filas[m_fila_seleccionada]->y() + m_filas[m_fila_seleccionada]->alto() > this->y()+this->alto())
 	{
 		//Desplaza la barra cuando se sale por abajo
 		float final_tabla = this->y()+this->alto();
 		float final_fila = m_filas[m_fila_seleccionada]->y() + m_filas[m_fila_seleccionada]->alto();
-		m_barra_desplazamiento->desplazar_y(final_tabla - final_fila);
+		m_barra_desplazamiento->desplazar_y(static_cast<int>(final_tabla - final_fila));
 	}
 
 }
 
-unsigned int Tabla::obtener_seleccion()
+unsigned long int Tabla::obtener_seleccion()
 {
 	return m_fila_seleccionada;
 }
