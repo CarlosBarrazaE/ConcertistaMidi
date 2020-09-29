@@ -8,6 +8,7 @@
 #include "../elementos_graficos/etiqueta.h++"
 #include "../elementos_graficos/tabla.h++"
 #include "../elementos_graficos/notificacion.h++"
+#include "../elementos_graficos/ruta_exploracion.h++"
 #include "../control/configuracion.h++"
 #include "../control/base_de_datos.h++"
 #include "../control/datos_musica.h++"
@@ -18,8 +19,6 @@ class VentanaSeleccionMusica : public Ventana
 private:
 	//Recursos
 	Rectangulo *m_rectangulo;
-	Etiqueta m_texto_titulo;
-	Tabla m_tabla_archivos;
 
 	//Datos
 	Configuracion *m_configuracion;
@@ -34,6 +33,9 @@ private:
 	//Componentes
 	Boton *m_boton_atras;
 	Boton *m_boton_continuar;
+	Etiqueta m_texto_titulo;
+	Tabla m_tabla_archivos;
+	Ruta_Exploracion m_ruta_exploracion;
 
 	void cargar_lista_carpetas();
 	void cargar_contenido_carpeta(std::string ruta_abrir);

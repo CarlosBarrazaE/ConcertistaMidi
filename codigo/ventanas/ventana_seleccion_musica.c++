@@ -1,6 +1,6 @@
 #include "ventana_seleccion_musica.h++"
 
-VentanaSeleccionMusica::VentanaSeleccionMusica(Configuracion *configuracion, Datos_Musica *musica, Administrador_Recursos *recursos) : Ventana(), m_texto_titulo(recursos), m_tabla_archivos(10, 50, Pantalla::Ancho-20, Pantalla::Alto-100, 40, recursos)
+VentanaSeleccionMusica::VentanaSeleccionMusica(Configuracion *configuracion, Datos_Musica *musica, Administrador_Recursos *recursos) : Ventana(), m_texto_titulo(recursos), m_tabla_archivos(10, 90, Pantalla::Ancho-20, Pantalla::Alto-140, 40, recursos), m_ruta_exploracion(10, 50, Pantalla::Ancho-20, 30, recursos)
 {
 	m_configuracion = configuracion;
 	m_musica = musica;
@@ -59,6 +59,7 @@ void VentanaSeleccionMusica::dibujar()
 	m_rectangulo->dibujar(0, Pantalla::Alto - 40, Pantalla::Ancho, 40, Color(0.761f, 0.887f, 0.985f));
 	m_texto_titulo.dibujar();
 
+	m_ruta_exploracion.dibujar();
 	m_tabla_archivos.dibujar();
 
 	m_boton_atras->dibujar();
@@ -238,10 +239,11 @@ bool VentanaSeleccionMusica::abrir_archivo_seleccionado()
 
 void VentanaSeleccionMusica::evento_raton(Raton *raton)
 {
+	m_ruta_exploracion.evento_raton(raton);
 	m_tabla_archivos.evento_raton(raton);
 
 	//Abrir el archivo con doble clic
-	if(raton->activado(BotonIzquierdo) && raton->numero_clics() == 2)
+	if(raton->activado(BotonIzquierdo) && m_tabla_archivos.seleccion_activada())
 	{
 		if(this->abrir_archivo_seleccionado())
 			m_accion = CambiarASeleccionPista;
@@ -299,8 +301,9 @@ void VentanaSeleccionMusica::evento_teclado(Tecla tecla, bool estado)
 
 void VentanaSeleccionMusica::evento_pantalla(float ancho, float alto)
 {
-	m_texto_titulo.dimension(Pantalla::Ancho, 40);
-	m_tabla_archivos.dimension(ancho-20, alto-100);
+	m_texto_titulo.dimension(ancho, 40);
+	m_ruta_exploracion.dimension(ancho-20, 30);
+	m_tabla_archivos.dimension(ancho-20, alto-140);
 
 	m_boton_atras->posicion(m_boton_atras->x(), alto - 32);
 	m_boton_continuar->posicion(ancho - 130, alto - 32);

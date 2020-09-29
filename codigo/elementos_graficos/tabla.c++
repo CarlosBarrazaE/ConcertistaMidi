@@ -7,6 +7,7 @@ Tabla::Tabla(float x, float y, float ancho, float alto, float alto_fila, Adminis
 
 	m_alto_fila = alto_fila;
 	m_fila_seleccionada = 0;//Primera fila predeterminada
+	m_seleccion_activada = false;
 
 	m_espacio_total_columnas = 0;
 
@@ -79,7 +80,10 @@ void Tabla::evento_raton(Raton *raton)
 		{
 			m_filas[m_fila_seleccionada]->deseleccionar();
 			m_fila_seleccionada = x;
+			m_seleccion_activada = false;
 		}
+		if(m_filas[x]->esta_seleccionado() && raton->numero_clics() == 2)
+			m_seleccion_activada = true;
 	}
 }
 
@@ -158,6 +162,7 @@ void Tabla::cambiar_seleccion(int cambio)
 {
 	if(m_filas.size() == 0)
 		return;
+	m_seleccion_activada = false;
 	//Se deselecciona la fila anterior y se marca la siguiente
 	//Si llega arriba comienza abajo de nuevo
 	if(!m_filas[m_fila_seleccionada]->esta_seleccionado())
@@ -205,5 +210,11 @@ void Tabla::cambiar_seleccion(int cambio)
 
 unsigned long int Tabla::obtener_seleccion()
 {
+	m_seleccion_activada = false;
 	return m_fila_seleccionada;
+}
+
+bool Tabla::seleccion_activada()
+{
+	return m_seleccion_activada;
 }

@@ -13,7 +13,7 @@ Generador_Particulas::Generador_Particulas(Sombreador *sombreador, Textura2D *te
 		1.0f,	1.0f,	1.0f,	1.0f,	//Arriba Derecha
 		1.0f,	0.0f,	1.0f,	0.0f,	//Abajo Derecha
 		0.0f,	1.0f,	0.0f,	1.0f,	//Arriba Izquierda
-		0.0f,	0.0f,	0.0f,	0.0f		//Abajo Izquierda
+		0.0f,	0.0f,	0.0f,	0.0f	//Abajo Izquierda
 	};
 
 	m_indice_objeto = 0; //Vertice temporal de objeto

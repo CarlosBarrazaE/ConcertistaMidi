@@ -25,8 +25,9 @@ private:
 	std::vector<Fila*> m_filas;
 
 	float m_alto_fila;
-	unsigned long int m_fila_seleccionada;
 	unsigned int m_espacio_total_columnas;
+	unsigned long int m_fila_seleccionada;
+	bool m_seleccion_activada;
 
 	//Etiqueta m_textos;
 	Rectangulo *m_rectangulo;
@@ -51,6 +52,7 @@ public:
 
 	void cambiar_seleccion(int cambio);
 	unsigned long int obtener_seleccion();
+	bool seleccion_activada();
 };
 
 #endif
