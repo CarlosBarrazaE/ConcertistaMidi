@@ -22,4 +22,26 @@ namespace Funciones
 
 		return std::to_string(horas) + ":" + tminutos + ":" + tsegundos;
 	}
+
+	std::vector<std::string> dividir_texto(const std::string &texto, char caracter)
+	{
+		std::vector<std::string> dividido;
+		std::string temporal;
+		for(unsigned long int x = 0; x<texto.length(); x++)
+		{
+			if(texto[x] == caracter)
+			{
+				if(temporal.length() > 0)
+					dividido.push_back(temporal);
+				temporal.clear();
+			}
+			else
+			{
+				temporal += texto[x];
+			}
+		}
+		if(temporal.length() > 0)
+			dividido.push_back(temporal);
+		return dividido;
+	}
 }

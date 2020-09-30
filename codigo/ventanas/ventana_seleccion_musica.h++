@@ -28,6 +28,7 @@ private:
 	std::vector<Datos_Archivos> m_lista_archivos;
 	std::string m_carpeta_inicial;
 	std::string m_carpeta_activa;
+	std::string m_nombre_carpeta_inicial;
 	bool m_es_carpeta_inicial;
 
 	//Componentes

@@ -5,6 +5,7 @@
 
 #include "elemento.h++"
 #include "boton.h++"
+#include "../util/funciones.h++"
 
 class Ruta_Exploracion : public Elemento
 {
@@ -18,7 +19,10 @@ private:
 	std::vector<Boton*> m_carpetas;
 
 	//Datos
-	unsigned int m_carpeta_seleccionada;
+	std::vector<std::string> m_rutas_botones;
+	bool m_cambiar_carpeta;
+	bool m_carpeta_anterior;
+	unsigned long int m_posicion_carpeta;
 public:
 	Ruta_Exploracion(float x, float y, float ancho, float alto, Administrador_Recursos *recursos);
 	~Ruta_Exploracion();
@@ -28,6 +32,12 @@ public:
 	void evento_raton(Raton *raton) override;
 
 	void dimension(float ancho, float alto) override;
+
+	void ruta_carpeta(const std::string &ruta_inicio, const std::string &ruta_completa, const std::string nombre_carpeta_inicial);
+
+	bool cambiar_carpeta();
+	bool boton_siguiente();
+	std::string nueva_ruta();
 };
 
 #endif

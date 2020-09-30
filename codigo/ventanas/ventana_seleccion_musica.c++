@@ -30,6 +30,14 @@ VentanaSeleccionMusica::VentanaSeleccionMusica(Configuracion *configuracion, Dat
 	m_carpeta_inicial = m_configuracion->leer("carpeta_inicial");
 	m_carpeta_activa = m_configuracion->leer("carpeta_activa");
 
+	//Cargar el nombre de la carpeta inicial
+	std::vector<std::vector<std::string>> ruta_carpetas = m_datos->ruta_carpetas();
+	for(unsigned int i=0; i<ruta_carpetas.size(); i++)
+	{
+		if(m_carpeta_inicial == ruta_carpetas[i][1])
+			m_nombre_carpeta_inicial = ruta_carpetas[i][0];
+	}
+
 	m_es_carpeta_inicial = false;
 	if(m_carpeta_inicial == "-")
 		m_carpeta_activa = "-";
@@ -154,8 +162,6 @@ void VentanaSeleccionMusica::crear_tabla(std::string ruta_abrir)
 	if(ruta_abrir != "" && std::ifstream(ruta_abrir))
 	{
 		Registro::Nota("Abriendo la carpeta: " + ruta_abrir);
-		//Limpia la lista de archivos
-		m_lista_archivos.clear();
 
 		//Almacena la carpeta raiz para retroceder
 		if(m_es_carpeta_inicial)
@@ -163,9 +169,19 @@ void VentanaSeleccionMusica::crear_tabla(std::string ruta_abrir)
 			m_carpeta_inicial = ruta_abrir;
 			m_configuracion->escribir("carpeta_inicial", ruta_abrir);
 			m_es_carpeta_inicial = false;
+
+			for(unsigned long int m = 0; m<m_lista_archivos.size(); m++)
+			{
+				if(ruta_abrir == m_lista_archivos[m].ruta)
+					m_nombre_carpeta_inicial = m_lista_archivos[m].nombre;
+			}
+
 		}
 		m_carpeta_activa = ruta_abrir;
 		m_configuracion->escribir("carpeta_activa", ruta_abrir);
+
+		//Limpia la lista de archivos
+		m_lista_archivos.clear();
 
 		this->cargar_contenido_carpeta(ruta_abrir);
 	}
@@ -185,6 +201,7 @@ void VentanaSeleccionMusica::crear_tabla(std::string ruta_abrir)
 
 		this->cargar_lista_carpetas();
 	}
+	m_ruta_exploracion.ruta_carpeta(m_carpeta_inicial, m_carpeta_activa, m_nombre_carpeta_inicial);
 
 
 	if(m_lista_archivos.size() == 0)
@@ -240,6 +257,15 @@ bool VentanaSeleccionMusica::abrir_archivo_seleccionado()
 void VentanaSeleccionMusica::evento_raton(Raton *raton)
 {
 	m_ruta_exploracion.evento_raton(raton);
+	if(m_ruta_exploracion.boton_siguiente())
+	{
+		if(this->abrir_archivo_seleccionado())
+			m_accion = CambiarASeleccionPista;
+	}
+
+	if(m_ruta_exploracion.cambiar_carpeta())
+		this->crear_tabla(m_ruta_exploracion.nueva_ruta());
+
 	m_tabla_archivos.evento_raton(raton);
 
 	//Abrir el archivo con doble clic

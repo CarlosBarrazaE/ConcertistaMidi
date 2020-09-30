@@ -15,10 +15,13 @@ private:
 	Color m_color_boton_actual;
 	Color m_color_boton_normal;
 	Color m_color_boton_sobre;
+	Color m_color_texto;
 
 	bool m_sobre_boton;
 	bool m_boton_pre_activado;
 	bool m_boton_activado;
+
+	bool m_habilitado;
 
 	void inicializar();
 
@@ -41,6 +44,7 @@ public:
 	void tipografia(Tipografia *tipografia);
 
 	bool esta_activado();
+	void habilitado(bool estado);
 };
 
 #endif
