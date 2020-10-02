@@ -23,6 +23,12 @@ private:
 	bool m_cambiar_carpeta;
 	bool m_carpeta_anterior;
 	unsigned long int m_posicion_carpeta;
+
+	float m_ancho_anterior;
+	float m_largo_actual;
+	unsigned long int m_primer_boton_mostrar;
+
+	void calcular_posicion();
 public:
 	Ruta_Exploracion(float x, float y, float ancho, float alto, Administrador_Recursos *recursos);
 	~Ruta_Exploracion();
@@ -37,6 +43,7 @@ public:
 
 	bool cambiar_carpeta();
 	bool boton_siguiente();
+	void boton_siguiente_habilitado(bool estado);
 	std::string nueva_ruta();
 };
 

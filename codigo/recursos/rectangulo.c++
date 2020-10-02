@@ -27,6 +27,9 @@ Rectangulo::Rectangulo(Sombreador *sombreador) : Figura(sombreador)
 	m_textura_estirable_horizontal = false;
 	m_textura_estirable_vertical = false;
 
+	m_borde_horizontal = 0;
+	m_borde_vertical = 0;
+
 	m_sombreador->uniforme_vector4f("color", m_color_rectangulo.rojo(), m_color_rectangulo.verde(), m_color_rectangulo.azul(), 1.0f);
 	m_sombreador->uniforme_bool("textura_activada", m_textura_activada);
 	m_sombreador->uniforme_bool("textura_estirable_horizontal", m_textura_estirable_horizontal);
@@ -120,13 +123,13 @@ void Rectangulo::dibujar_estirable(float x, float y, float ancho, float alto, fl
 		m_sombreador->uniforme_bool("textura_estirable_vertical", true);
 	}
 
-	if(m_borde_horizontal != borde_horizontal / ancho)
+	if(!Funciones::comparar_float(m_borde_horizontal, borde_horizontal / ancho, 0.0001f))
 	{
 		m_borde_horizontal = borde_horizontal / ancho;
 		cambio = true;
 	}
 
-	if(m_borde_vertical != borde_vertical / alto)
+	if(!Funciones::comparar_float(m_borde_vertical, borde_vertical / alto, 0.0001f))
 	{
 		m_borde_vertical = borde_vertical / alto;
 		cambio = true;

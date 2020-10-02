@@ -11,6 +11,7 @@ private:
 
 	float valor_limitado(float valor);
 	void establecer_valores(float rojo, float verde, float azul, float alfa);
+	bool comparar(float valor_1, float valor_2) const;
 public:
 	Color();
 	Color(const Color&);

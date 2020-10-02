@@ -5,6 +5,7 @@
 #include "figura.h++"
 #include "textura_2d.h++"
 #include "color.h++"
+#include "../util/funciones.h++"
 
 #include <vector>
 

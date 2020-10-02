@@ -56,6 +56,13 @@ void Color::establecer_valores(float rojo, float verde, float azul, float alfa)
 	m_alfa = this->valor_limitado(alfa);
 }
 
+bool Color::comparar(float valor_1, float valor_2) const
+{
+	int resultado_1 = static_cast<int>(valor_1 * 254.0f);
+	int resultado_2 = static_cast<int>(valor_2 * 254.0f);
+	return resultado_1 == resultado_2;
+}
+
 void Color::color(int rojo, int verde, int azul)
 {
 	this->establecer_valores(static_cast<float>(rojo) / 254.0f, static_cast<float>(verde) / 254.0f, static_cast<float>(azul) / 254.0f, 1.0f);
@@ -125,12 +132,12 @@ void Color::tono(float valor)
 
 bool Color::operator == (const Color &c) const
 {
-	return m_rojo == c.m_rojo && m_verde == c.m_verde && m_azul == c.m_azul && m_alfa == c.m_alfa;
+	return comparar(m_rojo, c.m_rojo) && comparar(m_verde, c.m_verde) && comparar(m_azul, c.m_azul) && comparar(m_alfa, c.m_alfa);
 }
 
 bool Color::operator != (const Color &c) const
 {
-	return m_rojo != c.m_rojo || m_verde != c.m_verde || m_azul != c.m_azul || m_alfa != c.m_alfa;
+	return !comparar(m_rojo, c.m_rojo) || !comparar(m_verde, c.m_verde) || !comparar(m_azul, c.m_azul) || !comparar(m_alfa, c.m_alfa);
 }
 
 Color& Color::operator = (const Color &c)

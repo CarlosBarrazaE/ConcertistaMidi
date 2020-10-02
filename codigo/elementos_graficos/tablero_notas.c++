@@ -109,7 +109,7 @@ void Tablero_Notas::dibujar_notas(int pista)
 		largo_nota = static_cast<float>(m_notas[pista][n].end - m_notas[pista][n].start) / static_cast<float>(m_duracion_nota);
 
 		//El alto minimo de la nota a mostrar es de 20 pixeles
-		if((posicion_y-largo_nota > 0 && largo_nota >= 20) || (posicion_y > 20 && largo_nota < 20) || largo_nota == 0)//La nota n salio de la pantalla
+		if((posicion_y-largo_nota > 0 && largo_nota >= 20) || (posicion_y > 20 && largo_nota < 20) || largo_nota <= 0)//La nota n salio de la pantalla
 		{
 			if(n == m_ultima_nota[pista])
 				m_ultima_nota[pista] = n+1;
@@ -146,7 +146,7 @@ void Tablero_Notas::dibujar_notas(int pista)
 			else if(negra==4)
 				ajuste_negra = m_ancho_blanca - (m_ancho_negra * 0.5f);
 
-			if(posicion_y >= -5 && posicion_y < 0 && m_tiempo_espera_negras[posicion_blanca] == 0)
+			if(posicion_y >= -5 && posicion_y < 0 && m_tiempo_espera_negras[posicion_blanca] <= 0)
 			{
 				posicion_negra = Octava::prosicion_nota_negra(m_notas[pista][n].note_id) - m_teclado->desplazamiento_negras();
 				m_tiempo_espera_negras[posicion_negra] = (-posicion_y)-1;
@@ -167,7 +167,7 @@ void Tablero_Notas::dibujar_notas(int pista)
 			ancho_tecla = m_ancho_blanca;
 			ajuste_negra = 0;
 
-			if(posicion_y >= -5 && posicion_y < 0 && m_tiempo_espera_blancas[posicion_blanca] == 0)
+			if(posicion_y >= -5 && posicion_y < 0 && m_tiempo_espera_blancas[posicion_blanca] <= 0)
 			{
 				m_tiempo_espera_blancas[posicion_blanca] = (-posicion_y)-1;
 			}

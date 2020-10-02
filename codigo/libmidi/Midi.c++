@@ -580,7 +580,7 @@ double Midi::GetSongPercentageComplete() const
 	if (pos < 0)
 		return 0.0;
 
-	if (len == 0)
+	if (len <= 0)
 		return 1.0;
 
 	return std::min( (pos / len), 1.0 );

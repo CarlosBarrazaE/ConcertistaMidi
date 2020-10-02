@@ -38,7 +38,7 @@ void Notificacion::actualizar(unsigned int diferencia_tiempo)
 
 				if(actual->tiempo > 1 && actual->opacidad < 1)
 					actual->opacidad += (static_cast<float>(diferencia_tiempo) / 1000000000.0f)*4;//0.25 Segundos para aparecer
-				else if(actual->tiempo <= 0.25 && actual->opacidad > 0)
+				else if(actual->tiempo <= 0.25f && actual->opacidad > 0)
 					actual->opacidad -= (static_cast<float>(diferencia_tiempo) / 1000000000.0f)*4;//0.25 Segundos para desaparecer
 			}
 

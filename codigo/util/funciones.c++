@@ -44,4 +44,11 @@ namespace Funciones
 			dividido.push_back(temporal);
 		return dividido;
 	}
+
+	bool comparar_float(float valor1, float valor2, float diferencia_minima)
+	{
+		if(valor1 < valor2 + diferencia_minima && valor1 > valor2 - diferencia_minima)
+			return true;
+		return false;
+	}
 }

@@ -87,7 +87,7 @@ void Generador_Particulas::dibujar()
 	m_sombreador->activar();
 	m_textura->activar();
 
-	if(Generador_Particulas::Ultima_escala != m_escala)
+	if(!Funciones::comparar_float(Generador_Particulas::Ultima_escala, m_escala, 0.0001f))
 	{
 		Generador_Particulas::Ultima_escala = m_escala;
 		m_sombreador->uniforme_float("escala", Generador_Particulas::Ultima_escala);
@@ -100,7 +100,7 @@ void Generador_Particulas::dibujar()
 		p = &m_particulas[i];
 		p->vida -= m_tiempo;
 
-		if(p->vida > 0.0)
+		if(p->vida > 0.0f)
 		{
 			p->posicion_x -= p->velocidad_x*m_tiempo;
 			p->posicion_y -= p->velocidad_y*m_tiempo;

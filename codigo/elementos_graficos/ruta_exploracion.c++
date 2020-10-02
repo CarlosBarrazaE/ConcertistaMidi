@@ -14,6 +14,10 @@ Ruta_Exploracion::Ruta_Exploracion(float x, float y, float ancho, float alto, Ad
 	m_carpeta_anterior = false;
 	m_cambiar_carpeta = false;
 	m_posicion_carpeta = 0;
+
+	m_ancho_anterior = this->ancho();
+	m_largo_actual = 0;
+	m_primer_boton_mostrar = 0;
 }
 
 Ruta_Exploracion::~Ruta_Exploracion()
@@ -25,19 +29,58 @@ Ruta_Exploracion::~Ruta_Exploracion()
 		delete b;
 }
 
+void Ruta_Exploracion::calcular_posicion()
+{
+	//Calcular las nuevas posiciones
+	if(m_largo_actual > this->ancho() || !Funciones::comparar_float(m_ancho_anterior ,this->ancho(), 0.01f))
+	{
+		float largo_actual = 65;
+		float ancho_siguiente = 0;
+		unsigned long int mostrar_actual = 0;
+
+		//Encuentra el numero de botones que alcanzan
+		if(m_carpetas.size() > 0)
+		{
+			ancho_siguiente = m_carpetas[m_carpetas.size()-1]->ancho();
+			mostrar_actual = m_carpetas.size()-1;
+		}
+		for(unsigned long int x = m_carpetas.size(); x > 0 && largo_actual+ancho_siguiente < this->ancho(); x--)
+		{
+			//x-1 es una posicion valida
+			largo_actual += m_carpetas[x-1]->ancho();
+			mostrar_actual = x-1;
+
+			if(x-1 > 0)
+				ancho_siguiente = m_carpetas[x-2]->ancho();
+		}
+
+		if(m_primer_boton_mostrar != mostrar_actual)
+		{
+			m_primer_boton_mostrar = mostrar_actual;
+			float posicion_texto = 65;
+			//Actualiza las posiciones
+			for(unsigned long int x = m_primer_boton_mostrar; x < m_carpetas.size(); x++)
+			{
+				m_carpetas[x]->posicion(this->x() + posicion_texto, this->y());
+				posicion_texto +=  m_carpetas[x]->ancho();
+			}
+			m_largo_actual = posicion_texto;
+		}
+		m_ancho_anterior = this->ancho();
+	}
+}
+
 void Ruta_Exploracion::actualizar(unsigned int /*diferencia_tiempo*/)
 {
 }
 
 void Ruta_Exploracion::dibujar()
 {
-	m_rectangulo->textura(false);
-
 	m_boton_atraz->dibujar();
 	m_boton_adelante->dibujar();
 
-	for(Boton *b : m_carpetas)
-		b->dibujar();
+	for(unsigned long int x = m_primer_boton_mostrar; x < m_carpetas.size(); x++)
+		m_carpetas[x]->dibujar();
 }
 
 void Ruta_Exploracion::evento_raton(Raton *raton)
@@ -47,7 +90,7 @@ void Ruta_Exploracion::evento_raton(Raton *raton)
 		m_carpeta_anterior = true;
 
 	m_boton_adelante->evento_raton(raton);
-	for(unsigned long int x = 0; x<m_carpetas.size(); x++)
+	for(unsigned long int x = m_primer_boton_mostrar; x<m_carpetas.size(); x++)
 	{
 		m_carpetas[x]->evento_raton(raton);
 		if(m_carpetas[x]->esta_activado())
@@ -61,6 +104,7 @@ void Ruta_Exploracion::evento_raton(Raton *raton)
 void Ruta_Exploracion::dimension(float ancho, float alto)
 {
 	this->_dimension(ancho, alto);
+	this->calcular_posicion();
 }
 
 void Ruta_Exploracion::ruta_carpeta(const std::string &ruta_inicio, const std::string &ruta_completa, const std::string nombre_carpeta_inicial)
@@ -114,6 +158,9 @@ void Ruta_Exploracion::ruta_carpeta(const std::string &ruta_inicio, const std::s
 				posicion_texto += m_carpetas[m_carpetas.size()-1]->ancho();
 			}
 		}
+		m_largo_actual = posicion_texto;
+		m_primer_boton_mostrar = 0;
+		this->calcular_posicion();
 	}
 	if(ruta_completa == "-")
 		m_boton_atraz->habilitado(false);
@@ -129,6 +176,11 @@ bool Ruta_Exploracion::cambiar_carpeta()
 bool Ruta_Exploracion::boton_siguiente()
 {
 	return m_boton_adelante->esta_activado();
+}
+
+void Ruta_Exploracion::boton_siguiente_habilitado(bool estado)
+{
+	m_boton_adelante->habilitado(estado);
 }
 
 std::string Ruta_Exploracion::nueva_ruta()

@@ -34,7 +34,7 @@ void Titulo::actualizar(unsigned int diferencia_tiempo)
 	if(m_estado == 0)//Aparecer
 	{
 		m_alfa +=valocidad_alfa;
-		if(m_alfa >= 1.0)
+		if(m_alfa >= 1.0f)
 		{
 			m_alfa = 1.0;
 			m_estado = 1;
@@ -64,7 +64,7 @@ void Titulo::actualizar(unsigned int diferencia_tiempo)
 	else if(m_estado == 4)//Desaparecer
 	{
 		m_alfa -=valocidad_alfa;
-		if(m_alfa < 0.0)
+		if(m_alfa < 0.0f)
 		{
 			m_alfa = 0.0;
 			m_estado = 5;
