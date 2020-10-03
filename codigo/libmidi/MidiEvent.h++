@@ -7,11 +7,11 @@
 #ifndef __MIDI_EVENT_H
 #define __MIDI_EVENT_H
 
-#include <iostream>
 #include <string>
 
 #include "Note.h++"
 #include "MidiUtil.h++"
+#include "../util/funciones.h++"
 
 struct MidiEventSimple
 {

@@ -29,6 +29,7 @@ private:
 	Administrador_Recursos *m_recursos;
 	Rectangulo *m_rectangulo;
 	Etiqueta m_texto_fps;
+	Etiqueta m_informacion;
 	Notificacion m_notificaciones;
 
 	//Control de fps

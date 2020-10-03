@@ -76,7 +76,10 @@ void Etiqueta::dibujar()
 		return;
 
 	if(m_tipografia == NULL)
+	{
+		Registro::Error("Etiqueta sin tipografia en texto: " + m_texto_actual);
 		return;
+	}
 
 	int nueva_x = 0;
 	int nueva_y = 0;

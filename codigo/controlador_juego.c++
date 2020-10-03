@@ -1,7 +1,7 @@
 #include "controlador_juego.h++"
 #include <SDL2/SDL.h>
 
-Controlador_Juego::Controlador_Juego(Administrador_Recursos *recursos) : m_texto_fps(recursos), m_notificaciones(recursos)
+Controlador_Juego::Controlador_Juego(Administrador_Recursos *recursos) : m_texto_fps(recursos), m_informacion(recursos), m_notificaciones(recursos)
 {
 	m_recursos = recursos;
 	m_rectangulo = recursos->figura(F_Rectangulo);
@@ -11,6 +11,8 @@ Controlador_Juego::Controlador_Juego(Administrador_Recursos *recursos) : m_texto
 	m_texto_fps.posicion(10, 0);
 	m_texto_fps.dimension(40, 40);
 	m_texto_fps.centrado_vertical(true);
+
+	m_informacion.tipografia(recursos->tipografia(LetraChica));
 
 	m_ventana_actual = new VentanaTitulo(recursos);
 
@@ -68,6 +70,10 @@ void Controlador_Juego::actualizar()
 		m_rectangulo->textura(false);
 		m_rectangulo->dibujar(static_cast<float>(m_raton.x())-11, static_cast<float>(m_raton.y()), 21, 1, Color(1.0f, 0.0f, 0.0f));
 		m_rectangulo->dibujar(static_cast<float>(m_raton.x()), static_cast<float>(m_raton.y())-11, 1, 21, Color(1.0f, 0.0f, 0.0f));
+
+		m_informacion.posicion(static_cast<float>(m_raton.x()+2), static_cast<float>(m_raton.y()-15));
+		m_informacion.texto("X: " + std::to_string(m_raton.x()) + " Y: " + std::to_string(m_raton.y()));
+		m_informacion.dibujar();
 	}
 
 	bool cambio_ventana = false;

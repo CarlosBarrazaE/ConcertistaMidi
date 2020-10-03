@@ -126,8 +126,10 @@ void MidiEvent::ReadMeta(std::istream &stream)
 		case MidiMetaEvent_Cue:
 		case MidiMetaEvent_PatchName:
 		case MidiMetaEvent_DeviceName:
-			m_text = std::string(buffer, meta_length);
+		{
+			m_text = Funciones::convertir_a_utf8(buffer, static_cast<int>(meta_length), "windows-1252");
 			break;
+		}
 
 		case MidiMetaEvent_TempoChange:
 		{

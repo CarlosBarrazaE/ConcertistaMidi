@@ -133,10 +133,34 @@ void VentanaOrgano::actualizar(unsigned int diferencia_tiempo)
 			//Eventos de texto
 			if(i->second.HasText())
 			{
-				if(m_subtitulo_texto.length() < 70)
-					m_subtitulo_texto += i->second.Text();
-				else
-					m_subtitulo_texto = m_subtitulo_texto.substr(i->second.Text().length()) + i->second.Text();
+				std::string nuevo_texto = i->second.Text();
+				bool nueva_linea = false;
+				if(nuevo_texto.length() > 0)
+				{
+					for(unsigned int x = 0; x<nuevo_texto.length(); x++)
+					{
+						if(nuevo_texto[x] == '/' || nuevo_texto[x] == '\\')
+						{
+							if(x+1<nuevo_texto.length())
+								m_subtitulo_texto = nuevo_texto.substr(x+1);
+							else
+								m_subtitulo_texto = "";
+							nueva_linea = true;
+							break;
+						}
+					}
+
+				}
+				if(m_subtitulo_texto.length() < 70 && !nueva_linea)
+					m_subtitulo_texto += nuevo_texto;
+				else if(!nueva_linea)
+				{
+					unsigned long int quitar = m_subtitulo_texto.length() - 70;
+					if(m_subtitulo_texto.length() > nuevo_texto.length()+quitar)
+						m_subtitulo_texto = m_subtitulo_texto.substr(nuevo_texto.length()+quitar) + nuevo_texto;
+					else
+						m_subtitulo_texto = nuevo_texto;
+				}
 				m_subtitulos.texto(m_subtitulo_texto);
 			}
 		}
@@ -220,7 +244,10 @@ void VentanaOrgano::dibujar()
 	if(m_pausa)
 		m_texto_pausa.dibujar();
 	if(m_subtitulo_texto.length() > 0)
+	{
+		m_rectangulo->dibujar(Pantalla::Centro_horizontal()-((m_subtitulos.largo_texto()+20)/2), 90, m_subtitulos.largo_texto()+20, m_subtitulos.alto_texto()+20, Color(0.7f, 0.9f, 0.9f));
 		m_subtitulos.dibujar();
+	}
 	m_titulo_musica->dibujar();
 }
 
@@ -340,4 +367,5 @@ void VentanaOrgano::evento_pantalla(float ancho, float alto)
 
 	m_texto_velocidad.dimension(ancho, 40);
 	m_texto_pausa.dimension(ancho, 40);
+	m_subtitulos.dimension(Pantalla::Ancho, 20);
 }

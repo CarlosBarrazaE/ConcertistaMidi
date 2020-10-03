@@ -51,4 +51,42 @@ namespace Funciones
 			return true;
 		return false;
 	}
+
+	std::string convertir_a_utf8(const char *entrada, int largo_entrada, const char *nombre_codificacion)
+	{
+		UErrorCode  estado = U_ZERO_ERROR;
+		UConverter *convertidor = ucnv_open(nombre_codificacion, &estado);
+
+		//Se calcula el tamaño de la nueva cadena
+		int32_t largo = ucnv_toUChars(convertidor, NULL, 0, entrada, largo_entrada, &estado);
+		//Se omite el error evidente de desbordamiento, no conozco otra forma de calcular el nuevo tamaño
+		if(U_FAILURE(estado) && estado != U_BUFFER_OVERFLOW_ERROR)
+		{
+			Registro::Error("Fallo la conversion: " + std::string(u_errorName(estado)));
+			ucnv_close(convertidor);
+			return "";
+		}
+
+		//Se construye la nueva cadena
+		UChar *cadena_salida = new UChar[largo+1];
+		estado = U_ZERO_ERROR;
+		ucnv_toUChars(convertidor, cadena_salida, largo, entrada, largo_entrada, &estado);
+		if(U_FAILURE(estado))
+		{
+			Registro::Error("Fallo la conversion: " + std::string(u_errorName(estado)));
+			ucnv_close(convertidor);
+			delete[] cadena_salida;
+			return "";
+		}
+
+		//Se convierte a un string
+		std::string resultado;
+		icu::UnicodeString unicode = icu::UnicodeString(cadena_salida, largo);
+		unicode.toUTF8String(resultado);
+
+		ucnv_close(convertidor);
+		delete[] cadena_salida;
+
+		return resultado;
+	}
 }
