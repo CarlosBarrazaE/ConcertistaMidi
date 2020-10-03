@@ -146,17 +146,19 @@ void Tablero_Notas::dibujar_notas(unsigned int pista)
 			else if(negra==4)
 				ajuste_negra = m_ancho_blanca - (m_ancho_negra * 0.5f);
 
-			if(posicion_y >= -5 && posicion_y < 0 && m_tiempo_espera_negras[posicion_blanca] <= 0)
+			posicion_negra = Octava::prosicion_nota_negra(m_notas[pista][n].note_id) - m_teclado->desplazamiento_negras();
+
+			//Solo notas dentro del teclado de 88 teclas
+			if(posicion_negra < m_tiempo_espera_negras.size())
 			{
-				posicion_negra = Octava::prosicion_nota_negra(m_notas[pista][n].note_id) - m_teclado->desplazamiento_negras();
-				m_tiempo_espera_negras[posicion_negra] = (-posicion_y)-1;
-			}
-			else if(posicion_y >= 0)
-			{
-				posicion_negra = Octava::prosicion_nota_negra(m_notas[pista][n].note_id) - m_teclado->desplazamiento_negras();
-				if(m_tiempo_espera_negras[posicion_negra] <= 0)
+				if(posicion_y >= -5 && posicion_y < 0 && m_tiempo_espera_negras[posicion_negra] <= 0)
+					m_tiempo_espera_negras[posicion_negra] = (-posicion_y)-1;
+				else if(posicion_y >= 0)
 				{
-					m_teclas_activas_negras[posicion_negra] = m_pistas->at(pista).color();
+					if(m_tiempo_espera_negras[posicion_negra] <= 0)
+					{
+						m_teclas_activas_negras[posicion_negra] = m_pistas->at(pista).color();
+					}
 				}
 			}
 			es_negra = true;
@@ -167,16 +169,18 @@ void Tablero_Notas::dibujar_notas(unsigned int pista)
 			ancho_tecla = m_ancho_blanca;
 			ajuste_negra = 0;
 
-			if(posicion_y >= -5 && posicion_y < 0 && m_tiempo_espera_blancas[posicion_blanca] <= 0)
+			//Solo notas dentro del teclado de 88 teclas
+			if(posicion_blanca < m_tiempo_espera_blancas.size())
 			{
-				m_tiempo_espera_blancas[posicion_blanca] = (-posicion_y)-1;
-			}
-			else if(posicion_y >= 0)
-			{
-				if(m_tiempo_espera_blancas[posicion_blanca] <= 0)
+				if(posicion_y >= -5 && posicion_y < 0 && m_tiempo_espera_blancas[posicion_blanca] <= 0)
+					m_tiempo_espera_blancas[posicion_blanca] = (-posicion_y)-1;
+				else if(posicion_y >= 0)
 				{
-				//if(posicion_y >= 0)//Nuevo
-					m_teclas_activas_blancas[posicion_blanca] = m_pistas->at(pista).color();
+					if(m_tiempo_espera_blancas[posicion_blanca] <= 0)
+					{
+					//if(posicion_y >= 0)//Nuevo
+						m_teclas_activas_blancas[posicion_blanca] = m_pistas->at(pista).color();
+					}
 				}
 			}
 			es_negra = false;
