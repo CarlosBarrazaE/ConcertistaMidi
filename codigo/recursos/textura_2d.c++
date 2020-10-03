@@ -24,12 +24,7 @@ Textura2D::~Textura2D()
 	Textura2D::Ultimo_indice_seleccionado = 0;
 }
 
-unsigned int Textura2D::o_indice()
-{
-	return m_indice_textura;
-}
-
-void Textura2D::generar(unsigned int ancho, unsigned int alto, unsigned int bits, unsigned char *datos)
+void Textura2D::generar(int ancho, int alto, unsigned int bits, unsigned char *datos)
 {
 	m_ancho = ancho;
 	m_alto = alto;
@@ -40,7 +35,7 @@ void Textura2D::generar(unsigned int ancho, unsigned int alto, unsigned int bits
 		m_formato = GL_RGBA;
 
 	glBindTexture(GL_TEXTURE_2D, m_indice_textura);
-	glTexImage2D(GL_TEXTURE_2D, 0, m_formato, ancho, alto, 0, m_formato, GL_UNSIGNED_BYTE, datos);
+	glTexImage2D(GL_TEXTURE_2D, 0, static_cast<int>(m_formato), ancho, alto, 0, m_formato, GL_UNSIGNED_BYTE, datos);
 	//glGenerateMipmap(GL_TEXTURE_2D);
 
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, m_envolver_s);
@@ -60,21 +55,21 @@ void Textura2D::activar()
 	}
 }
 
-void Textura2D::envolver_horizontal(unsigned int valor)
+void Textura2D::envolver_horizontal(int valor)
 {
 	m_envolver_s = valor;
 	this->activar();
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, m_envolver_s);
 }
 
-void Textura2D::envolver_vertical(unsigned int valor)
+void Textura2D::envolver_vertical(int valor)
 {
 	m_envolver_t = valor;
 	this->activar();
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, m_envolver_t);
 }
 
-void Textura2D::envolver(unsigned int s, unsigned int t)
+void Textura2D::envolver(int s, int t)
 {
 	m_envolver_s = s;
 	m_envolver_t = t;
@@ -83,14 +78,14 @@ void Textura2D::envolver(unsigned int s, unsigned int t)
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, m_envolver_t);
 }
 
-void Textura2D::filtro_minimizar(unsigned int valor)
+void Textura2D::filtro_minimizar(int valor)
 {
 	m_filtro_minimizar = valor;
 	this->activar();
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, m_filtro_minimizar);
 }
 
-void Textura2D::filtro_maximizar(unsigned int valor)
+void Textura2D::filtro_maximizar(int valor)
 {
 	m_filtro_maximizar = valor;
 	this->activar();

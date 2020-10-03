@@ -89,7 +89,7 @@ Textura2D *Administrador_Recursos::textura(Textura valor)
 		Archivo::Tga textura_nueva(m_archivo_texturas[valor]);
 
 		temporal = new Textura2D();
-		temporal->generar(textura_nueva.ancho(), textura_nueva.alto(), textura_nueva.bytes(), textura_nueva.imagen());
+		temporal->generar(static_cast<int>(textura_nueva.ancho()), static_cast<int>(textura_nueva.alto()), textura_nueva.bytes(), textura_nueva.imagen());
 
 		m_lista_texturas[valor] = temporal;
 

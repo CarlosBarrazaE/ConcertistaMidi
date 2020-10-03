@@ -23,8 +23,8 @@ namespace Archivo
 					{
 						//La cabecera contiene: ancho, alto y los bpp
 						//El ancho se guarda en cabecera[0] y cabecera[1] para leerlo hay que multiplicar cabecera[1]*256
-						m_ancho_imagen = 256 * cabecera[1] + cabecera[0];
-						m_alto_imagen = 256 * cabecera[3] + cabecera[2];
+						m_ancho_imagen = static_cast<unsigned int>(256 * cabecera[1] + cabecera[0]);
+						m_alto_imagen = static_cast<unsigned int>(256 * cabecera[3] + cabecera[2]);
 
 						if(m_ancho_imagen > 0 && m_alto_imagen > 0)
 						{

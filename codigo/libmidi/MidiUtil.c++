@@ -22,7 +22,7 @@ unsigned short BigToSystem16(unsigned short x)
 
 unsigned long parse_variable_length(std::istream &in)
 {
-	unsigned long value = in.get();
+	unsigned long value = static_cast<unsigned int>(in.get());
 
 	if (in.good() && (value & 0x80))
 	{
@@ -31,7 +31,7 @@ unsigned long parse_variable_length(std::istream &in)
 		unsigned long c;
 		do
 		{
-			c = in.get();
+			c = static_cast<unsigned int>(in.get());
 			value = (value << 7) + (c & 0x7F);
 		}
 		while (in.good() && (c & 0x80));

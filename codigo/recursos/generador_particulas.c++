@@ -50,9 +50,9 @@ Generador_Particulas::~Generador_Particulas()
 	glDeleteBuffers(1, &m_indice_objeto);
 }
 
-int Generador_Particulas::particula_inactiva()
+unsigned int Generador_Particulas::particula_inactiva()
 {
-	int particula = 0;
+	unsigned int particula = 0;
 	if(m_particulas_activas < m_particulas_maximas)
 	{
 		particula = m_ultima_particula_activa;
@@ -97,7 +97,7 @@ void Generador_Particulas::dibujar()
 	unsigned int dibujar_particulas = 0;
 	for(int i = static_cast<int>(m_primera_particula_activa); dibujar_particulas < m_particulas_activas; i++)
 	{
-		p = &m_particulas[i];
+		p = &m_particulas[static_cast<unsigned int>(i)];
 		p->vida -= m_tiempo;
 
 		if(p->vida > 0.0f)

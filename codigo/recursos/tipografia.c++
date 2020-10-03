@@ -61,9 +61,9 @@ void Tipografia::generar_caracteres()
 
 		FT_GlyphSlot letra = m_tipografia->glyph;
 
-		m_ancho_atlas += letra->bitmap.width;
-		if(letra->bitmap.rows > m_alto_atlas)
-			m_alto_atlas = letra->bitmap.rows;
+		m_ancho_atlas += static_cast<int>(letra->bitmap.width);
+		if(static_cast<int>(letra->bitmap.rows) > m_alto_atlas)
+			m_alto_atlas = static_cast<int>(letra->bitmap.rows);
 		contador++;
 	}
 
@@ -102,8 +102,8 @@ void Tipografia::generar_caracteres()
 
 		Caracter *letra_nueva = new Caracter();
 		letra_nueva->codigo_unicode = letra_actual;
-		letra_nueva->ancho = letra->bitmap.width;
-		letra_nueva->alto = letra->bitmap.rows;
+		letra_nueva->ancho = static_cast<int>(letra->bitmap.width);
+		letra_nueva->alto = static_cast<int>(letra->bitmap.rows);
 		letra_nueva->ajuste_izquierda = letra->bitmap_left;
 		letra_nueva->ajuste_arriba = letra->bitmap_top;
 		letra_nueva->avance_x = letra->advance.x;
@@ -111,8 +111,8 @@ void Tipografia::generar_caracteres()
 		letra_nueva->textura_x = posicion_textura;
 		m_caracteres[idioma_espannol[n]] = letra_nueva;
 
-		glTexSubImage2D(GL_TEXTURE_2D, 0, posicion_textura, 0, letra->bitmap.width, letra->bitmap.rows, GL_RED, GL_UNSIGNED_BYTE, letra->bitmap.buffer);
-		posicion_textura += letra->bitmap.width;
+		glTexSubImage2D(GL_TEXTURE_2D, 0, posicion_textura, 0, letra_nueva->ancho, letra_nueva->alto, GL_RED, GL_UNSIGNED_BYTE, letra->bitmap.buffer);
+		posicion_textura += static_cast<int>(letra->bitmap.width);
 	}
 }
 
@@ -135,7 +135,7 @@ int Tipografia::crear_texto(icu::UnicodeString texto, unsigned int *indice_objet
 
 	Caracter *letra;
 	unsigned int letra_anterior = 0;
-	float vertices[6*texto.length()][4];
+	float vertices[static_cast<unsigned long int>(6*texto.length())][4];
 	int posicion_arreglo = 0;
 
 	for(int n=0; n<texto.length(); n++)
@@ -200,7 +200,7 @@ int Tipografia::crear_texto(icu::UnicodeString texto, unsigned int *indice_objet
 
 	glGenBuffers(1, indice_objeto);
 	glBindBuffer(GL_ARRAY_BUFFER, *indice_objeto);
-	glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
+	glBufferData(GL_ARRAY_BUFFER, static_cast<GLsizeiptr>(sizeof(vertices)), vertices, GL_STATIC_DRAW);
 
 	glVertexAttribPointer(0, 4, GL_FLOAT, GL_FALSE, 4 * sizeof(float), 0);
 	glEnableVertexAttribArray(0);

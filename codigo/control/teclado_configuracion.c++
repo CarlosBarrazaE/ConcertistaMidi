@@ -13,7 +13,7 @@ Teclado_Configuracion::Teclado_Configuracion()
 	m_en_do_primera_barra = true;
 }
 
-Teclado_Configuracion::Teclado_Configuracion(int numero_b,int numero_n, int inicio_b, int inicio_n, int desplazamiento_b, int desplazamiento_n, int primera_barra, bool en_do_primera_barra)
+Teclado_Configuracion::Teclado_Configuracion(unsigned int numero_b, unsigned int numero_n, unsigned int inicio_b, unsigned int inicio_n, unsigned int desplazamiento_b, unsigned int desplazamiento_n, unsigned int primera_barra, bool en_do_primera_barra)
 {
 	m_numero_blancas = numero_b;
 	m_numero_negras = numero_n;
@@ -25,37 +25,37 @@ Teclado_Configuracion::Teclado_Configuracion(int numero_b,int numero_n, int inic
 	m_en_do_primera_barra = en_do_primera_barra;
 }
 
-int Teclado_Configuracion::numero_blancas()
+unsigned int Teclado_Configuracion::numero_blancas()
 {
 	return m_numero_blancas;
 }
 
-int Teclado_Configuracion::numero_negras()
+unsigned int Teclado_Configuracion::numero_negras()
 {
 	return m_numero_negras;
 }
 
-int Teclado_Configuracion::inicio_blancas()
+unsigned int Teclado_Configuracion::inicio_blancas()
 {
 	return m_inicio_blanca;
 }
 
-int Teclado_Configuracion::inicio_negras()
+unsigned int Teclado_Configuracion::inicio_negras()
 {
 	return m_inicio_negra;
 }
 
-int Teclado_Configuracion::desplazamiento_blancas()
+unsigned int Teclado_Configuracion::desplazamiento_blancas()
 {
 	return m_desplazamiento_blancas;
 }
 
-int Teclado_Configuracion::desplazamiento_negras()
+unsigned int Teclado_Configuracion::desplazamiento_negras()
 {
 	return m_desplazamiento_negras;
 }
 
-int Teclado_Configuracion::primera_barra()
+unsigned int Teclado_Configuracion::primera_barra()
 {
 	return m_primera_barra;
 }

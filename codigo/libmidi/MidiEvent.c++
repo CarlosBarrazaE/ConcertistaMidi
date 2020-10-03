@@ -108,7 +108,7 @@ void MidiEvent::ReadMeta(std::istream &stream)
 	char *buffer = new char[meta_length + 1];
 	buffer[meta_length] = 0;
 
-	stream.read(buffer, meta_length);
+	stream.read(buffer, static_cast<std::streamsize>(meta_length));
 	if (stream.fail())
 	{
 		delete[] buffer;
@@ -175,7 +175,7 @@ void MidiEvent::ReadSysEx(std::istream &stream)
 
 	// Discard
 	char *buffer = new char[sys_ex_length];
-	stream.read(buffer, sys_ex_length);
+	stream.read(buffer, static_cast<std::streamsize>(sys_ex_length));
 	delete[] buffer;
 }
 

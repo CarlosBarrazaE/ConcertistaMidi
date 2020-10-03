@@ -30,7 +30,7 @@ struct Caracter
 	int ajuste_arriba;
 	long int avance_x;
 	long int avance_y;
-	unsigned int textura_x;//Posicion dentro del atlas
+	int textura_x;//Posicion dentro del atlas
 };
 
 class Tipografia
@@ -41,8 +41,8 @@ private:
 
 	std::map<unsigned int, Caracter*> m_caracteres;
 	unsigned int m_indice_atlas;
-	unsigned int m_ancho_atlas;
-	unsigned int m_alto_atlas;
+	int m_ancho_atlas;
+	int m_alto_atlas;
 
 	int m_tamanno_letra;
 

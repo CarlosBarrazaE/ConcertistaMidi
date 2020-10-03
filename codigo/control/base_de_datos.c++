@@ -79,7 +79,7 @@ std::vector<std::vector<std::string>> Base_de_Datos::consulta_tabla(std::string 
 	if(respuesta == SQLITE_OK)
 	{
 		sqlite3_step(respuesta_consulta);
-		int x = 0;
+		unsigned int x = 0;
 		while(sqlite3_column_text(respuesta_consulta, 0))
 		{
 			tabla.push_back(std::vector<std::string>());

@@ -51,7 +51,7 @@ MidiTrack MidiTrack::ReadFromStream(std::istream &stream)
 	MidiTrack t;
 
 	// Read events until we run out of track
-	char last_status = 0;
+	unsigned char last_status = 0;
 	unsigned long current_pulse_count = 0;
 	while (event_stream.peek() != std::char_traits<char>::eof())
 	{
@@ -174,7 +174,7 @@ bool MidiTrack::hasNotes() const
 
 unsigned int MidiTrack::AggregateEventsRemain() const
 {
-	return static_cast<unsigned int>(m_events.size() - (m_last_event + 1));
+	return static_cast<unsigned int>(m_events.size() - static_cast<unsigned int>(m_last_event + 1));
 }
 
 unsigned int MidiTrack::AggregateEventCount() const
@@ -379,7 +379,7 @@ MidiEventList MidiTrack::Update(microseconds_t delta_microseconds)
 	m_running_microseconds += delta_microseconds;
 
 	MidiEventList evs;
-	for (size_t i = m_last_event + 1; i < m_events.size(); ++i)
+	for (size_t i = static_cast<size_t>(m_last_event + 1); i < m_events.size(); ++i)
 	{
 		if (m_event_usecs[i] <= m_running_microseconds)
 		{

@@ -28,7 +28,7 @@ private:
 	float m_tiempo;
 	float m_escala;
 
-	int particula_inactiva();
+	unsigned int particula_inactiva();
 
 public:
 	Generador_Particulas(Sombreador *sombreador, Textura2D *textura, unsigned int particulas_maximas, float escala);

@@ -132,7 +132,7 @@ void Sombreador::imprimir_detalle_programa(unsigned int indice) const
 	GLenum tipo;
 
 	Registro::Depurar("**** Programa sombreador indice: " + std::to_string(indice) + " ****");
-	int parametro = -1;
+	int parametro = 0;
 	glGetProgramiv(indice, GL_LINK_STATUS, &parametro);
 	Registro::Depurar("GL_LINK_STATUS: " + std::to_string(parametro));
 
@@ -142,7 +142,7 @@ void Sombreador::imprimir_detalle_programa(unsigned int indice) const
 	glGetProgramiv(indice, GL_ACTIVE_ATTRIBUTES, &parametro);
 	Registro::Depurar("GL_ACTIVE_ATTRIBUTES: " + std::to_string(parametro));
 
-	for(int x=0; x<parametro; x++)
+	for(unsigned int x=0; x<static_cast<unsigned int>(parametro); x++)
 	{
 		glGetActiveAttrib(indice, x, maximo_largo, NULL, &tamanno, &tipo, nombre);
 		if(tamanno > 1)
@@ -164,7 +164,7 @@ void Sombreador::imprimir_detalle_programa(unsigned int indice) const
 	glGetProgramiv(indice, GL_ACTIVE_UNIFORMS, &parametro);
 	Registro::Depurar("GL_ACTIVE_UNIFORMS: " + std::to_string(parametro));
 
-	for(int x=0; x<parametro; x++)
+	for(unsigned int x=0; x<static_cast<unsigned int>(parametro); x++)
 	{
 		glGetActiveUniform(indice, x, maximo_largo, NULL, &tamanno, &tipo, nombre);
 		if(tamanno > 1)

@@ -2,8 +2,8 @@
 
 Configuracion::Configuracion() : m_entrada(NULL), m_salida(NULL)
 {
-	int id_dispositivo_entrada = 0;
-	int id_dispositivo_salida = 0;
+	unsigned int id_dispositivo_entrada = 0;
+	unsigned int id_dispositivo_salida = 0;
 
 	std::string ruta_base_de_datos = Usuario::carpeta_personal() + ".concertista.db";
 	if(std::ifstream(ruta_base_de_datos))
@@ -12,8 +12,8 @@ Configuracion::Configuracion() : m_entrada(NULL), m_salida(NULL)
 		Registro::Depurar("Abriendo la base de datos en: " + ruta_base_de_datos);
 		m_datos.abrir(ruta_base_de_datos);
 		m_datos.actualizar();
-		id_dispositivo_entrada = std::stoi(m_datos.leer_configuracion("dispositivo_entrada"));
-		id_dispositivo_salida = std::stoi(m_datos.leer_configuracion("dispositivo_salida"));
+		id_dispositivo_entrada = static_cast<unsigned int>(std::stoi(m_datos.leer_configuracion("dispositivo_entrada")));
+		id_dispositivo_salida = static_cast<unsigned int>(std::stoi(m_datos.leer_configuracion("dispositivo_salida")));
 	}
 	else
 	{
@@ -57,7 +57,7 @@ void Configuracion::dispositivo_entrada(unsigned int id_entrada)
 	MidiCommDescriptionList dispositivos_entrada = MidiCommIn::GetDeviceList();
 	if(dispositivos_entrada.size() > 0)
 	{
-		int id = 0;
+		unsigned int id = 0;
 		if(id_entrada < dispositivos_entrada.size())
 			id = id_entrada;
 
@@ -73,7 +73,7 @@ void Configuracion::dispositivo_salida(unsigned int id_salida)
 	MidiCommDescriptionList dispositivos_salida = MidiCommOut::GetDeviceList();
 	if(dispositivos_salida.size() > 0)
 	{
-		int id = 0;
+		unsigned int id = 0;
 		if(id_salida < dispositivos_salida.size())
 			id = id_salida;
 

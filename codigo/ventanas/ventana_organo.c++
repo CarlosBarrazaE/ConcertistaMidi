@@ -1,6 +1,6 @@
 #include "ventana_organo.h++"
 
-VentanaOrgano::VentanaOrgano(Configuracion *configuracion, Datos_Musica *musica, Administrador_Recursos *recursos) : Ventana(), m_texto_velocidad(recursos), m_texto_pausa(recursos)
+VentanaOrgano::VentanaOrgano(Configuracion *configuracion, Datos_Musica *musica, Administrador_Recursos *recursos) : Ventana(), m_texto_velocidad(recursos), m_texto_pausa(recursos), m_subtitulos(recursos)
 {
 	m_configuracion = configuracion;
 	m_musica = musica;
@@ -60,6 +60,13 @@ VentanaOrgano::VentanaOrgano(Configuracion *configuracion, Datos_Musica *musica,
 	m_texto_pausa.posicion(0, 200);
 	m_texto_pausa.dimension(Pantalla::Ancho, 40);
 	m_texto_pausa.centrado(true);
+
+	m_subtitulos.texto("");
+	m_subtitulos.tipografia(recursos->tipografia(LetraTitulo));
+	m_subtitulos.color(Color(0.0f, 0.0f, 0.0f));
+	m_subtitulos.posicion(0, 100);
+	m_subtitulos.dimension(Pantalla::Ancho, 20);
+	m_subtitulos.centrado(true);
 
 	m_tablero->notas(m_musica->musica()->Notes());
 	m_tablero->pistas(m_musica->pistas());
@@ -123,6 +130,15 @@ void VentanaOrgano::actualizar(unsigned int diferencia_tiempo)
 			{
 				m_configuracion->dispositivo_salida()->Write(i->second);
 			}
+			//Eventos de texto
+			if(i->second.HasText())
+			{
+				if(m_subtitulo_texto.length() < 70)
+					m_subtitulo_texto += i->second.Text();
+				else
+					m_subtitulo_texto = m_subtitulo_texto.substr(i->second.Text().length()) + i->second.Text();
+				m_subtitulos.texto(m_subtitulo_texto);
+			}
 		}
 	}
 
@@ -161,12 +177,11 @@ void VentanaOrgano::actualizar(unsigned int diferencia_tiempo)
 
 	//Establece el color en gris para las notas tocadas por el jugador
 	//Sera sobreescrito por el tablero de notas en la etapa de dibujo si la nota tocada es correcta
-	for(int id_nota : m_notas_tocadas_blanca)
+	for(unsigned int id_nota : m_notas_tocadas_blanca)
 		m_teclas_activas_blancas->at(id_nota) = Color(0.7f, 0.7f, 0.7f);
 
-	for(int id_nota : m_notas_tocadas_negra)
+	for(unsigned int id_nota : m_notas_tocadas_negra)
 		m_teclas_activas_negras->at(id_nota) = Color(0.7f, 0.7f, 0.7f);
-
 
 	//Si selecciono un nuevo tiempo en la barra de progreso, se cambia la posicion.
 	if(m_barra->tiempo_seleccionado() > 0)
@@ -204,6 +219,8 @@ void VentanaOrgano::dibujar()
 	m_texto_velocidad.dibujar();
 	if(m_pausa)
 		m_texto_pausa.dibujar();
+	if(m_subtitulo_texto.length() > 0)
+		m_subtitulos.dibujar();
 	m_titulo_musica->dibujar();
 }
 

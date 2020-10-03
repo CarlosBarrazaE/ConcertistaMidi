@@ -113,7 +113,8 @@ void doRetrieveDevices(unsigned int perms, MidiCommDescriptionList& devices)
 
 	snd_seq_client_info_t* cinfo;
 	snd_seq_port_info_t* pinfo;
-	int count = 0, ownid = snd_seq_client_id(alsa_seq);
+	unsigned int count = 0;
+	int ownid = snd_seq_client_id(alsa_seq);
 
 	snd_seq_client_info_alloca(&cinfo);
 	snd_seq_port_info_alloca(&pinfo);
@@ -349,8 +350,8 @@ void MidiCommOut::Write(const MidiEvent &out)
 	{
 		case MidiEventType_NoteOn:
 		{
-			int ch = out.Channel();
-			int note = out.NoteNumber();
+			unsigned int ch = out.Channel();
+			unsigned int note = out.NoteNumber();
 			snd_seq_ev_set_noteon(&ev, static_cast<unsigned char>(ch), static_cast<unsigned char>(note), static_cast<unsigned char>(out.NoteVelocity()));
 
 			// save for reset
@@ -359,8 +360,8 @@ void MidiCommOut::Write(const MidiEvent &out)
 		}
 		case MidiEventType_NoteOff:
 		{
-			int note = out.NoteNumber();
-			int ch = out.Channel();
+			unsigned int ch = out.Channel();
+			unsigned int note = out.NoteNumber();
 			snd_seq_ev_set_noteoff(&ev, static_cast<unsigned char>(ch), static_cast<unsigned char>(note), static_cast<unsigned char>(out.NoteVelocity()));
 
 			// remove from reset

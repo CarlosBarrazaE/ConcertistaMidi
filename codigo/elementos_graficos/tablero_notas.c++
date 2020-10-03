@@ -15,7 +15,7 @@ Tablero_Notas::Tablero_Notas(float x, float y, float ancho, float alto, Teclado_
 	m_tipografia = recursos->tipografia(LetraMuyChica);
 	m_recursos = recursos;
 
-	for(int i=0; i<52; i++)
+	for(unsigned int i=0; i<52; i++)
 	{
 		m_tiempo_espera_blancas[i] = 0;
 		if(i<36)
@@ -87,10 +87,10 @@ void Tablero_Notas::dibujar_lineas_verticales()
 	}
 }
 
-void Tablero_Notas::dibujar_notas(int pista)
+void Tablero_Notas::dibujar_notas(unsigned int pista)
 {
-	int posicion_blanca = 0;
-	int posicion_negra = 0;
+	unsigned int posicion_blanca = 0;
+	unsigned int posicion_negra = 0;
 	float ajuste_negra = 0;
 	float ancho_tecla = 0;
 	float largo_nota = 0;
@@ -138,7 +138,7 @@ void Tablero_Notas::dibujar_notas(int pista)
 		{
 			//Dibuja las notas negras
 			ancho_tecla = m_ancho_negra;
-			int negra = Octava::numero_negra(m_notas[pista][n].note_id);
+			unsigned int negra = Octava::numero_negra(m_notas[pista][n].note_id);
 			if(negra==1 || negra == 3)
 				ajuste_negra = m_ancho_blanca - (m_ancho_negra * 0.667f);
 			else if(negra==2 || negra == 5)
@@ -218,7 +218,7 @@ void Tablero_Notas::dibujar_notas(int pista)
 
 void Tablero_Notas::actualizar(unsigned int /*diferencia_tiempo*/)
 {
-	for(int i=0; i<52; i++)
+	for(unsigned int i=0; i<52; i++)
 	{
 		if(m_tiempo_espera_blancas[i] > 0)
 		{
@@ -349,7 +349,7 @@ void Tablero_Notas::reiniciar()
 	{
 		m_ultima_nota[i] = 0;
 	}
-	for(int i=0; i<52; i++)
+	for(unsigned int i=0; i<52; i++)
 	{
 		m_tiempo_espera_blancas[i] = 0;
 		if(i<36)

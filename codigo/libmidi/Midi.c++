@@ -134,7 +134,7 @@ Midi Midi::ReadFromStream(std::istream &stream)
 	m.BuildTempoTrack();
 
 	// Tell our tracks their IDs
-	for (int i = 0; i < track_count; ++i)
+	for (unsigned int i = 0; i < track_count; ++i)
 	{
 		m.m_tracks[i].SetTrackId(i);
 	}
@@ -177,7 +177,7 @@ Midi Midi::ReadFromStream(std::istream &stream)
 	MidiEventMicrosecondList bar_line_usecs;
 	const microseconds_t len = m.GetSongLengthInMicroseconds();
 	microseconds_t bar_usec = 0;
-	int bar_no = 0;
+	unsigned int bar_no = 0;
 	while (bar_usec <= len)
 	{
 		bar_usec = m.GetEventPulseInMicroseconds(bar_no*pulses_per_quarter_note*4, pulses_per_quarter_note);
@@ -392,7 +392,7 @@ microseconds_t Midi::GetEventPulseInMicroseconds(unsigned long event_pulses, uns
 		if (hit)
 			break;
 
-		running_tempo = tempo_track.Events()[i].GetTempoInUsPerQn();
+		running_tempo = static_cast<microseconds_t>(tempo_track.Events()[i].GetTempoInUsPerQn());
 		last_tempo_event_pulses = tempo_event_pulses;
 	}
 

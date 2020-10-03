@@ -69,8 +69,8 @@ void Organo::dibujar_blancas(float x, float y, unsigned int numero_teclas)
 
 void Organo::dibujar_negras(float x, float y, unsigned int numero_teclas)
 {
-	int n_blanca = m_teclado->inicio_blancas();
-	int n_negra = m_teclado->inicio_negras();
+	unsigned int n_blanca = m_teclado->inicio_blancas();
+	unsigned int n_negra = m_teclado->inicio_negras();
 	float desplazamiento = 0;
 	Color negro, color_actual;
 	bool tecla_activa = false;
