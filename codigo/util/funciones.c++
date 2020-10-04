@@ -23,6 +23,13 @@ namespace Funciones
 		return std::to_string(horas) + ":" + tminutos + ":" + tsegundos;
 	}
 
+	bool comparar_float(float valor1, float valor2, float diferencia_minima)
+	{
+		if(valor1 < valor2 + diferencia_minima && valor1 > valor2 - diferencia_minima)
+			return true;
+		return false;
+	}
+
 	std::vector<std::string> dividir_texto(const std::string &texto, char caracter)
 	{
 		std::vector<std::string> dividido;
@@ -43,13 +50,6 @@ namespace Funciones
 		if(temporal.length() > 0)
 			dividido.push_back(temporal);
 		return dividido;
-	}
-
-	bool comparar_float(float valor1, float valor2, float diferencia_minima)
-	{
-		if(valor1 < valor2 + diferencia_minima && valor1 > valor2 - diferencia_minima)
-			return true;
-		return false;
 	}
 
 	std::string convertir_a_utf8(const char *entrada, int largo_entrada, const char *nombre_codificacion)
@@ -88,5 +88,15 @@ namespace Funciones
 		delete[] cadena_salida;
 
 		return resultado;
+	}
+
+	bool esta_vacio(const std::string &texto)
+	{
+		for(unsigned long int x=0; x<texto.length(); x++)
+		{
+			if(texto[x] != ' ' && texto[x] != '\t' && texto[x] != '\r' && texto[x] != '\n')
+				return false;
+		}
+		return true;
 	}
 }

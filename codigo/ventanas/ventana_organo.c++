@@ -6,6 +6,7 @@ VentanaOrgano::VentanaOrgano(Configuracion *configuracion, Datos_Musica *musica,
 	m_musica = musica;
 
 	m_rectangulo = recursos->figura(F_Rectangulo);
+	m_textura_subtitulo = recursos->textura(T_Nota);
 
 	//Carga la configuracion de la base de datos
 	std::string resultado_velocidad = m_configuracion->leer("velocidad_musica");
@@ -87,6 +88,7 @@ VentanaOrgano::VentanaOrgano(Configuracion *configuracion, Datos_Musica *musica,
 
 	m_cambio_velocidad = false;
 	m_pausa = false;
+	m_retorno_carro = false;
 
 	m_guardar_velocidad = false;
 	m_guardar_duracion_nota = false;
@@ -130,39 +132,60 @@ void VentanaOrgano::actualizar(unsigned int diferencia_tiempo)
 			{
 				m_configuracion->dispositivo_salida()->Write(i->second);
 			}
-			//Eventos de texto
-			if(i->second.HasText())
+			//Letra de archivo midi
+			if(i->second.HasText() && i->second.MetaType() == MidiMetaEvent_Lyric)
 			{
 				std::string nuevo_texto = i->second.Text();
-				bool nueva_linea = false;
-				if(nuevo_texto.length() > 0)
-				{
-					for(unsigned int x = 0; x<nuevo_texto.length(); x++)
-					{
-						if(nuevo_texto[x] == '/' || nuevo_texto[x] == '\\')
-						{
-							if(x+1<nuevo_texto.length())
-								m_subtitulo_texto = nuevo_texto.substr(x+1);
-							else
-								m_subtitulo_texto = "";
-							nueva_linea = true;
-							break;
-						}
-					}
 
-				}
-				if(m_subtitulo_texto.length() < 70 && !nueva_linea)
-					m_subtitulo_texto += nuevo_texto;
-				else if(!nueva_linea)
+				//Retorno de carro para la proxima linea
+				if(nuevo_texto.length() > 0 && (nuevo_texto[0] == '\r' || nuevo_texto[0] == '\n'))
+					m_retorno_carro = true;
+				else
 				{
-					unsigned long int quitar = m_subtitulo_texto.length() - 70;
-					if(m_subtitulo_texto.length() > nuevo_texto.length()+quitar)
-						m_subtitulo_texto = m_subtitulo_texto.substr(nuevo_texto.length()+quitar) + nuevo_texto;
-					else
+					if(m_subtitulo_texto.length() >= 80 || m_retorno_carro)
+					{
 						m_subtitulo_texto = nuevo_texto;
+						m_retorno_carro = false;
+					}
+					else
+						m_subtitulo_texto += nuevo_texto;
 				}
+
 				m_subtitulos.texto(m_subtitulo_texto);
 			}
+			//Midi karaoke
+			else if(i->second.HasText() && i->second.MetaType() == MidiMetaEvent_Text && i->second.GetDeltaPulses() > 0)
+			{
+				std::string nuevo_texto = i->second.Text();
+
+				//Retorno de carro para la proxima linea
+				if(nuevo_texto.length() > 0 && (nuevo_texto[0] == '\\' || nuevo_texto[0] == '/'))
+				{
+					std::string recortado = nuevo_texto.substr(1);//Quita el primer caracter
+					if(!Funciones::esta_vacio(recortado))
+						m_subtitulo_texto = recortado;
+					else
+						m_subtitulo_texto = "";
+				}
+				else
+					m_subtitulo_texto += nuevo_texto;
+
+				m_subtitulos.texto(m_subtitulo_texto);
+			}
+			if(i->second.MetaType() == MidiMetaEvent_Copyright)
+				Registro::Depurar("Evento Meta: MidiMetaEvent_Copyright Contenido: " + i->second.Text() + " Largo: " + std::to_string(i->second.Text().length()));
+			else if(i->second.MetaType() == MidiMetaEvent_TrackName)
+				Registro::Depurar("Evento Meta: MidiMetaEvent_TrackName Contenido: " + i->second.Text() + " Largo: " + std::to_string(i->second.Text().length()));
+			else if(i->second.MetaType() == MidiMetaEvent_Instrument)
+				Registro::Depurar("Evento Meta: MidiMetaEvent_Instrument Contenido: " + i->second.Text() + " Largo: " + std::to_string(i->second.Text().length()));
+			else if(i->second.MetaType() == MidiMetaEvent_Marker)
+				Registro::Depurar("Evento Meta: MidiMetaEvent_Marker Contenido: " + i->second.Text() + " Largo: " + std::to_string(i->second.Text().length()));
+			else if(i->second.MetaType() == MidiMetaEvent_Cue)
+				Registro::Depurar("Evento Meta: MidiMetaEvent_Cue Contenido: " + i->second.Text() + " Largo: " + std::to_string(i->second.Text().length()));
+			else if(i->second.MetaType() == MidiMetaEvent_PatchName)
+				Registro::Depurar("Evento Meta: MidiMetaEvent_PatchName Contenido: " + i->second.Text() + " Largo: " + std::to_string(i->second.Text().length()));
+			else if(i->second.MetaType() == MidiMetaEvent_DeviceName)
+				Registro::Depurar("Evento Meta: MidiMetaEvent_DeviceName Contenido: " + i->second.Text() + " Largo: " + std::to_string(i->second.Text().length()));
 		}
 	}
 
@@ -245,8 +268,14 @@ void VentanaOrgano::dibujar()
 		m_texto_pausa.dibujar();
 	if(m_subtitulo_texto.length() > 0)
 	{
-		m_rectangulo->dibujar(Pantalla::Centro_horizontal()-((m_subtitulos.largo_texto()+20)/2), 90, m_subtitulos.largo_texto()+20, m_subtitulos.alto_texto()+20, Color(0.7f, 0.9f, 0.9f));
+		//Dibuja el fondo
+		m_textura_subtitulo->activar();
+		m_rectangulo->textura(true);
+		m_rectangulo->extremos_fijos(true, true);
+		m_rectangulo->color(Color(0.9f, 0.9f, 0.9f));
+		m_rectangulo->dibujar_estirable(Pantalla::Centro_horizontal()-((m_subtitulos.largo_texto()+40)/2), 90, m_subtitulos.largo_texto()+40, m_subtitulos.alto_texto()+20, 15.0f, 12.0f);
 		m_subtitulos.dibujar();
+		m_rectangulo->extremos_fijos(false, false);
 	}
 	m_titulo_musica->dibujar();
 }

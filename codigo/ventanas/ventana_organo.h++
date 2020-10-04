@@ -20,6 +20,7 @@ class VentanaOrgano : public Ventana
 private:
 	//Recursos
 	Rectangulo *m_rectangulo;
+	Textura2D *m_textura_subtitulo;
 
 	//Componentes
 	Barra_Progreso *m_barra;
@@ -34,6 +35,7 @@ private:
 	double m_velocidad_musica;
 	bool m_cambio_velocidad;
 	bool m_pausa;
+	bool m_retorno_carro;
 
 	//Para saver si es necesario guardar
 	bool m_guardar_velocidad;
