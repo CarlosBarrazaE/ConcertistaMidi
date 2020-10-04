@@ -76,9 +76,6 @@ public:
 	MidiError(MidiErrorCode error);
 	std::string GetErrorDescription() const;
 	const MidiErrorCode m_error;
-
-private:
-	MidiError& operator =(const MidiError&) = default;
 };
 
 enum MidiEventType

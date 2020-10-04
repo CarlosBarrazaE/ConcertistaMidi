@@ -40,8 +40,6 @@ void Elemento::_dimension(float ancho, float alto)
 	m_ancho = ancho;
     if(m_centrado)
 		m_x = m_x - (m_ancho / 2);
-	else
-		m_x = m_x;
 
 	m_alto = alto;
 }
