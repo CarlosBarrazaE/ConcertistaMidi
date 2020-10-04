@@ -90,9 +90,17 @@ VentanaOrgano::VentanaOrgano(Configuracion *configuracion, Datos_Musica *musica,
 	m_pausa = false;
 	m_retorno_carro = false;
 
+	//Carga la configuracion de los subtitulos
+	std::string estado_subtitulo = m_configuracion->leer("estado_subtitulo");
+	if(estado_subtitulo == "falso")
+		m_mostrar_subtitulo = false;
+	else
+		m_mostrar_subtitulo = true;
+
 	m_guardar_velocidad = false;
 	m_guardar_duracion_nota = false;
 	m_guardar_tipo_teclado = false;
+	m_guardar_estado_subtitulo = false;
 }
 
 VentanaOrgano::~VentanaOrgano()
@@ -135,7 +143,7 @@ void VentanaOrgano::actualizar(unsigned int diferencia_tiempo)
 			//Letra de archivo midi
 			if(i->second.HasText() && i->second.MetaType() == MidiMetaEvent_Lyric)
 			{
-				std::string nuevo_texto = i->second.Text();
+				std::string nuevo_texto = Funciones::remplazar_caracter(i->second.Text(), '_', ' ');
 
 				//Retorno de carro para la proxima linea
 				if(nuevo_texto.length() > 0 && (nuevo_texto[0] == '\r' || nuevo_texto[0] == '\n'))
@@ -156,7 +164,7 @@ void VentanaOrgano::actualizar(unsigned int diferencia_tiempo)
 			//Midi karaoke
 			else if(i->second.HasText() && i->second.MetaType() == MidiMetaEvent_Text && i->second.GetDeltaPulses() > 0)
 			{
-				std::string nuevo_texto = i->second.Text();
+				std::string nuevo_texto = Funciones::remplazar_caracter(i->second.Text(), '_', ' ');
 
 				//Retorno de carro para la proxima linea
 				if(nuevo_texto.length() > 0 && (nuevo_texto[0] == '\\' || nuevo_texto[0] == '/'))
@@ -172,6 +180,7 @@ void VentanaOrgano::actualizar(unsigned int diferencia_tiempo)
 
 				m_subtitulos.texto(m_subtitulo_texto);
 			}
+			/*
 			if(i->second.MetaType() == MidiMetaEvent_Copyright)
 				Registro::Depurar("Evento Meta: MidiMetaEvent_Copyright Contenido: " + i->second.Text() + " Largo: " + std::to_string(i->second.Text().length()));
 			else if(i->second.MetaType() == MidiMetaEvent_TrackName)
@@ -185,7 +194,7 @@ void VentanaOrgano::actualizar(unsigned int diferencia_tiempo)
 			else if(i->second.MetaType() == MidiMetaEvent_PatchName)
 				Registro::Depurar("Evento Meta: MidiMetaEvent_PatchName Contenido: " + i->second.Text() + " Largo: " + std::to_string(i->second.Text().length()));
 			else if(i->second.MetaType() == MidiMetaEvent_DeviceName)
-				Registro::Depurar("Evento Meta: MidiMetaEvent_DeviceName Contenido: " + i->second.Text() + " Largo: " + std::to_string(i->second.Text().length()));
+				Registro::Depurar("Evento Meta: MidiMetaEvent_DeviceName Contenido: " + i->second.Text() + " Largo: " + std::to_string(i->second.Text().length()));*/
 		}
 	}
 
@@ -266,7 +275,7 @@ void VentanaOrgano::dibujar()
 	m_texto_velocidad.dibujar();
 	if(m_pausa)
 		m_texto_pausa.dibujar();
-	if(m_subtitulo_texto.length() > 0)
+	if(m_mostrar_subtitulo && m_subtitulo_texto.length() > 0)
 	{
 		//Dibuja el fondo
 		m_textura_subtitulo->activar();
@@ -289,6 +298,13 @@ void VentanaOrgano::guardar_configuracion()
 		m_configuracion->escribir("duracion_nota", std::to_string(m_tablero->duracion_nota()));//modificar_duracion_nota
 	if(m_guardar_tipo_teclado)
 		m_configuracion->escribir("tipo_teclado", std::to_string(static_cast<int>(m_teclado_actual)));
+	if(m_guardar_estado_subtitulo)
+	{
+		if(m_mostrar_subtitulo)
+			m_configuracion->escribir("estado_subtitulo", "verdadero");
+		else
+			m_configuracion->escribir("estado_subtitulo", "falso");
+	}
 }
 
 void VentanaOrgano::evento_raton(Raton *raton)
@@ -343,6 +359,11 @@ void VentanaOrgano::evento_teclado(Tecla tecla, bool estado)
 		if(m_pausa)
 			if(m_configuracion->dispositivo_salida() != NULL)
 				m_configuracion->dispositivo_salida()->Reset();
+	}
+	else if(tecla == TECLA_F4 && estado)
+	{
+		m_mostrar_subtitulo = !m_mostrar_subtitulo;
+		m_guardar_estado_subtitulo = !m_guardar_estado_subtitulo;
 	}
 	else if(tecla == TECLA_F5 && estado)
 	{

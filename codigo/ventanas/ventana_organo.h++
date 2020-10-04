@@ -36,11 +36,13 @@ private:
 	bool m_cambio_velocidad;
 	bool m_pausa;
 	bool m_retorno_carro;
+	bool m_mostrar_subtitulo;
 
 	//Para saver si es necesario guardar
 	bool m_guardar_velocidad;
 	bool m_guardar_duracion_nota;
 	bool m_guardar_tipo_teclado;
+	bool m_guardar_estado_subtitulo;
 
 	//Datos
 	Configuracion *m_configuracion;

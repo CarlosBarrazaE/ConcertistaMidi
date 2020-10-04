@@ -92,11 +92,26 @@ namespace Funciones
 
 	bool esta_vacio(const std::string &texto)
 	{
+		//Verifica si la cadena de texto esta vacia
 		for(unsigned long int x=0; x<texto.length(); x++)
 		{
 			if(texto[x] != ' ' && texto[x] != '\t' && texto[x] != '\r' && texto[x] != '\n')
 				return false;
 		}
 		return true;
+	}
+
+	std::string remplazar_caracter(const std::string &texto, const char caracter_origen, const char caracter_destino)
+	{
+		//Se reemplaza el caracter de origen por el caracter de destino
+		std::string salida;
+		for(unsigned long int x = 0; x<texto.length(); x++)
+		{
+			if(texto[x] == caracter_origen)
+				salida += caracter_destino;
+			else
+				salida += texto[x];
+		}
+		return salida;
 	}
 }
