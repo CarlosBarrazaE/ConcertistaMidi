@@ -11,7 +11,8 @@
 
 #include "Note.h++"
 #include "MidiUtil.h++"
-#include "../util/funciones.h++"
+#include "../util/texto.h++"
+#include "../registro.h++"
 
 struct MidiEventSimple
 {

@@ -13,6 +13,7 @@
 #include "../control/datos_musica.h++"
 #include "../libmidi/Midi.h++"
 #include "../libmidi/MidiComm.h++"
+#include "../util/texto.h++"
 #include <map>
 
 class VentanaOrgano : public Ventana

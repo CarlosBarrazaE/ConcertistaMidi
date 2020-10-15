@@ -92,7 +92,7 @@ VentanaOrgano::VentanaOrgano(Configuracion *configuracion, Datos_Musica *musica,
 
 	//Carga la configuracion de los subtitulos
 	std::string estado_subtitulo = m_configuracion->leer("estado_subtitulo");
-	if(estado_subtitulo == "falso")
+	if(estado_subtitulo == "inactivo")
 		m_mostrar_subtitulo = false;
 	else
 		m_mostrar_subtitulo = true;
@@ -143,7 +143,8 @@ void VentanaOrgano::actualizar(unsigned int diferencia_tiempo)
 			//Letra de archivo midi
 			if(i->second.HasText() && i->second.MetaType() == MidiMetaEvent_Lyric)
 			{
-				std::string nuevo_texto = Funciones::remplazar_caracter(i->second.Text(), '_', ' ');
+				std::string nuevo_texto = i->second.Text();
+				std::replace(nuevo_texto.begin(), nuevo_texto.end(), '_', ' ');
 
 				//Retorno de carro para la proxima linea
 				if(nuevo_texto.length() > 0 && (nuevo_texto[0] == '\r' || nuevo_texto[0] == '\n'))
@@ -159,24 +160,28 @@ void VentanaOrgano::actualizar(unsigned int diferencia_tiempo)
 						m_subtitulo_texto += nuevo_texto;
 				}
 
+				if(Texto::esta_vacio(m_subtitulo_texto) && m_subtitulo_texto.length() > 0)
+					m_subtitulo_texto = "";
+
 				m_subtitulos.texto(m_subtitulo_texto);
 			}
 			//Midi karaoke
 			else if(i->second.HasText() && i->second.MetaType() == MidiMetaEvent_Text && i->second.GetDeltaPulses() > 0)
 			{
-				std::string nuevo_texto = Funciones::remplazar_caracter(i->second.Text(), '_', ' ');
+				std::string nuevo_texto = i->second.Text();
+				std::replace(nuevo_texto.begin(), nuevo_texto.end(), '_', ' ');
 
 				//Retorno de carro para la proxima linea
 				if(nuevo_texto.length() > 0 && (nuevo_texto[0] == '\\' || nuevo_texto[0] == '/'))
 				{
 					std::string recortado = nuevo_texto.substr(1);//Quita el primer caracter
-					if(!Funciones::esta_vacio(recortado))
-						m_subtitulo_texto = recortado;
-					else
-						m_subtitulo_texto = "";
+					m_subtitulo_texto = recortado;
 				}
 				else
 					m_subtitulo_texto += nuevo_texto;
+
+				if(Texto::esta_vacio(m_subtitulo_texto) && m_subtitulo_texto.length() > 0)
+					m_subtitulo_texto = "";
 
 				m_subtitulos.texto(m_subtitulo_texto);
 			}
@@ -301,9 +306,9 @@ void VentanaOrgano::guardar_configuracion()
 	if(m_guardar_estado_subtitulo)
 	{
 		if(m_mostrar_subtitulo)
-			m_configuracion->escribir("estado_subtitulo", "verdadero");
+			m_configuracion->escribir("estado_subtitulo", "activo");
 		else
-			m_configuracion->escribir("estado_subtitulo", "falso");
+			m_configuracion->escribir("estado_subtitulo", "inactivo");
 	}
 }
 

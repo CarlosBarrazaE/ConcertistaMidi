@@ -11,7 +11,7 @@ Base_de_Datos::~Base_de_Datos()
 		sqlite3_close(m_base_de_datos);
 }
 
-bool Base_de_Datos::consulta(std::string consulta_entrada)
+bool Base_de_Datos::consulta(const std::string &consulta_entrada)
 {
 	if(!m_base_de_datos_abierta)
 	{
@@ -29,7 +29,7 @@ bool Base_de_Datos::consulta(std::string consulta_entrada)
 	return true;
 }
 
-int Base_de_Datos::consulta_int(std::string consulta)
+int Base_de_Datos::consulta_int(const std::string &consulta)
 {
 	if(!m_base_de_datos_abierta)
 	{
@@ -48,7 +48,7 @@ int Base_de_Datos::consulta_int(std::string consulta)
 	return resultado;
 }
 
-std::string Base_de_Datos::consulta_texto(std::string consulta)
+std::string Base_de_Datos::consulta_texto(const std::string &consulta)
 {
 	if(!m_base_de_datos_abierta)
 	{
@@ -71,7 +71,7 @@ std::string Base_de_Datos::consulta_texto(std::string consulta)
 	return "";
 }
 
-std::vector<std::vector<std::string>> Base_de_Datos::consulta_tabla(std::string consulta, int columnas)
+std::vector<std::vector<std::string>> Base_de_Datos::consulta_tabla(const std::string &consulta, int columnas)
 {
 	sqlite3_stmt * respuesta_consulta;
 	int respuesta = sqlite3_prepare(m_base_de_datos, consulta.c_str(), -1, &respuesta_consulta, NULL);
@@ -85,7 +85,10 @@ std::vector<std::vector<std::string>> Base_de_Datos::consulta_tabla(std::string 
 			tabla.push_back(std::vector<std::string>());
 			for(int c=0; c<columnas; c++)
 			{
-				tabla[x].push_back(std::string(reinterpret_cast<const char*>(sqlite3_column_text(respuesta_consulta, c))));
+				if(sqlite3_column_text(respuesta_consulta, c) != NULL)
+					tabla[x].push_back(std::string(reinterpret_cast<const char*>(sqlite3_column_text(respuesta_consulta, c))));
+				else
+					tabla[x].push_back("");
 			}
 			sqlite3_step(respuesta_consulta);
 			x++;
@@ -95,7 +98,31 @@ std::vector<std::vector<std::string>> Base_de_Datos::consulta_tabla(std::string 
 	return tabla;
 }
 
-bool Base_de_Datos::abrir(std::string direccion)
+std::vector<std::string> Base_de_Datos::consulta_fila(const std::string &consulta, int columnas)
+{
+	sqlite3_stmt * respuesta_consulta;
+	int respuesta = sqlite3_prepare(m_base_de_datos, consulta.c_str(), -1, &respuesta_consulta, NULL);
+	std::vector<std::string> fila;
+	if(respuesta == SQLITE_OK)
+	{
+		sqlite3_step(respuesta_consulta);
+		if(sqlite3_column_text(respuesta_consulta, 0))
+		{
+			for(int c=0; c<columnas; c++)
+			{
+				if(sqlite3_column_text(respuesta_consulta, c) != NULL)
+					fila.push_back(std::string(reinterpret_cast<const char*>(sqlite3_column_text(respuesta_consulta, c))));
+				else
+					fila.push_back("");
+			}
+			sqlite3_step(respuesta_consulta);
+		}
+	}
+	sqlite3_finalize(respuesta_consulta);
+	return fila;
+}
+
+bool Base_de_Datos::abrir(const std::string &direccion)
 {
 	int respuesta = sqlite3_open(direccion.c_str(), &m_base_de_datos);
 	if(respuesta != SQLITE_OK)
@@ -113,6 +140,7 @@ void Base_de_Datos::crear()
 	//Crea todas las tablas de la base de datos
 	this->consulta("CREATE TABLE configuracion (atributo VARCHAR(30), valor TEXT)");
 	this->consulta("CREATE TABLE carpetas (nombre VARCHAR(30) NOT NULL PRIMARY KEY, ruta TEXT)");
+	this->consulta("CREATE TABLE archivos (ruta TEXT NOT NULL PRIMARY KEY, visitas INT DEFAULT 0, duracion INT DEFAULT 0, ultimo_acceso DATETIME)");
 
 	this->escribir_configuracion("version_base_de_datos", VERSION_BASE_DE_DATOS);
 	this->ruta_carpeta("Canciones", "../musica/");
@@ -131,8 +159,18 @@ void Base_de_Datos::actualizar()
 	}
 }
 
+void Base_de_Datos::iniciar_transaccion()
+{
+	sqlite3_exec(m_base_de_datos, "BEGIN TRANSACTION;", NULL, NULL, NULL);
+}
+
+void Base_de_Datos::finalizar_transaccion()
+{
+	sqlite3_exec(m_base_de_datos, "END TRANSACTION;", NULL, NULL, NULL);
+}
+
 //Tabla configuracion
-bool Base_de_Datos::escribir_configuracion(std::string atributo, std::string valor)
+bool Base_de_Datos::escribir_configuracion(const std::string &atributo, const std::string &valor)
 {
 	if(atributo.size() > 30)
 	{
@@ -156,7 +194,7 @@ bool Base_de_Datos::escribir_configuracion(std::string atributo, std::string val
 	}
 }
 
-std::string Base_de_Datos::leer_configuracion(std::string atributo)
+std::string Base_de_Datos::leer_configuracion(const std::string &atributo)
 {
 	if(atributo.size() > 30)
 	{
@@ -166,7 +204,7 @@ std::string Base_de_Datos::leer_configuracion(std::string atributo)
 	return this->consulta_texto("SELECT valor FROM configuracion WHERE atributo = '"+atributo+"' LIMIT 1");
 }
 
-bool Base_de_Datos::ruta_carpeta(std::string nombre, std::string ruta)
+bool Base_de_Datos::ruta_carpeta(const std::string &nombre, const std::string &ruta)
 {
 	return this->consulta("INSERT INTO carpetas ('nombre', 'ruta') VALUES ('"+nombre+"', '"+ruta+"')");
 }
@@ -176,7 +214,33 @@ std::vector<std::vector<std::string>> Base_de_Datos::ruta_carpetas()
 	return this->consulta_tabla("SELECT * FROM carpetas", 2);
 }
 
-bool Base_de_Datos::eliminar_ruta_carpeta(std::string nombre)
+bool Base_de_Datos::eliminar_ruta_carpeta(const std::string &nombre)
 {
 	return this->consulta("DELETE FROM carpetas WHERE nombre = '"+nombre+"'");
+}
+
+void Base_de_Datos::agregar_archivo(const std::string &ruta, unsigned int duracion)
+{
+	if(ruta.length() > 0)
+		this->consulta("INSERT INTO archivos ('ruta', 'duracion') VALUES ('"+ruta+"', '"+std::to_string(duracion)+"')");
+}
+
+void Base_de_Datos::actualizar_archivo(const std::string &ruta, unsigned int duracion)
+{
+	if(ruta.length() > 0)
+		this->consulta("UPDATE archivos SET duracion = '"+std::to_string(duracion)+"' WHERE ruta = '"+ruta+"')");
+}
+
+void Base_de_Datos::sumar_visita_archivo(const std::string &ruta)
+{
+	if(ruta.length() > 0)
+		this->consulta("UPDATE archivos SET visitas += 1, ultimo_acceso = now() WHERE ruta = '"+ruta+"')");
+}
+
+std::vector<std::string> Base_de_Datos::datos_archivo(const std::string &ruta)
+{
+	std::vector<std::string> fila;
+	if(ruta.length() > 0)
+		fila = this->consulta_fila("SELECT visitas, duracion, ultimo_acceso FROM archivos WHERE ruta = '"+ruta+"' LIMIT 1", 3);
+	return fila;
 }

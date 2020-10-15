@@ -13,12 +13,12 @@ Barra_Progreso::Barra_Progreso(float x, float y, float ancho, float alto, micros
 	m_frente = recursos->textura(T_FrenteBarraProgreso);
 	m_rectangulo = recursos->figura(F_Rectangulo);
 
-	m_texto_inicial.texto(Funciones::milisegundos_a_texto(m_tiempo_actual));
+	m_texto_inicial.texto(Funciones::microsegundo_a_texto(m_tiempo_actual, true));
 	m_texto_inicial.tipografia(recursos->tipografia(LetraMuyChica));
 	m_texto_inicial.posicion(this->x()+4, this->y() + this->alto() - 12);
 	m_texto_inicial.color(Color(0.0f, 0.0f, 0.0f));
 
-	m_texto_final.texto(Funciones::milisegundos_a_texto(tiempo_total));
+	m_texto_final.texto(Funciones::microsegundo_a_texto(tiempo_total, true));
 	m_texto_final.tipografia(recursos->tipografia(LetraMuyChica));
 	m_texto_final.posicion(this->x()+this->ancho() - (4 + m_texto_final.largo_texto()), this->y() + this->alto() - 12);
 	m_texto_final.color(Color(0.0f, 0.0f, 0.0f));
@@ -36,7 +36,7 @@ void Barra_Progreso::actualizar(unsigned int /*diferencia_tiempo*/)
 	else if(m_progreso < 0)
 		m_progreso = 0;
 
-	m_texto_inicial.texto(Funciones::milisegundos_a_texto(m_tiempo_actual));
+	m_texto_inicial.texto(Funciones::microsegundo_a_texto(m_tiempo_actual, true));
 }
 
 void Barra_Progreso::dibujar()

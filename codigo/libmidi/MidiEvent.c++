@@ -127,7 +127,7 @@ void MidiEvent::ReadMeta(std::istream &stream)
 		case MidiMetaEvent_PatchName:
 		case MidiMetaEvent_DeviceName:
 		{
-			m_text = Funciones::convertir_a_utf8(buffer, static_cast<int>(meta_length), "windows-1252");
+			m_text = Texto::convertir_a_utf8(buffer, static_cast<int>(meta_length), "windows-1252");
 			break;
 		}
 
@@ -161,7 +161,7 @@ void MidiEvent::ReadMeta(std::istream &stream)
 
 		default:
 			// Ignore unknown event
-			std::cerr << "Ignore unknown midi event type " << (m_meta_type * 1) << " of length " << meta_length << std::endl;
+			Registro::Aviso("Ignorando evento MIDI desconocido " + std::to_string((m_meta_type * 1)) + " de largo " + std::to_string(meta_length));
 		//  delete[] buffer;
 		//  throw MidiError(MidiError_UnknownMetaEventType);
 	}

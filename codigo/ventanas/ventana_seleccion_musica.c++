@@ -23,6 +23,7 @@ VentanaSeleccionMusica::VentanaSeleccionMusica(Configuracion *configuracion, Dat
 
 	//Fila titulo
 	m_tabla_archivos.agregar_columna("Nombre Archivo", false, 5);
+	m_tabla_archivos.agregar_columna("Duracion", true, 1);
 	m_tabla_archivos.agregar_columna("Tamaño", true, 1);
 	m_tabla_archivos.agregar_columna("Veces", true, 1);
 	m_tabla_archivos.agregar_columna("Fecha", true, 1);
@@ -80,9 +81,11 @@ void VentanaSeleccionMusica::cargar_lista_carpetas()
 	for(unsigned int i=0; i<ruta_carpetas.size(); i++)
 	{
 		Datos_Archivos actual;
-		actual.es_carpeta = true;
+
 		actual.nombre = ruta_carpetas[i][0];
 		actual.ruta = ruta_carpetas[i][1];
+		actual.tamanno = 3;
+		actual.es_carpeta = true;
 
 		//Todo Filtrar archivos Midi
 		m_lista_archivos.push_back(actual);
@@ -91,6 +94,7 @@ void VentanaSeleccionMusica::cargar_lista_carpetas()
 
 void VentanaSeleccionMusica::cargar_contenido_carpeta(std::string ruta_abrir)
 {
+	m_datos->iniciar_transaccion();
 	for(const std::filesystem::directory_entry elemento : std::filesystem::directory_iterator(ruta_abrir))
 	{
 		std::string ruta = std::string(elemento.path());
@@ -125,7 +129,8 @@ void VentanaSeleccionMusica::cargar_contenido_carpeta(std::string ruta_abrir)
 		}
 		else
 			nombre_archivo = ruta.substr(inicio_archivo+1);
-		std::replace(nombre_archivo.begin(), nombre_archivo.end(), '_', ' ');//Reemplaza el guion bajo por espacio
+		//Reemplaza el guion bajo por espacio
+		std::replace(nombre_archivo.begin(), nombre_archivo.end(), '_', ' ');
 
 		bool es_midi = false;
 		if(extencion_archivo == "mid" ||
@@ -140,20 +145,44 @@ void VentanaSeleccionMusica::cargar_contenido_carpeta(std::string ruta_abrir)
 		if(elemento.is_directory() || (!elemento.is_directory() && es_midi))
 		{
 			Datos_Archivos actual;
-			actual.es_carpeta = elemento.is_directory();
 			actual.ruta = elemento.path();
 			actual.nombre = nombre_archivo;
+			actual.es_carpeta = elemento.is_directory();
 
 			if(!elemento.is_directory())
 			{
-				//Archivo
+				std::vector<std::string> datos_midi = m_datos->datos_archivo(actual.ruta);
 				actual.tamanno = elemento.file_size();
-				actual.fecha = "09/09/2020";
+				actual.fecha_acceso = "-";
+				if(datos_midi.size() > 0)
+				{
+					actual.visitas = static_cast<unsigned int>(std::stoi(datos_midi[0]));
+					actual.duracion = static_cast<microseconds_t>(std::stoi(datos_midi[1]));
+					if(datos_midi[2] != "")
+						actual.fecha_acceso = datos_midi[2];
+				}
+				else
+				{
+					actual.duracion = Funciones::duracion_midi(actual.ruta);//Tiempo en microsegundos
+					m_datos->agregar_archivo(actual.ruta, actual.duracion);
+				}
 			}
-			//Todo Filtrar archivos Midi
+			else
+				actual.tamanno = 0;//Numero de archivos
+
 			m_lista_archivos.push_back(actual);
 		}
+		/*
+		this->ruta = "";
+		this->nombre = "";
+		this->fecha_acceso = "Desconocido";
+		this->duracion = 0;
+		this->visitas = 0;
+		this->es_carpeta = false;
+		this->tamanno = 0;
+		*/
 	}
+	m_datos->finalizar_transaccion();
 }
 
 void VentanaSeleccionMusica::crear_tabla(std::string ruta_abrir)
@@ -221,9 +250,20 @@ void VentanaSeleccionMusica::crear_tabla(std::string ruta_abrir)
 		std::vector<std::string> fila_nueva;
 
 		fila_nueva.push_back(m_lista_archivos[i].nombre);
-		fila_nueva.push_back(std::to_string(m_lista_archivos[i].tamanno));
-		fila_nueva.push_back("35");
-		fila_nueva.push_back(m_lista_archivos[i].fecha);
+
+		if(m_lista_archivos[i].es_carpeta)
+		{
+			fila_nueva.push_back("-");
+			fila_nueva.push_back(std::to_string(m_lista_archivos[i].tamanno) + " archivos");
+		}
+		else
+		{
+			fila_nueva.push_back(Funciones::microsegundo_a_texto(m_lista_archivos[i].duracion, false));
+			fila_nueva.push_back(Texto::bytes_a_texto(m_lista_archivos[i].tamanno));
+		}
+
+		fila_nueva.push_back(std::to_string(m_lista_archivos[i].visitas));
+		fila_nueva.push_back(m_lista_archivos[i].fecha_acceso);
 		m_tabla_archivos.insertar_fila(fila_nueva);
 	}
 }
@@ -301,26 +341,8 @@ void VentanaSeleccionMusica::evento_teclado(Tecla tecla, bool estado)
 	}
 	else if((tecla == TECLA_BORRAR || tecla == TECLA_FLECHA_IZQUIERDA) && !estado)
 	{
-		if(m_carpeta_inicial.length() > 0 && m_carpeta_inicial != "-" && m_carpeta_inicial.length() < m_carpeta_activa.length())
-		{
- 			unsigned long int recorte = m_carpeta_activa.length()-2;
-			bool termino_busqueda = false;
-			for(unsigned long int x = m_carpeta_activa.length()-2; x > 1 && !termino_busqueda; x--)
-			{
-				//NOTE no creo que esto funcione en windows
-				if(m_carpeta_activa[x] == '/')
-				{
-					recorte = x;
-					termino_busqueda = true;
-				}
-			}
-
-			m_carpeta_activa = m_carpeta_activa.substr(0, recorte);
-			//Carga la lista de archivos de la carpeta seleccionada
-			this->crear_tabla(m_carpeta_activa);
-		}
-		else if(m_carpeta_inicial.length() >= m_carpeta_activa.length() && m_carpeta_inicial != "-")
-			this->crear_tabla("");
+		m_ruta_exploracion.ir_atraz();
+		this->crear_tabla(m_ruta_exploracion.nueva_ruta());
 	}
 	else if(tecla == TECLA_FLECHA_ABAJO && !estado)
 		m_tabla_archivos.cambiar_seleccion(1);

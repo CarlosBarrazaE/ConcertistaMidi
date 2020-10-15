@@ -2,11 +2,13 @@
 
 Datos_Archivos::Datos_Archivos()
 {
-	this->es_carpeta = false;
 	this->ruta = "";
 	this->nombre = "";
+	this->fecha_acceso = "Desconocido";
+	this->duracion = 0;
+	this->visitas = 0;
+	this->es_carpeta = false;
 	this->tamanno = 0;
-	this->fecha = "Desconocido";
 }
 
 bool Datos_Archivos::operator < (const Datos_Archivos &d) const

@@ -13,25 +13,34 @@ class Base_de_Datos
 	private:
 		bool m_base_de_datos_abierta;
 		sqlite3 *m_base_de_datos;
-		bool consulta(std::string consulta);
-		int consulta_int(std::string consulta);
-		std::string consulta_texto(std::string consulta);
-		std::vector<std::vector<std::string>> consulta_tabla(std::string consulta, int columnas);
+		bool consulta(const std::string &consulta);
+		int consulta_int(const std::string &consulta);
+		std::string consulta_texto(const std::string &consulta);
+		std::vector<std::vector<std::string>> consulta_tabla(const std::string &consulta, int columnas);
+		std::vector<std::string> consulta_fila(const std::string &consulta, int columnas);
 	public:
 		Base_de_Datos();
 		~Base_de_Datos();
-		bool abrir(std::string direccion);
+		bool abrir(const std::string &direccion);
 		void crear();
 		void actualizar();
+		void iniciar_transaccion();
+		void finalizar_transaccion();
 
 		//Tabla configuracion
-		bool escribir_configuracion(std::string atributo, std::string valor);
-		std::string leer_configuracion(std::string atributo);
+		bool escribir_configuracion(const std::string &atributo, const std::string &valor);
+		std::string leer_configuracion(const std::string &atributo);
 
 		//Tabla carpetas
-		bool ruta_carpeta(std::string nombre, std::string ruta);
+		bool ruta_carpeta(const std::string &nombre, const std::string &ruta);
 		std::vector<std::vector<std::string>> ruta_carpetas();
-		bool eliminar_ruta_carpeta(std::string nombre);
+		bool eliminar_ruta_carpeta(const std::string &nombre);
+
+		//Tabla archivos
+		void agregar_archivo(const std::string &ruta, unsigned int duracion);
+		void actualizar_archivo(const std::string &ruta, unsigned int duracion);
+		void sumar_visita_archivo(const std::string &ruta);
+		std::vector<std::string> datos_archivo(const std::string &ruta);
 };
 
 #endif
