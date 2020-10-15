@@ -6,6 +6,7 @@
 #include "elemento.h++"
 #include "boton.h++"
 #include "../util/funciones.h++"
+#include "../util/texto.h++"
 
 class Ruta_Exploracion : public Elemento
 {
@@ -41,6 +42,7 @@ public:
 
 	void ruta_carpeta(const std::string &ruta_inicio, const std::string &ruta_completa, const std::string nombre_carpeta_inicial);
 
+	void ir_atraz();
 	bool cambiar_carpeta();
 	bool boton_siguiente();
 	void boton_siguiente_habilitado(bool estado);

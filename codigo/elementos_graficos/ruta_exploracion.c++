@@ -140,7 +140,7 @@ void Ruta_Exploracion::ruta_carpeta(const std::string &ruta_inicio, const std::s
 		if(ruta_inicio.size() < ruta_completa.size())
 		{
 			std::string ruta_dividir = ruta_completa.substr(ruta_inicio.size());
-			std::vector<std::string> carpetas = Funciones::dividir_texto(ruta_dividir, '/');
+			std::vector<std::string> carpetas = Texto::dividir_texto(ruta_dividir, '/');
 
 			std::string ruta_actual = ruta_inicio;
 			//Agrega un '/' al final si no lo tiene
@@ -166,6 +166,11 @@ void Ruta_Exploracion::ruta_carpeta(const std::string &ruta_inicio, const std::s
 		m_boton_atraz->habilitado(false);
 	else
 		m_boton_atraz->habilitado(true);
+}
+
+void Ruta_Exploracion::ir_atraz()
+{
+	m_carpeta_anterior = true;
 }
 
 bool Ruta_Exploracion::cambiar_carpeta()
