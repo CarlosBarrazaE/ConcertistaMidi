@@ -84,7 +84,7 @@ void VentanaSeleccionMusica::cargar_lista_carpetas()
 
 		actual.nombre = ruta_carpetas[i][0];
 		actual.ruta = ruta_carpetas[i][1];
-		actual.tamanno = 3;
+		actual.tamanno = Funciones::numero_de_archivos(actual.ruta);
 		actual.es_carpeta = true;
 
 		//Todo Filtrar archivos Midi
@@ -98,51 +98,17 @@ void VentanaSeleccionMusica::cargar_contenido_carpeta(std::string ruta_abrir)
 	for(const std::filesystem::directory_entry elemento : std::filesystem::directory_iterator(ruta_abrir))
 	{
 		std::string ruta = std::string(elemento.path());
-		unsigned long int inicio_archivo = 0;
-		unsigned long int extencion = ruta.length()-1;
-		//Se recorre la ruta desde el final
-		bool encontrado = false;
-		for(unsigned long int i=ruta.length()-1; i>0 && !encontrado; i--)
-		{
-			//Se busca el punto solo si es un archivo
-			if(!elemento.is_directory() && extencion == ruta.length()-1 && ruta[i] == '.')
-			{
-				//Encuentra el primer punto
-				extencion = i;
-			}
+		std::string nombre_archivo = Funciones::nombre_archivo(ruta, elemento.is_directory());
+		std::string extencion_archivo = Funciones::extencion_archivo(ruta);
 
-			if(inicio_archivo == 0 && ruta[i] == '/')
-			{
-				//Termina al encontrar el inicio del nombre del archivo
-				inicio_archivo = i;
-				encontrado = true;
-				i=0;
-			}
-		}
-
-		//Se obtiene el nombre y la extencion del archivo
-		std::string nombre_archivo, extencion_archivo;
-		if(extencion != ruta.length()-1)
-		{
-			nombre_archivo = ruta.substr(inicio_archivo+1, extencion-(inicio_archivo+1));
-			extencion_archivo = ruta.substr(extencion+1);
-		}
-		else
-			nombre_archivo = ruta.substr(inicio_archivo+1);
 		//Reemplaza el guion bajo por espacio
 		std::replace(nombre_archivo.begin(), nombre_archivo.end(), '_', ' ');
 
-		bool es_midi = false;
-		if(extencion_archivo == "mid" ||
-			extencion_archivo == "MID" ||
-			extencion_archivo == "midi" ||
-			extencion_archivo == "MIDI"
-		)
-		{
-			es_midi = true;
-		}
+		bool oculto = false;
+		if(nombre_archivo.length() > 0 && nombre_archivo[0] == '.')
+			oculto = true;
 
-		if(elemento.is_directory() || (!elemento.is_directory() && es_midi))
+		if((elemento.is_directory() && !oculto) || (!elemento.is_directory() && Funciones::es_midi(extencion_archivo)))
 		{
 			Datos_Archivos actual;
 			actual.ruta = elemento.path();
@@ -168,19 +134,10 @@ void VentanaSeleccionMusica::cargar_contenido_carpeta(std::string ruta_abrir)
 				}
 			}
 			else
-				actual.tamanno = 0;//Numero de archivos
+				actual.tamanno = Funciones::numero_de_archivos(actual.ruta);//Numero de archivos
 
 			m_lista_archivos.push_back(actual);
 		}
-		/*
-		this->ruta = "";
-		this->nombre = "";
-		this->fecha_acceso = "Desconocido";
-		this->duracion = 0;
-		this->visitas = 0;
-		this->es_carpeta = false;
-		this->tamanno = 0;
-		*/
 	}
 	m_datos->finalizar_transaccion();
 }
@@ -254,7 +211,12 @@ void VentanaSeleccionMusica::crear_tabla(std::string ruta_abrir)
 		if(m_lista_archivos[i].es_carpeta)
 		{
 			fila_nueva.push_back("-");
-			fila_nueva.push_back(std::to_string(m_lista_archivos[i].tamanno) + " archivos");
+			if(m_lista_archivos[i].tamanno == 0)
+				fila_nueva.push_back("Sin Archivos");
+			else if(m_lista_archivos[i].tamanno == 1)
+				fila_nueva.push_back(std::to_string(m_lista_archivos[i].tamanno) + " archivo");//Singular
+			else
+				fila_nueva.push_back(std::to_string(m_lista_archivos[i].tamanno) + " archivos");//Plural
 		}
 		else
 		{

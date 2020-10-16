@@ -26,7 +26,7 @@ namespace Funciones
 			return std::to_string(horas) + ":" + tminutos + ":" + tsegundos;
 	}
 
-	microseconds_t duracion_midi(std::string ruta_midi)
+	microseconds_t duracion_midi(const std::string &ruta_midi)
 	{
 		Midi *archivo_midi = NULL;
 		try
@@ -52,5 +52,67 @@ namespace Funciones
 		if(valor1 < valor2 + diferencia_minima && valor1 > valor2 - diferencia_minima)
 			return true;
 		return false;
+	}
+
+	std::string nombre_archivo(const std::string &ruta, bool carpeta)
+	{
+		unsigned long int extencion = ruta.length()-1;
+		for(unsigned long int i=ruta.length()-1; i>0; i--)
+		{
+			//Encuentra el primer punto
+			if(extencion == ruta.length()-1 && ruta[i] == '.')
+				extencion = i;
+			//Inicio del nombre del archivo
+			if(ruta[i] == '/' && i < ruta.length()-1)
+			{
+				if(carpeta)
+					return ruta.substr(i+1);
+				//Es archivo
+				if(i < extencion && extencion != ruta.length()-1)
+					return ruta.substr(i+1, extencion-(i+1));
+			}
+		}
+		return "";
+	}
+
+	std::string extencion_archivo(const std::string &nombre)
+	{
+		for(unsigned long int i=nombre.length()-1; i>0; i--)
+		{
+			if(nombre[i] == '.' && i < nombre.length()-1)
+				return nombre.substr(i+1);
+		}
+		return "";
+	}
+
+	bool es_midi(const std::string &extencion)
+	{
+		if(extencion.length() == 3 &&
+			(extencion[0] == 'M' || extencion[0] == 'm') &&
+			(extencion[1] == 'I' || extencion[1] == 'i') &&
+			(extencion[2] == 'D' || extencion[2] == 'd'))
+			return true;
+		else if(extencion.length() == 4 &&
+			(extencion[0] == 'M' || extencion[0] == 'm') &&
+			(extencion[1] == 'I' || extencion[1] == 'i') &&
+			(extencion[2] == 'D' || extencion[2] == 'd') &&
+			(extencion[3] == 'I' || extencion[3] == 'i'))
+			return true;
+		return false;
+	}
+
+	unsigned int numero_de_archivos(const std::string &carpeta)
+	{
+		unsigned int archivos = 0;
+		if(!std::ifstream(carpeta))
+			return 0;
+		for(const std::filesystem::directory_entry elemento : std::filesystem::directory_iterator(carpeta))
+		{
+			std::string ruta = std::string(elemento.path());
+			std::string extencion = Funciones::extencion_archivo(ruta);
+			if(elemento.is_directory() || Funciones::es_midi(extencion))
+				archivos++;
+		}
+		return archivos;
 	}
 }
