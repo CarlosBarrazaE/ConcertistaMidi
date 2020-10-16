@@ -152,14 +152,17 @@ void Boton::tipografia(Tipografia *tipografia)
 
 void Boton::habilitado(bool estado)
 {
-	m_habilitado = estado;
-	if(m_habilitado)
-		m_color_texto = m_color_texto - 0.5f;
-	else
+	if(m_habilitado != estado)
 	{
-		m_color_texto = m_color_texto + 0.5f;
-		m_color_boton_actual = m_color_boton_normal;
-	}
+		m_habilitado = estado;
+		if(m_habilitado)
+			m_color_texto = m_color_texto - 0.5f;
+		else
+		{
+			m_color_texto = m_color_texto + 0.5f;
+			m_color_boton_actual = m_color_boton_normal;
+		}
 
-	m_texto.color(m_color_texto);
+		m_texto.color(m_color_texto);
+	}
 }
