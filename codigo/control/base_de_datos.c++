@@ -140,7 +140,7 @@ void Base_de_Datos::crear()
 	//Crea todas las tablas de la base de datos
 	this->consulta("CREATE TABLE configuracion (atributo VARCHAR(30), valor TEXT)");
 	this->consulta("CREATE TABLE carpetas (nombre VARCHAR(30) NOT NULL PRIMARY KEY, ruta TEXT)");
-	this->consulta("CREATE TABLE archivos (ruta TEXT NOT NULL PRIMARY KEY, visitas INT DEFAULT 0, duracion INT DEFAULT 0, ultimo_acceso DATETIME)");
+	this->consulta("CREATE TABLE archivos (ruta TEXT NOT NULL PRIMARY KEY, visitas INT DEFAULT 0, duracion BIGINT DEFAULT 0, ultimo_acceso DATETIME)");
 
 	this->escribir_configuracion("version_base_de_datos", VERSION_BASE_DE_DATOS);
 	this->ruta_carpeta("Canciones", "../musica/");
@@ -219,22 +219,22 @@ bool Base_de_Datos::eliminar_ruta_carpeta(const std::string &nombre)
 	return this->consulta("DELETE FROM carpetas WHERE nombre = '"+nombre+"'");
 }
 
-void Base_de_Datos::agregar_archivo(const std::string &ruta, unsigned int duracion)
+void Base_de_Datos::agregar_archivo(const std::string &ruta, long int duracion)
 {
 	if(ruta.length() > 0)
 		this->consulta("INSERT INTO archivos ('ruta', 'duracion') VALUES ('"+ruta+"', '"+std::to_string(duracion)+"')");
 }
 
-void Base_de_Datos::actualizar_archivo(const std::string &ruta, unsigned int duracion)
+void Base_de_Datos::actualizar_archivo(const std::string &ruta, long int duracion)
 {
 	if(ruta.length() > 0)
-		this->consulta("UPDATE archivos SET duracion = '"+std::to_string(duracion)+"' WHERE ruta = '"+ruta+"')");
+		this->consulta("UPDATE archivos SET duracion = '"+std::to_string(duracion)+"' WHERE ruta = '"+ruta+"'");
 }
 
 void Base_de_Datos::sumar_visita_archivo(const std::string &ruta)
 {
 	if(ruta.length() > 0)
-		this->consulta("UPDATE archivos SET visitas += 1, ultimo_acceso = now() WHERE ruta = '"+ruta+"')");
+		this->consulta("UPDATE archivos SET visitas = visitas+1, ultimo_acceso = datetime('now') WHERE ruta = '"+ruta+"'");
 }
 
 std::vector<std::string> Base_de_Datos::datos_archivo(const std::string &ruta)

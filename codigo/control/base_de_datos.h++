@@ -37,8 +37,8 @@ class Base_de_Datos
 		bool eliminar_ruta_carpeta(const std::string &nombre);
 
 		//Tabla archivos
-		void agregar_archivo(const std::string &ruta, unsigned int duracion);
-		void actualizar_archivo(const std::string &ruta, unsigned int duracion);
+		void agregar_archivo(const std::string &ruta, long int duracion);
+		void actualizar_archivo(const std::string &ruta, long int duracion);
 		void sumar_visita_archivo(const std::string &ruta);
 		std::vector<std::string> datos_archivo(const std::string &ruta);
 };

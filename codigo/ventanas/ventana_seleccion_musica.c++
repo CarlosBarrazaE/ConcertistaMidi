@@ -25,8 +25,8 @@ VentanaSeleccionMusica::VentanaSeleccionMusica(Configuracion *configuracion, Dat
 	m_tabla_archivos.agregar_columna("Nombre Archivo", false, 5);
 	m_tabla_archivos.agregar_columna("Duracion", true, 1);
 	m_tabla_archivos.agregar_columna("Tamaño", true, 1);
-	m_tabla_archivos.agregar_columna("Veces", true, 1);
-	m_tabla_archivos.agregar_columna("Fecha", true, 1);
+	m_tabla_archivos.agregar_columna("Visitas", true, 1);
+	m_tabla_archivos.agregar_columna("Fecha", true, 2);
 
 	m_carpeta_inicial = m_configuracion->leer("carpeta_inicial");
 	m_carpeta_activa = m_configuracion->leer("carpeta_activa");
@@ -123,7 +123,7 @@ void VentanaSeleccionMusica::cargar_contenido_carpeta(std::string ruta_abrir)
 				if(datos_midi.size() > 0)
 				{
 					actual.visitas = static_cast<unsigned int>(std::stoi(datos_midi[0]));
-					actual.duracion = static_cast<microseconds_t>(std::stoi(datos_midi[1]));
+					actual.duracion = static_cast<microseconds_t>(std::stol(datos_midi[1]));
 					if(datos_midi[2] != "")
 						actual.fecha_acceso = datos_midi[2];
 				}
@@ -246,10 +246,18 @@ bool VentanaSeleccionMusica::abrir_archivo_seleccionado()
 		else
 		{
 			//Abre el archivo seleccionado
-			Registro::Nota("Abriendo archivo: " + m_lista_archivos[seleccion_actual].ruta);
-			if(m_musica->cargar_midi(m_lista_archivos[seleccion_actual].ruta))
+			Datos_Archivos &archivo_abierto = m_lista_archivos[seleccion_actual];
+			Registro::Nota("Abriendo archivo: " + archivo_abierto.ruta);
+			if(m_musica->cargar_midi(archivo_abierto.ruta))
 			{
-				m_musica->nombre_musica(m_lista_archivos[seleccion_actual].nombre);
+				//Se suma la visita y se actualiza la fecha
+				m_datos->sumar_visita_archivo(archivo_abierto.ruta);
+
+				//Se actualiza la duracion si el archivo cambia
+				if(m_musica->musica()->GetSongLengthInMicroseconds() != archivo_abierto.duracion)
+					m_datos->actualizar_archivo(archivo_abierto.ruta, m_musica->musica()->GetSongLengthInMicroseconds());
+
+				m_musica->nombre_musica(archivo_abierto.nombre);
 				m_musica->autor("Autor");
 				return true;
 			}
