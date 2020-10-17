@@ -234,7 +234,7 @@ void Base_de_Datos::actualizar_archivo(const std::string &ruta, long int duracio
 void Base_de_Datos::sumar_visita_archivo(const std::string &ruta)
 {
 	if(ruta.length() > 0)
-		this->consulta("UPDATE archivos SET visitas = visitas+1, ultimo_acceso = datetime('now') WHERE ruta = '"+ruta+"'");
+		this->consulta("UPDATE archivos SET visitas = visitas+1, ultimo_acceso = datetime('now', 'localtime') WHERE ruta = '"+ruta+"'");
 }
 
 std::vector<std::string> Base_de_Datos::datos_archivo(const std::string &ruta)
