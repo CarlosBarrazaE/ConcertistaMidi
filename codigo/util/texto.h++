@@ -15,6 +15,7 @@ namespace Texto
 	std::string convertir_a_utf8(const char *entrada, int largo, const char *nombre_codificacion);
 	bool esta_vacio(const std::string &texto);
 	std::string bytes_a_texto(unsigned long int tamanno);
+	std::string primera_letra_mayuscula(const std::string &texto);
 }
 
 #endif

@@ -84,4 +84,15 @@ namespace Texto
 		else
 			return std::to_string(tamanno/(1024*1024*1024)) + " GB";
 	}
+
+	std::string primera_letra_mayuscula(const std::string &texto)
+	{
+		icu::UnicodeString texto_transformado = texto.c_str();
+		texto_transformado.toTitle(0).trim();
+
+		std::string resultado = "";
+		texto_transformado.toUTF8String(resultado);
+
+		return resultado;
+	}
 }

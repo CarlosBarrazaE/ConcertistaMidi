@@ -112,11 +112,11 @@ void VentanaSeleccionMusica::cargar_contenido_carpeta(std::string ruta_abrir)
 		{
 			Datos_Archivos actual;
 			actual.ruta = elemento.path();
-			actual.nombre = nombre_archivo;
 			actual.es_carpeta = elemento.is_directory();
 
 			if(!elemento.is_directory())
 			{
+				actual.nombre = Texto::primera_letra_mayuscula(nombre_archivo);
 				std::vector<std::string> datos_midi = m_datos->datos_archivo(actual.ruta);
 				actual.tamanno = elemento.file_size();
 				actual.fecha_acceso = "-";
@@ -134,7 +134,10 @@ void VentanaSeleccionMusica::cargar_contenido_carpeta(std::string ruta_abrir)
 				}
 			}
 			else
+			{
+				actual.nombre = nombre_archivo;
 				actual.tamanno = Funciones::numero_de_archivos(actual.ruta);//Numero de archivos
+			}
 
 			m_lista_archivos.push_back(actual);
 		}
@@ -198,6 +201,7 @@ void VentanaSeleccionMusica::crear_tabla(std::string ruta_abrir)
 	}
 	else
 		m_ruta_exploracion.boton_siguiente_habilitado(true);
+
 	//Ordenar Lista
 	std::sort(m_lista_archivos.begin(), m_lista_archivos.end());
 
