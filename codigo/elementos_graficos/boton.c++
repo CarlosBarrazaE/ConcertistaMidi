@@ -64,6 +64,7 @@ void Boton::inicializar()
 	m_color_boton_normal = color;
 	m_color_boton_actual = color;
 	m_color_boton_sobre = color - 0.1f;
+	m_color_boton_activado = color - 0.15f;
 }
 
 void Boton::actualizar(unsigned int /*diferencia_tiempo*/)
@@ -88,7 +89,10 @@ void Boton::evento_raton(Raton *raton)
 	if(raton->esta_sobre(this->x(), this->y(), this->ancho(), this->alto()))
 	{
 		if(raton->activado(BotonIzquierdo) && m_sobre_boton)
+		{
 			m_boton_pre_activado = true;
+			m_color_boton_actual = m_color_boton_activado;
+		}
 		else if(!raton->activado(BotonIzquierdo))
 		{
 			m_color_boton_actual = m_color_boton_sobre;
@@ -138,6 +142,7 @@ void Boton::color_boton(Color color)
 	m_color_boton_normal = color;
 	m_color_boton_actual = color;
 	m_color_boton_sobre = color - 0.1f;
+	m_color_boton_activado = color - 0.15f;
 }
 
 void Boton::color_texto(Color color)

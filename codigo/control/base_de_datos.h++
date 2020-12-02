@@ -41,6 +41,9 @@ class Base_de_Datos
 		void actualizar_archivo(const std::string &ruta, long int duracion);
 		void sumar_visita_archivo(const std::string &ruta);
 		std::vector<std::string> datos_archivo(const std::string &ruta);
+		std::vector<std::string> lista_archivos();
+		void borrar_archivo(const std::string &ruta);
+		void borrar_archivos();
 };
 
 #endif

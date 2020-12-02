@@ -15,6 +15,7 @@ private:
 	Color m_color_boton_actual;
 	Color m_color_boton_normal;
 	Color m_color_boton_sobre;
+	Color m_color_boton_activado;
 	Color m_color_texto;
 
 	bool m_sobre_boton;
