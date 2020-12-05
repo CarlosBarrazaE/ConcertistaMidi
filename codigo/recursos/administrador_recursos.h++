@@ -53,6 +53,9 @@ enum Textura
 	T_ManoIzquierda,
 	T_ManoDerecha,
 	T_MusicaFondo,
+	T_CasillaInactiva,
+	T_CasillaActiva,
+	T_CasillaSombra,
 };
 
 enum SombreadorVF

@@ -2,6 +2,8 @@
 
 float Pantalla::Ancho = 0;
 float Pantalla::Alto = 0;
+bool Pantalla::PantallaCompleta = false;
+bool Pantalla::ModoAlambre = false;
 
 float Pantalla::Centro_horizontal()
 {

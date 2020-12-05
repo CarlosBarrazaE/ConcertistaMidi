@@ -14,7 +14,9 @@ enum Accion
 	CambiarASeleccionMusica,
 	CambiarASeleccionPista,
 	CambiarAOrgano,
-	Salir
+	Salir,
+	EntrarPantallaCompleta,
+	SalirPantallaCompleta,
 };
 
 class Ventana

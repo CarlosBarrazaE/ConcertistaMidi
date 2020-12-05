@@ -78,21 +78,22 @@ void Controlador_Juego::actualizar()
 
 	bool cambio_ventana = false;
 
-	if(m_ventana_actual->obtener_accion() == CambiarATitulo)
+	Accion accion_actual = m_ventana_actual->obtener_accion();
+	if(accion_actual == CambiarATitulo)
 	{
 		delete m_ventana_actual;
 		m_fps_dinamico = true;
 		m_ventana_actual = new VentanaTitulo(m_recursos);
 		cambio_ventana = true;
 	}
-	else if(m_ventana_actual->obtener_accion() == CambiarASeleccionMusica)
+	else if(accion_actual == CambiarASeleccionMusica)
 	{
 		delete m_ventana_actual;
 		m_fps_dinamico = true;
 		m_ventana_actual = new VentanaSeleccionMusica(&m_configuracion, &m_musica, m_recursos);
 		cambio_ventana = true;
 	}
-	else if(m_ventana_actual->obtener_accion() == CambiarASeleccionPista)
+	else if(accion_actual == CambiarASeleccionPista)
 	{
 		delete m_ventana_actual;
 		m_fps_dinamico = true;
@@ -101,7 +102,7 @@ void Controlador_Juego::actualizar()
 
 		m_fotograma = -1;
 	}
-	else if(m_ventana_actual->obtener_accion() == CambiarAOrgano)
+	else if(accion_actual == CambiarAOrgano)
 	{
 		delete m_ventana_actual;
 		m_fps_dinamico = false;
@@ -110,15 +111,31 @@ void Controlador_Juego::actualizar()
 
 		m_fotograma++;
 	}
-	else if(m_ventana_actual->obtener_accion() == CambiarAConfiguracion)
+	else if(accion_actual == CambiarAConfiguracion)
 	{
 		delete m_ventana_actual;
 		m_fps_dinamico = true;
 		m_ventana_actual = new VentanaConfiguracion(&m_configuracion, m_recursos);
 		cambio_ventana = true;
 	}
-	else if(m_ventana_actual->obtener_accion() == Salir)
+	else if(accion_actual == Salir)
 		this->evento_salir();
+	else if(accion_actual == EntrarPantallaCompleta)
+	{
+		if(!m_pantalla_completa)
+		{
+			m_pantalla_completa = !m_pantalla_completa;
+			m_guardar_cambios = !m_guardar_cambios;
+		}
+	}
+	else if(accion_actual == SalirPantallaCompleta)
+	{
+		if(m_pantalla_completa)
+		{
+			m_pantalla_completa = !m_pantalla_completa;
+			m_guardar_cambios = !m_guardar_cambios;
+		}
+	}
 
 	if(cambio_ventana)
 	{

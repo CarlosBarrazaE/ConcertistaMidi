@@ -4,6 +4,7 @@
 #include "ventana.h++"
 #include "../elementos_graficos/boton.h++"
 #include "../elementos_graficos/solapa.h++"
+#include "../elementos_graficos/casilla_verificacion.h++"
 #include "../control/configuracion.h++"
 
 class VentanaConfiguracion : public Ventana
@@ -30,6 +31,7 @@ private:
 
 	//Solapa Video (4)
 	Etiqueta *m_solapa4_titulo;
+	Casilla_Verificacion *m_solapa4_casilla_pantalla_completa;
 
 	//Datos
 	Configuracion *m_configuracion;

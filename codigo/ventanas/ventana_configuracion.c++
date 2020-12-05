@@ -43,7 +43,13 @@ VentanaConfiguracion::VentanaConfiguracion(Configuracion *configuracion, Adminis
 
 	m_solapa->agregar_solapa("Video");
 	m_solapa4_titulo = new Etiqueta(250, 50, Pantalla::Ancho-250, 40, true, "Video", LetraTitulo, recursos);
+	m_solapa4_casilla_pantalla_completa = new Casilla_Verificacion(260, 100, Pantalla::Ancho-270, 30, "Pantalla Completa (F11)", recursos);
 	m_solapa->agregar_elemento_solapa(3, m_solapa4_titulo);
+	m_solapa->agregar_elemento_solapa(3, m_solapa4_casilla_pantalla_completa);
+
+	//Actualiza segun el estado de la pantalla
+	if(m_solapa4_casilla_pantalla_completa->activado() != Pantalla::PantallaCompleta)
+		m_solapa4_casilla_pantalla_completa->estado(Pantalla::PantallaCompleta);
 
 	m_ultima_solapa = 0;
 }
@@ -63,6 +69,7 @@ VentanaConfiguracion::~VentanaConfiguracion()
 	delete m_solapa2_titulo;
 	delete m_solapa3_titulo;
 	delete m_solapa4_titulo;
+	delete m_solapa4_casilla_pantalla_completa;
 
 	delete m_solapa;
 }
@@ -89,6 +96,7 @@ void VentanaConfiguracion::evento_raton(Raton *raton)
 	m_boton_atras->evento_raton(raton);
 	if(m_boton_atras->esta_activado())
 		m_accion = CambiarATitulo;
+
 	if(m_solapa1_restablecer->esta_activado())
 	{
 		m_configuracion->escribir("velocidad_musica", "1.000000");
@@ -123,12 +131,22 @@ void VentanaConfiguracion::evento_raton(Raton *raton)
 		m_configuracion->base_de_datos()->borrar_archivos();
 		Notificacion::Nota("Base de datos borrada", 5);
 	}
+	if(m_solapa4_casilla_pantalla_completa->cambio_estado())
+	{
+		if(m_solapa4_casilla_pantalla_completa->activado())
+			m_accion = EntrarPantallaCompleta;
+		else
+			m_accion = SalirPantallaCompleta;
+	}
 }
 
 void VentanaConfiguracion::evento_teclado(Tecla tecla, bool estado)
 {
 	if(tecla == TECLA_ESCAPE && !estado)
 		m_accion = CambiarATitulo;
+
+	if(m_solapa4_casilla_pantalla_completa->activado() != Pantalla::PantallaCompleta)
+		m_solapa4_casilla_pantalla_completa->estado(Pantalla::PantallaCompleta);
 }
 
 void VentanaConfiguracion::evento_pantalla(float ancho, float alto)
@@ -148,4 +166,5 @@ void VentanaConfiguracion::evento_pantalla(float ancho, float alto)
 	m_solapa3_titulo->dimension(Pantalla::Ancho-250, 40);
 
 	m_solapa4_titulo->dimension(Pantalla::Ancho-250, 40);
+	m_solapa4_casilla_pantalla_completa->dimension(Pantalla::Ancho-270, 25);
 }

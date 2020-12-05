@@ -11,5 +11,7 @@ Ventana::~Ventana()
 
 Accion Ventana::obtener_accion()
 {
-	return m_accion;
+	Accion accion = m_accion;
+	m_accion = Ninguna;
+	return accion;
 }

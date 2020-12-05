@@ -15,8 +15,8 @@ void ajustar_ventana(Controlador_Juego *controlador, int ancho_nuevo, int alto_n
 void eventos_raton_rueda(Controlador_Juego *controlador, int desplazamiento_x, int desplazamiento_y);
 void eventos_raton_botones(Controlador_Juego *controlador, int boton, int accion, int numero_clics);
 void eventos_raton_posicion(Controlador_Juego *controlador, int x, int y);
-void eventos_taclado(SDL_Window *ventana, Controlador_Juego *controlador, int tecla, bool estado);
-void controlar_eventos(SDL_Window *ventana, Controlador_Juego *controlador, SDL_Event *evento);
+void eventos_taclado(Controlador_Juego *controlador, int tecla, bool estado);
+void controlar_eventos(Controlador_Juego *controlador, SDL_Event *evento);
 
 int main (int /*n*/, char **/*argumentos*/)
 {
@@ -46,21 +46,39 @@ int main (int /*n*/, char **/*argumentos*/)
 	Administrador_Recursos recursos;
 	Controlador_Juego controlador(&recursos);
 
-	//Se actualiza segun la configuracion
-	if(controlador.es_pantalla_completa())
-		SDL_SetWindowFullscreen(ventana, SDL_WINDOW_FULLSCREEN_DESKTOP);
-	else
-		SDL_SetWindowFullscreen(ventana, 0);
-
 	while (!controlador.terminar())
 	{
 		SDL_Event evento;
 		while (SDL_PollEvent(&evento))
-			controlar_eventos(ventana, &controlador, &evento);
+			controlar_eventos(&controlador, &evento);
 
 		glClear(GL_COLOR_BUFFER_BIT);
 
 		controlador.actualizar();
+
+		//Pantalla Completa
+		if(controlador.es_pantalla_completa() && !Pantalla::PantallaCompleta)
+		{
+			SDL_SetWindowFullscreen(ventana, SDL_WINDOW_FULLSCREEN_DESKTOP);
+			Pantalla::PantallaCompleta = true;
+		}
+		else if(!controlador.es_pantalla_completa() && Pantalla::PantallaCompleta)
+		{
+			SDL_SetWindowFullscreen(ventana, 0);
+			Pantalla::PantallaCompleta = false;
+		}
+
+		//Modo Alambre
+		if(controlador.modo_alambre_activado() && !Pantalla::ModoAlambre)
+		{
+			glPolygonMode(GL_FRONT, GL_LINE);
+			Pantalla::ModoAlambre = true;
+		}
+		else if(!controlador.modo_alambre_activado() && Pantalla::ModoAlambre)
+		{
+			glPolygonMode(GL_FRONT, GL_FILL);
+			Pantalla::ModoAlambre = false;
+		}
 
 		SDL_GL_SwapWindow(ventana);
 	}
@@ -78,12 +96,12 @@ void configurar_gl()
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 }
 
-void controlar_eventos(SDL_Window *ventana, Controlador_Juego *controlador, SDL_Event *evento)
+void controlar_eventos(Controlador_Juego *controlador, SDL_Event *evento)
 {
 	if (evento->type == SDL_KEYDOWN)
-		eventos_taclado(ventana, controlador, evento->key.keysym.sym, true);
+		eventos_taclado(controlador, evento->key.keysym.sym, true);
 	else if (evento->type == SDL_KEYUP)
-		eventos_taclado(ventana, controlador, evento->key.keysym.sym, false);
+		eventos_taclado(controlador, evento->key.keysym.sym, false);
 	else if(evento->type == SDL_MOUSEBUTTONDOWN)
 		eventos_raton_botones(controlador, evento->button.button, evento->button.state, evento->button.clicks);
 	else if(evento->type == SDL_MOUSEBUTTONUP)
@@ -139,7 +157,7 @@ void eventos_raton_rueda(Controlador_Juego *controlador, int desplazamiento_x, i
 	controlador->eventos_raton();
 }
 
-void eventos_taclado(SDL_Window *ventana, Controlador_Juego *controlador, int tecla, bool estado)
+void eventos_taclado(Controlador_Juego *controlador, int tecla, bool estado)
 {
 	switch(tecla)
 	{
@@ -209,20 +227,8 @@ void eventos_taclado(SDL_Window *ventana, Controlador_Juego *controlador, int te
 		case SDLK_F8: controlador->eventos_teclado(TECLA_F8, estado); break;
 		case SDLK_F9: controlador->eventos_teclado(TECLA_F9, estado); break;
 		case SDLK_F10: controlador->eventos_teclado(TECLA_F10, estado); break;
-		case SDLK_F11:
-			controlador->eventos_teclado(TECLA_F11, estado);
-			if(controlador->es_pantalla_completa())
-				SDL_SetWindowFullscreen(ventana, SDL_WINDOW_FULLSCREEN_DESKTOP);
-			else
-				SDL_SetWindowFullscreen(ventana, 0);
-			break;
-		case SDLK_F12:
-			controlador->eventos_teclado(TECLA_F12, estado);
-			if(controlador->modo_alambre_activado())
-				glPolygonMode(GL_FRONT, GL_LINE);
-			else
-				glPolygonMode(GL_FRONT, GL_FILL);
-			break;
+		case SDLK_F11: controlador->eventos_teclado(TECLA_F11, estado); break;
+		case SDLK_F12: controlador->eventos_teclado(TECLA_F12, estado); break;
 		default: return;
 	}
 }
