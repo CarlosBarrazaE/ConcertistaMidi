@@ -19,9 +19,10 @@ private:
 	Solapa *m_solapa;
 
 	//Solapa General (1)
-	Etiqueta *m_solapa1_titulo;
+	Etiqueta *m_solapa1_titulo, *m_solapa1_desarrollo;
 	Etiqueta *m_solapa1_texto_restablecer, *m_solapa1_texto_limpiar, *m_solapa1_texto_borrar;
 	Boton *m_solapa1_restablecer, *m_solapa1_limpiar_bd, *m_solapa1_borrar_db;
+ 	Casilla_Verificacion *m_solapa1_casilla_desarrollo, *m_solapa1_casilla_modo_alambre;
 
 	//Solapa Carpetas MIDI (2)
 	Etiqueta *m_solapa2_titulo;

@@ -8,6 +8,7 @@ public:
 	static float Alto;
 	static bool PantallaCompleta;
 	static bool ModoAlambre;
+	static bool ModoDesarrollo;
 
 	static float Centro_horizontal();
 	static float Centro_vertical();

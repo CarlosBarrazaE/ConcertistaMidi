@@ -17,6 +17,10 @@ enum Accion
 	Salir,
 	EntrarPantallaCompleta,
 	SalirPantallaCompleta,
+	EntrarModoAlambre,
+	SalirModoAlambre,
+	EntrarModoDesarrollo,
+	SalirModoDesarrollo,
 };
 
 class Ventana

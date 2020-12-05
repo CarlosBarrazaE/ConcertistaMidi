@@ -19,12 +19,15 @@ VentanaConfiguracion::VentanaConfiguracion(Configuracion *configuracion, Adminis
 	m_solapa = new Solapa(0, 40, 250, Pantalla::Alto, recursos);
 	m_solapa->agregar_solapa("General");
 	m_solapa1_titulo = new Etiqueta(250, 50, Pantalla::Ancho-250, 40, true, "General", LetraTitulo, recursos);
-	m_solapa1_texto_restablecer = new Etiqueta(260, 100, Pantalla::Ancho-270, 25, false, "Volver a la configuración predeterminada", LetraChica, recursos);
-	m_solapa1_texto_limpiar = new Etiqueta(260, 135, Pantalla::Ancho-270, 25, false, "Limpiar la base de datos", LetraChica, recursos);
-	m_solapa1_texto_borrar = new Etiqueta(260, 170, Pantalla::Ancho-270, 25, false, "Borrar la base de datos", LetraChica, recursos);
-	m_solapa1_restablecer = new Boton(Pantalla::Ancho - 110, 100, 100, 25, "Restablecer", LetraChica, recursos);
-	m_solapa1_limpiar_bd = new Boton(Pantalla::Ancho - 110, 135, 100, 25, "Limpiar", LetraChica, recursos);
-	m_solapa1_borrar_db = new Boton(Pantalla::Ancho - 110, 170, 100, 25, "Borrar", LetraChica, recursos);
+	m_solapa1_texto_restablecer = new Etiqueta(260, 100, Pantalla::Ancho-270, 30, false, "Volver a la configuración predeterminada", LetraMediana, recursos);
+	m_solapa1_texto_limpiar = new Etiqueta(260, 140, Pantalla::Ancho-270, 30, false, "Limpiar la base de datos", LetraMediana, recursos);
+	m_solapa1_texto_borrar = new Etiqueta(260, 180, Pantalla::Ancho-270, 30, false, "Borrar la base de datos", LetraMediana, recursos);
+	m_solapa1_desarrollo = new Etiqueta(260, 230, Pantalla::Ancho-270, 30, true, "Desarrollo", LetraTitulo, recursos);
+	m_solapa1_restablecer = new Boton(Pantalla::Ancho - 160, 100, 150, 30, "Restablecer", LetraMediana, recursos);
+	m_solapa1_limpiar_bd = new Boton(Pantalla::Ancho - 160, 140, 150, 30, "Limpiar", LetraMediana, recursos);
+	m_solapa1_borrar_db = new Boton(Pantalla::Ancho - 160, 180, 150, 30, "Borrar", LetraMediana, recursos);
+	m_solapa1_casilla_desarrollo = new Casilla_Verificacion(260, 280, Pantalla::Ancho-270, 30, "Modo Desarrollo (F10)", recursos);
+	m_solapa1_casilla_modo_alambre = new Casilla_Verificacion(260, 320, Pantalla::Ancho-270, 30, "Modo Alambre (F12)", recursos);
 	m_solapa->agregar_elemento_solapa(0, m_solapa1_titulo);
 	m_solapa->agregar_elemento_solapa(0, m_solapa1_texto_restablecer);
 	m_solapa->agregar_elemento_solapa(0, m_solapa1_texto_limpiar);
@@ -32,6 +35,9 @@ VentanaConfiguracion::VentanaConfiguracion(Configuracion *configuracion, Adminis
 	m_solapa->agregar_elemento_solapa(0, m_solapa1_restablecer);
 	m_solapa->agregar_elemento_solapa(0, m_solapa1_limpiar_bd);
 	m_solapa->agregar_elemento_solapa(0, m_solapa1_borrar_db);
+	m_solapa->agregar_elemento_solapa(0, m_solapa1_desarrollo);
+	m_solapa->agregar_elemento_solapa(0, m_solapa1_casilla_desarrollo);
+	m_solapa->agregar_elemento_solapa(0, m_solapa1_casilla_modo_alambre);
 
 	m_solapa->agregar_solapa("Carpetas MIDI");
 	m_solapa2_titulo = new Etiqueta(250, 50, Pantalla::Ancho-250, 40, true, "Carpetas MIDI", LetraTitulo, recursos);
@@ -50,6 +56,8 @@ VentanaConfiguracion::VentanaConfiguracion(Configuracion *configuracion, Adminis
 	//Actualiza segun el estado de la pantalla
 	if(m_solapa4_casilla_pantalla_completa->activado() != Pantalla::PantallaCompleta)
 		m_solapa4_casilla_pantalla_completa->estado(Pantalla::PantallaCompleta);
+	if(m_solapa1_casilla_modo_alambre->activado() != Pantalla::ModoAlambre)
+		m_solapa1_casilla_modo_alambre->estado(Pantalla::ModoAlambre);
 
 	m_ultima_solapa = 0;
 }
@@ -65,9 +73,14 @@ VentanaConfiguracion::~VentanaConfiguracion()
 	delete m_solapa1_restablecer;
 	delete m_solapa1_limpiar_bd;
 	delete m_solapa1_borrar_db;
+	delete m_solapa1_desarrollo;
+	delete m_solapa1_casilla_desarrollo;
+	delete m_solapa1_casilla_modo_alambre;
 
 	delete m_solapa2_titulo;
+
 	delete m_solapa3_titulo;
+
 	delete m_solapa4_titulo;
 	delete m_solapa4_casilla_pantalla_completa;
 
@@ -131,6 +144,20 @@ void VentanaConfiguracion::evento_raton(Raton *raton)
 		m_configuracion->base_de_datos()->borrar_archivos();
 		Notificacion::Nota("Base de datos borrada", 5);
 	}
+	if(m_solapa1_casilla_desarrollo->cambio_estado())
+	{
+		if(m_solapa1_casilla_desarrollo->activado())
+			m_accion = EntrarModoDesarrollo;
+		else
+			m_accion = SalirModoDesarrollo;
+	}
+	if(m_solapa1_casilla_modo_alambre->cambio_estado())
+	{
+		if(m_solapa1_casilla_modo_alambre->activado())
+			m_accion = EntrarModoAlambre;
+		else
+			m_accion = SalirModoAlambre;
+	}
 	if(m_solapa4_casilla_pantalla_completa->cambio_estado())
 	{
 		if(m_solapa4_casilla_pantalla_completa->activado())
@@ -145,6 +172,12 @@ void VentanaConfiguracion::evento_teclado(Tecla tecla, bool estado)
 	if(tecla == TECLA_ESCAPE && !estado)
 		m_accion = CambiarATitulo;
 
+	//Modo desarrollo activado desde teclado
+	if(m_solapa1_casilla_desarrollo->activado() != Pantalla::ModoDesarrollo)
+		m_solapa1_casilla_desarrollo->estado(Pantalla::ModoDesarrollo);
+	if(m_solapa1_casilla_modo_alambre->activado() != Pantalla::ModoAlambre)
+		m_solapa1_casilla_modo_alambre->estado(Pantalla::ModoAlambre);
+	//Actualiza cuando se activa desde el teclado
 	if(m_solapa4_casilla_pantalla_completa->activado() != Pantalla::PantallaCompleta)
 		m_solapa4_casilla_pantalla_completa->estado(Pantalla::PantallaCompleta);
 }
@@ -157,14 +190,17 @@ void VentanaConfiguracion::evento_pantalla(float ancho, float alto)
 	m_solapa->dimension(250, alto);
 
 	m_solapa1_titulo->dimension(Pantalla::Ancho-250, 40);
-	m_solapa1_restablecer->posicion(Pantalla::Ancho - 110, 100);
-	m_solapa1_limpiar_bd->posicion(Pantalla::Ancho - 110, 135);
-	m_solapa1_borrar_db->posicion(Pantalla::Ancho - 110, 170);
+	m_solapa1_restablecer->posicion(Pantalla::Ancho - 160, 100);
+	m_solapa1_limpiar_bd->posicion(Pantalla::Ancho - 160, 140);
+	m_solapa1_borrar_db->posicion(Pantalla::Ancho - 160, 180);
+	m_solapa1_desarrollo->dimension(Pantalla::Ancho-250, 40);
+	m_solapa1_casilla_desarrollo->dimension(Pantalla::Ancho-270, 30);
+	m_solapa1_casilla_modo_alambre->dimension(Pantalla::Ancho-270, 30);
 
 	m_solapa2_titulo->dimension(Pantalla::Ancho-250, 40);
 
 	m_solapa3_titulo->dimension(Pantalla::Ancho-250, 40);
 
 	m_solapa4_titulo->dimension(Pantalla::Ancho-250, 40);
-	m_solapa4_casilla_pantalla_completa->dimension(Pantalla::Ancho-270, 25);
+	m_solapa4_casilla_pantalla_completa->dimension(Pantalla::Ancho-270, 30);
 }

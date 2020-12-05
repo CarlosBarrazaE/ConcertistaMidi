@@ -124,7 +124,7 @@ void Controlador_Juego::actualizar()
 	{
 		if(!m_pantalla_completa)
 		{
-			m_pantalla_completa = !m_pantalla_completa;
+			m_pantalla_completa = true;
 			m_guardar_cambios = !m_guardar_cambios;
 		}
 	}
@@ -132,9 +132,29 @@ void Controlador_Juego::actualizar()
 	{
 		if(m_pantalla_completa)
 		{
-			m_pantalla_completa = !m_pantalla_completa;
+			m_pantalla_completa = false;
 			m_guardar_cambios = !m_guardar_cambios;
 		}
+	}
+	else if(accion_actual == EntrarModoAlambre)
+	{
+		if(!m_modo_alambre)
+			m_modo_alambre = true;
+	}
+	else if(accion_actual == SalirModoAlambre)
+	{
+		if(m_modo_alambre)
+			m_modo_alambre = false;
+	}
+	else if(accion_actual == EntrarModoDesarrollo)
+	{
+		if(!m_depurar)
+			m_depurar = true;
+	}
+	else if(accion_actual == SalirModoDesarrollo)
+	{
+		if(m_depurar)
+			m_depurar = false;
 	}
 
 	if(cambio_ventana)
@@ -199,7 +219,10 @@ void Controlador_Juego::eventos_raton()
 void Controlador_Juego::eventos_teclado(Tecla tecla, bool estado)
 {
 	if(tecla == TECLA_F10 && estado)
+	{
 		m_depurar = !m_depurar;
+		Pantalla::ModoDesarrollo = m_depurar;
+	}
 	else if(tecla == TECLA_F11 && estado)
 	{
 		m_pantalla_completa = !m_pantalla_completa;
