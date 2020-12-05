@@ -90,15 +90,18 @@ void Boton::evento_raton(Raton *raton)
 	{
 		if(raton->activado(BotonIzquierdo) && m_sobre_boton)
 		{
+			//Solo se aceptan el clic cuando estaba sobre el boton antes del evento
 			m_boton_pre_activado = true;
 			m_color_boton_actual = m_color_boton_activado;
 		}
 		else if(!raton->activado(BotonIzquierdo))
 		{
+			//Se confirma que esta sobre el boton antes del evento
 			m_color_boton_actual = m_color_boton_sobre;
 			m_sobre_boton = true;
 			if(m_boton_pre_activado)
 			{
+				//Se activa al soltar el clic sobre el boton
 				m_boton_activado = true;
 				m_boton_pre_activado = false;
 			}
@@ -106,6 +109,7 @@ void Boton::evento_raton(Raton *raton)
 	}
 	else
 	{
+		//Se borra todo
 		m_color_boton_actual = m_color_boton_normal;
 		m_sobre_boton = false;
 		m_boton_pre_activado = false;

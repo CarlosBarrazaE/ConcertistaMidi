@@ -1,0 +1,258 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   sodipodi:docname="casilla_verificacion.svg"
+   inkscape:version="1.0 (4035a4fb49, 2020-05-01)"
+   id="svg8"
+   version="1.1"
+   viewBox="0 0 176.8247 58.82238"
+   height="58.82238mm"
+   width="176.82469mm"
+   inkscape:export-filename="/home/carlos/Documentos/Programas/Codigos Fuentes/Programas en C++/piano/Concertista Midi/extra/casilla_verificacion.png"
+   inkscape:export-xdpi="105"
+   inkscape:export-ydpi="105">
+  <defs
+     id="defs2">
+    <filter
+       width="1.2"
+       style="color-interpolation-filters:sRGB"
+       inkscape:label="Drop Shadow"
+       id="filter1520">
+      <feFlood
+         flood-opacity="0.20000000000000004"
+         flood-color="rgb(0,0,0)"
+         result="flood"
+         id="feFlood1510" />
+      <feComposite
+         in="flood"
+         in2="SourceGraphic"
+         operator="in"
+         result="composite1"
+         id="feComposite1512" />
+      <feGaussianBlur
+         in="composite1"
+         stdDeviation="1"
+         result="blur"
+         id="feGaussianBlur1514" />
+      <feOffset
+         dx="3"
+         dy="3"
+         result="offset"
+         id="feOffset1516" />
+      <feComposite
+         in="offset"
+         in2="SourceGraphic"
+         operator="out"
+         result="composite2"
+         id="feComposite1518" />
+    </filter>
+    <filter
+       style="color-interpolation-filters:sRGB"
+       id="filter1812"
+       inkscape:label="Drop Shadow">
+      <feBlend
+         mode="normal"
+         in2="SourceGraphic"
+         id="feBlend1814"
+         result="fbSourceGraphic" />
+    </filter>
+    <filter
+       inkscape:label="Drop Shadow"
+       id="filter1812-9"
+       style="color-interpolation-filters:sRGB">
+      <feBlend
+         result="fbSourceGraphic"
+         id="feBlend1814-31"
+         in2="SourceGraphic"
+         mode="normal" />
+      <feColorMatrix
+         id="feColorMatrix1816-9"
+         values="0 0 0 -1 0 0 0 0 -1 0 0 0 0 -1 0 0 0 0 1 0"
+         in="fbSourceGraphic"
+         result="fbSourceGraphicAlpha" />
+      <feFlood
+         in="fbSourceGraphic"
+         result="flood"
+         flood-color="rgb(0,0,0)"
+         flood-opacity="0.498039"
+         id="feFlood1818-4" />
+      <feComposite
+         result="composite1"
+         operator="out"
+         in="flood"
+         id="feComposite1820-7"
+         in2="fbSourceGraphic" />
+      <feGaussianBlur
+         result="blur"
+         stdDeviation="3"
+         in="composite1"
+         id="feGaussianBlur1822-8" />
+      <feOffset
+         result="offset"
+         dy="0"
+         dx="0"
+         id="feOffset1824-4" />
+      <feComposite
+         result="composite2"
+         operator="atop"
+         in="offset"
+         id="feComposite1826-5"
+         in2="fbSourceGraphic" />
+    </filter>
+    <filter
+       inkscape:label="Drop Shadow"
+       id="filter1158"
+       style="color-interpolation-filters:sRGB">
+      <feBlend
+         result="fbSourceGraphic"
+         id="feBlend1160"
+         in2="SourceGraphic"
+         mode="normal" />
+      <feColorMatrix
+         id="feColorMatrix1007"
+         values="0 0 0 -1 0 0 0 0 -1 0 0 0 0 -1 0 0 0 0 1 0"
+         in="fbSourceGraphic"
+         result="fbSourceGraphicAlpha" />
+      <feFlood
+         in="fbSourceGraphic"
+         result="flood"
+         flood-color="rgb(37,180,255)"
+         flood-opacity="0.5"
+         id="feFlood1009" />
+      <feComposite
+         result="composite1"
+         operator="out"
+         in="flood"
+         id="feComposite1011"
+         in2="fbSourceGraphic" />
+      <feGaussianBlur
+         result="blur"
+         stdDeviation="3"
+         in="composite1"
+         id="feGaussianBlur1013" />
+      <feOffset
+         result="offset"
+         dy="0"
+         dx="0"
+         id="feOffset1015" />
+      <feComposite
+         result="composite2"
+         operator="atop"
+         in="offset"
+         id="feComposite1017"
+         in2="fbSourceGraphic" />
+    </filter>
+  </defs>
+  <sodipodi:namedview
+     showguides="true"
+     inkscape:window-maximized="1"
+     inkscape:window-y="0"
+     inkscape:window-x="1600"
+     inkscape:window-height="1015"
+     inkscape:window-width="1920"
+     fit-margin-bottom="0"
+     fit-margin-right="0"
+     fit-margin-left="0"
+     fit-margin-top="0"
+     showgrid="false"
+     inkscape:document-rotation="0"
+     inkscape:current-layer="g1020"
+     inkscape:document-units="mm"
+     inkscape:cy="128.88365"
+     inkscape:cx="567.86022"
+     inkscape:zoom="2.9093642"
+     inkscape:pageshadow="2"
+     inkscape:pageopacity="0.0"
+     borderopacity="1.0"
+     bordercolor="#666666"
+     pagecolor="#ffffff"
+     id="base" />
+  <metadata
+     id="metadata5">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title />
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <g
+     transform="translate(3.4123353,3.411204)"
+     id="layer1"
+     inkscape:groupmode="layer"
+     inkscape:label="Capa 1">
+    <g
+       id="g1020"
+       transform="matrix(0.99931036,0,0,1.0012664,53.617619,-1.5006218)"
+       style="display:inline">
+      <rect
+         inkscape:export-ydpi="105"
+         inkscape:export-xdpi="105"
+         ry="3.7662241"
+         inkscape:label="casilla"
+         y="2.9874995"
+         x="-52.163872"
+         height="48.95665"
+         width="49.054398"
+         id="Casilla-0"
+         style="fill:#ffffff;stroke:#969493;stroke-width:0.979718;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;paint-order:normal;filter:url(#filter1812-9)"
+         inkscape:export-filename="/home/carlos/Documentos/Programas/Codigos Fuentes/Programas en C++/piano/Concertista Midi/1.png" />
+      <g
+         inkscape:export-ydpi="105"
+         inkscape:export-xdpi="105"
+         id="g1022">
+        <rect
+           inkscape:export-ydpi="105"
+           inkscape:export-xdpi="105"
+           ry="3.7662241"
+           inkscape:label="casilla"
+           y="2.9874995"
+           x="6.8768463"
+           height="48.95665"
+           width="49.054398"
+           id="Casilla-0-0"
+           style="display:inline;fill:#ffffff;fill-opacity:1;stroke:#969493;stroke-width:0.979718;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;paint-order:normal;filter:url(#filter1158)"
+           inkscape:export-filename="/home/carlos/Documentos/Programas/Codigos Fuentes/Programas en C++/piano/Concertista Midi/4.png" />
+        <rect
+           ry="3.7662241"
+           inkscape:label="casilla"
+           y="2.9874995"
+           x="6.8768449"
+           height="48.95665"
+           width="49.054398"
+           id="Casilla-0-3"
+           style="opacity:1;fill:none;fill-opacity:1;stroke:#25b4ff;stroke-width:0.979718;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;paint-order:normal;filter:url(#filter1812)" />
+        <rect
+           style="fill:#25b4ff;fill-opacity:1;stroke:#25b4ff;stroke-width:0.627271;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;paint-order:normal"
+           id="Casilla-0-2-6"
+           width="31.394812"
+           height="31.332256"
+           x="15.706629"
+           y="11.799697"
+           inkscape:label="casilla"
+           ry="2.4103835" />
+      </g>
+      <rect
+         style="fill:#ffffff;stroke:#969493;stroke-width:0.98011;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;paint-order:normal;filter:url(#filter1520)"
+         id="Casilla-0-36"
+         width="49.054398"
+         height="48.95665"
+         x="65.917564"
+         y="2.9874995"
+         inkscape:label="casilla"
+         ry="3.7662241"
+         inkscape:export-xdpi="105"
+         inkscape:export-ydpi="105"
+         inkscape:export-filename="/home/carlos/Documentos/Programas/Codigos Fuentes/Programas en C++/piano/Concertista Midi/3.png" />
+    </g>
+  </g>
+</svg>
