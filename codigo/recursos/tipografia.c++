@@ -30,6 +30,14 @@ Tipografia::Tipografia(Formato formato, int tamanno_letra)
 
 Tipografia::~Tipografia()
 {
+	for(std::map<unsigned int, Caracter*>::iterator i = m_caracteres.begin(); i != m_caracteres.end(); i++)
+		delete i->second;
+	m_caracteres.clear();
+
+	//Destruye freetype
+	FT_Done_Face(m_tipografia);
+	FT_Done_FreeType(m_libreria);
+
 	glBindTexture(GL_TEXTURE_2D, 0);
 	glDeleteTextures(1, &m_indice_atlas);
 }

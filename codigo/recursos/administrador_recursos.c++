@@ -81,6 +81,10 @@ Administrador_Recursos::~Administrador_Recursos()
 	for(std::map<FiguraGeometrica, Rectangulo*>::iterator i = m_lista_figuras.begin(); i != m_lista_figuras.end(); i++)
 		delete i->second;
 	m_lista_figuras.clear();
+
+	for(std::map<ModeloLetra, Tipografia*>::iterator i = m_formato_letras.begin(); i != m_formato_letras.end(); i++)
+		delete i->second;
+	m_formato_letras.clear();
 }
 
 Textura2D *Administrador_Recursos::textura(Textura valor)

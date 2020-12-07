@@ -35,6 +35,7 @@ Configuracion::Configuracion() : m_entrada(NULL), m_salida(NULL)
 
 Configuracion::~Configuracion()
 {
+	midiStop();
 }
 
 Base_de_Datos* Configuracion::base_de_datos()
