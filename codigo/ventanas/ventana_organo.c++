@@ -105,6 +105,9 @@ VentanaOrgano::VentanaOrgano(Configuracion *configuracion, Datos_Musica *musica,
 
 VentanaOrgano::~VentanaOrgano()
 {
+	m_configuracion->dispositivo_entrada()->Reset();
+	if(m_configuracion->dispositivo_salida() != NULL)
+		m_configuracion->dispositivo_salida()->Reset();
 	delete m_barra;
 	delete m_tablero;
 	delete m_organo;
@@ -324,9 +327,6 @@ void VentanaOrgano::evento_teclado(Tecla tecla, bool estado)
 {
 	if(tecla == TECLA_ESCAPE && !estado)
 	{
-		if(m_configuracion->dispositivo_salida() != NULL)
-			m_configuracion->dispositivo_salida()->Reset();
-
 		this->guardar_configuracion();
 
 		m_musica->reiniciar();

@@ -346,46 +346,37 @@ void MidiCommOut::Write(const MidiEvent &out)
 	snd_seq_ev_set_direct(&ev);
 
 	// set event type
-	switch (out.Type())
+	if (out.Type() == MidiEventType_NoteOn && out.NoteVelocity() > 0)
 	{
-		case MidiEventType_NoteOn:
-		{
-			unsigned int ch = out.Channel();
-			unsigned int note = out.NoteNumber();
-			snd_seq_ev_set_noteon(&ev, static_cast<unsigned char>(ch), static_cast<unsigned char>(note), static_cast<unsigned char>(out.NoteVelocity()));
+		unsigned int ch = out.Channel();
+		unsigned int note = out.NoteNumber();
+		snd_seq_ev_set_noteon(&ev, static_cast<unsigned char>(ch), static_cast<unsigned char>(note), static_cast<unsigned char>(out.NoteVelocity()));
 
-			// save for reset
-			m_notes_on.push_back(std::pair<int,int>(ch, note));
-			break;
-		}
-		case MidiEventType_NoteOff:
-		{
-			unsigned int ch = out.Channel();
-			unsigned int note = out.NoteNumber();
-			snd_seq_ev_set_noteoff(&ev, static_cast<unsigned char>(ch), static_cast<unsigned char>(note), static_cast<unsigned char>(out.NoteVelocity()));
+		// save for reset
+		m_notes_on.push_back(std::pair<int,int>(ch,  note));
+	}
+	//Los NoteOn con velocidad 0 se consideran NoteOff
+	else if (out.Type() == MidiEventType_NoteOff || (out.Type() == MidiEventType_NoteOn && out.NoteVelocity() == 0))
+	{
+		unsigned int ch = out.Channel();
+		unsigned int note = out.NoteNumber();
+		snd_seq_ev_set_noteoff(&ev, static_cast<unsigned char>(ch), static_cast<unsigned char>(note), static_cast<unsigned char>(out.NoteVelocity()));
 
-			// remove from reset
-			std::pair<int,int> p(ch, note);
-			std::vector<std::pair<int,int> >::iterator i;
-			for (i = m_notes_on.begin(); i != m_notes_on.end(); ++i)
+		// remove from reset
+		std::pair<int,int> p(ch, note);
+		std::vector<std::pair<int,int> >::iterator i;
+		for (i = m_notes_on.begin(); i != m_notes_on.end(); ++i)
+		{
+			if (*i == p)
 			{
-				if (*i == p)
-				{
-					m_notes_on.erase(i);
-					break;
-				}
+				m_notes_on.erase(i);
+				break;
 			}
-
-			break;
 		}
-
-		case MidiEventType_ProgramChange:
-			snd_seq_ev_set_pgmchange(&ev, out.Channel(), out.ProgramNumber());
-			break;
-
-		// Unknown type, do nothing
-		default:
-			return;
+	}
+	else if (out.Type() == MidiEventType_ProgramChange)
+	{
+		snd_seq_ev_set_pgmchange(&ev, out.Channel(), out.ProgramNumber());
 	}
 
 	snd_seq_event_output(alsa_seq, &ev);
@@ -402,12 +393,15 @@ void MidiCommOut::Reset()
 	snd_seq_ev_set_direct(&ev);
 
 	std::vector<std::pair<int,int> >::const_iterator i;
+	int contador = 0;
 	for (i = m_notes_on.begin(); i != m_notes_on.end(); ++i)
 	{
+		contador ++;
 		snd_seq_ev_set_noteoff(&ev, static_cast<unsigned char>(i->first), static_cast<unsigned char>(i->second), 0);
 		snd_seq_event_output(alsa_seq, &ev);
 		snd_seq_drain_output(alsa_seq);
 	}
+	m_notes_on.clear();
 }
 
 void MidiCommOut::Reconnect()
