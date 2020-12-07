@@ -24,9 +24,6 @@ Barra_Desplazamiento::Barra_Desplazamiento(float x, float y, float ancho, float 
 
 Barra_Desplazamiento::~Barra_Desplazamiento()
 {
-	for(Elemento* e : m_elementos)
-		delete e;
-	m_elementos.clear();
 }
 
 void Barra_Desplazamiento::inicializar(Administrador_Recursos *recursos)
