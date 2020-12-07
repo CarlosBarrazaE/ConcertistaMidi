@@ -108,6 +108,7 @@ VentanaOrgano::~VentanaOrgano()
 	m_configuracion->dispositivo_entrada()->Reset();
 	if(m_configuracion->dispositivo_salida() != NULL)
 		m_configuracion->dispositivo_salida()->Reset();
+	delete m_titulo_musica;
 	delete m_barra;
 	delete m_tablero;
 	delete m_organo;

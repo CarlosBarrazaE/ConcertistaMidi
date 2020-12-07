@@ -27,6 +27,7 @@ Organo::Organo(float x, float y, float ancho, Teclado_Configuracion *teclado, Ad
 
 Organo::~Organo()
 {
+	delete m_generador_particulas;
 }
 
 void Organo::dibujar_blancas(float x, float y, unsigned int numero_teclas)

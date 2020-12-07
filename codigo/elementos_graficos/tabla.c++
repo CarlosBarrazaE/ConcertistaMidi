@@ -21,6 +21,8 @@ Tabla::~Tabla()
 
 	for(Fila *f : m_filas)
 		delete f;
+
+	delete m_barra_desplazamiento;
 }
 
 void Tabla::actualizar_ancho_columnas()

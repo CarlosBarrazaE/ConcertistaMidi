@@ -20,6 +20,7 @@ void midiInit()
 		return;
 
 	int err = snd_seq_open(&alsa_seq, "default", SND_SEQ_OPEN_DUPLEX, 0);
+	snd_config_update_free_global();//Libera memoria
 	int ownid = snd_seq_client_id(alsa_seq);
 	midi_initiated = true;
 

@@ -32,6 +32,9 @@ VentanaSeleccionPista::~VentanaSeleccionPista()
 {
 	delete m_boton_atras;
 	delete m_boton_continuar;
+	delete m_barra_desplazamiento;
+	for(Elemento* e : m_configuracion_pistas)
+		delete e;
 }
 
 void VentanaSeleccionPista::crear_configuracion(Administrador_Recursos *recursos)
