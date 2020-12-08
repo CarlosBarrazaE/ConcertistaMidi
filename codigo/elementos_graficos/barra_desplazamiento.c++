@@ -39,6 +39,7 @@ void Barra_Desplazamiento::inicializar(Administrador_Recursos *recursos)
 
 	m_sobre_barra = false;
 	m_boton_activado = false;
+	m_enviar_evento = false;
 	m_proporcion = 0;
 
 	//Un evento de raton ficticio con una posicion muy lejana
