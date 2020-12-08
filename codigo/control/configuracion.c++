@@ -35,6 +35,10 @@ Configuracion::Configuracion() : m_entrada(NULL), m_salida(NULL)
 
 Configuracion::~Configuracion()
 {
+	if(m_entrada != NULL)
+		delete m_entrada;
+	if(m_salida != NULL)
+		delete m_salida;
 	midiStop();
 }
 
@@ -63,6 +67,8 @@ void Configuracion::dispositivo_entrada(unsigned int id_entrada)
 			id = id_entrada;
 
 		Registro::Nota("Conectado al dispositivo de entrada: " + dispositivos_entrada[id].name);
+		if(m_entrada != NULL)
+			delete m_entrada;
 		m_entrada = new MidiCommIn(id);
 	}
 	else
@@ -79,6 +85,8 @@ void Configuracion::dispositivo_salida(unsigned int id_salida)
 			id = id_salida;
 
 		Registro::Nota("Conectado al dispositivo de salida: " + dispositivos_salida[id].name);
+		if(m_salida != NULL)
+			delete m_salida;
 		m_salida = new MidiCommOut(id);
 	}
 	else

@@ -9,12 +9,16 @@ Datos_Musica::Datos_Musica()
 
 Datos_Musica::~Datos_Musica()
 {
+	if(m_musica != NULL)
+		delete m_musica;
 }
 
 bool Datos_Musica::cargar_midi(std::string direccion)
 {
 	try
 	{
+		if(m_musica != NULL)
+			delete m_musica;
 		m_musica = new Midi(Midi::ReadFromFile(direccion));
 	}
 	catch(const MidiError &e)
