@@ -44,7 +44,7 @@ Tipografia::~Tipografia()
 
 void Tipografia::generar_caracteres()
 {
-	icu::UnicodeString idioma_espannol = "0123456789 ⁰¹²³⁴⁵⁶⁷⁸⁹ABCDEFGHIJKLMNÑOPQRSTUVWXYZabcdefghijklmnñopqrstuvwxyzÁÉÍÓÚáéíóúÄËÏÖÜäëïöüâêîôû,.-_;:'·#$€%&@\"\\()[]{}+-*/=¿?¡!<>ºªḉḈçÇ^�";
+	icu::UnicodeString idioma_espannol = "0123456789 ⁰¹²³⁴⁵⁶⁷⁸⁹ABCDEFGHIJKLMNÑOPQRSTUVWXYZabcdefghijklmnñopqrstuvwxyzÁÉÍÓÚáéíóúÄËÏÖÜäëïöüâêîôû,._;:'·#$€%&@\"\\()[]{}+-*/=¿?¡!<>ºªḉḈçÇ^�";
 
 	int contador = 0;
 	m_ancho_atlas = 0;
@@ -108,19 +108,24 @@ void Tipografia::generar_caracteres()
 
 		FT_GlyphSlot letra = m_tipografia->glyph;
 
-		Caracter *letra_nueva = new Caracter();
-		letra_nueva->codigo_unicode = letra_actual;
-		letra_nueva->ancho = static_cast<int>(letra->bitmap.width);
-		letra_nueva->alto = static_cast<int>(letra->bitmap.rows);
-		letra_nueva->ajuste_izquierda = letra->bitmap_left;
-		letra_nueva->ajuste_arriba = letra->bitmap_top;
-		letra_nueva->avance_x = letra->advance.x;
-		letra_nueva->avance_y = letra->advance.y;
-		letra_nueva->textura_x = posicion_textura;
-		m_caracteres[idioma_espannol[n]] = letra_nueva;
+		if(!m_caracteres[idioma_espannol[n]])
+		{
+			Caracter *letra_nueva = new Caracter();
+			letra_nueva->codigo_unicode = letra_actual;
+			letra_nueva->ancho = static_cast<int>(letra->bitmap.width);
+			letra_nueva->alto = static_cast<int>(letra->bitmap.rows);
+			letra_nueva->ajuste_izquierda = letra->bitmap_left;
+			letra_nueva->ajuste_arriba = letra->bitmap_top;
+			letra_nueva->avance_x = letra->advance.x;
+			letra_nueva->avance_y = letra->advance.y;
+			letra_nueva->textura_x = posicion_textura;
+			m_caracteres[idioma_espannol[n]] = letra_nueva;
 
-		glTexSubImage2D(GL_TEXTURE_2D, 0, posicion_textura, 0, letra_nueva->ancho, letra_nueva->alto, GL_RED, GL_UNSIGNED_BYTE, letra->bitmap.buffer);
-		posicion_textura += static_cast<int>(letra->bitmap.width);
+			glTexSubImage2D(GL_TEXTURE_2D, 0, posicion_textura, 0, letra_nueva->ancho, letra_nueva->alto, GL_RED, GL_UNSIGNED_BYTE, letra->bitmap.buffer);
+			posicion_textura += static_cast<int>(letra->bitmap.width);
+		}
+		else
+			Registro::Aviso("El caracter codigo: " + std::to_string(static_cast<unsigned int>(idioma_espannol[n])) + " ya existe");
 	}
 }
 
