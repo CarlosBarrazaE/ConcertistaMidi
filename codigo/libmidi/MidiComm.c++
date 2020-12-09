@@ -72,7 +72,8 @@ void midiInit()
 	err = snd_seq_subscribe_port(alsa_seq, sub);
 	if (err<0)
 	{
-		fprintf(stderr, "Cannot subscribe announce port: %s\n", snd_strerror(err));
+		std::string texto = snd_strerror(err);
+		Notificacion::Error("No se puede suscribir puerto de anuncio: " + texto, 10);
 		return;
 	}
 
@@ -163,7 +164,8 @@ MidiCommIn::MidiCommIn(unsigned int device_id)
 	int res = snd_seq_connect_from(alsa_seq, local_in, m_description.client, m_description.port);
 	if (res < 0)
 	{
-		Notificacion::Error("No se puede conectar al dispositivo de entrada: '" + m_description.name + "' " + snd_strerror(res), 10);
+		Notificacion::Error("No se puede conectar al dispositivo de entrada: '" + m_description.name + "'", 10);
+		Registro::Error(snd_strerror(res));
 	}
 
 	// enable internal keyboard
@@ -303,7 +305,8 @@ MidiCommOut::MidiCommOut(unsigned int device_id)
 	int res = snd_seq_connect_to(alsa_seq, local_out, m_description.client, m_description.port);
 	if (res < 0)
 	{
-		Notificacion::Error("No se puede conectar al dispositivo de salida: '" + m_description.name + "' " + snd_strerror(res), 10);
+		Notificacion::Error("No se puede conectar al dispositivo de salida: '" + m_description.name + "'", 10);
+		Registro::Error(snd_strerror(res));
 	}
 }
 
