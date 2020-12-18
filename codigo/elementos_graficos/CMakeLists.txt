@@ -6,14 +6,16 @@ set(elementos_graficos
 	${CMAKE_CURRENT_SOURCE_DIR}/tablero_notas.c++
 	${CMAKE_CURRENT_SOURCE_DIR}/organo.c++
 	${CMAKE_CURRENT_SOURCE_DIR}/configuracion_pista.c++
-	${CMAKE_CURRENT_SOURCE_DIR}/barra_desplazamiento.c++
 	${CMAKE_CURRENT_SOURCE_DIR}/lista_opciones.c++
 	${CMAKE_CURRENT_SOURCE_DIR}/titulo.c++
 	${CMAKE_CURRENT_SOURCE_DIR}/fila.c++
 	${CMAKE_CURRENT_SOURCE_DIR}/tabla.c++
 	${CMAKE_CURRENT_SOURCE_DIR}/notificacion.c++
 	${CMAKE_CURRENT_SOURCE_DIR}/ruta_exploracion.c++
-	${CMAKE_CURRENT_SOURCE_DIR}/solapa.c++
 	${CMAKE_CURRENT_SOURCE_DIR}/casilla_verificacion.c++
+	${CMAKE_CURRENT_SOURCE_DIR}/entrada_texto.c++
+
+	${CMAKE_CURRENT_SOURCE_DIR}/panel_desplazamiento.c++
+	${CMAKE_CURRENT_SOURCE_DIR}/panel_solapa.c++
 	PARENT_SCOPE
 )

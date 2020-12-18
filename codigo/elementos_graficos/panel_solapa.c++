@@ -1,6 +1,6 @@
-#include "solapa.h++"
+#include "panel_solapa.h++"
 
-Solapa::Solapa(float x, float y, float ancho, float alto, Administrador_Recursos *recursos) : Elemento(x, y, ancho, alto)
+Panel_Solapa::Panel_Solapa(float x, float y, float ancho, float alto, Administrador_Recursos *recursos) : Elemento(x, y, ancho, alto)
 {
 	m_recursos = recursos;
 	m_rectangulo = recursos->figura(F_Rectangulo);
@@ -11,13 +11,13 @@ Solapa::Solapa(float x, float y, float ancho, float alto, Administrador_Recursos
 	m_solapa_activa = 0;
 }
 
-Solapa::~Solapa()
+Panel_Solapa::~Panel_Solapa()
 {
 	for(Boton *b : m_solapas)
 		delete b;
 }
 
-void Solapa::actualizar(unsigned int diferencia_tiempo)
+void Panel_Solapa::actualizar(unsigned int diferencia_tiempo)
 {
 	if(m_componentes.size() > m_solapa_activa)
 	{
@@ -28,7 +28,7 @@ void Solapa::actualizar(unsigned int diferencia_tiempo)
 	}
 }
 
-void Solapa::dibujar()
+void Panel_Solapa::dibujar()
 {
 	m_rectangulo->dibujar(0, 40, this->ancho(), this->alto() - 80, Color(1.0f, 1.0f, 1.0f));//Fondo blanco
 	for(Boton *b : m_solapas)
@@ -40,7 +40,7 @@ void Solapa::dibujar()
 	}
 }
 
-void Solapa::evento_raton(Raton *raton)
+void Panel_Solapa::evento_raton(Raton *raton)
 {
 	for(long unsigned int x=0; x<m_solapas.size(); x++)
 	{
@@ -59,7 +59,7 @@ void Solapa::evento_raton(Raton *raton)
 	}
 }
 
-void Solapa::agregar_solapa(std::string nombre)
+void Panel_Solapa::agregar_solapa(std::string nombre)
 {
 	m_solapas.push_back(new Boton(this->x()+10, this->y()+10+static_cast<float>(m_solapas.size())*50.0f, 230, 50, nombre, LetraMediana, m_recursos));
 	if(m_solapas.size() == 1)
@@ -69,12 +69,12 @@ void Solapa::agregar_solapa(std::string nombre)
 	m_componentes.push_back(std::vector<Elemento*>());
 }
 
-unsigned int Solapa::solapa_activa()
+unsigned int Panel_Solapa::solapa_activa()
 {
 	return m_solapa_activa;
 }
 
-void Solapa::agregar_elemento_solapa(unsigned int solapa, Elemento *e)
+void Panel_Solapa::agregar_elemento_solapa(unsigned int solapa, Elemento *e)
 {
 	if(m_solapas.size() > solapa && m_componentes.size() > solapa)
 	{

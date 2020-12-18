@@ -1,11 +1,11 @@
-#ifndef SOLAPA_H
-#define SOLAPA_H
+#ifndef PANEL_SOLAPA_H
+#define PANEL_SOLAPA_H
 
 #include <vector>
 #include "elemento.h++"
 #include "boton.h++"
 
-class Solapa : public Elemento
+class Panel_Solapa : public Elemento
 {
 private:
 	//Recursos
@@ -20,8 +20,8 @@ private:
 	//Datos
 	unsigned int m_solapa_activa;
 public:
-	Solapa(float x, float y, float ancho, float alto, Administrador_Recursos *recursos);
-	~Solapa();
+	Panel_Solapa(float x, float y, float ancho, float alto, Administrador_Recursos *recursos);
+	~Panel_Solapa();
 
 	void actualizar(unsigned int diferencia_tiempo) override;
 	void dibujar() override;

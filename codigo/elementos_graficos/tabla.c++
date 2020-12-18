@@ -11,7 +11,7 @@ Tabla::Tabla(float x, float y, float ancho, float alto, float alto_fila, Adminis
 
 	m_espacio_total_columnas = 0;
 
-	m_barra_desplazamiento = new Barra_Desplazamiento(x, y+m_alto_fila, ancho, alto-m_alto_fila, m_alto_fila, 0, recursos);
+	m_panel_desplazamiento = new Panel_Desplazamiento(x, y+m_alto_fila, ancho, alto-m_alto_fila, m_alto_fila, 0, recursos);
 }
 
 Tabla::~Tabla()
@@ -22,7 +22,7 @@ Tabla::~Tabla()
 	for(Fila *f : m_filas)
 		delete f;
 
-	delete m_barra_desplazamiento;
+	delete m_panel_desplazamiento;
 }
 
 void Tabla::actualizar_ancho_columnas()
@@ -51,7 +51,7 @@ void Tabla::actualizar_ancho_columnas()
 
 void Tabla::actualizar(unsigned int diferencia_tiempo)
 {
-	m_barra_desplazamiento->actualizar(diferencia_tiempo);
+	m_panel_desplazamiento->actualizar(diferencia_tiempo);
 }
 
 void Tabla::dibujar()
@@ -68,14 +68,14 @@ void Tabla::dibujar()
 	}
 
 	//Dibuja los bordes laterales
-	m_barra_desplazamiento->dibujar();
+	m_panel_desplazamiento->dibujar();
 	m_rectangulo->dibujar(this->x(), this->y(), 1, this->alto(), m_color_fondo);
 	m_rectangulo->dibujar(this->x()+this->ancho()-1, this->y(), 1, this->alto(), m_color_fondo);
 }
 
 void Tabla::evento_raton(Raton *raton)
 {
-	m_barra_desplazamiento->evento_raton(raton);
+	m_panel_desplazamiento->evento_raton(raton);
 	for(unsigned int x=0; x<m_filas.size(); x++)
 	{
 		if(m_filas[x]->esta_seleccionado() && x != m_fila_seleccionada)
@@ -94,7 +94,7 @@ void Tabla::dimension(float ancho, float alto)
 	this->_dimension(ancho, alto);
 	this->actualizar_ancho_columnas();
 	//La barra de desplazamiento esta despues de la fila de titulo
-	m_barra_desplazamiento->dimension(ancho, alto-m_alto_fila);
+	m_panel_desplazamiento->dimension(ancho, alto-m_alto_fila);
 
 	for(Fila *m : m_filas)
 		m->dimension(this->ancho(), m_alto_fila);
@@ -146,13 +146,13 @@ void Tabla::insertar_fila(std::vector<std::string> texto)
 	}
 
 	m_filas.push_back(f);
-	m_barra_desplazamiento->agregar_elemento(f);
+	m_panel_desplazamiento->agregar_elemento(f);
 }
 
 void Tabla::vaciar()
 {
 	//Se eliminan las filas al cambiar de carpeta
-	m_barra_desplazamiento->vaciar();
+	m_panel_desplazamiento->vaciar();
 	for(Fila *m : m_filas)
 		delete m;
 
@@ -198,14 +198,14 @@ void Tabla::cambiar_seleccion(int cambio)
 		//Desplaza la barra cuando se sale por arriba
 		float inicio_tabla = this->y()+m_alto_fila;
 		float inicio_fila = m_filas[m_fila_seleccionada]->y();
-		m_barra_desplazamiento->desplazar_y(static_cast<int>(inicio_tabla - inicio_fila));
+		m_panel_desplazamiento->desplazar_y(static_cast<int>(inicio_tabla - inicio_fila));
 	}
 	else if(m_filas[m_fila_seleccionada]->y() + m_filas[m_fila_seleccionada]->alto() > this->y()+this->alto())
 	{
 		//Desplaza la barra cuando se sale por abajo
 		float final_tabla = this->y()+this->alto();
 		float final_fila = m_filas[m_fila_seleccionada]->y() + m_filas[m_fila_seleccionada]->alto();
-		m_barra_desplazamiento->desplazar_y(static_cast<int>(final_tabla - final_fila));
+		m_panel_desplazamiento->desplazar_y(static_cast<int>(final_tabla - final_fila));
 	}
 
 }

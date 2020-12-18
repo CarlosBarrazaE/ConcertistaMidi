@@ -16,7 +16,7 @@ VentanaConfiguracion::VentanaConfiguracion(Configuracion *configuracion, Adminis
 	m_boton_atras = new Boton(10, Pantalla::Alto - 32, 120, 25, "Atrás", LetraChica, recursos);
 	m_boton_atras->color_boton(Color(0.9f, 0.9f, 0.9f));
 
-	m_solapa = new Solapa(0, 40, 250, Pantalla::Alto, recursos);
+	m_solapa = new Panel_Solapa(0, 40, 250, Pantalla::Alto, recursos);
 	m_solapa->agregar_solapa("General");
 	m_solapa1_titulo = new Etiqueta(250, 50, Pantalla::Ancho-250, 40, true, "General", LetraTitulo, recursos);
 	m_solapa1_texto_restablecer = new Etiqueta(260, 100, Pantalla::Ancho-270, 30, false, "Volver a la configuración predeterminada", LetraMediana, recursos);
@@ -56,6 +56,8 @@ VentanaConfiguracion::VentanaConfiguracion(Configuracion *configuracion, Adminis
 	//Actualiza segun el estado de la pantalla
 	if(m_solapa4_casilla_pantalla_completa->activado() != Pantalla::PantallaCompleta)
 		m_solapa4_casilla_pantalla_completa->estado(Pantalla::PantallaCompleta);
+	if(m_solapa1_casilla_desarrollo->activado() != Pantalla::ModoDesarrollo)
+		m_solapa1_casilla_desarrollo->estado(Pantalla::ModoDesarrollo);
 	if(m_solapa1_casilla_modo_alambre->activado() != Pantalla::ModoAlambre)
 		m_solapa1_casilla_modo_alambre->estado(Pantalla::ModoAlambre);
 

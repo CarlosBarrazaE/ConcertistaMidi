@@ -1,11 +1,11 @@
-#ifndef BARRA_DESPLAZAMIENTO_H
-#define BARRA_DESPLAZAMIENTO_H
+#ifndef PANEL_DESPLAZAMIENTO_H
+#define PANEL_DESPLAZAMIENTO_H
 
 #include "elemento.h++"
 #include "../dispositivos/pantalla.h++"
 #include <vector>
 
-class Barra_Desplazamiento : public Elemento
+class Panel_Desplazamiento : public Elemento
 {
 private:
 	//Recursos
@@ -30,9 +30,9 @@ private:
 	void inicializar(Administrador_Recursos *recursos);
 	void actualizar_dimension();
 public:
-	Barra_Desplazamiento(float x, float y, float ancho, float alto, float fila, float margen_fila, Administrador_Recursos *recursos);
-	Barra_Desplazamiento(float x, float y, float ancho, float alto, float columna, float fila, float margen_columna, float margen_fila, Administrador_Recursos *recursos);
-	~Barra_Desplazamiento();
+	Panel_Desplazamiento(float x, float y, float ancho, float alto, float fila, float margen_fila, Administrador_Recursos *recursos);
+	Panel_Desplazamiento(float x, float y, float ancho, float alto, float columna, float fila, float margen_columna, float margen_fila, Administrador_Recursos *recursos);
+	~Panel_Desplazamiento();
 
 	void actualizar(unsigned int diferencia_tiempo) override;
 	void dibujar() override;

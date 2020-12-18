@@ -2,10 +2,10 @@
 #define VENTANASELECCIONPISTA_H
 
 #include "ventana.h++"
+#include "../elementos_graficos/panel_desplazamiento.h++"
 #include "../elementos_graficos/boton.h++"
 #include "../elementos_graficos/etiqueta.h++"
 #include "../elementos_graficos/configuracion_pista.h++"
-#include "../elementos_graficos/barra_desplazamiento.h++"
 #include "../control/configuracion.h++"
 #include "../control/datos_musica.h++"
 
@@ -19,7 +19,7 @@ private:
 	//Componentes
 	Boton *m_boton_atras;
 	Boton *m_boton_continuar;
-	Barra_Desplazamiento *m_barra_desplazamiento;
+	Panel_Desplazamiento *m_panel_desplazamiento;
 	std::vector<Configuracion_Pista*> m_configuracion_pistas;
 
 	//Datos

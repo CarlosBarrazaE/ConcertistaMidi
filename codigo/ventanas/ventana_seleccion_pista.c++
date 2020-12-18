@@ -20,7 +20,7 @@ VentanaSeleccionPista::VentanaSeleccionPista(Configuracion *configuracion, Datos
 	m_texto_titulo.dimension(Pantalla::Ancho, 40);
 	m_texto_titulo.centrado(true);
 
-	m_barra_desplazamiento = new Barra_Desplazamiento(0, 50, Pantalla::Ancho, Pantalla::Alto - 100, 350, 150, 10, 10, recursos);
+	m_panel_desplazamiento = new Panel_Desplazamiento(0, 50, Pantalla::Ancho, Pantalla::Alto - 100, 350, 150, 10, 10, recursos);
 
 	if(m_musica->pistas()->size() > 0)
 		this->cargar_configuracion(recursos);
@@ -32,7 +32,7 @@ VentanaSeleccionPista::~VentanaSeleccionPista()
 {
 	delete m_boton_atras;
 	delete m_boton_continuar;
-	delete m_barra_desplazamiento;
+	delete m_panel_desplazamiento;
 	for(Elemento* e : m_configuracion_pistas)
 		delete e;
 }
@@ -63,7 +63,7 @@ void VentanaSeleccionPista::crear_configuracion(Administrador_Recursos *recursos
 
 			configuracion = new Configuracion_Pista(0, 0, 350, 150, Pista(pista_actual.InstrumentName(), pista_actual.Notes().size(), pista_actual.canal(), color_pista, Fondo, visible, true), recursos);
 			m_configuracion_pistas.push_back(configuracion);
-			m_barra_desplazamiento->agregar_elemento(configuracion);
+			m_panel_desplazamiento->agregar_elemento(configuracion);
 		}
 		else
 		{
@@ -82,7 +82,7 @@ void VentanaSeleccionPista::cargar_configuracion(Administrador_Recursos *recurso
 		configuracion = new Configuracion_Pista(0, 0, 350, 150, pistas->at(i), recursos);
 		m_configuracion_pistas.push_back(configuracion);
 		if(pistas->at(i).numero_notas() > 0)
-			m_barra_desplazamiento->agregar_elemento(configuracion);
+			m_panel_desplazamiento->agregar_elemento(configuracion);
 	}
 }
 
@@ -101,12 +101,12 @@ void VentanaSeleccionPista::actualizar(unsigned int diferencia_tiempo)
 {
 	m_boton_atras->actualizar(diferencia_tiempo);
 	m_boton_continuar->actualizar(diferencia_tiempo);
-	m_barra_desplazamiento->actualizar(diferencia_tiempo);
+	m_panel_desplazamiento->actualizar(diferencia_tiempo);
 }
 
 void VentanaSeleccionPista::dibujar()
 {
-	m_barra_desplazamiento->dibujar();
+	m_panel_desplazamiento->dibujar();
 	m_rectangulo->textura(false);
 	m_rectangulo->dibujar(0, 0, Pantalla::Ancho, 40, Color(0.141f, 0.624f, 0.933f));
 	m_rectangulo->dibujar(0, Pantalla::Alto - 40, Pantalla::Ancho, 40, Color(0.761f, 0.887f, 0.985f));
@@ -120,7 +120,7 @@ void VentanaSeleccionPista::evento_raton(Raton *raton)
 {
 	m_boton_atras->evento_raton(raton);
 	m_boton_continuar->evento_raton(raton);
-	m_barra_desplazamiento->evento_raton(raton);
+	m_panel_desplazamiento->evento_raton(raton);
 
 	if(m_boton_atras->esta_activado())
 		m_accion = CambiarASeleccionMusica;
@@ -146,7 +146,7 @@ void VentanaSeleccionPista::evento_teclado(Tecla tecla, bool estado)
 void VentanaSeleccionPista::evento_pantalla(float ancho, float alto)
 {
 	m_texto_titulo.dimension(Pantalla::Ancho, 40);
-	m_barra_desplazamiento->dimension(ancho, alto-100);
+	m_panel_desplazamiento->dimension(ancho, alto-100);
 	m_boton_atras->posicion(m_boton_atras->x(), alto - 32);
 	m_boton_continuar->posicion(ancho - 130, alto - 32);
 }

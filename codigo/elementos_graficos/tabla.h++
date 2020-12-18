@@ -4,7 +4,7 @@
 #include "elemento.h++"
 #include "etiqueta.h++"
 #include "fila.h++"
-#include "barra_desplazamiento.h++"
+#include "panel_desplazamiento.h++"
 #include "../dispositivos/pantalla.h++"
 
 #include <vector>
@@ -32,7 +32,7 @@ private:
 	//Etiqueta m_textos;
 	Rectangulo *m_rectangulo;
 	Color m_color_fondo;
-	Barra_Desplazamiento *m_barra_desplazamiento;
+	Panel_Desplazamiento *m_panel_desplazamiento;
 
 	void actualizar_ancho_columnas();
 

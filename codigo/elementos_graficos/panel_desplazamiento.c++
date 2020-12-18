@@ -1,7 +1,7 @@
-#include "barra_desplazamiento.h++"
+#include "panel_desplazamiento.h++"
 #include "../registro.h++"
 
-Barra_Desplazamiento::Barra_Desplazamiento(float x, float y, float ancho, float alto, float fila, float margen_fila, Administrador_Recursos *recursos) : Elemento(x, y, ancho, alto)
+Panel_Desplazamiento::Panel_Desplazamiento(float x, float y, float ancho, float alto, float fila, float margen_fila, Administrador_Recursos *recursos) : Elemento(x, y, ancho, alto)
 {
 	m_columna = 0;
 	m_margen_columna = 0;
@@ -11,7 +11,7 @@ Barra_Desplazamiento::Barra_Desplazamiento(float x, float y, float ancho, float 
 	this->inicializar(recursos);
 }
 
-Barra_Desplazamiento::Barra_Desplazamiento(float x, float y, float ancho, float alto, float columna, float fila, float margen_columna, float margen_fila, Administrador_Recursos *recursos)
+Panel_Desplazamiento::Panel_Desplazamiento(float x, float y, float ancho, float alto, float columna, float fila, float margen_columna, float margen_fila, Administrador_Recursos *recursos)
 : Elemento(x, y, ancho, alto)
 {
 	m_columna = columna;
@@ -22,11 +22,11 @@ Barra_Desplazamiento::Barra_Desplazamiento(float x, float y, float ancho, float 
 	this->inicializar(recursos);
 }
 
-Barra_Desplazamiento::~Barra_Desplazamiento()
+Panel_Desplazamiento::~Panel_Desplazamiento()
 {
 }
 
-void Barra_Desplazamiento::inicializar(Administrador_Recursos *recursos)
+void Panel_Desplazamiento::inicializar(Administrador_Recursos *recursos)
 {
 	m_alto_actual = 0;
 	m_desplazamiento_x = 0;
@@ -46,7 +46,7 @@ void Barra_Desplazamiento::inicializar(Administrador_Recursos *recursos)
 	m_raton_ficticio.actualizar_posicion(std::numeric_limits<int>::max(), std::numeric_limits<int>::max());
 }
 
-void Barra_Desplazamiento::actualizar_dimension()
+void Panel_Desplazamiento::actualizar_dimension()
 {
 	int numero_columnas = 1;
 	float x_inicio = this->x();
@@ -85,7 +85,7 @@ void Barra_Desplazamiento::actualizar_dimension()
 		m_proporcion = (this->alto()-20) / m_alto_actual;
 }
 
-void Barra_Desplazamiento::actualizar(unsigned int diferencia_tiempo)
+void Panel_Desplazamiento::actualizar(unsigned int diferencia_tiempo)
 {
 	if(m_calcular_posicion)
 		this->actualizar_dimension();
@@ -101,7 +101,7 @@ void Barra_Desplazamiento::actualizar(unsigned int diferencia_tiempo)
 		m_animacion -= (static_cast<float>(diferencia_tiempo)/1000000000.0f) * 3;
 }
 
-void Barra_Desplazamiento::dibujar()
+void Panel_Desplazamiento::dibujar()
 {
 
 	glScissor(static_cast<int>(this->x()), static_cast<int>(Pantalla::Alto-this->y()-this->alto()), static_cast<int>(this->ancho()), static_cast<int>(this->alto()));
@@ -131,7 +131,7 @@ void Barra_Desplazamiento::dibujar()
 	glDisable(GL_SCISSOR_TEST);
 }
 
-void Barra_Desplazamiento::evento_raton(Raton *raton)
+void Panel_Desplazamiento::evento_raton(Raton *raton)
 {
 	//Solo si el raton esta dentro del espacio del componente se envian el evento
 	Raton *evento_raton;
@@ -198,13 +198,13 @@ void Barra_Desplazamiento::evento_raton(Raton *raton)
 	}
 }
 
-void Barra_Desplazamiento::dimension(float ancho, float alto)
+void Panel_Desplazamiento::dimension(float ancho, float alto)
 {
 	this->_dimension(ancho, alto);
 	m_calcular_posicion = true;
 }
 
-void Barra_Desplazamiento::desplazar_y(int dy)
+void Panel_Desplazamiento::desplazar_y(int dy)
 {
 	float nuevo_desplazamiento = m_desplazamiento_y + static_cast<float>(dy);
 	if(nuevo_desplazamiento > 0)
@@ -220,12 +220,12 @@ void Barra_Desplazamiento::desplazar_y(int dy)
 	m_desplazamiento_y = nuevo_desplazamiento;
 }
 
-void Barra_Desplazamiento::agregar_elemento(Elemento *e)
+void Panel_Desplazamiento::agregar_elemento(Elemento *e)
 {
 	m_elementos.push_back(e);
 }
 
-void Barra_Desplazamiento::vaciar()
+void Panel_Desplazamiento::vaciar()
 {
 	m_elementos.clear();
 	m_calcular_posicion = true;

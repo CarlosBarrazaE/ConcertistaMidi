@@ -2,8 +2,8 @@
 #define VENTANACONFIGURACION_H
 
 #include "ventana.h++"
+#include "../elementos_graficos/panel_solapa.h++"
 #include "../elementos_graficos/boton.h++"
-#include "../elementos_graficos/solapa.h++"
 #include "../elementos_graficos/casilla_verificacion.h++"
 #include "../control/configuracion.h++"
 
@@ -16,7 +16,7 @@ private:
 	//Componentes
 	Etiqueta m_texto_titulo;
 	Boton *m_boton_atras;
-	Solapa *m_solapa;
+	Panel_Solapa *m_solapa;
 
 	//Solapa General (1)
 	Etiqueta *m_solapa1_titulo, *m_solapa1_desarrollo;
