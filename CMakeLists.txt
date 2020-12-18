@@ -1,6 +1,8 @@
 cmake_minimum_required(VERSION 3.7 FATAL_ERROR)
 project(concertistamidi)
 
+set(OpenGL_GL_PREFERENCE "GLVND")
+
 find_package(PkgConfig REQUIRED)
 find_package(OpenGL REQUIRED)
 find_package(GLEW REQUIRED)
