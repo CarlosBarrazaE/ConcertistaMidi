@@ -34,9 +34,6 @@ void Casilla_Verificacion::actualizar(unsigned int /*diferencia_tiempo*/)
 
 void Casilla_Verificacion::dibujar()
 {
-	//m_rectangulo->textura(false);
-	//m_rectangulo->dibujar(this->x(), this->y(), this->ancho(), this->alto(), Color(1.0f, 0.75f, 0.85f));
-
 	m_rectangulo->textura(true);
 
 	if(!m_clic)
