@@ -5,6 +5,8 @@ VentanaConfiguracion::VentanaConfiguracion(Configuracion *configuracion, Adminis
 	m_configuracion = configuracion;
 
 	m_rectangulo = recursos->figura(F_Rectangulo);
+	id_dispositivo_entrada = static_cast<unsigned int>(std::stoi(m_configuracion->leer("dispositivo_entrada")));
+	id_dispositivo_salida = static_cast<unsigned int>(std::stoi(m_configuracion->leer("dispositivo_salida")));
 
 	m_texto_titulo.texto("Configuración");
 	m_texto_titulo.tipografia(recursos->tipografia(LetraTitulo));
@@ -45,7 +47,24 @@ VentanaConfiguracion::VentanaConfiguracion(Configuracion *configuracion, Adminis
 
 	m_solapa->agregar_solapa("Dispositivos");
 	m_solapa3_titulo = new Etiqueta(250, 50, Pantalla::Ancho-250, 40, true, "Dispositivos", LetraTitulo, recursos);
+	m_solapa3_texto_entrada = new Etiqueta(260, 100, Pantalla::Ancho-270, 30, false, "Dispositivo de Entrada", LetraMediana, recursos);
+	m_solapa3_texto_salida = new Etiqueta(260, 140, Pantalla::Ancho-270, 30, false, "Dispositivo de Salida", LetraMediana, recursos);
+	m_solapa3_opcion_entrada = new Lista_Opciones(500, 100, 200, 20, recursos);
+	m_solapa3_opcion_salida = new Lista_Opciones(500, 140, 200, 20, recursos);
+	//Se agregan las opciones opciones_textos
+	m_solapa3_opcion_entrada->tipografia(recursos->tipografia(LetraMediana));
+	m_solapa3_opcion_entrada->opciones_textos(this->obtener_dispositivos(MidiCommIn::GetDeviceList()));
+	m_solapa3_opcion_salida->tipografia(recursos->tipografia(LetraMediana));
+	m_solapa3_opcion_salida->opciones_textos(this->obtener_dispositivos(MidiCommOut::GetDeviceList()));
+
+	m_solapa3_opcion_entrada->opcion_predeterminada(id_dispositivo_entrada);
+	m_solapa3_opcion_salida->opcion_predeterminada(id_dispositivo_salida);
+
 	m_solapa->agregar_elemento_solapa(2, m_solapa3_titulo);
+	m_solapa->agregar_elemento_solapa(2, m_solapa3_texto_entrada);
+	m_solapa->agregar_elemento_solapa(2, m_solapa3_texto_salida);
+	m_solapa->agregar_elemento_solapa(2, m_solapa3_opcion_entrada);
+	m_solapa->agregar_elemento_solapa(2, m_solapa3_opcion_salida);
 
 	m_solapa->agregar_solapa("Video");
 	m_solapa4_titulo = new Etiqueta(250, 50, Pantalla::Ancho-250, 40, true, "Video", LetraTitulo, recursos);
@@ -82,11 +101,35 @@ VentanaConfiguracion::~VentanaConfiguracion()
 	delete m_solapa2_titulo;
 
 	delete m_solapa3_titulo;
+	delete m_solapa3_texto_entrada;
+	delete m_solapa3_texto_salida;
+	delete m_solapa3_opcion_entrada;
+	delete m_solapa3_opcion_salida;
 
 	delete m_solapa4_titulo;
 	delete m_solapa4_casilla_pantalla_completa;
 
 	delete m_solapa;
+}
+
+std::vector<std::string> VentanaConfiguracion::obtener_dispositivos(MidiCommDescriptionList lista)
+{
+	std::vector<std::string> opciones_entrada;
+	if(lista.size() > 0)
+	{
+		for(unsigned long int d=0; d<lista.size(); d++)
+			opciones_entrada.push_back(lista[d].name);
+	}
+	else
+		opciones_entrada.push_back("No se detectaron dispositivos");
+
+	return opciones_entrada;
+}
+
+void VentanaConfiguracion::guardar_configuracion()
+{
+	m_configuracion->escribir("dispositivo_entrada", std::to_string(m_solapa3_opcion_entrada->opcion_seleccionada()));
+	m_configuracion->escribir("dispositivo_salida", std::to_string(m_solapa3_opcion_salida->opcion_seleccionada()));
 }
 
 void VentanaConfiguracion::actualizar(unsigned int diferencia_tiempo)
@@ -110,7 +153,10 @@ void VentanaConfiguracion::evento_raton(Raton *raton)
 	m_solapa->evento_raton(raton);
 	m_boton_atras->evento_raton(raton);
 	if(m_boton_atras->esta_activado())
+	{
 		m_accion = CambiarATitulo;
+		this->guardar_configuracion();
+	}
 
 	if(m_solapa1_restablecer->esta_activado())
 	{
@@ -167,12 +213,26 @@ void VentanaConfiguracion::evento_raton(Raton *raton)
 		else
 			m_accion = SalirPantallaCompleta;
 	}
+
+	if(id_dispositivo_entrada != m_solapa3_opcion_entrada->opcion_seleccionada())
+	{
+		id_dispositivo_entrada = static_cast<unsigned int>(m_solapa3_opcion_entrada->opcion_seleccionada());
+		m_configuracion->dispositivo_entrada(id_dispositivo_entrada);
+	}
+	if(id_dispositivo_salida != m_solapa3_opcion_salida->opcion_seleccionada())
+	{
+		id_dispositivo_salida = static_cast<unsigned int>(m_solapa3_opcion_salida->opcion_seleccionada());
+		m_configuracion->dispositivo_salida(id_dispositivo_salida);
+	}
 }
 
 void VentanaConfiguracion::evento_teclado(Tecla tecla, bool estado)
 {
 	if(tecla == TECLA_ESCAPE && !estado)
+	{
 		m_accion = CambiarATitulo;
+		this->guardar_configuracion();
+	}
 
 	//Modo desarrollo activado desde teclado
 	if(m_solapa1_casilla_desarrollo->activado() != Pantalla::ModoDesarrollo)

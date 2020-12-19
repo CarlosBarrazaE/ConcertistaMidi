@@ -150,7 +150,7 @@ void VentanaSeleccionMusica::crear_tabla(std::string ruta_abrir)
 	m_tabla_archivos.vaciar();//Se vacia la tabla
 	if(ruta_abrir != "" && std::ifstream(ruta_abrir))
 	{
-		Registro::Nota("Abriendo la carpeta: " + ruta_abrir);
+		Registro::Depurar("Abriendo la carpeta: " + ruta_abrir);
 
 		//Almacena la carpeta raiz para retroceder
 		if(m_es_carpeta_inicial)
@@ -175,10 +175,10 @@ void VentanaSeleccionMusica::crear_tabla(std::string ruta_abrir)
 		this->cargar_contenido_carpeta(ruta_abrir);
 	}
 	else if(ruta_abrir != "")
-		Notificacion::Aviso("La carpeta: \"" + ruta_abrir + "\" no existe", 5);
+		Notificacion::Error("La carpeta: \"" + ruta_abrir + "\" no existe", 5);
 	else
 	{
-		Registro::Nota("Mostrando la lista de carpetas");
+		Registro::Depurar("Mostrando la lista de carpetas");
 		//Limpia la lista de archivos
 		m_lista_archivos.clear();
 
@@ -251,7 +251,7 @@ bool VentanaSeleccionMusica::abrir_archivo_seleccionado()
 		{
 			//Abre el archivo seleccionado
 			Datos_Archivos &archivo_abierto = m_lista_archivos[seleccion_actual];
-			Registro::Nota("Abriendo archivo: " + archivo_abierto.ruta);
+			Registro::Depurar("Abriendo archivo: " + archivo_abierto.ruta);
 			if(m_musica->cargar_midi(archivo_abierto.ruta))
 			{
 				//Se suma la visita y se actualiza la fecha

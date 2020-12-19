@@ -5,6 +5,7 @@
 #include "../elementos_graficos/panel_solapa.h++"
 #include "../elementos_graficos/boton.h++"
 #include "../elementos_graficos/casilla_verificacion.h++"
+#include "../elementos_graficos/lista_opciones.h++"
 #include "../control/configuracion.h++"
 
 class VentanaConfiguracion : public Ventana
@@ -29,6 +30,8 @@ private:
 
 	//Solapa Dispositivos (3)
 	Etiqueta *m_solapa3_titulo;
+	Etiqueta *m_solapa3_texto_entrada, *m_solapa3_texto_salida;
+	Lista_Opciones *m_solapa3_opcion_entrada, *m_solapa3_opcion_salida;
 
 	//Solapa Video (4)
 	Etiqueta *m_solapa4_titulo;
@@ -37,6 +40,11 @@ private:
 	//Datos
 	Configuracion *m_configuracion;
 	unsigned int m_ultima_solapa;
+	unsigned int id_dispositivo_entrada;
+	unsigned int id_dispositivo_salida;
+
+	std::vector<std::string> obtener_dispositivos(MidiCommDescriptionList lista);
+	void guardar_configuracion();
 
 public:
 	VentanaConfiguracion(Configuracion *configuracion, Administrador_Recursos *recursos);
