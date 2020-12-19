@@ -40,9 +40,11 @@ int main (int /*n*/, char **/*argumentos*/)
 		return 0;
 	}
 
+	Registro::Nota("Consertista MIDI " + std::string(VERSION));
 	Registro::Mostrar_detalles();
 
 	configurar_gl();
+
 	Administrador_Recursos recursos;
 	Controlador_Juego controlador(&recursos);
 

@@ -41,6 +41,7 @@ public:
 	void opciones_textos(std::vector<std::string> opciones);
 	void opciones_iconos(std::vector<Textura2D*> iconos);
 	void tipografia(Tipografia *tipografia);
+	void color_texto(const Color &color);
 	void opcion_predeterminada(unsigned long int opcion);
 	unsigned long int opcion_seleccionada();
 	bool cambio_opcion_seleccionada();

@@ -6,7 +6,7 @@
 
 #define ARCHIVO_REGISTRO "../registros.txt"
 #define IMPRIMIR_TERMINAL 1
-#define NIVEL_REGISTRO 3
+#define NIVEL_REGISTRO 2
 
 enum CodigoEstado
 {

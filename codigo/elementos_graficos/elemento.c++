@@ -11,15 +11,10 @@ Elemento::Elemento(float x, float y, float ancho, float alto)
 
 Elemento::Elemento(float x, float y, float ancho, float alto, bool centrado)
 {
-	if(centrado)
-		m_x = x - (m_ancho / 2);
-	else
-		m_x = x;
-
-	m_y = y;
 	m_ancho = ancho;
 	m_alto = alto;
 	m_centrado = centrado;
+	this->_posicion(x, y);
 }
 
 Elemento::~Elemento()

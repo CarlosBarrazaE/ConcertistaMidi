@@ -9,8 +9,9 @@ Lista_Opciones::Lista_Opciones(float x, float y, float ancho, float alto, Admini
 	m_centrado_icono = (ancho - m_ancho_icono)/2;
 	m_cambio_opcion_seleccionada = false;
 
-	m_texto_seleccion.color(Color(1.0f, 1.0f, 1.0f));
-	m_texto_seleccion.posicion(0, 0);
+	m_texto_seleccion.tipografia(recursos->tipografia(LetraChica));
+	m_texto_seleccion.color(Color(0.0f, 0.0f, 0.0f));
+	m_texto_seleccion.posicion(x, y);
 	m_texto_seleccion.dimension(ancho, alto);
 	m_texto_seleccion.centrado(true);
 }
@@ -140,6 +141,11 @@ void Lista_Opciones::opciones_iconos(std::vector<Textura2D*> iconos)
 void Lista_Opciones::tipografia(Tipografia *tipografia)
 {
 	m_texto_seleccion.tipografia(tipografia);
+}
+
+void Lista_Opciones::color_texto(const Color &color)
+{
+	m_texto_seleccion.color(color);
 }
 
 void Lista_Opciones::opcion_predeterminada(unsigned long int opcion)

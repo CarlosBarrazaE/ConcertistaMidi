@@ -66,13 +66,13 @@ void Configuracion::dispositivo_entrada(unsigned int id_entrada)
 		if(id_entrada < dispositivos_entrada.size())
 			id = id_entrada;
 
-		Registro::Nota("Conectado al dispositivo de entrada: " + dispositivos_entrada[id].name);
+		Registro::Aviso("Conectado al dispositivo de entrada: " + dispositivos_entrada[id].name);
 		if(m_entrada != NULL)
 			delete m_entrada;
 		m_entrada = new MidiCommIn(id);
 	}
 	else
-		Notificacion::Aviso("No se pudo conectar al dispositivo MIDI de entrada", 10);
+		Notificacion::Error("No se pudo conectar al dispositivo MIDI de entrada", 10);
 }
 
 void Configuracion::dispositivo_salida(unsigned int id_salida)
@@ -84,13 +84,13 @@ void Configuracion::dispositivo_salida(unsigned int id_salida)
 		if(id_salida < dispositivos_salida.size())
 			id = id_salida;
 
-		Registro::Nota("Conectado al dispositivo de salida: " + dispositivos_salida[id].name);
+		Registro::Aviso("Conectado al dispositivo de salida: " + dispositivos_salida[id].name);
 		if(m_salida != NULL)
 			delete m_salida;
 		m_salida = new MidiCommOut(id);
 	}
 	else
-		Notificacion::Aviso("No se pudo conectar al dispositivo MIDI de salida", 10);
+		Notificacion::Error("No se pudo conectar al dispositivo MIDI de salida", 10);
 }
 
 MidiCommIn *Configuracion::dispositivo_entrada()

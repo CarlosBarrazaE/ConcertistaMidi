@@ -56,8 +56,8 @@ void Registro::Mostrar_detalles()
 
 	Registro::Nota("Vendedor: " + std::string(reinterpret_cast<const char*>(marca)));
 	Registro::Nota("Tarjeta Grafica: " +std::string(reinterpret_cast<const char*>(tarjeta_grafica)));
-	Registro::Nota("Version OpenGl: " + std::string(reinterpret_cast<const char*>(version)));
-	Registro::Nota("Version GLSL: " + std::string(reinterpret_cast<const char*>(version_glsl)));
+	Registro::Nota("Versión OpenGl: " + std::string(reinterpret_cast<const char*>(version)));
+	Registro::Nota("Versión GLSL: " + std::string(reinterpret_cast<const char*>(version_glsl)));
 
 	GLenum parametros[] = {
 		GL_MAX_COMBINED_TEXTURE_IMAGE_UNITS,

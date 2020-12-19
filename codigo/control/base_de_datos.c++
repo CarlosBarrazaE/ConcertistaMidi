@@ -150,7 +150,7 @@ void Base_de_Datos::actualizar()
 {
 	//Verificar version de la base de datos
 	std::string version_texto = this->leer_configuracion("version_base_de_datos");
-	Registro::Nota("Version de la base de datos: " + version_texto);
+	Registro::Nota("Versión de la base de datos: " + version_texto);
 	if(version_texto != "")
 	{
 		/*

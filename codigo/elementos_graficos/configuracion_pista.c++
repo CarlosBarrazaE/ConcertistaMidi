@@ -66,12 +66,14 @@ Configuracion_Pista::Configuracion_Pista(float x, float y, float ancho, float al
 	m_seleccion_modo.dimension_icono(40, 40);
 	m_seleccion_modo.opciones_textos(opcion_modo);
 	m_seleccion_modo.opciones_iconos(icono_modos);
+	m_seleccion_modo.color_texto(Color(1.0f, 1.0f, 1.0f));
 	m_seleccion_modo.tipografia(recursos->tipografia(LetraMuyChica));
 	m_seleccion_modo.opcion_predeterminada(2);
 
 	m_seleccion_color.dimension_icono(40, 40);
 	m_seleccion_color.opciones_textos(opcion_color);
 	m_seleccion_color.opciones_iconos(icono_color);
+	m_seleccion_color.color_texto(Color(1.0f, 1.0f, 1.0f));
 	m_seleccion_color.tipografia(recursos->tipografia(LetraMuyChica));
 
 	m_vista_previa = new Boton(300, 22, 30, 30, "", recursos);

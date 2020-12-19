@@ -32,11 +32,11 @@ void midiInit()
 		return;
 	}
 
-	snd_seq_set_client_name(alsa_seq, "Linthesia");
+	snd_seq_set_client_name(alsa_seq, "Concertista MIDI");
 
 	// meanings of READ and WRITE are permissions of the port from the viewpoint of other ports
 	// READ: port allows to send events to other ports
-	local_out = snd_seq_create_simple_port(alsa_seq, "Linthesia Output",
+	local_out = snd_seq_create_simple_port(alsa_seq, "Concertista MIDI Salida",
 											SND_SEQ_PORT_CAP_READ | SND_SEQ_PORT_CAP_SUBS_READ,
 											SND_SEQ_PORT_TYPE_MIDI_GENERIC);
 
@@ -45,11 +45,11 @@ void midiInit()
 											SND_SEQ_PORT_TYPE_MIDI_GENERIC);
 
 	// WRITE: port allows to receive events from other ports
-	local_in = snd_seq_create_simple_port(alsa_seq, "Linthesia Input",
+	local_in = snd_seq_create_simple_port(alsa_seq, "Concertista MIDI Entrada",
 										SND_SEQ_PORT_CAP_WRITE | SND_SEQ_PORT_CAP_SUBS_WRITE,
 										SND_SEQ_PORT_TYPE_MIDI_GENERIC);
 
-	anon_in = snd_seq_create_simple_port(alsa_seq, "Linthesia Annonce Listener",
+	anon_in = snd_seq_create_simple_port(alsa_seq, "Concertista MIDI Anuncio",
 										SND_SEQ_PORT_CAP_WRITE | SND_SEQ_PORT_CAP_NO_EXPORT,
 										SND_SEQ_PORT_TYPE_MIDI_GENERIC | SND_SEQ_PORT_TYPE_APPLICATION);
 
@@ -229,7 +229,7 @@ MidiEvent MidiCommIn::Read()
 			int lost_client = ev->data.addr.client;
 			int lost_port   = ev->data.addr.port;
 
-			Registro::Aviso("Dispositivo MIDI desconectado cliente: " + std::to_string(lost_client) + ", puerto=" + std::to_string(lost_port));
+			Registro::Depurar("Dispositivo MIDI desconectado cliente: " + std::to_string(lost_client) + ", puerto=" + std::to_string(lost_port));
 
 			Notificacion::Aviso("Dispositivo MIDI desconectado", 10);
 
@@ -245,7 +245,7 @@ MidiEvent MidiCommIn::Read()
 			snd_seq_port_info_t* pinfo;
 			snd_seq_port_info_alloca(&pinfo);
 
-			Registro::Nota("Nuevo dispositivo MIDI cliente: " + std::to_string(new_client) + ", puerto=" + std::to_string(new_port));
+			Registro::Depurar("Nuevo dispositivo MIDI cliente: " + std::to_string(new_client) + ", puerto=" + std::to_string(new_port));
 			int err = snd_seq_get_any_port_info(alsa_seq, new_client, new_port, pinfo);
 
 			if (err < 0)
@@ -253,8 +253,8 @@ MidiEvent MidiCommIn::Read()
 
 			int port = snd_seq_port_info_get_port(pinfo);
 			int client = snd_seq_port_info_get_client(pinfo);
-			Registro::Nota("Informacion puerto cliente: " + std::to_string(client) + " puerto: " + std::to_string(port));
-			Notificacion::Nota("Nuevo dispositivo MIDI: " + std::string(snd_seq_port_info_get_name(pinfo)), 10);
+			Registro::Depurar("Informacion puerto cliente: " + std::to_string(client) + " puerto: " + std::to_string(port));
+			Notificacion::Aviso("Nuevo dispositivo MIDI: " + std::string(snd_seq_port_info_get_name(pinfo)), 10);
 
 			MidiCommIn::UpdateDeviceList();
 			MidiCommOut::UpdateDeviceList();
