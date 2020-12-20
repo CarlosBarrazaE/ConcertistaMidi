@@ -5,8 +5,10 @@ VentanaConfiguracion::VentanaConfiguracion(Configuracion *configuracion, Adminis
 	m_configuracion = configuracion;
 
 	m_rectangulo = recursos->figura(F_Rectangulo);
-	id_dispositivo_entrada = static_cast<unsigned int>(std::stoi(m_configuracion->leer("dispositivo_entrada")));
-	id_dispositivo_salida = static_cast<unsigned int>(std::stoi(m_configuracion->leer("dispositivo_salida")));
+	m_id_dispositivo_entrada = static_cast<unsigned int>(std::stoi(m_configuracion->leer("dispositivo_entrada")));
+	m_id_dispositivo_salida = static_cast<unsigned int>(std::stoi(m_configuracion->leer("dispositivo_salida")));
+	m_id_entrada_anterior = m_id_dispositivo_entrada;
+	m_id_salida_anterior = m_id_dispositivo_salida;
 
 	m_texto_titulo.texto("Configuración");
 	m_texto_titulo.tipografia(recursos->tipografia(LetraTitulo));
@@ -70,8 +72,8 @@ VentanaConfiguracion::VentanaConfiguracion(Configuracion *configuracion, Adminis
 	m_solapa3_opcion_salida->tipografia(recursos->tipografia(LetraMediana));
 	m_solapa3_opcion_salida->opciones_textos(this->obtener_dispositivos(MidiCommOut::GetDeviceList()));
 
-	m_solapa3_opcion_entrada->opcion_predeterminada(id_dispositivo_entrada);
-	m_solapa3_opcion_salida->opcion_predeterminada(id_dispositivo_salida);
+	m_solapa3_opcion_entrada->opcion_predeterminada(m_id_dispositivo_entrada);
+	m_solapa3_opcion_salida->opcion_predeterminada(m_id_dispositivo_salida);
 
 	m_solapa->agregar_elemento_solapa(2, m_solapa3_titulo);
 	m_solapa->agregar_elemento_solapa(2, m_solapa3_texto_entrada);
@@ -145,8 +147,11 @@ std::vector<std::string> VentanaConfiguracion::obtener_dispositivos(MidiCommDesc
 
 void VentanaConfiguracion::guardar_configuracion()
 {
-	m_configuracion->escribir("dispositivo_entrada", std::to_string(m_solapa3_opcion_entrada->opcion_seleccionada()));
-	m_configuracion->escribir("dispositivo_salida", std::to_string(m_solapa3_opcion_salida->opcion_seleccionada()));
+	if(m_id_dispositivo_entrada != m_id_entrada_anterior)
+		m_configuracion->escribir("dispositivo_entrada", std::to_string(m_id_dispositivo_entrada));
+
+	if(m_id_dispositivo_salida != m_id_salida_anterior)
+		m_configuracion->escribir("dispositivo_salida", std::to_string(m_id_dispositivo_salida));
 }
 
 void VentanaConfiguracion::cargar_tabla_carpetas()
@@ -261,15 +266,15 @@ void VentanaConfiguracion::evento_raton(Raton *raton)
 	}
 	else if(m_solapa->solapa_activa() == 2)
 	{
-		if(id_dispositivo_entrada != m_solapa3_opcion_entrada->opcion_seleccionada())
+		if(m_id_dispositivo_entrada != m_solapa3_opcion_entrada->opcion_seleccionada())
 		{
-			id_dispositivo_entrada = static_cast<unsigned int>(m_solapa3_opcion_entrada->opcion_seleccionada());
-			m_configuracion->dispositivo_entrada(id_dispositivo_entrada);
+			m_id_dispositivo_entrada = static_cast<unsigned int>(m_solapa3_opcion_entrada->opcion_seleccionada());
+			m_configuracion->dispositivo_entrada(m_id_dispositivo_entrada);
 		}
-		if(id_dispositivo_salida != m_solapa3_opcion_salida->opcion_seleccionada())
+		if(m_id_dispositivo_salida != m_solapa3_opcion_salida->opcion_seleccionada())
 		{
-			id_dispositivo_salida = static_cast<unsigned int>(m_solapa3_opcion_salida->opcion_seleccionada());
-			m_configuracion->dispositivo_salida(id_dispositivo_salida);
+			m_id_dispositivo_salida = static_cast<unsigned int>(m_solapa3_opcion_salida->opcion_seleccionada());
+			m_configuracion->dispositivo_salida(m_id_dispositivo_salida);
 		}
 	}
 	else if(m_solapa->solapa_activa() == 3)

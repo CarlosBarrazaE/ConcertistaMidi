@@ -43,8 +43,10 @@ private:
 	//Datos
 	Configuracion *m_configuracion;
 	unsigned int m_ultima_solapa;
-	unsigned int id_dispositivo_entrada;
-	unsigned int id_dispositivo_salida;
+	unsigned int m_id_dispositivo_entrada;
+	unsigned int m_id_dispositivo_salida;
+	unsigned int m_id_entrada_anterior;
+	unsigned int m_id_salida_anterior;
 
 	std::vector<std::string> obtener_dispositivos(MidiCommDescriptionList lista);
 	void guardar_configuracion();
