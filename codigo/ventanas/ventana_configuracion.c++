@@ -168,6 +168,24 @@ void VentanaConfiguracion::cargar_tabla_carpetas()
 	}
 }
 
+unsigned int VentanaConfiguracion::limpiar_base_de_datos()
+{
+	unsigned int registros_eliminados = 0;
+	std::vector<std::string> archivos = m_configuracion->base_de_datos()->lista_archivos();
+	for(unsigned int x=0; x<archivos.size(); x++)
+	{
+		//Archivos que ya no existen, movidos o renombrados
+		if(!std::ifstream(archivos[x]))
+		{
+			//NOTE Agregar las demas tablas una vez que esten implementadas
+			m_configuracion->base_de_datos()->borrar_archivo(archivos[x]);
+			Registro::Nota("El archivo no existe: " + archivos[x]);
+			registros_eliminados++;
+		}
+	}
+	return registros_eliminados;
+}
+
 void VentanaConfiguracion::actualizar(unsigned int diferencia_tiempo)
 {
 	m_solapa->actualizar(diferencia_tiempo);
@@ -207,19 +225,7 @@ void VentanaConfiguracion::evento_raton(Raton *raton)
 		if(m_solapa1_limpiar_bd->esta_activado())
 		{
 			Notificacion::Nota("Limpiando base de datos...", 1);
-			unsigned int registros_eliminados = 0;
-			std::vector<std::string> archivos = m_configuracion->base_de_datos()->lista_archivos();
-			for(unsigned int x=0; x<archivos.size(); x++)
-			{
-				//Archivos que ya no existen, movidos o renombrados
-				if(!std::ifstream(archivos[x]))
-				{
-					//NOTE Agregar las demas tablas una vez que esten implementadas
-					m_configuracion->base_de_datos()->borrar_archivo(archivos[x]);
-					Registro::Nota("El archivo no existe: " + archivos[x]);
-					registros_eliminados++;
-				}
-			}
+			unsigned int registros_eliminados = this->limpiar_base_de_datos();
 			if(registros_eliminados > 0)
 				Notificacion::Nota("Se borraron "+std::to_string(registros_eliminados)+" registros huerfanos", 5);
 			else

@@ -51,6 +51,7 @@ private:
 	std::vector<std::string> obtener_dispositivos(MidiCommDescriptionList lista);
 	void guardar_configuracion();
 	void cargar_tabla_carpetas();
+	unsigned int limpiar_base_de_datos();
 
 public:
 	VentanaConfiguracion(Configuracion *configuracion, Administrador_Recursos *recursos);
