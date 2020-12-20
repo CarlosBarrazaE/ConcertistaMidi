@@ -6,6 +6,7 @@
 #include "../elementos_graficos/boton.h++"
 #include "../elementos_graficos/casilla_verificacion.h++"
 #include "../elementos_graficos/lista_opciones.h++"
+#include "../elementos_graficos/tabla.h++"
 #include "../control/configuracion.h++"
 
 class VentanaConfiguracion : public Ventana
@@ -27,6 +28,8 @@ private:
 
 	//Solapa Carpetas MIDI (2)
 	Etiqueta *m_solapa2_titulo;
+	Tabla *m_solapa2_tabla;
+	Boton *m_solapa2_agregar, *m_solapa2_eliminar;
 
 	//Solapa Dispositivos (3)
 	Etiqueta *m_solapa3_titulo;
@@ -45,6 +48,7 @@ private:
 
 	std::vector<std::string> obtener_dispositivos(MidiCommDescriptionList lista);
 	void guardar_configuracion();
+	void cargar_tabla_carpetas();
 
 public:
 	VentanaConfiguracion(Configuracion *configuracion, Administrador_Recursos *recursos);

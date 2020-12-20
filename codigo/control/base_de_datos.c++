@@ -139,7 +139,7 @@ void Base_de_Datos::crear()
 {
 	//Crea todas las tablas de la base de datos
 	this->consulta("CREATE TABLE configuracion (atributo VARCHAR(30), valor TEXT)");
-	this->consulta("CREATE TABLE carpetas (nombre VARCHAR(30) NOT NULL PRIMARY KEY, ruta TEXT)");
+	this->consulta("CREATE TABLE carpetas (nombre VARCHAR(30) NOT NULL, ruta TEXT NOT NULL PRIMARY KEY)");
 	this->consulta("CREATE TABLE archivos (ruta TEXT NOT NULL PRIMARY KEY, visitas INT DEFAULT 0, duracion BIGINT DEFAULT 0, ultimo_acceso DATETIME)");
 
 	this->escribir_configuracion("version_base_de_datos", VERSION_BASE_DE_DATOS);
@@ -214,9 +214,9 @@ std::vector<std::vector<std::string>> Base_de_Datos::ruta_carpetas()
 	return this->consulta_tabla("SELECT * FROM carpetas", 2);
 }
 
-bool Base_de_Datos::eliminar_ruta_carpeta(const std::string &nombre)
+bool Base_de_Datos::eliminar_ruta_carpeta(const std::string &ruta)
 {
-	return this->consulta("DELETE FROM carpetas WHERE nombre = '"+nombre+"'");
+	return this->consulta("DELETE FROM carpetas WHERE ruta = '"+ruta+"'");
 }
 
 void Base_de_Datos::agregar_archivo(const std::string &ruta, long int duracion)

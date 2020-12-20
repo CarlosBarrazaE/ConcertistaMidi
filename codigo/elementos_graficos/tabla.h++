@@ -5,13 +5,12 @@
 #include "etiqueta.h++"
 #include "fila.h++"
 #include "panel_desplazamiento.h++"
-#include "../dispositivos/pantalla.h++"
 
 #include <vector>
 
 struct Celda
 {
-	//TODO posiblemente deberia agregar un campo para saber si es ocultable cuando la tabla es muy chica
+	//NOTE posiblemente deberia agregar un campo para saber si es ocultable cuando la tabla es muy chica
 	Etiqueta *texto;
 	bool centrado;
 	unsigned int numero_espacio;
@@ -27,7 +26,7 @@ private:
 	float m_alto_fila;
 	unsigned int m_espacio_total_columnas;
 	unsigned long int m_fila_seleccionada;
-	bool m_seleccion_activada;
+	bool m_seleccion, m_seleccion_activada;
 
 	//Etiqueta m_textos;
 	Rectangulo *m_rectangulo;
@@ -53,6 +52,7 @@ public:
 	void cambiar_seleccion(int cambio);
 	unsigned long int obtener_seleccion();
 	bool seleccion_activada();
+	bool seleccion();
 };
 
 #endif

@@ -7,6 +7,7 @@ Tabla::Tabla(float x, float y, float ancho, float alto, float alto_fila, Adminis
 
 	m_alto_fila = alto_fila;
 	m_fila_seleccionada = 0;//Primera fila predeterminada
+	m_seleccion = false;
 	m_seleccion_activada = false;
 
 	m_espacio_total_columnas = 0;
@@ -71,6 +72,7 @@ void Tabla::dibujar()
 	m_panel_desplazamiento->dibujar();
 	m_rectangulo->dibujar(this->x(), this->y(), 1, this->alto(), m_color_fondo);
 	m_rectangulo->dibujar(this->x()+this->ancho()-1, this->y(), 1, this->alto(), m_color_fondo);
+	m_rectangulo->dibujar(this->x(), this->y()+this->alto()-1, this->ancho(), 1, m_color_fondo);
 }
 
 void Tabla::evento_raton(Raton *raton)
@@ -84,8 +86,12 @@ void Tabla::evento_raton(Raton *raton)
 			m_fila_seleccionada = x;
 			m_seleccion_activada = false;
 		}
-		if(m_filas[x]->esta_seleccionado() && raton->numero_clics() == 2)
-			m_seleccion_activada = true;
+		if(m_filas[x]->esta_seleccionado())
+		{
+			m_seleccion = true;
+			if(raton->numero_clics() == 2)
+				m_seleccion_activada = true;
+		}
 	}
 }
 
@@ -145,6 +151,8 @@ void Tabla::insertar_fila(std::vector<std::string> texto)
 		f->agregar_celda(nueva_etiqueta);
 	}
 
+	m_seleccion = false;
+	m_fila_seleccionada = 0;
 	m_filas.push_back(f);
 	m_panel_desplazamiento->agregar_elemento(f);
 }
@@ -158,12 +166,14 @@ void Tabla::vaciar()
 
 	m_filas.clear();
 	m_fila_seleccionada = 0;
+	m_seleccion = false;
 }
 
 void Tabla::cambiar_seleccion(int cambio)
 {
 	if(m_filas.size() == 0)
 		return;
+	m_seleccion = true;
 	m_seleccion_activada = false;
 	//Se deselecciona la fila anterior y se marca la siguiente
 	//Si llega arriba comienza abajo de nuevo
@@ -219,4 +229,9 @@ unsigned long int Tabla::obtener_seleccion()
 bool Tabla::seleccion_activada()
 {
 	return m_seleccion_activada;
+}
+
+bool Tabla::seleccion()
+{
+	return m_seleccion;
 }

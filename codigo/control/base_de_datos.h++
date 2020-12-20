@@ -34,7 +34,7 @@ class Base_de_Datos
 		//Tabla carpetas
 		bool ruta_carpeta(const std::string &nombre, const std::string &ruta);
 		std::vector<std::vector<std::string>> ruta_carpetas();
-		bool eliminar_ruta_carpeta(const std::string &nombre);
+		bool eliminar_ruta_carpeta(const std::string &ruta);
 
 		//Tabla archivos
 		void agregar_archivo(const std::string &ruta, long int duracion);

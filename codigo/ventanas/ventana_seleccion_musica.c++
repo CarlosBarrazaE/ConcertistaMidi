@@ -195,7 +195,13 @@ void VentanaSeleccionMusica::crear_tabla(std::string ruta_abrir)
 
 	if(m_lista_archivos.size() == 0)
 	{
-		Notificacion::Aviso("Esta carpeta no contiene archivos MIDI", 5);
+		if(m_es_carpeta_inicial)
+		{
+			Notificacion::Aviso("No hay carpetas donde buscar archivos MIDI", 5);
+			Notificacion::Nota("Agregue carpetas en la configuración", 15);
+		}
+		else
+			Notificacion::Aviso("Esta carpeta no contiene archivos MIDI", 5);
 		m_ruta_exploracion.boton_siguiente_habilitado(false);
 		return;
 	}

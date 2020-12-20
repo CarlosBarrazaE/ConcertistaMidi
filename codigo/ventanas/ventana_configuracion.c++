@@ -18,6 +18,7 @@ VentanaConfiguracion::VentanaConfiguracion(Configuracion *configuracion, Adminis
 	m_boton_atras = new Boton(10, Pantalla::Alto - 32, 120, 25, "Atrás", LetraChica, recursos);
 	m_boton_atras->color_boton(Color(0.9f, 0.9f, 0.9f));
 
+	//Pestaña de configuracion general
 	m_solapa = new Panel_Solapa(0, 40, 250, Pantalla::Alto, recursos);
 	m_solapa->agregar_solapa("General");
 	m_solapa1_titulo = new Etiqueta(250, 50, Pantalla::Ancho-250, 40, true, "General", LetraTitulo, recursos);
@@ -41,10 +42,22 @@ VentanaConfiguracion::VentanaConfiguracion(Configuracion *configuracion, Adminis
 	m_solapa->agregar_elemento_solapa(0, m_solapa1_casilla_desarrollo);
 	m_solapa->agregar_elemento_solapa(0, m_solapa1_casilla_modo_alambre);
 
+	//Pestaña de configuracion de carpetas midi
 	m_solapa->agregar_solapa("Carpetas MIDI");
 	m_solapa2_titulo = new Etiqueta(250, 50, Pantalla::Ancho-250, 40, true, "Carpetas MIDI", LetraTitulo, recursos);
+	m_solapa2_tabla = new Tabla(260, 100, Pantalla::Ancho-270, Pantalla::Alto-190, 30, recursos);
+	m_solapa2_tabla->agregar_columna("Nombre", false, 1);
+	m_solapa2_tabla->agregar_columna("Ruta", false, 3);
+	this->cargar_tabla_carpetas();
+	m_solapa2_agregar = new Boton(Pantalla::Ancho-320, Pantalla::Alto-80, 150, 30, "Agregar", LetraMediana, recursos);
+	m_solapa2_eliminar = new Boton(Pantalla::Ancho-160, Pantalla::Alto-80, 150, 30, "Eliminar", LetraMediana, recursos);
+	m_solapa2_eliminar->habilitado(false);//Se habilita al seleccionar una fila de la tabla
 	m_solapa->agregar_elemento_solapa(1, m_solapa2_titulo);
+	m_solapa->agregar_elemento_solapa(1, m_solapa2_tabla);
+	m_solapa->agregar_elemento_solapa(1, m_solapa2_agregar);
+	m_solapa->agregar_elemento_solapa(1, m_solapa2_eliminar);
 
+	//Pestaña de configuracion de dispositivos midis
 	m_solapa->agregar_solapa("Dispositivos");
 	m_solapa3_titulo = new Etiqueta(250, 50, Pantalla::Ancho-250, 40, true, "Dispositivos", LetraTitulo, recursos);
 	m_solapa3_texto_entrada = new Etiqueta(260, 100, Pantalla::Ancho-270, 30, false, "Dispositivo de Entrada", LetraMediana, recursos);
@@ -66,6 +79,7 @@ VentanaConfiguracion::VentanaConfiguracion(Configuracion *configuracion, Adminis
 	m_solapa->agregar_elemento_solapa(2, m_solapa3_opcion_entrada);
 	m_solapa->agregar_elemento_solapa(2, m_solapa3_opcion_salida);
 
+	//Pestaña de configuracion de videos
 	m_solapa->agregar_solapa("Video");
 	m_solapa4_titulo = new Etiqueta(250, 50, Pantalla::Ancho-250, 40, true, "Video", LetraTitulo, recursos);
 	m_solapa4_casilla_pantalla_completa = new Casilla_Verificacion(260, 100, Pantalla::Ancho-270, 30, "Pantalla Completa (F11)", recursos);
@@ -99,6 +113,9 @@ VentanaConfiguracion::~VentanaConfiguracion()
 	delete m_solapa1_casilla_modo_alambre;
 
 	delete m_solapa2_titulo;
+	delete m_solapa2_tabla;
+	delete m_solapa2_agregar;
+	delete m_solapa2_eliminar;
 
 	delete m_solapa3_titulo;
 	delete m_solapa3_texto_entrada;
@@ -132,6 +149,20 @@ void VentanaConfiguracion::guardar_configuracion()
 	m_configuracion->escribir("dispositivo_salida", std::to_string(m_solapa3_opcion_salida->opcion_seleccionada()));
 }
 
+void VentanaConfiguracion::cargar_tabla_carpetas()
+{
+	std::vector<std::vector<std::string>> carpetas = m_configuracion->base_de_datos()->ruta_carpetas();
+	for(unsigned long int c=0; c < carpetas.size(); c++)
+	{
+		std::vector<std::string> fila;
+		for(unsigned long int f=0; f < carpetas[c].size(); f++)
+		{
+			fila.push_back(carpetas[c][f]);
+		}
+		m_solapa2_tabla->insertar_fila(fila);
+	}
+}
+
 void VentanaConfiguracion::actualizar(unsigned int diferencia_tiempo)
 {
 	m_solapa->actualizar(diferencia_tiempo);
@@ -158,71 +189,98 @@ void VentanaConfiguracion::evento_raton(Raton *raton)
 		this->guardar_configuracion();
 	}
 
-	if(m_solapa1_restablecer->esta_activado())
+	if(m_solapa->solapa_activa() == 0)
 	{
-		m_configuracion->escribir("velocidad_musica", "1.000000");
-		m_configuracion->escribir("duracion_nota", "6700");
-		m_configuracion->escribir("tipo_teclado", "88");
-		m_configuracion->escribir("estado_subtitulo", "activo");
-		Notificacion::Nota("Configuración restablecida", 5);
-	}
-	if(m_solapa1_limpiar_bd->esta_activado())
-	{
-		Notificacion::Nota("Limpiando base de datos...", 1);
-		unsigned int registros_eliminados = 0;
-		std::vector<std::string> archivos = m_configuracion->base_de_datos()->lista_archivos();
-		for(unsigned int x=0; x<archivos.size(); x++)
+		if(m_solapa1_restablecer->esta_activado())
 		{
-			//Archivos que ya no existen, movidos o renombrados
-			if(!std::ifstream(archivos[x]))
+			m_configuracion->escribir("velocidad_musica", "1.000000");
+			m_configuracion->escribir("duracion_nota", "6700");
+			m_configuracion->escribir("tipo_teclado", "88");
+			m_configuracion->escribir("estado_subtitulo", "activo");
+			Notificacion::Nota("Configuración restablecida", 5);
+		}
+		if(m_solapa1_limpiar_bd->esta_activado())
+		{
+			Notificacion::Nota("Limpiando base de datos...", 1);
+			unsigned int registros_eliminados = 0;
+			std::vector<std::string> archivos = m_configuracion->base_de_datos()->lista_archivos();
+			for(unsigned int x=0; x<archivos.size(); x++)
 			{
-				//NOTE Agregar las demas tablas una vez que esten implementadas
-				m_configuracion->base_de_datos()->borrar_archivo(archivos[x]);
-				Registro::Nota("El archivo no existe: " + archivos[x]);
-				registros_eliminados++;
+				//Archivos que ya no existen, movidos o renombrados
+				if(!std::ifstream(archivos[x]))
+				{
+					//NOTE Agregar las demas tablas una vez que esten implementadas
+					m_configuracion->base_de_datos()->borrar_archivo(archivos[x]);
+					Registro::Nota("El archivo no existe: " + archivos[x]);
+					registros_eliminados++;
+				}
+			}
+			if(registros_eliminados > 0)
+				Notificacion::Nota("Se borraron "+std::to_string(registros_eliminados)+" registros huerfanos", 5);
+			else
+				Notificacion::Nota("Base de datos limpia", 5);
+		}
+		if(m_solapa1_borrar_db->esta_activado())
+		{
+			m_configuracion->base_de_datos()->borrar_archivos();
+			Notificacion::Nota("Base de datos borrada", 5);
+		}
+		if(m_solapa1_casilla_desarrollo->cambio_estado())
+		{
+			if(m_solapa1_casilla_desarrollo->activado())
+				m_accion = EntrarModoDesarrollo;
+			else
+				m_accion = SalirModoDesarrollo;
+		}
+		if(m_solapa1_casilla_modo_alambre->cambio_estado())
+		{
+			if(m_solapa1_casilla_modo_alambre->activado())
+				m_accion = EntrarModoAlambre;
+			else
+				m_accion = SalirModoAlambre;
+		}
+	}
+	else if(m_solapa->solapa_activa() == 1)
+	{
+		if(m_solapa2_tabla->seleccion())
+			m_solapa2_eliminar->habilitado(true);
+		if(m_solapa2_eliminar->esta_activado())
+		{
+			//Borra seleccion actual y recarga la tabla
+			std::vector<std::vector<std::string>> carpetas = m_configuracion->base_de_datos()->ruta_carpetas();
+			unsigned long int seleccion = m_solapa2_tabla->obtener_seleccion();
+			if(seleccion < carpetas.size())
+			{
+				Registro::Depurar("Eliminando de la lista la carpeta: '" + carpetas[seleccion][0] + "' ruta: '" + carpetas[seleccion][1] + "'");
+				m_configuracion->base_de_datos()->eliminar_ruta_carpeta(carpetas[seleccion][1]);
+				m_solapa2_eliminar->habilitado(false);
+				this->m_solapa2_tabla->vaciar();
+				this->cargar_tabla_carpetas();
 			}
 		}
-		if(registros_eliminados > 0)
-			Notificacion::Nota("Se borraron "+std::to_string(registros_eliminados)+" registros huerfanos", 5);
-		else
-			Notificacion::Nota("Base de datos limpia", 5);
 	}
-	if(m_solapa1_borrar_db->esta_activado())
+	else if(m_solapa->solapa_activa() == 2)
 	{
-		m_configuracion->base_de_datos()->borrar_archivos();
-		Notificacion::Nota("Base de datos borrada", 5);
+		if(id_dispositivo_entrada != m_solapa3_opcion_entrada->opcion_seleccionada())
+		{
+			id_dispositivo_entrada = static_cast<unsigned int>(m_solapa3_opcion_entrada->opcion_seleccionada());
+			m_configuracion->dispositivo_entrada(id_dispositivo_entrada);
+		}
+		if(id_dispositivo_salida != m_solapa3_opcion_salida->opcion_seleccionada())
+		{
+			id_dispositivo_salida = static_cast<unsigned int>(m_solapa3_opcion_salida->opcion_seleccionada());
+			m_configuracion->dispositivo_salida(id_dispositivo_salida);
+		}
 	}
-	if(m_solapa1_casilla_desarrollo->cambio_estado())
+	else if(m_solapa->solapa_activa() == 3)
 	{
-		if(m_solapa1_casilla_desarrollo->activado())
-			m_accion = EntrarModoDesarrollo;
-		else
-			m_accion = SalirModoDesarrollo;
-	}
-	if(m_solapa1_casilla_modo_alambre->cambio_estado())
-	{
-		if(m_solapa1_casilla_modo_alambre->activado())
-			m_accion = EntrarModoAlambre;
-		else
-			m_accion = SalirModoAlambre;
-	}
-	if(m_solapa4_casilla_pantalla_completa->cambio_estado())
-	{
-		if(m_solapa4_casilla_pantalla_completa->activado())
-			m_accion = EntrarPantallaCompleta;
-		else
-			m_accion = SalirPantallaCompleta;
-	}
-
-	if(id_dispositivo_entrada != m_solapa3_opcion_entrada->opcion_seleccionada())
-	{
-		id_dispositivo_entrada = static_cast<unsigned int>(m_solapa3_opcion_entrada->opcion_seleccionada());
-		m_configuracion->dispositivo_entrada(id_dispositivo_entrada);
-	}
-	if(id_dispositivo_salida != m_solapa3_opcion_salida->opcion_seleccionada())
-	{
-		id_dispositivo_salida = static_cast<unsigned int>(m_solapa3_opcion_salida->opcion_seleccionada());
-		m_configuracion->dispositivo_salida(id_dispositivo_salida);
+		if(m_solapa4_casilla_pantalla_completa->cambio_estado())
+		{
+			if(m_solapa4_casilla_pantalla_completa->activado())
+				m_accion = EntrarPantallaCompleta;
+			else
+				m_accion = SalirPantallaCompleta;
+		}
 	}
 }
 
@@ -232,6 +290,16 @@ void VentanaConfiguracion::evento_teclado(Tecla tecla, bool estado)
 	{
 		m_accion = CambiarATitulo;
 		this->guardar_configuracion();
+	}
+	if(m_solapa->solapa_activa() == 1)
+	{
+		if(tecla == TECLA_FLECHA_ABAJO && !estado)
+			m_solapa2_tabla->cambiar_seleccion(1);
+		else if(tecla == TECLA_FLECHA_ARRIBA && !estado)
+			m_solapa2_tabla->cambiar_seleccion(-1);
+
+		if(m_solapa2_tabla->seleccion())
+			m_solapa2_eliminar->habilitado(true);
 	}
 
 	//Modo desarrollo activado desde teclado
@@ -260,6 +328,9 @@ void VentanaConfiguracion::evento_pantalla(float ancho, float alto)
 	m_solapa1_casilla_modo_alambre->dimension(Pantalla::Ancho-270, 30);
 
 	m_solapa2_titulo->dimension(Pantalla::Ancho-250, 40);
+	m_solapa2_tabla->dimension(Pantalla::Ancho-270, Pantalla::Alto-190);
+	m_solapa2_agregar->posicion(Pantalla::Ancho-320, Pantalla::Alto-80);
+	m_solapa2_eliminar->posicion(Pantalla::Ancho-160, Pantalla::Alto-80);
 
 	m_solapa3_titulo->dimension(Pantalla::Ancho-250, 40);
 
