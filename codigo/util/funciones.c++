@@ -57,19 +57,19 @@ namespace Funciones
 	std::string nombre_archivo(const std::string &ruta, bool carpeta)
 	{
 		unsigned long int extencion = ruta.length()-1;
-		for(unsigned long int i=ruta.length()-1; i>0; i--)
+		for(unsigned long int i=ruta.length(); i>0; i--)
 		{
 			//Encuentra el primer punto
-			if(extencion == ruta.length()-1 && ruta[i] == '.')
-				extencion = i;
+			if(extencion == ruta.length()-1 && ruta[i-1] == '.')
+				extencion = i-1;
 			//Inicio del nombre del archivo
-			if(ruta[i] == '/' && i < ruta.length()-1)
+			if(ruta[i-1] == '/' && i-1 < ruta.length()-1)
 			{
 				if(carpeta)
-					return ruta.substr(i+1);
+					return ruta.substr(i);
 				//Es archivo
-				if(i < extencion && extencion != ruta.length()-1)
-					return ruta.substr(i+1, extencion-(i+1));
+				if(i-1 < extencion && extencion != ruta.length()-1)
+					return ruta.substr(i, extencion-(i));
 			}
 		}
 		return "";
@@ -91,6 +91,11 @@ namespace Funciones
 			(extencion[0] == 'M' || extencion[0] == 'm') &&
 			(extencion[1] == 'I' || extencion[1] == 'i') &&
 			(extencion[2] == 'D' || extencion[2] == 'd'))
+			return true;
+		if(extencion.length() == 3 &&
+			(extencion[0] == 'K' || extencion[0] == 'k') &&
+			(extencion[1] == 'A' || extencion[1] == 'a') &&
+			(extencion[2] == 'R' || extencion[2] == 'r'))
 			return true;
 		else if(extencion.length() == 4 &&
 			(extencion[0] == 'M' || extencion[0] == 'm') &&

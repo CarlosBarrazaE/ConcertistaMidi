@@ -43,6 +43,7 @@ public:
 	void dibujar() override;
 	void evento_raton(Raton *raton) override;
 
+	void posicion(float x, float y) override;
 	void dimension(float ancho, float alto) override;
 
 	void agregar_columna(std::string texto, bool centrado, unsigned int numero_espacio);

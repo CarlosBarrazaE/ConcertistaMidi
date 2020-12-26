@@ -7,18 +7,22 @@
 #include "../elementos_graficos/casilla_verificacion.h++"
 #include "../elementos_graficos/lista_opciones.h++"
 #include "../elementos_graficos/tabla.h++"
+#include "../elementos_graficos/selector_archivos.h++"
 #include "../control/configuracion.h++"
+#include "../util/usuario.h++"
 
 class VentanaConfiguracion : public Ventana
 {
 private:
 	//Recursos
+	Administrador_Recursos *m_recursos;
 	Rectangulo *m_rectangulo;
 
 	//Componentes
 	Etiqueta m_texto_titulo;
 	Boton *m_boton_atras;
 	Panel_Solapa *m_solapa;
+	Selector_Archivos *m_selector_archivos;
 
 	//Solapa General (1)
 	Etiqueta *m_solapa1_titulo, *m_solapa1_desarrollo;

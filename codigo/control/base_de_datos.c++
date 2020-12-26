@@ -143,7 +143,7 @@ void Base_de_Datos::crear()
 	this->consulta("CREATE TABLE archivos (ruta TEXT NOT NULL PRIMARY KEY, visitas INT DEFAULT 0, duracion BIGINT DEFAULT 0, ultimo_acceso DATETIME)");
 
 	this->escribir_configuracion("version_base_de_datos", VERSION_BASE_DE_DATOS);
-	this->ruta_carpeta("Canciones", "../musica/");
+	this->agregar_carpeta("Canciones", "../musica/");
 }
 
 void Base_de_Datos::actualizar()
@@ -204,17 +204,17 @@ std::string Base_de_Datos::leer_configuracion(const std::string &atributo)
 	return this->consulta_texto("SELECT valor FROM configuracion WHERE atributo = '"+atributo+"' LIMIT 1");
 }
 
-bool Base_de_Datos::ruta_carpeta(const std::string &nombre, const std::string &ruta)
+bool Base_de_Datos::agregar_carpeta(const std::string &nombre, const std::string &ruta)
 {
 	return this->consulta("INSERT INTO carpetas ('nombre', 'ruta') VALUES ('"+nombre+"', '"+ruta+"')");
 }
 
-std::vector<std::vector<std::string>> Base_de_Datos::ruta_carpetas()
+std::vector<std::vector<std::string>> Base_de_Datos::carpetas()
 {
 	return this->consulta_tabla("SELECT * FROM carpetas", 2);
 }
 
-bool Base_de_Datos::eliminar_ruta_carpeta(const std::string &ruta)
+bool Base_de_Datos::eliminar_carpeta(const std::string &ruta)
 {
 	return this->consulta("DELETE FROM carpetas WHERE ruta = '"+ruta+"'");
 }

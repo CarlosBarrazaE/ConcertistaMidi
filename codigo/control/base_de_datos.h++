@@ -32,9 +32,9 @@ class Base_de_Datos
 		std::string leer_configuracion(const std::string &atributo);
 
 		//Tabla carpetas
-		bool ruta_carpeta(const std::string &nombre, const std::string &ruta);
-		std::vector<std::vector<std::string>> ruta_carpetas();
-		bool eliminar_ruta_carpeta(const std::string &ruta);
+		bool agregar_carpeta(const std::string &nombre, const std::string &ruta);
+		std::vector<std::vector<std::string>> carpetas();
+		bool eliminar_carpeta(const std::string &ruta);
 
 		//Tabla archivos
 		void agregar_archivo(const std::string &ruta, long int duracion);

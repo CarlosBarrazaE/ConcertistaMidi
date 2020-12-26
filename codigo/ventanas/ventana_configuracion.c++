@@ -4,6 +4,7 @@ VentanaConfiguracion::VentanaConfiguracion(Configuracion *configuracion, Adminis
 {
 	m_configuracion = configuracion;
 
+	m_recursos = recursos;
 	m_rectangulo = recursos->figura(F_Rectangulo);
 	m_id_dispositivo_entrada = static_cast<unsigned int>(std::stoi(m_configuracion->leer("dispositivo_entrada")));
 	m_id_dispositivo_salida = static_cast<unsigned int>(std::stoi(m_configuracion->leer("dispositivo_salida")));
@@ -19,6 +20,7 @@ VentanaConfiguracion::VentanaConfiguracion(Configuracion *configuracion, Adminis
 
 	m_boton_atras = new Boton(10, Pantalla::Alto - 32, 120, 25, "Atrás", LetraChica, recursos);
 	m_boton_atras->color_boton(Color(0.9f, 0.9f, 0.9f));
+	m_selector_archivos = NULL;
 
 	//Pestaña de configuracion general
 	m_solapa = new Panel_Solapa(0, 40, 250, Pantalla::Alto, recursos);
@@ -102,6 +104,8 @@ VentanaConfiguracion::VentanaConfiguracion(Configuracion *configuracion, Adminis
 VentanaConfiguracion::~VentanaConfiguracion()
 {
 	delete m_boton_atras;
+	if(m_selector_archivos != NULL)
+		delete m_selector_archivos;
 
 	delete m_solapa1_titulo;
 	delete m_solapa1_texto_restablecer;
@@ -118,6 +122,7 @@ VentanaConfiguracion::~VentanaConfiguracion()
 	delete m_solapa2_tabla;
 	delete m_solapa2_agregar;
 	delete m_solapa2_eliminar;
+
 
 	delete m_solapa3_titulo;
 	delete m_solapa3_texto_entrada;
@@ -156,7 +161,7 @@ void VentanaConfiguracion::guardar_configuracion()
 
 void VentanaConfiguracion::cargar_tabla_carpetas()
 {
-	std::vector<std::vector<std::string>> carpetas = m_configuracion->base_de_datos()->ruta_carpetas();
+	std::vector<std::vector<std::string>> carpetas = m_configuracion->base_de_datos()->carpetas();
 	for(unsigned long int c=0; c < carpetas.size(); c++)
 	{
 		std::vector<std::string> fila;
@@ -188,6 +193,8 @@ unsigned int VentanaConfiguracion::limpiar_base_de_datos()
 
 void VentanaConfiguracion::actualizar(unsigned int diferencia_tiempo)
 {
+	if(m_selector_archivos != NULL)
+		m_selector_archivos->actualizar(diferencia_tiempo);
 	m_solapa->actualizar(diferencia_tiempo);
 }
 
@@ -200,10 +207,40 @@ void VentanaConfiguracion::dibujar()
 
 	m_solapa->dibujar();
 	m_boton_atras->dibujar();
+
+	if(m_selector_archivos != NULL)
+		m_selector_archivos->dibujar();
 }
 
 void VentanaConfiguracion::evento_raton(Raton *raton)
 {
+	if(m_selector_archivos != NULL)//Cancela los demas eventos
+	{
+		m_selector_archivos->evento_raton(raton);
+		if(m_selector_archivos->dialogo() == Cancelar)
+		{
+			delete m_selector_archivos;
+			m_selector_archivos = NULL;
+		}
+		else if(m_selector_archivos->dialogo() == Aceptar)
+		{
+			std::string ruta_nueva = m_selector_archivos->ruta_seleccionada();
+			std::string nombre_carpeta = Funciones::nombre_archivo(ruta_nueva, true);
+			if(ruta_nueva == "/")
+				nombre_carpeta = "/";
+			Registro::Depurar("Agregando la Carpeta: '" + nombre_carpeta + "' Ruta: '" + ruta_nueva + "'");
+			m_configuracion->base_de_datos()->agregar_carpeta(nombre_carpeta, ruta_nueva);
+			delete m_selector_archivos;
+			m_selector_archivos = NULL;
+
+			//Se recarga la tabla de carpetas
+			m_solapa2_eliminar->habilitado(false);
+			this->m_solapa2_tabla->vaciar();
+			this->cargar_tabla_carpetas();
+		}
+		else
+			return;
+	}
 	m_solapa->evento_raton(raton);
 	m_boton_atras->evento_raton(raton);
 	if(m_boton_atras->esta_activado())
@@ -255,15 +292,19 @@ void VentanaConfiguracion::evento_raton(Raton *raton)
 	{
 		if(m_solapa2_tabla->seleccion())
 			m_solapa2_eliminar->habilitado(true);
-		if(m_solapa2_eliminar->esta_activado())
+		if(m_solapa2_agregar->esta_activado())
+			m_selector_archivos = new Selector_Archivos(Pantalla::Ancho/2 - 600/2, Pantalla::Alto/2 - 450/2, 600, 450, "Seleccione una carpeta", Usuario::carpeta_personal(), false, m_recursos);
+		else if(m_solapa2_eliminar->esta_activado())
 		{
 			//Borra seleccion actual y recarga la tabla
-			std::vector<std::vector<std::string>> carpetas = m_configuracion->base_de_datos()->ruta_carpetas();
+			std::vector<std::vector<std::string>> carpetas = m_configuracion->base_de_datos()->carpetas();
 			unsigned long int seleccion = m_solapa2_tabla->obtener_seleccion();
 			if(seleccion < carpetas.size())
 			{
-				Registro::Depurar("Eliminando de la lista la carpeta: '" + carpetas[seleccion][0] + "' ruta: '" + carpetas[seleccion][1] + "'");
-				m_configuracion->base_de_datos()->eliminar_ruta_carpeta(carpetas[seleccion][1]);
+				Registro::Depurar("Eliminando de la lista la Carpeta: '" + carpetas[seleccion][0] + "' Ruta: '" + carpetas[seleccion][1] + "'");
+				m_configuracion->base_de_datos()->eliminar_carpeta(carpetas[seleccion][1]);
+
+				//Se recarga la tabla de carpetas
 				m_solapa2_eliminar->habilitado(false);
 				this->m_solapa2_tabla->vaciar();
 				this->cargar_tabla_carpetas();
@@ -302,6 +343,18 @@ void VentanaConfiguracion::evento_teclado(Tecla tecla, bool estado)
 		m_accion = CambiarATitulo;
 		this->guardar_configuracion();
 	}
+	//Modo desarrollo activado desde teclado
+	if(m_solapa1_casilla_desarrollo->activado() != Pantalla::ModoDesarrollo)
+		m_solapa1_casilla_desarrollo->estado(Pantalla::ModoDesarrollo);
+	if(m_solapa1_casilla_modo_alambre->activado() != Pantalla::ModoAlambre)
+		m_solapa1_casilla_modo_alambre->estado(Pantalla::ModoAlambre);
+	//Actualiza cuando se activa desde el teclado
+	if(m_solapa4_casilla_pantalla_completa->activado() != Pantalla::PantallaCompleta)
+		m_solapa4_casilla_pantalla_completa->estado(Pantalla::PantallaCompleta);
+
+	if(m_selector_archivos != NULL)//Cancela los demas eventos
+		return;
+
 	if(m_solapa->solapa_activa() == 1)
 	{
 		if(tecla == TECLA_FLECHA_ABAJO && !estado)
@@ -312,21 +365,16 @@ void VentanaConfiguracion::evento_teclado(Tecla tecla, bool estado)
 		if(m_solapa2_tabla->seleccion())
 			m_solapa2_eliminar->habilitado(true);
 	}
-
-	//Modo desarrollo activado desde teclado
-	if(m_solapa1_casilla_desarrollo->activado() != Pantalla::ModoDesarrollo)
-		m_solapa1_casilla_desarrollo->estado(Pantalla::ModoDesarrollo);
-	if(m_solapa1_casilla_modo_alambre->activado() != Pantalla::ModoAlambre)
-		m_solapa1_casilla_modo_alambre->estado(Pantalla::ModoAlambre);
-	//Actualiza cuando se activa desde el teclado
-	if(m_solapa4_casilla_pantalla_completa->activado() != Pantalla::PantallaCompleta)
-		m_solapa4_casilla_pantalla_completa->estado(Pantalla::PantallaCompleta);
 }
 
 void VentanaConfiguracion::evento_pantalla(float ancho, float alto)
 {
 	m_texto_titulo.dimension(ancho, 40);
 	m_boton_atras->posicion(m_boton_atras->x(), alto - 32);
+	if(m_selector_archivos != NULL)
+	{
+		m_selector_archivos->posicion(ancho/2 - 600/2, alto/2 - 450/2);
+	}
 
 	m_solapa->dimension(250, alto);
 

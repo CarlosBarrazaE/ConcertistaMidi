@@ -29,10 +29,11 @@ Tabla::~Tabla()
 void Tabla::actualizar_ancho_columnas()
 {
 	float posicion_actual = this->x();
+	float ancho_actual = 0;
 	for(Celda c : m_fila_titulo)
 	{
 		c.texto->posicion(posicion_actual, this->y());
-		float ancho_actual = (static_cast<float>(c.numero_espacio) * this->ancho()) / static_cast<float>(m_espacio_total_columnas);
+		ancho_actual = (static_cast<float>(c.numero_espacio) * this->ancho()) / static_cast<float>(m_espacio_total_columnas);
 		c.texto->dimension(ancho_actual, m_alto_fila);
 		posicion_actual += ancho_actual;
 	}
@@ -93,6 +94,21 @@ void Tabla::evento_raton(Raton *raton)
 				m_seleccion_activada = true;
 		}
 	}
+}
+
+void Tabla::posicion(float x, float y)
+{
+	this->_posicion(x, y);
+
+	float posicion_actual = this->x();
+	float ancho_actual = 0;
+	for(Celda c : m_fila_titulo)
+	{
+		c.texto->posicion(posicion_actual, this->y());
+		ancho_actual = (static_cast<float>(c.numero_espacio) * this->ancho()) / static_cast<float>(m_espacio_total_columnas);
+		posicion_actual += ancho_actual;
+	}
+	m_panel_desplazamiento->posicion(this->x(), this->y() + m_alto_fila);
 }
 
 void Tabla::dimension(float ancho, float alto)

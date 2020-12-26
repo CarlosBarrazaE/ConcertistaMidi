@@ -14,6 +14,7 @@ set(elementos_graficos
 	${CMAKE_CURRENT_SOURCE_DIR}/ruta_exploracion.c++
 	${CMAKE_CURRENT_SOURCE_DIR}/casilla_verificacion.c++
 	${CMAKE_CURRENT_SOURCE_DIR}/entrada_texto.c++
+	${CMAKE_CURRENT_SOURCE_DIR}/selector_archivos.c++
 
 	${CMAKE_CURRENT_SOURCE_DIR}/panel_desplazamiento.c++
 	${CMAKE_CURRENT_SOURCE_DIR}/panel_solapa.c++

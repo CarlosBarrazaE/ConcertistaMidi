@@ -169,7 +169,7 @@ void Controlador_Juego::actualizar()
 		if(m_fotograma > 1)
 		{
 			//Se omite el primer fotograma porque aun muestra la ventana anterior
-			/*float *pixeles = new float[Pantalla::Ancho*Pantalla::Alto*4];
+			/*float *pixeles = new float[static_cast<int>(Pantalla::Ancho*Pantalla::Alto*4)];
 			glReadPixels(0, 0, Pantalla::Ancho, Pantalla::Alto, GL_RGBA, GL_FLOAT, pixeles);
 			Archivo::Tga::Escribir("../fotogramas/" + std::to_string(m_fotograma-1) + ".tga", pixeles, Pantalla::Ancho, Pantalla::Alto);
 			delete[] pixeles;*/

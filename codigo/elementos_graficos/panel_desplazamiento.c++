@@ -198,6 +198,12 @@ void Panel_Desplazamiento::evento_raton(Raton *raton)
 	}
 }
 
+void Panel_Desplazamiento::posicion(float x, float y)
+{
+	this->_posicion(x, y);
+	m_calcular_posicion = true;
+}
+
 void Panel_Desplazamiento::dimension(float ancho, float alto)
 {
 	this->_dimension(ancho, alto);

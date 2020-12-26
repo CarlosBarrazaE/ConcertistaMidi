@@ -1,5 +1,5 @@
-#ifndef RUTA_EXPLORACION
-#define RUTA_EXPLORACION
+#ifndef RUTA_EXPLORACION_H
+#define RUTA_EXPLORACION_H
 
 #include <vector>
 
@@ -16,20 +16,19 @@ private:
 	Rectangulo *m_rectangulo;
 
 	//Componentes
-	Boton *m_boton_atraz, *m_boton_adelante;
+	Boton *m_boton_atras, *m_boton_adelante;
 	std::vector<Boton*> m_carpetas;
 
 	//Datos
 	std::vector<std::string> m_rutas_botones;
+	float m_ancho_actual;//Ancho de todos los botones existentes
+	unsigned long int m_primera_carpeta_dibujar;
+	unsigned long int m_numero_carpeta_extra;
+	bool m_agregar_carpeta_extra;
 	bool m_cambiar_carpeta;
-	bool m_carpeta_anterior;
-	unsigned long int m_posicion_carpeta;
 
-	float m_ancho_anterior;
-	float m_largo_actual;
-	unsigned long int m_primer_boton_mostrar;
-
-	void calcular_posicion();
+	void eliminar(unsigned long int inicio);
+	void calcular_carpetas_visibles();
 public:
 	Ruta_Exploracion(float x, float y, float ancho, float alto, Administrador_Recursos *recursos);
 	~Ruta_Exploracion();
@@ -38,14 +37,17 @@ public:
 	void dibujar() override;
 	void evento_raton(Raton *raton) override;
 
+	void posicion(float x, float y) override;
 	void dimension(float ancho, float alto) override;
 
-	void ruta_carpeta(const std::string &ruta_inicio, const std::string &ruta_completa, const std::string nombre_carpeta_inicial);
+	void carpeta_extra(const std::string &nombre, const std::string &ruta);
+	void ruta(const std::string &inicio, const std::string &fin);
 
-	void ir_atraz();
+	void atras();//Cambio a carpeta atras
+	bool siguiente();//Ir a carpeta siguiente
+	void siguiente_habilitado(bool estado);
+
 	bool cambiar_carpeta();
-	bool boton_siguiente();
-	void boton_siguiente_habilitado(bool estado);
 	std::string nueva_ruta();
 };
 

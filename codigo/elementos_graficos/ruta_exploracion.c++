@@ -5,68 +5,93 @@ Ruta_Exploracion::Ruta_Exploracion(float x, float y, float ancho, float alto, Ad
 	m_recursos = recursos;
 	m_rectangulo = recursos->figura(F_Rectangulo);
 
-	m_boton_atraz = new Boton(x, y, 30, 30, "<", recursos);
-	m_boton_atraz->color_boton(Color(1.0f, 1.0f, 1.0f));
+	m_boton_atras = new Boton(x, y, 30, 30, "<", recursos);
+	m_boton_atras->color_boton(Color(1.0f, 1.0f, 1.0f));
 
 	m_boton_adelante = new Boton(x+30, y, 30, 30, ">", recursos);
 	m_boton_adelante->color_boton(Color(1.0f, 1.0f, 1.0f));
 
-	m_carpeta_anterior = false;
+	m_ancho_actual = 65;
+	m_primera_carpeta_dibujar = 0;
+	m_numero_carpeta_extra = 0;
+	m_agregar_carpeta_extra = true;
 	m_cambiar_carpeta = false;
-	m_posicion_carpeta = 0;
-
-	m_ancho_anterior = this->ancho();
-	m_largo_actual = 0;
-	m_primer_boton_mostrar = 0;
 }
 
 Ruta_Exploracion::~Ruta_Exploracion()
 {
-	delete m_boton_atraz;
+	delete m_boton_atras;
 	delete m_boton_adelante;
 
 	for(Boton *b : m_carpetas)
 		delete b;
 }
 
-void Ruta_Exploracion::calcular_posicion()
+void Ruta_Exploracion::eliminar(unsigned long int inicio)
 {
-	//Calcular las nuevas posiciones
-	if(m_largo_actual > this->ancho() || !Funciones::comparar_float(m_ancho_anterior ,this->ancho(), 0.01f))
+	if(m_rutas_botones.size() >= 1)
 	{
-		float largo_actual = 65;
-		float ancho_siguiente = 0;
-		unsigned long int mostrar_actual = 0;
-
-		//Encuentra el numero de botones que alcanzan
-		if(m_carpetas.size() > 0)
+		if(inicio+1 == m_rutas_botones.size())
 		{
-			ancho_siguiente = m_carpetas[m_carpetas.size()-1]->ancho();
-			mostrar_actual = m_carpetas.size()-1;
+			//Elimina la ultima
+			m_ancho_actual -= m_carpetas.back()->ancho();
+			delete m_carpetas.back();
+			m_carpetas.pop_back();
+			m_rutas_botones.pop_back();
 		}
-		for(unsigned long int x = m_carpetas.size(); x > 0 && largo_actual+ancho_siguiente < this->ancho(); x--)
+		else
 		{
-			//x-1 es una posicion valida
-			largo_actual += m_carpetas[x-1]->ancho();
-			mostrar_actual = x-1;
-
-			if(x-1 > 0)
-				ancho_siguiente = m_carpetas[x-2]->ancho();
-		}
-
-		if(m_primer_boton_mostrar != mostrar_actual)
-		{
-			m_primer_boton_mostrar = mostrar_actual;
-			float posicion_texto = 65;
-			//Actualiza las posiciones
-			for(unsigned long int x = m_primer_boton_mostrar; x < m_carpetas.size(); x++)
+			//Elimina multiples
+			if(inicio > 0 && inicio < m_carpetas.size())
 			{
-				m_carpetas[x]->posicion(this->x() + posicion_texto, this->y());
-				posicion_texto +=  m_carpetas[x]->ancho();
+				for(unsigned long int x = inicio; x<m_carpetas.size(); x++)
+				{
+					m_ancho_actual -= m_carpetas[x]->ancho();
+					delete m_carpetas[x];
+				}
+				m_carpetas.erase(m_carpetas.begin() + static_cast<long int>(inicio), m_carpetas.end());
+				m_rutas_botones.erase(m_rutas_botones.begin() + static_cast<long int>(inicio), m_rutas_botones.end());
 			}
-			m_largo_actual = posicion_texto;
 		}
-		m_ancho_anterior = this->ancho();
+
+		//Si quedan solo carpetas extras se pueden agregar mas
+		if(m_rutas_botones.size() <= m_numero_carpeta_extra)
+		{
+			m_agregar_carpeta_extra = true;
+			m_numero_carpeta_extra = m_rutas_botones.size();
+		}
+		this->calcular_carpetas_visibles();
+	}
+}
+
+void Ruta_Exploracion::calcular_carpetas_visibles()
+{
+	unsigned long int carpeta_visible_actual = m_primera_carpeta_dibujar;
+	if(this->ancho() >= m_ancho_actual && m_primera_carpeta_dibujar > 0)
+		m_primera_carpeta_dibujar = 0;
+	else if(this->ancho() < m_ancho_actual)
+	{
+		//Calcular cuantos botones se pueden dibujar sin salirse de la ventana
+		//almacena el primer boton en m_primera_carpeta_dibujar
+		float ancho_nuevo = 65;
+		for(unsigned long int x=m_carpetas.size(); x>0; x--)
+		{
+			ancho_nuevo += m_carpetas[x-1]->ancho();
+			if(ancho_nuevo < this->ancho())
+				m_primera_carpeta_dibujar = x-1;
+			else
+				x = 1;//Fin del ciclo
+		}
+	}
+	if(carpeta_visible_actual != m_primera_carpeta_dibujar)
+	{
+		//Se recalculan las posiciones X
+		float posicion_x = 65;
+		for(unsigned long int x=m_primera_carpeta_dibujar; x<m_carpetas.size(); x++)
+		{
+			m_carpetas[x]->posicion(this->x() + posicion_x , m_carpetas[x]->y());
+			posicion_x += m_carpetas[x]->ancho();
+		}
 	}
 }
 
@@ -76,125 +101,131 @@ void Ruta_Exploracion::actualizar(unsigned int /*diferencia_tiempo*/)
 
 void Ruta_Exploracion::dibujar()
 {
-	m_boton_atraz->dibujar();
+	m_boton_atras->dibujar();
 	m_boton_adelante->dibujar();
 
-	for(unsigned long int x = m_primer_boton_mostrar; x < m_carpetas.size(); x++)
+	for(unsigned long int x = m_primera_carpeta_dibujar; x < m_carpetas.size(); x++)
 		m_carpetas[x]->dibujar();
 }
 
 void Ruta_Exploracion::evento_raton(Raton *raton)
 {
-	m_boton_atraz->evento_raton(raton);
-	if(m_boton_atraz->esta_activado())
-		m_carpeta_anterior = true;
-
+	m_boton_atras->evento_raton(raton);
 	m_boton_adelante->evento_raton(raton);
-	for(unsigned long int x = m_primer_boton_mostrar; x<m_carpetas.size(); x++)
+
+	if(m_boton_atras->esta_activado())
+	{
+		m_cambiar_carpeta = true;
+		this->eliminar(m_rutas_botones.size()-1);
+	}
+
+	unsigned long int eliminar = 0;
+	for(unsigned long int x = m_primera_carpeta_dibujar; x<m_carpetas.size() && eliminar == 0; x++)
 	{
 		m_carpetas[x]->evento_raton(raton);
 		if(m_carpetas[x]->esta_activado())
 		{
 			m_cambiar_carpeta = true;
-			m_posicion_carpeta = x;
+			eliminar = x+1;
 		}
 	}
+	if(eliminar > 0)
+		this->eliminar(eliminar);
+}
+
+void Ruta_Exploracion::posicion(float x, float y)
+{
+	float diferencia_x = this->x() - x;
+	this->_posicion(x, y);
+
+	m_boton_atras->posicion(this->x(), this->y());
+	m_boton_adelante->posicion(this->x()+30, this->y());
+
+	for(Boton *b : m_carpetas)
+		b->posicion(b->x() - diferencia_x, this->y());
 }
 
 void Ruta_Exploracion::dimension(float ancho, float alto)
 {
 	this->_dimension(ancho, alto);
-	this->calcular_posicion();
+	this->calcular_carpetas_visibles();
 }
 
-void Ruta_Exploracion::ruta_carpeta(const std::string &ruta_inicio, const std::string &ruta_completa, const std::string nombre_carpeta_inicial)
+void Ruta_Exploracion::carpeta_extra(const std::string &nombre, const std::string &ruta)
 {
-	//Borrar lista de botones si existe
-	m_carpeta_anterior = false;
-	m_cambiar_carpeta = false;
-	m_posicion_carpeta = 0;
-	if(m_carpetas.size() > 0)
+	//Solo se permiten carpetas extras al inicio
+	if(m_agregar_carpeta_extra)
 	{
-		for(Boton *b : m_carpetas)
-			delete b;
-		m_carpetas.clear();
-		m_rutas_botones.clear();
+		m_carpetas.push_back(new Boton(this->x() + m_ancho_actual, this->y(), 30, 30, nombre, LetraChica, m_recursos));
+		m_rutas_botones.push_back(ruta);
+
+		m_ancho_actual += m_carpetas.back()->ancho();
+		m_numero_carpeta_extra++;
 	}
+}
 
-	if(ruta_completa.find(ruta_inicio) != std::string::npos)
+void Ruta_Exploracion::ruta(const std::string &inicio, const std::string &fin)
+{
+	if(fin.find(inicio) != std::string::npos)//La ruta final debe contener la ruta inicial
 	{
-		float posicion_texto = 65;
-		//Es la raiz
-		m_carpetas.push_back(new Boton(this->x() + posicion_texto, this->y(), 30, 30, "/", LetraChica, m_recursos));
-		m_rutas_botones.push_back("");
-		posicion_texto +=  m_carpetas[m_carpetas.size()-1]->ancho();
-
-		if(ruta_completa != "-")
+		if(inicio.size() < fin.size())
 		{
-			//nombre_carpeta_inicial es la primera carpeta abierta
-			m_carpetas.push_back(new Boton(this->x() + posicion_texto, this->y(), 30, 30, nombre_carpeta_inicial, LetraChica, m_recursos));
-			m_rutas_botones.push_back(ruta_inicio);
-			posicion_texto +=  m_carpetas[m_carpetas.size()-1]->ancho();
-		}
+			std::string ruta = fin.substr(inicio.size());//Se quita la parte de la ruta que no se usara
+			std::vector<std::string> carpetas_anidadas = Texto::dividir_texto(ruta, '/');//Se dividen las carpetas anidadas
 
-		if(ruta_inicio.size() < ruta_completa.size())
-		{
-			std::string ruta_dividir = ruta_completa.substr(ruta_inicio.size());
-			std::vector<std::string> carpetas = Texto::dividir_texto(ruta_dividir, '/');
-
-			std::string ruta_actual = ruta_inicio;
+			std::string ruta_actual = inicio;
 			//Agrega un '/' al final si no lo tiene
 			if(ruta_actual[ruta_actual.length()-1] != '/')
 				ruta_actual += "/";
 
-			for(unsigned long int x=0; x<carpetas.size(); x++)
+			//Se crea un boton por cada carpeta anidada
+			for(unsigned long int x=0; x<carpetas_anidadas.size(); x++)
 			{
 				//Guarda la ruta del boton actual
-				ruta_actual += carpetas[x] + "/";
-				m_rutas_botones.push_back(ruta_actual);
-
-				//Agrega el boton actual
-				m_carpetas.push_back(new Boton(this->x()+posicion_texto, this->y(), 30, 30, carpetas[x], LetraChica, m_recursos));
-				posicion_texto += m_carpetas[m_carpetas.size()-1]->ancho();
+				ruta_actual += carpetas_anidadas[x] + "/";
+				if(x >= m_carpetas.size() - m_numero_carpeta_extra)//Se salta los que ya existe
+				{
+					//Agrega el boton actual
+					m_carpetas.push_back(new Boton(this->x()+m_ancho_actual, this->y(), 30, 30, carpetas_anidadas[x], LetraChica, m_recursos));
+					m_ancho_actual += m_carpetas.back()->ancho();
+					m_rutas_botones.push_back(ruta_actual);
+					m_agregar_carpeta_extra = false;//Ya no se permiten mas carpetas extras una vez que entra aqui
+				}
 			}
 		}
-		m_largo_actual = posicion_texto;
-		m_primer_boton_mostrar = 0;
-		this->calcular_posicion();
 	}
-	if(ruta_completa == "-")
-		m_boton_atraz->habilitado(false);
+	this->calcular_carpetas_visibles();
+	if(m_carpetas.size() <= 1)
+		m_boton_atras->habilitado(false);
 	else
-		m_boton_atraz->habilitado(true);
+		m_boton_atras->habilitado(true);
 }
 
-void Ruta_Exploracion::ir_atraz()
+void Ruta_Exploracion::atras()
 {
-	m_carpeta_anterior = true;
+	this->eliminar(m_rutas_botones.size()-1);
 }
 
-bool Ruta_Exploracion::cambiar_carpeta()
-{
-	return m_carpeta_anterior || m_cambiar_carpeta;
-}
-
-bool Ruta_Exploracion::boton_siguiente()
+bool Ruta_Exploracion::siguiente()
 {
 	return m_boton_adelante->esta_activado();
 }
 
-void Ruta_Exploracion::boton_siguiente_habilitado(bool estado)
+void Ruta_Exploracion::siguiente_habilitado(bool estado)
 {
 	m_boton_adelante->habilitado(estado);
 }
 
+bool Ruta_Exploracion::cambiar_carpeta()
+{
+	bool cambiar = m_cambiar_carpeta;
+	m_cambiar_carpeta = false;
+	return cambiar;
+}
+
 std::string Ruta_Exploracion::nueva_ruta()
 {
-	if(m_carpeta_anterior && m_rutas_botones.size() > 1)
-		return m_rutas_botones[m_rutas_botones.size()-2];
-
-	if(m_cambiar_carpeta)
-		return m_rutas_botones[m_posicion_carpeta];
-
+	if(m_rutas_botones.size() > 0)
+		return m_rutas_botones.back();//Retorna la ultima carpeta
 	return "";
 }
