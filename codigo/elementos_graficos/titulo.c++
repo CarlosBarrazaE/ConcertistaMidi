@@ -71,8 +71,13 @@ void Titulo::actualizar(unsigned int diferencia_tiempo)
 		}
 	}
 
-	m_titulo.posicion(this->x()+m_posicion_texto, this->y()+this->alto()/2-m_titulo.alto_texto());
-	m_autor.posicion(this->x()-m_posicion_texto, this->y()+this->alto()/2+20);
+	if(m_autor.texto().length() > 0)
+	{
+		m_titulo.posicion(this->x()+m_posicion_texto, this->y()+this->alto()/2-m_titulo.alto_texto());
+		m_autor.posicion(this->x()-m_posicion_texto, this->y()+this->alto()/2+20);
+	}
+	else
+		m_titulo.posicion(this->x()+m_posicion_texto, (this->y()+this->alto()/2));
 }
 
 void Titulo::dibujar()
@@ -84,7 +89,8 @@ void Titulo::dibujar()
 	m_rectangulo->dibujar(this->x(), this->y()+this->alto()/2-100, this->ancho(), 200, Color(1.0f, 1.0f, 1.0f, m_alfa));
 
 	m_titulo.dibujar();
-	m_autor.dibujar();
+	if(m_autor.texto().length() > 0)
+		m_autor.dibujar();
 }
 
 void Titulo::evento_raton(Raton */*raton*/)
@@ -95,11 +101,16 @@ void Titulo::dimension(float ancho, float alto)
 {
 	this->_dimension(ancho, alto);
 
-	m_titulo.posicion(this->x(), this->y()+alto/2-m_titulo.alto_texto());
-	m_titulo.dimension(ancho, 0);
+	if(m_autor.texto().length() > 0)
+	{
+		m_titulo.posicion(this->x(), this->y()+alto/2-m_titulo.alto_texto());
+		m_titulo.dimension(ancho, 0);
 
-	m_autor.posicion(this->x(), this->y()+alto/2+20);
-	m_autor.dimension(ancho, 0);
+		m_autor.posicion(this->x(), this->y()+alto/2+20);
+		m_autor.dimension(ancho, 0);
+	}
+	else
+		m_titulo.posicion(this->x()+m_posicion_texto, this->y()+this->alto()/2);
 }
 
 void Titulo::datos(Datos_Musica *datos_musica)

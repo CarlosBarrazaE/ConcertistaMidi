@@ -372,9 +372,7 @@ void VentanaConfiguracion::evento_pantalla(float ancho, float alto)
 	m_texto_titulo.dimension(ancho, 40);
 	m_boton_atras->posicion(m_boton_atras->x(), alto - 32);
 	if(m_selector_archivos != NULL)
-	{
 		m_selector_archivos->posicion(ancho/2 - 600/2, alto/2 - 450/2);
-	}
 
 	m_solapa->dimension(250, alto);
 
