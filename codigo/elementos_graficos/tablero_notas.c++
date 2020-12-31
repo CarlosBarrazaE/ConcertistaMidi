@@ -249,12 +249,8 @@ void Tablero_Notas::dibujar()
 	this->dibujar_lineas_horizontales();
 	this->dibujar_lineas_verticales();
 
-	//Dibuja la sombra de la barra de progreso
-	m_rectangulo->textura(true);
-	m_textura_sombra->activar();
-	m_rectangulo->dibujar(this->x(), this->y(), this->ancho(), 20);
-
 	//Dibuja las notas por pistas
+	m_rectangulo->textura(true);
 	m_rectangulo->extremos_fijos(false, true);
 	for(unsigned int pista=0; pista<m_notas.size(); pista++)
 	{
@@ -267,6 +263,11 @@ void Tablero_Notas::dibujar()
 		}
 	}
 	m_rectangulo->extremos_fijos(false, false);
+
+	//Dibuja la sombra de la barra de progreso
+	m_textura_sombra->activar();
+	m_rectangulo->color(Color(0.7f, 0.7f, 0.7f));
+	m_rectangulo->dibujar(this->x(), this->y(), this->ancho(), 20);
 }
 
 void Tablero_Notas::evento_raton(Raton */*raton*/)
