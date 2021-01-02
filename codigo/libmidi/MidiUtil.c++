@@ -103,7 +103,9 @@ std::string MidiError::GetErrorDescription() const
 			return "Valor de InputError no válido. Las opciones son 'report', 'ignore', and 'use'";
 
 		case MidiError_RequestedTempoFromNonTempoEvent:
-			return "Los datos de tiempo se solicitaron desde un evento MIDI no temporal.";
+			return "Los datos de tempo se solicitaron desde un evento MIDI diferente.";
+		case MidiError_RequiereCompasDesdeEventoNoCompas:
+			return "Los datos del compas fueron requerido desde un evento MIDI diferente.";
 
 		default:
 			return "Codigo de error desconocido: " + std::to_string(static_cast<unsigned int>(m_error)) + ".";

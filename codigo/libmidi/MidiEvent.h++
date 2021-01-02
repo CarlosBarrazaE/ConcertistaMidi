@@ -75,6 +75,10 @@ public:
 	// per quarter note.  (Non-meta-tempo events will throw an error).
 	unsigned long GetTempoInUsPerQn() const;
 
+	//Recupera el indicador de compas
+	unsigned char NumeradorComas();
+	unsigned char DenominadorCompas();
+
 	// Convenience function: Is this the special End-Of-Track event
 	bool IsEnd() const;
 
@@ -104,6 +108,9 @@ public:
 	unsigned char m_data1;
 	unsigned char m_data2;
 	unsigned long m_delta_pulses;
+
+	unsigned char m_numerador_compas;
+	unsigned char m_denominador_compas;
 
 	unsigned char m_meta_type;
 

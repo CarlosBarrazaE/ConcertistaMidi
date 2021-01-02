@@ -67,7 +67,8 @@ enum MidiErrorCode
 	MidiError_InputError,
 	MidiError_InvalidInputErrorBehavior,
 
-	MidiError_RequestedTempoFromNonTempoEvent
+	MidiError_RequestedTempoFromNonTempoEvent,
+	MidiError_RequiereCompasDesdeEventoNoCompas
 };
 
 class MidiError : public std::exception

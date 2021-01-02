@@ -6,6 +6,10 @@
 
 #include "Midi.h++"
 
+//Valor predeterminado 4/4
+unsigned char Midi::NumeradorCompas = 4;
+unsigned char Midi::DenominadorCompas = 4;
+
 Midi Midi::ReadFromFile(const std::string &filename)
 {
 	std::fstream file(filename.c_str(), std::ios::in | std::ios::binary);
@@ -178,9 +182,10 @@ Midi Midi::ReadFromStream(std::istream &stream)
 	const microseconds_t len = m.GetSongLengthInMicroseconds();
 	microseconds_t bar_usec = 0;
 	unsigned int bar_no = 0;
+	unsigned int pulso_redonda = static_cast<unsigned int>(pulses_per_quarter_note)*4;
 	while (bar_usec <= len)
 	{
-		bar_usec = m.GetEventPulseInMicroseconds(bar_no*pulses_per_quarter_note*4, pulses_per_quarter_note);
+		bar_usec = m.GetEventPulseInMicroseconds(bar_no*(pulso_redonda/DenominadorCompas)*NumeradorCompas, pulses_per_quarter_note);
 		bar_line_usecs.push_back(bar_usec);
 		bar_no++;
 	}
@@ -279,6 +284,11 @@ void Midi::BuildTempoTrack()
 
 				// Insert our newly stolen event into the auto-sorting map
 				tempo_events[ev_pulses] = ev;
+			}
+			else if (ev.Type() == MidiEventType_Meta && ev.MetaType() == MidiMetaEvent_TimeSignature)
+			{
+				NumeradorCompas = ev.NumeradorComas();
+				DenominadorCompas = ev.DenominadorCompas();
 			}
 		}
 	}

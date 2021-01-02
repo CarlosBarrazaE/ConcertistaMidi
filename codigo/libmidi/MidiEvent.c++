@@ -14,7 +14,7 @@ MidiEventSimple::MidiEventSimple(unsigned char s, unsigned char b1, unsigned cha
 {
 }
 
-MidiEvent::MidiEvent() : m_status(0), m_data1(0), m_data2(0), m_tempo_uspqn(0)
+MidiEvent::MidiEvent() : m_status(0), m_data1(0), m_data2(0), m_numerador_compas(4), m_denominador_compas(4), m_tempo_uspqn(0)
 {
 }
 
@@ -150,13 +150,23 @@ void MidiEvent::ReadMeta(std::istream &stream)
 		case MidiMetaEvent_SequenceNumber:
 		case MidiMetaEvent_EndOfTrack:
 		case MidiMetaEvent_SMPTEOffset:
+			break;
 		case MidiMetaEvent_TimeSignature:
+			if(meta_length == 4)
+			{
+				m_numerador_compas = static_cast<unsigned char>(buffer[0]);
+				m_denominador_compas = static_cast<unsigned char>(1 << buffer[1]);//2^buffer[1]
+				//unsigned int reloj = static_cast<unsigned char>(buffer[2]);
+				//unsigned int nota = static_cast<unsigned char>(buffer[3]);
+			}
+			break;
 		case MidiMetaEvent_KeySignature:
 		case MidiMetaEvent_Proprietary:
 		case MidiMetaEvent_ChannelPrefix:
 		case MidiMetaEvent_MidiPort:
 			// NOTE: We would have to keep all of this around if we
 			// wanted to reproduce 1:1 MIDIs between file Save/Load
+
 			break;
 
 		default:
@@ -395,4 +405,22 @@ unsigned long MidiEvent::GetTempoInUsPerQn() const
 		throw MidiError(MidiError_RequestedTempoFromNonTempoEvent);
 
 	return m_tempo_uspqn;
+}
+
+unsigned char MidiEvent::NumeradorComas()
+{
+	if (Type() != MidiEventType_Meta ||
+		MetaType() != MidiMetaEvent_TimeSignature)
+		throw MidiError(MidiError_RequiereCompasDesdeEventoNoCompas);
+
+	return m_numerador_compas;
+}
+
+unsigned char MidiEvent::DenominadorCompas()
+{
+	if (Type() != MidiEventType_Meta ||
+		MetaType() != MidiMetaEvent_TimeSignature)
+		throw MidiError(MidiError_RequiereCompasDesdeEventoNoCompas);
+
+	return m_denominador_compas;
 }

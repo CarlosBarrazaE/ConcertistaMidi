@@ -70,6 +70,8 @@ private:
 
 	static microseconds_t ConvertPulsesToMicroseconds(unsigned long pulses, microseconds_t tempo, unsigned short pulses_per_quarter_note);
 
+	static unsigned char NumeradorCompas;
+	static unsigned char DenominadorCompas;
 	Midi();
 
 	// This is O(n) where n is the number of tempo changes (across all tracks) in
