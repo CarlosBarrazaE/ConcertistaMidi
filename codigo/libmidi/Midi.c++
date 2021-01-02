@@ -510,7 +510,7 @@ microseconds_t Midi::GetSongLengthInMicroseconds() const
 	if (!m_initialized)
 		return 0;
 
-	return m_microsecond_base_song_length - m_microsecond_dead_start_air;
+	return m_microsecond_base_song_length;
 }
 
 
