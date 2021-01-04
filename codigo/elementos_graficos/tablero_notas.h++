@@ -28,11 +28,8 @@ private:
 	int m_duracion_nota;
 	NotasPistas m_notas;
 	MidiEventMicrosecondList m_lineas;
-	std::array<Color, 52> m_teclas_activas_blancas;
-	std::array<Color, 36> m_teclas_activas_negras;
-
-	std::array<float, 52> m_tiempo_espera_blancas;
-	std::array<float, 36> m_tiempo_espera_negras;
+	std::array<Color, 128> m_teclas_activas;
+	std::array<float, 128> m_tiempo_espera;
 
 	std::vector<unsigned int> m_ultima_nota;//Ultima nota por cada pista
 
@@ -53,16 +50,15 @@ public:
 
 	void dimension(float ancho, float alto) override;
 
-	std::array<Color, 52> *blancas_presionadas();
-	std::array<Color, 36> *negras_presionadas();
+	std::array<Color, 128> *estado_teclas();
 
 	void tiempo(microseconds_t tiempo);
 	void notas(NotasPistas notas);
 	void lineas(MidiEventMicrosecondList lineas);
 	void pistas(std::vector<Pista> *pistas);
+	int duracion_nota();
 	void duracion_nota(int valor);
 	void modificar_duracion_nota(int valor);
-	int duracion_nota();
 	void teclado(Teclado_Configuracion *teclado);
 	void reiniciar();
 

@@ -72,11 +72,9 @@ VentanaOrgano::VentanaOrgano(Configuracion *configuracion, Datos_Musica *musica,
 	m_tablero->notas(m_musica->musica()->Notes());
 	m_tablero->pistas(m_musica->pistas());
 	m_tablero->lineas(m_musica->musica()->GetBarLines());
-	m_organo->blancas_presionadas(m_tablero->blancas_presionadas());
-	m_organo->negras_presionadas(m_tablero->negras_presionadas());
+	m_organo->estado_teclas(m_tablero->estado_teclas());
 
-	m_teclas_activas_blancas = m_tablero->blancas_presionadas();
-	m_teclas_activas_negras = m_tablero->negras_presionadas();
+	m_teclas_activas = m_tablero->estado_teclas();
 
 	//Carga la configuracion de la base de datos de la duracion
 	std::string resultado_duracion = m_configuracion->leer("duracion_nota");
@@ -223,30 +221,17 @@ void VentanaOrgano::actualizar(unsigned int diferencia_tiempo)
 		{
 			//Almacena la notas cuando recive el evento NoteOn
 			if(evento.Type() == MidiEventType_NoteOn)
-			{
-				if(!Octava::es_negra(evento.NoteNumber()))
-					m_notas_tocadas_blanca.insert(Octava::prosicion_nota(evento.NoteNumber()));
-				else
-					m_notas_tocadas_negra.insert(Octava::prosicion_nota_negra(evento.NoteNumber()));
-			}
+				m_notas_tocadas.insert(evento.NoteNumber());
 			//Elimina las notas cuando recive el evento NoteOff
 			else if(evento.Type() == MidiEventType_NoteOff)
-			{
-				if(!Octava::es_negra(evento.NoteNumber()))
-					m_notas_tocadas_blanca.erase(Octava::prosicion_nota(evento.NoteNumber()));
-				else
-					m_notas_tocadas_negra.erase(Octava::prosicion_nota_negra(evento.NoteNumber()));
-			}
+				m_notas_tocadas.erase(evento.NoteNumber());
 		}
 	}
 
 	//Establece el color en gris para las notas tocadas por el jugador
 	//Sera sobreescrito por el tablero de notas en la etapa de dibujo si la nota tocada es correcta
-	for(unsigned int id_nota : m_notas_tocadas_blanca)
-		m_teclas_activas_blancas->at(id_nota) = Color(0.7f, 0.7f, 0.7f);
-
-	for(unsigned int id_nota : m_notas_tocadas_negra)
-		m_teclas_activas_negras->at(id_nota) = Color(0.7f, 0.7f, 0.7f);
+ 	for(unsigned int id_nota : m_notas_tocadas)
+ 		m_teclas_activas->at(id_nota) = Color(0.7f, 0.7f, 0.7f);
 
 	//Si selecciono un nuevo tiempo en la barra de progreso, se cambia la posicion.
 	if(m_barra->tiempo_seleccionado() > 0)

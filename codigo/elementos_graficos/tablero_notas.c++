@@ -15,12 +15,8 @@ Tablero_Notas::Tablero_Notas(float x, float y, float ancho, float alto, Teclado_
 	m_tipografia = recursos->tipografia(LetraMuyChica);
 	m_recursos = recursos;
 
-	for(unsigned int i=0; i<52; i++)
-	{
-		m_tiempo_espera_blancas[i] = 0;
-		if(i<36)
-			m_tiempo_espera_negras[i] = 0;
-	}
+	for(unsigned int i=0; i<128; i++)
+		m_tiempo_espera[i] = 0;
 }
 
 Tablero_Notas::~Tablero_Notas()
@@ -32,7 +28,9 @@ Tablero_Notas::~Tablero_Notas()
 
 void Tablero_Notas::calcular_tamannos()
 {
-	m_ancho_blanca = (this->ancho() / static_cast<float>(m_teclado->numero_blancas()));
+	//NOTE Tablero de nota solo requiere el numero de blancas para funcionar
+	//m_ancho_blanca = (this->ancho() / static_cast<float>(m_teclado->numero_blancas()));
+	m_ancho_blanca = (this->ancho() / static_cast<float>(Octava::numero_blancas(128-1)));
 	m_ancho_negra = m_ancho_blanca * PROPORCION_ANCHO_NEGRA;
 }
 
@@ -73,9 +71,9 @@ void Tablero_Notas::dibujar_lineas_horizontales()
 
 void Tablero_Notas::dibujar_lineas_verticales()
 {
-	float posicion_x = m_ancho_blanca * static_cast<float>(m_teclado->primera_barra());
-	bool en_do = m_teclado->en_do_primera_barra();
-	for(int i=0; i<15 && posicion_x < this->ancho(); i++)
+	float posicion_x = 0;//m_ancho_blanca * static_cast<float>(m_teclado->primera_barra());
+	bool en_do = true;//m_teclado->en_do_primera_barra();
+	for(int i=0; i<22 && posicion_x < this->ancho(); i++)
 	{
 		//Se dibuja la linea vertical
 		m_rectangulo->dibujar(this->x()+posicion_x, this->y(), 1, this->alto());
@@ -89,14 +87,14 @@ void Tablero_Notas::dibujar_lineas_verticales()
 
 void Tablero_Notas::dibujar_notas(unsigned int pista)
 {
-	unsigned int posicion_blanca = 0;
-	unsigned int posicion_negra = 0;
-	float ajuste_negra = 0;
-	float ancho_tecla = 0;
 	float largo_nota = 0;
 	float largo_final_nota = 0;
 	float posicion_y = 0;//Es negativo hasta que la tota sale de la pantalla
-	bool es_negra = false;
+
+	//Datos para el dibujo final
+	unsigned int numero_nota = 0;//Id de la nota desde 0 hasta 127
+	float ancho_tecla = 0;//El ancho puede cambiar si es blanca o es negra
+	float ajuste_negra = 0;//Permite desplazar la nota negra un poco en relacion a la blanca
 
 	for(unsigned int n=m_ultima_nota[pista]; n<m_notas[pista].size(); n++)
 	{
@@ -126,66 +124,6 @@ void Tablero_Notas::dibujar_notas(unsigned int pista)
 			continue;
 		}
 
-		posicion_blanca = Octava::prosicion_nota(m_notas[pista][n].note_id) - m_teclado->desplazamiento_blancas();
-
-		//No dibuja las notas fuera de la pantalla hacia los lados
-		if(static_cast<float>(posicion_blanca) * m_ancho_blanca > this->ancho())
-			continue;
-		if(static_cast<float>(posicion_blanca) * m_ancho_blanca < 0)
-			continue;
-
-		if(Octava::es_negra(m_notas[pista][n].note_id))
-		{
-			//Dibuja las notas negras
-			ancho_tecla = m_ancho_negra;
-			unsigned int negra = Octava::numero_negra(m_notas[pista][n].note_id);
-			if(negra==1 || negra == 3)
-				ajuste_negra = m_ancho_blanca - (m_ancho_negra * 0.667f);
-			else if(negra==2 || negra == 5)
-				ajuste_negra = m_ancho_blanca - (m_ancho_negra * 0.333f);
-			else if(negra==4)
-				ajuste_negra = m_ancho_blanca - (m_ancho_negra * 0.5f);
-
-			posicion_negra = Octava::prosicion_nota_negra(m_notas[pista][n].note_id) - m_teclado->desplazamiento_negras();
-
-			//Solo notas dentro del teclado de 88 teclas
-			if(posicion_negra < m_tiempo_espera_negras.size())
-			{
-				if(posicion_y >= -5 && posicion_y < 0 && m_tiempo_espera_negras[posicion_negra] <= 0)
-					m_tiempo_espera_negras[posicion_negra] = (-posicion_y)-1;
-				else if(posicion_y >= 0)
-				{
-					if(m_tiempo_espera_negras[posicion_negra] <= 0)
-					{
-						m_teclas_activas_negras[posicion_negra] = m_pistas->at(pista).color();
-					}
-				}
-			}
-			es_negra = true;
-		}
-		else
-		{
-			//Dibuja las notas blancas
-			ancho_tecla = m_ancho_blanca;
-			ajuste_negra = 0;
-
-			//Solo notas dentro del teclado de 88 teclas
-			if(posicion_blanca < m_tiempo_espera_blancas.size())
-			{
-				if(posicion_y >= -5 && posicion_y < 0 && m_tiempo_espera_blancas[posicion_blanca] <= 0)
-					m_tiempo_espera_blancas[posicion_blanca] = (-posicion_y)-1;
-				else if(posicion_y >= 0)
-				{
-					if(m_tiempo_espera_blancas[posicion_blanca] <= 0)
-					{
-					//if(posicion_y >= 0)//Nuevo
-						m_teclas_activas_blancas[posicion_blanca] = m_pistas->at(pista).color();
-					}
-				}
-			}
-			es_negra = false;
-		}
-
 		//Recorta la parte de la nota que no se ve
 		if(posicion_y > 20)
 			largo_final_nota = largo_nota - (posicion_y-20);//Reduce el alto de la nota
@@ -199,42 +137,79 @@ void Tablero_Notas::dibujar_notas(unsigned int pista)
 			largo_final_nota = 20;
 		}
 
-		//Las notas negras se dibujan un poco mas oscura
-		if(es_negra)
-			m_rectangulo->color(m_pistas->at(pista).color()-0.3f);
-		else
+		//numero_nota incluye blancas y negras
+		numero_nota = m_notas[pista][n].note_id;
+
+		if(numero_nota > 127)
+		{
+			Registro::Error("Id de nota = : " + std::to_string(static_cast<unsigned int>(numero_nota)));
+			continue;
+		}
+/*
+		posicion_blanca = Octava::prosicion_nota(m_notas[pista][n].note_id) - m_teclado->desplazamiento_blancas();
+
+		//No dibuja las notas fuera de la pantalla hacia los lados
+		if(static_cast<float>(posicion_blanca) * m_ancho_blanca > this->ancho())
+			continue;
+		if(static_cast<float>(posicion_blanca) * m_ancho_blanca < 0)
+			continue;
+*/
+		//Actualiza el tiempo de espera de las notas
+		if(posicion_y >= -5 && posicion_y < 0 && m_tiempo_espera[numero_nota] <= 0)
+			m_tiempo_espera[numero_nota] = (-posicion_y)-1;
+		else if(posicion_y >= 0)
+		{
+			if(m_tiempo_espera[numero_nota] <= 0)
+				m_teclas_activas[numero_nota] = m_pistas->at(pista).color();
+		}
+
+		if(Octava::es_blanca(m_notas[pista][n].note_id))
+		{
+			//Dibuja las notas blancas
+			ancho_tecla = m_ancho_blanca;
+			ajuste_negra = 0;
+
+			//Se establece el color de la nota
 			m_rectangulo->color(m_pistas->at(pista).color());
+		}
+		else
+		{
+			//Dibuja las notas negras
+			ancho_tecla = m_ancho_negra;
 
+			//Mueve la tecla un poco dependiendo de su posicion
+			unsigned int nota_en_octava = numero_nota % 12;//Numero de la tecla dentro de la octava
+			if(nota_en_octava==1 || nota_en_octava == 6)
+				ajuste_negra = m_ancho_blanca - (m_ancho_negra * 0.667f);
+			else if(nota_en_octava==3 || nota_en_octava == 10)
+				ajuste_negra = m_ancho_blanca - (m_ancho_negra * 0.333f);
+			else if(nota_en_octava==8)
+				ajuste_negra = m_ancho_blanca - (m_ancho_negra * 0.5f);
 
+			//La nota negra es un poco mas oscura
+			m_rectangulo->color(m_pistas->at(pista).color()-0.3f);
+		}
 
+		unsigned int numero_negras = Octava::numero_negras(numero_nota);
 		m_textura_nota->activar();
-		m_rectangulo->dibujar_estirable(this->x() + static_cast<float>(posicion_blanca) * m_ancho_blanca + ajuste_negra, this->y()+this->alto()+posicion_y-largo_nota, ancho_tecla, largo_final_nota, 0, 10);
+		m_rectangulo->dibujar_estirable(this->x() + static_cast<float>(numero_nota-numero_negras) * m_ancho_blanca + ajuste_negra, this->y()+this->alto()+posicion_y-largo_nota, ancho_tecla, largo_final_nota, 0, 10);
 
 		//Agrega una segunda textura a la nota tocada
 		if(posicion_y > 0)
 		{
 			m_textura_nota_resaltada->activar();
 			m_rectangulo->color(Color(1.0f, 1.0f, 1.0f));
-			m_rectangulo->dibujar_estirable(this->x() + static_cast<float>(posicion_blanca) * m_ancho_blanca + ajuste_negra, this->y()+this->alto()+posicion_y-largo_nota, ancho_tecla, largo_final_nota, 0, 10);
+			m_rectangulo->dibujar_estirable(this->x() + static_cast<float>(numero_nota-numero_negras) * m_ancho_blanca + ajuste_negra, this->y()+this->alto()+posicion_y-largo_nota, ancho_tecla, largo_final_nota, 0, 10);
 		}
 	}
 }
 
 void Tablero_Notas::actualizar(unsigned int /*diferencia_tiempo*/)
 {
-	for(unsigned int i=0; i<52; i++)
+	for(unsigned int i=0; i<128; i++)
 	{
-		if(m_tiempo_espera_blancas[i] > 0)
-		{
-			m_tiempo_espera_blancas[i] -= 1;
-		}
-		if(i<36)
-		{
-			if(m_tiempo_espera_negras[i] > 0)
-			{
-				m_tiempo_espera_negras[i] -= 1;
-			}
-		}
+		if(m_tiempo_espera[i] > 0)
+			m_tiempo_espera[i] -= 1;
 	}
 }
 
@@ -280,14 +255,9 @@ void Tablero_Notas::dimension(float ancho, float alto)
 	this->calcular_tamannos();
 }
 
-std::array<Color, 52> *Tablero_Notas::blancas_presionadas()
+std::array<Color, 128> *Tablero_Notas::estado_teclas()
 {
-	return &m_teclas_activas_blancas;
-}
-
-std::array<Color, 36> *Tablero_Notas::negras_presionadas()
-{
-	return &m_teclas_activas_negras;
+	return &m_teclas_activas;
 }
 
 void Tablero_Notas::tiempo(microseconds_t tiempo)
@@ -299,9 +269,7 @@ void Tablero_Notas::notas(NotasPistas notas)
 {
 	m_notas = notas;
 	for(unsigned int i=0; i<notas.size(); i++)
-	{
 		m_ultima_nota.push_back(0);//Se inician todas las pistas en 0
-	}
 }
 
 void Tablero_Notas::lineas(MidiEventMicrosecondList lineas)
@@ -312,6 +280,11 @@ void Tablero_Notas::lineas(MidiEventMicrosecondList lineas)
 void Tablero_Notas::pistas(std::vector<Pista> *pistas)
 {
 	m_pistas = pistas;
+}
+
+int Tablero_Notas::duracion_nota()
+{
+	return m_duracion_nota;
 }
 
 void Tablero_Notas::duracion_nota(int valor)
@@ -337,11 +310,6 @@ void Tablero_Notas::modificar_duracion_nota(int valor)
 		m_duracion_nota = 14000;
 }
 
-int Tablero_Notas::duracion_nota()
-{
-	return m_duracion_nota;
-}
-
 void Tablero_Notas::teclado(Teclado_Configuracion *teclado)
 {
 	m_teclado = teclado;
@@ -351,13 +319,7 @@ void Tablero_Notas::teclado(Teclado_Configuracion *teclado)
 void Tablero_Notas::reiniciar()
 {
 	for(unsigned int i=0; i<m_ultima_nota.size(); i++)
-	{
 		m_ultima_nota[i] = 0;
-	}
-	for(unsigned int i=0; i<52; i++)
-	{
-		m_tiempo_espera_blancas[i] = 0;
-		if(i<36)
-			m_tiempo_espera_negras[i] = 0;
-	}
+	for(unsigned int i=0; i<128; i++)
+		m_tiempo_espera[i] = 0;
 }

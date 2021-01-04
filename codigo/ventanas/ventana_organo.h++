@@ -48,10 +48,8 @@ private:
 	//Datos
 	Configuracion *m_configuracion;
 	Datos_Musica *m_musica;
-	std::array<Color, 52> *m_teclas_activas_blancas;
-	std::array<Color, 36> *m_teclas_activas_negras;
-	std::set<unsigned int> m_notas_tocadas_blanca;
-	std::set<unsigned int> m_notas_tocadas_negra;
+	std::array<Color, 128> *m_teclas_activas;
+	std::set<unsigned int> m_notas_tocadas;
 	TipoTeclado m_teclado_actual;
 	std::string m_subtitulo_texto;
 

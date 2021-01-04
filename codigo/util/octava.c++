@@ -2,35 +2,31 @@
 
 namespace Octava
 {
-	bool notas_negras[12] = {false, true, false, true, false, false, true, false, true, false, true, false};
-	unsigned int numero_blanca[12] = {1,1,2,2,3,4,4,5,5,6,6,7};
-	unsigned int numero_negras[12] = {0,1,1,2,2,2,3,3,4,4,5,5};
-	unsigned int negra[12] =  {0,1,0,2,0,0,3,0,4,0,5,0};
+	unsigned int numero_blanca_octava[12] = {1,1,2,2,3,4,4,5,5,6,6,7};//Numero de blancas hasta la posicion en octava
+	unsigned int numero_negras_octava[12] = {0,1,1,2,2,2,3,3,4,4,5,5};//Numero de negras hasta la posicion en octava
 
-	bool es_negra(unsigned int id_nota)
+	bool es_blanca(unsigned int id_nota)
 	{
-		return notas_negras[id_nota % 12];
+		//Calcula si una nota MIDI es blanca o no
+		unsigned int nota = id_nota % 12;//Posicion dentro de la octava
+		if(nota == 1 || nota == 3 || nota == 6 || nota == 8 || nota == 10)
+			return false;
+		return true;
 	}
 
-	unsigned int prosicion_nota(unsigned int id_nota)
+	unsigned int numero_blancas(unsigned int id_nota)
 	{
-		unsigned int octava = id_nota / 12;//Solo se queda con la parte entera
-		unsigned int nota_en_octava = (id_nota % 12);//Numero de nota del 0 al 11
-
-		return octava*7 + numero_blanca[nota_en_octava] - 13;
+		//Retorna el numero de teclas blancas que hay hasta la nota MIDI incluyendola
+		unsigned int octava = id_nota / 12;
+		//Hay 7 blancas por octava y se cuenta desde la octava 0
+		return octava*7 + numero_blanca_octava[id_nota % 12];
 	}
 
-	unsigned int prosicion_nota_negra(unsigned int id_nota)
+	unsigned int numero_negras(unsigned int id_nota)
 	{
-		unsigned int octava = id_nota / 12;//Solo se queda con la parte entera
-		unsigned int nota_en_octava = (id_nota % 12);//Numero de nota del 0 al 11
-
-		return octava*5 + numero_negras[nota_en_octava] - 10;
-	}
-
-	unsigned int numero_negra(unsigned int id_nota)
-	{
-		unsigned int nota_en_octava = (id_nota % 12);//Numero de nota del 0 al 11
-		return negra[nota_en_octava];
+		//Retorna el numero de teclas negras que hay hasta la nota MIDI incluyendola
+		unsigned int octava = id_nota / 12;
+		//Hay 5 negras por octava y se cuenta desde la octava 0
+		return octava*5 + numero_negras_octava[id_nota % 12];
 	}
 }

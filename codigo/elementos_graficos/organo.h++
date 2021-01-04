@@ -33,8 +33,7 @@ private:
 	float m_ancho_tecla_blanca, m_ancho_tecla_negra;
 	float m_alto_tecla_blanca, m_alto_tecla_negra;
 
-	std::array<Color, 52> *m_teclas_activas_blancas;
-	std::array<Color, 36> *m_teclas_activas_negras;
+	std::array<Color, 128> *m_teclas_activas;
 
 	//Metodos
 	void dibujar_blancas(float x, float y, unsigned int numero_teclas);
@@ -52,8 +51,7 @@ public:
 	void dimension(float ancho, float alto) override;
 
 	void teclado(Teclado_Configuracion *teclado);
-	void blancas_presionadas(std::array<Color, 52> *teclas_blancas);
-	void negras_presionadas(std::array<Color, 36> *teclas_negras);
+	void estado_teclas(std::array<Color, 128> *teclas);
 };
 
 #endif
