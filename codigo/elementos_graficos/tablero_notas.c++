@@ -197,15 +197,22 @@ void Tablero_Notas::dibujar_notas(unsigned int pista)
 		}
 
 		unsigned int numero_blancas = Octava::blancas_desde_inicio(numero_nota) - numero_notas_omitir;
+		if(numero_blancas > 0)
+			numero_blancas--;
+		else
+		{
+			//Esto ocurre cuando comienza con una negra, se le quita el ancho de la blanca
+			ajuste_negra -= m_ancho_blanca;
+		}
 		m_textura_nota->activar();
-		m_rectangulo->dibujar_estirable(this->x() + static_cast<float>(numero_blancas-1) * m_ancho_blanca + ajuste_negra, this->y()+this->alto()+posicion_y-largo_nota, ancho_tecla, largo_final_nota, 0, 10);
+		m_rectangulo->dibujar_estirable(this->x() + static_cast<float>(numero_blancas) * m_ancho_blanca + ajuste_negra, this->y()+this->alto()+posicion_y-largo_nota, ancho_tecla, largo_final_nota, 0, 10);
 
 		//Agrega una segunda textura a la nota tocada
 		if(posicion_y > 0)
 		{
 			m_textura_nota_resaltada->activar();
 			m_rectangulo->color(Color(1.0f, 1.0f, 1.0f));
-			m_rectangulo->dibujar_estirable(this->x() + static_cast<float>(numero_blancas-1) * m_ancho_blanca + ajuste_negra, this->y()+this->alto()+posicion_y-largo_nota, ancho_tecla, largo_final_nota, 0, 10);
+			m_rectangulo->dibujar_estirable(this->x() + static_cast<float>(numero_blancas) * m_ancho_blanca + ajuste_negra, this->y()+this->alto()+posicion_y-largo_nota, ancho_tecla, largo_final_nota, 0, 10);
 		}
 	}
 }
