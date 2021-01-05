@@ -8,7 +8,7 @@
 #include "../elementos_graficos/organo.h++"
 #include "../elementos_graficos/titulo.h++"
 #include "../control/pista.h++"
-#include "../control/tipo_teclados.h++"
+#include "../control/teclado_organo.h++"
 #include "../control/configuracion.h++"
 #include "../control/datos_musica.h++"
 #include "../libmidi/Midi.h++"
@@ -46,11 +46,11 @@ private:
 	bool m_guardar_estado_subtitulo;
 
 	//Datos
+	Teclado_Organo m_teclado_actual;
 	Configuracion *m_configuracion;
 	Datos_Musica *m_musica;
 	std::array<Color, 128> *m_teclas_activas;
 	std::set<unsigned int> m_notas_tocadas;
-	TipoTeclado m_teclado_actual;
 	std::string m_subtitulo_texto;
 
 	void guardar_configuracion();

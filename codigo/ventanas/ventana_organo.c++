@@ -24,26 +24,11 @@ VentanaOrgano::VentanaOrgano(Configuracion *configuracion, Datos_Musica *musica,
 
 	std::string resultado_teclado = m_configuracion->leer("tipo_teclado");
 	if(resultado_teclado != "")
-	{
-		int teclado_leido = std::stoi(resultado_teclado);
-		switch(teclado_leido)
-		{
-			case 88: m_teclado_actual = Teclas88; break;
-			case 76: m_teclado_actual = Teclas76; break;
-			case 61: m_teclado_actual = Teclas61; break;
-			case 49: m_teclado_actual = Teclas49; break;
-			case 37: m_teclado_actual = Teclas37; break;
-			default: m_teclado_actual = Teclas88;
-		}
-	}
-	else
-		m_teclado_actual = Teclas88;
-
-	Teclado_Configuracion *teclado = Tipo_Teclado::Obtener_teclado(m_teclado_actual);
+		m_teclado_actual.cargar(resultado_teclado);
 
 	m_barra = new Barra_Progreso(0, 40, Pantalla::Ancho, 40, m_musica->musica()->GetSongLengthInMicroseconds(), m_musica->musica()->GetBarLines(), recursos);
-	m_organo = new Organo(0, Pantalla::Alto, Pantalla::Ancho, teclado, recursos);
-	m_tablero = new Tablero_Notas(0, m_barra->alto()+40, Pantalla::Ancho, Pantalla::Alto - (m_organo->alto() + m_barra->alto() + 40), teclado, recursos);
+	m_organo = new Organo(0, Pantalla::Alto, Pantalla::Ancho, &m_teclado_actual, recursos);
+	m_tablero = new Tablero_Notas(0, m_barra->alto()+40, Pantalla::Ancho, Pantalla::Alto - (m_organo->alto() + m_barra->alto() + 40), &m_teclado_actual, recursos);
 
 	m_titulo_musica = new Titulo(0, m_barra->alto()+40, Pantalla::Ancho, Pantalla::Alto - (m_organo->alto() + m_barra->alto() + 40), recursos);
 	m_titulo_musica->datos(musica);
@@ -291,7 +276,7 @@ void VentanaOrgano::guardar_configuracion()
 	if(m_guardar_duracion_nota)
 		m_configuracion->escribir("duracion_nota", std::to_string(m_tablero->duracion_nota()));//modificar_duracion_nota
 	if(m_guardar_tipo_teclado)
-		m_configuracion->escribir("tipo_teclado", std::to_string(static_cast<int>(m_teclado_actual)));
+		m_configuracion->escribir("tipo_teclado", m_teclado_actual.texto());
 	if(m_guardar_estado_subtitulo)
 	{
 		if(m_mostrar_subtitulo)
@@ -311,6 +296,7 @@ void VentanaOrgano::evento_raton(Raton *raton)
 
 void VentanaOrgano::evento_teclado(Tecla tecla, bool estado)
 {
+	bool cambio_teclado = false;
 	if(tecla == TECLA_ESCAPE && !estado)
 	{
 		this->guardar_configuracion();
@@ -358,42 +344,55 @@ void VentanaOrgano::evento_teclado(Tecla tecla, bool estado)
 	}
 	else if(tecla == TECLA_F5 && estado)
 	{
-		m_tablero->teclado(Tipo_Teclado::Obtener_teclado(Teclas37));
-		m_organo->teclado(Tipo_Teclado::Obtener_teclado(Teclas37));
-		m_tablero->dimension(Pantalla::Ancho, Pantalla::Alto - (m_organo->alto() + m_barra->alto()+40));
-		m_teclado_actual = Teclas37;
-		m_guardar_tipo_teclado = true;
+		m_teclado_actual.cambiar(48, 37);
+		cambio_teclado = true;
 	}
 	else if(tecla == TECLA_F6 && estado)
 	{
-		m_tablero->teclado(Tipo_Teclado::Obtener_teclado(Teclas49));
-		m_organo->teclado(Tipo_Teclado::Obtener_teclado(Teclas49));
-		m_tablero->dimension(Pantalla::Ancho, Pantalla::Alto - (m_organo->alto() + m_barra->alto()+40));
-		m_teclado_actual = Teclas49;
-		m_guardar_tipo_teclado = true;
+		m_teclado_actual.cambiar(36, 49);
+		cambio_teclado = true;
 	}
 	else if(tecla == TECLA_F7 && estado)
 	{
-		m_tablero->teclado(Tipo_Teclado::Obtener_teclado(Teclas61));
-		m_organo->teclado(Tipo_Teclado::Obtener_teclado(Teclas61));
-		m_tablero->dimension(Pantalla::Ancho, Pantalla::Alto - (m_organo->alto() + m_barra->alto()+40));
-		m_teclado_actual = Teclas61;
-		m_guardar_tipo_teclado = true;
+		m_teclado_actual.cambiar(36, 61);
+		cambio_teclado = true;
 	}
 	else if(tecla == TECLA_F8 && estado)
 	{
-		m_tablero->teclado(Tipo_Teclado::Obtener_teclado(Teclas76));
-		m_organo->teclado(Tipo_Teclado::Obtener_teclado(Teclas76));
-		m_tablero->dimension(Pantalla::Ancho, Pantalla::Alto - (m_organo->alto() + m_barra->alto()+40));
-		m_teclado_actual = Teclas76;
-		m_guardar_tipo_teclado = true;
+		m_teclado_actual.cambiar(28, 76);
+		cambio_teclado = true;
 	}
 	else if(tecla == TECLA_F9 && estado)
 	{
-		m_tablero->teclado(Tipo_Teclado::Obtener_teclado(Teclas88));
-		m_organo->teclado(Tipo_Teclado::Obtener_teclado(Teclas88));
+		m_teclado_actual.cambiar(21, 88);
+		cambio_teclado = true;
+	}
+	else if(tecla == TECLA_INSERTAR && estado)
+	{
+		m_teclado_actual.tecla_inicial(m_teclado_actual.tecla_inicial()+1);
+		cambio_teclado = true;
+	}
+	else if(tecla == TECLA_SUPRIMIR && estado)
+	{
+		m_teclado_actual.tecla_inicial(m_teclado_actual.tecla_inicial()-1);
+		cambio_teclado = true;
+	}
+	else if(tecla == TECLA_REPAG && estado)
+	{
+		m_teclado_actual.numero_teclas(m_teclado_actual.numero_teclas()+1);
+		cambio_teclado = true;
+	}
+	else if(tecla == TECLA_AVPAG && estado)
+	{
+		m_teclado_actual.numero_teclas(m_teclado_actual.numero_teclas()-1);
+		cambio_teclado = true;
+	}
+	if(cambio_teclado)
+	{
+		m_organo->calcular_tamannos();
+		//El organo puede cambiar de tamaño al cambiar el numero de teclas, entonces hay que
+		//ajustar el tamaño del tablero de notas
 		m_tablero->dimension(Pantalla::Ancho, Pantalla::Alto - (m_organo->alto() + m_barra->alto()+40));
-		m_teclado_actual = Teclas88;
 		m_guardar_tipo_teclado = true;
 	}
 }

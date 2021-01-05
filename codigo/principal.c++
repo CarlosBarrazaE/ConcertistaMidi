@@ -231,6 +231,12 @@ void eventos_taclado(Controlador_Juego *controlador, int tecla, bool estado)
 		case SDLK_F10: controlador->eventos_teclado(TECLA_F10, estado); break;
 		case SDLK_F11: controlador->eventos_teclado(TECLA_F11, estado); break;
 		case SDLK_F12: controlador->eventos_teclado(TECLA_F12, estado); break;
+		case SDLK_INSERT: controlador->eventos_teclado(TECLA_INSERTAR, estado); break;
+		case SDLK_DELETE: controlador->eventos_teclado(TECLA_SUPRIMIR, estado); break;
+		case SDLK_HOME: controlador->eventos_teclado(TECLA_INICIO, estado); break;
+		case SDLK_END: controlador->eventos_teclado(TECLA_FIN, estado); break;
+		case SDLK_PAGEUP: controlador->eventos_teclado(TECLA_REPAG, estado); break;
+		case SDLK_PAGEDOWN: controlador->eventos_teclado(TECLA_AVPAG, estado); break;
 		default: return;
 	}
 }

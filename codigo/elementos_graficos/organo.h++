@@ -6,7 +6,7 @@
 #include "../recursos/rectangulo.h++"
 #include "../util/octava.h++"
 #include "../control/pista.h++"
-#include "../control/teclado_configuracion.h++"
+#include "../control/teclado_organo.h++"
 #include "../libmidi/Midi.h++"
 
 #include <map>
@@ -29,19 +29,18 @@ private:
 	float m_tiempo;
 	unsigned int m_numero_particulas;
 
-	Teclado_Configuracion *m_teclado;
+	Teclado_Organo *m_teclado;
 	float m_ancho_tecla_blanca, m_ancho_tecla_negra;
 	float m_alto_tecla_blanca, m_alto_tecla_negra;
 
 	std::array<Color, 128> *m_teclas_activas;
 
 	//Metodos
-	void dibujar_blancas(float x, float y, unsigned int numero_teclas);
-	void dibujar_negras(float x, float y, unsigned int numero_teclas);
-	void calcular_tamannos();
+	void dibujar_blancas(float x, float y, unsigned int tecla_inicial, unsigned int numero_teclas);
+	void dibujar_negras(float x, float y, unsigned int tecla_inicial, unsigned int numero_teclas);
 
 public:
-	Organo(float x, float y, float ancho, Teclado_Configuracion *teclado, Administrador_Recursos *recursos);
+	Organo(float x, float y, float ancho, Teclado_Organo *teclado, Administrador_Recursos *recursos);
 	~Organo();
 
 	void actualizar(unsigned int diferencia_tiempo) override;
@@ -50,8 +49,9 @@ public:
 
 	void dimension(float ancho, float alto) override;
 
-	void teclado(Teclado_Configuracion *teclado);
 	void estado_teclas(std::array<Color, 128> *teclas);
+
+	void calcular_tamannos();
 };
 
 #endif

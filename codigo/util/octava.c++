@@ -14,19 +14,44 @@ namespace Octava
 		return true;
 	}
 
-	unsigned int numero_blancas(unsigned int id_nota)
+	unsigned int blancas_desde_inicio(unsigned id_nota)
 	{
-		//Retorna el numero de teclas blancas que hay hasta la nota MIDI incluyendola
+		//Retorna el numero de blancas desde el inicio incluyendo a id_nota si corresponde
+		if(id_nota > 128)
+			id_nota = 0;
+
 		unsigned int octava = id_nota / 12;
 		//Hay 7 blancas por octava y se cuenta desde la octava 0
 		return octava*7 + numero_blanca_octava[id_nota % 12];
 	}
 
-	unsigned int numero_negras(unsigned int id_nota)
+	unsigned int negras_desde_inicio(unsigned id_nota)
 	{
-		//Retorna el numero de teclas negras que hay hasta la nota MIDI incluyendola
+		//Retorna el numero de negras desde el inicio incluyendo a id_nota si corresponde
+		if(id_nota > 128)
+			id_nota = 0;
 		unsigned int octava = id_nota / 12;
 		//Hay 5 negras por octava y se cuenta desde la octava 0
 		return octava*5 + numero_negras_octava[id_nota % 12];
+	}
+
+	unsigned int numero_blancas(unsigned int inicio, unsigned int largo)
+	{
+		//Retorna el numero de blancas empezando a contar desde inicio
+		unsigned int blancas_omitidas = 0;
+		if(inicio > 0)
+			blancas_omitidas = blancas_desde_inicio(inicio-1);
+		unsigned int blancas_totales = blancas_desde_inicio(inicio+largo-1);
+		return blancas_totales - blancas_omitidas;
+	}
+
+	unsigned int numero_negras(unsigned int inicio, unsigned int largo)
+	{
+		//Retorna el numero de negras empezando a contar desde inicio
+		unsigned int negras_omitidas = 0;
+		if(inicio > 0)
+			negras_omitidas = negras_desde_inicio(inicio-1);
+		unsigned int negras_totales = negras_desde_inicio(inicio+largo-1);
+		return negras_totales - negras_omitidas;
 	}
 }

@@ -1,10 +1,9 @@
 #include "organo.h++"
 
-Organo::Organo(float x, float y, float ancho, Teclado_Configuracion *teclado, Administrador_Recursos *recursos) : Elemento(x, y, ancho, 0)
+Organo::Organo(float x, float y, float ancho, Teclado_Organo *teclado, Administrador_Recursos *recursos) : Elemento(x, y, ancho, 0)
 {
 	//El origen del organo esta abajo a la izquierda
 	m_teclado = teclado;
-	calcular_tamannos();
 
 	m_tecla_blanca = recursos->textura(T_TeclaBlanca);
 	m_tecla_negra = recursos->textura(T_TeclaNegra);
@@ -23,6 +22,8 @@ Organo::Organo(float x, float y, float ancho, Teclado_Configuracion *teclado, Ad
 	m_generador_particulas = new Generador_Particulas(particulas, t_particula, 500, m_ancho_tecla_blanca);
 	m_tiempo = 0;
 	m_numero_particulas = 0;
+
+	calcular_tamannos();
 }
 
 Organo::~Organo()
@@ -30,12 +31,12 @@ Organo::~Organo()
 	delete m_generador_particulas;
 }
 
-void Organo::dibujar_blancas(float x, float y, unsigned int numero_teclas)
+void Organo::dibujar_blancas(float x, float y, unsigned int tecla_inicial, unsigned int numero_teclas)
 {
 	float desplazamiento = x;
 	Color negro;
 	bool tecla_presionada_anterior = false;
-	for(unsigned int n=0; n<numero_teclas; n++)
+	for(unsigned int n=tecla_inicial; n<tecla_inicial+numero_teclas; n++)
 	{
 		//Se salta las negras
 		if(!Octava::es_blanca(n))
@@ -76,16 +77,20 @@ void Organo::dibujar_blancas(float x, float y, unsigned int numero_teclas)
 	}
 }
 
-void Organo::dibujar_negras(float x, float y, unsigned int numero_teclas)
+void Organo::dibujar_negras(float x, float y, unsigned int tecla_inicial, unsigned int numero_teclas)
 {
 	float desplazamiento = 0;
 	Color negro, color_actual;
 	bool tecla_activa = false;
-	for(unsigned int n=0; n<numero_teclas; n++)
+	unsigned int numero_blancas = 0;
+	for(unsigned int n=tecla_inicial; n<tecla_inicial+numero_teclas; n++)
 	{
 		//Se salta las blancas
 		if(Octava::es_blanca(n))
+		{
+			numero_blancas++;
 			continue;
+		}
 
 		if(m_teclas_activas->at(n) != negro)
 		{
@@ -107,7 +112,6 @@ void Organo::dibujar_negras(float x, float y, unsigned int numero_teclas)
 		}
 
 		unsigned int nota_en_octava = n % 12;//Numero de la tecla dentro de la octava
-		unsigned int numero_blancas = Octava::numero_blancas(n);
 		if(nota_en_octava==1 || nota_en_octava == 6)
 			desplazamiento = x + static_cast<float>(numero_blancas) * m_ancho_tecla_blanca - m_ancho_tecla_negra * 0.667f;
 		else if(nota_en_octava==3 || nota_en_octava == 10)
@@ -130,8 +134,8 @@ void Organo::dibujar_negras(float x, float y, unsigned int numero_teclas)
 
 void Organo::calcular_tamannos()
 {
-	//m_ancho_tecla_blanca = (this->ancho() / static_cast<float>(m_teclado->numero_blancas()));
-	m_ancho_tecla_blanca = (this->ancho() / static_cast<float>(Octava::numero_blancas(128-1)));
+	unsigned int numero_blancas = Octava::numero_blancas(m_teclado->tecla_inicial(), m_teclado->numero_teclas());
+	m_ancho_tecla_blanca = (this->ancho() / static_cast<float>(numero_blancas));
 	m_alto_tecla_blanca = m_ancho_tecla_blanca * PROPORCION_BLANCA;
 	if(m_alto_tecla_blanca > 250)
 		m_alto_tecla_blanca = 250;
@@ -139,6 +143,7 @@ void Organo::calcular_tamannos()
 	m_ancho_tecla_negra = m_ancho_tecla_blanca * PROPORCION_ANCHO_NEGRA;
 	m_alto_tecla_negra = m_alto_tecla_blanca * PROPORCION_NEGRA;
 
+	m_generador_particulas->escala(m_ancho_tecla_blanca);
 	this->_dimension(this->ancho(), m_alto_tecla_blanca + 11);
 }
 
@@ -169,13 +174,11 @@ void Organo::dibujar()
 	m_tecla_blanca->activar();
 	m_rectangulo->textura(true);
 	m_rectangulo->color(Color(1.0f, 1.0f, 1.0f));
-	this->dibujar_blancas(this->x(), this->y() - this->alto() + 10, 128);
-	//this->dibujar_blancas(this->x(), this->y() - this->alto() + 10, m_teclado->numero_blancas());
+	this->dibujar_blancas(this->x(), this->y() - this->alto() + 10, m_teclado->tecla_inicial(), m_teclado->numero_teclas());
 
 	//Dibuja las notas negras
 	m_tecla_negra->activar();
-	this->dibujar_negras(this->x(), this->y() - this->alto() + 10, 128);
-	//this->dibujar_negras(this->x(), this->y() - this->alto() + 10, m_teclado->numero_negras());
+	this->dibujar_negras(this->x(), this->y() - this->alto() + 10, m_teclado->tecla_inicial(), m_teclado->numero_teclas());
 
 	//Dibuja un borde negro
 	m_borde_negro->activar();
@@ -198,14 +201,6 @@ void Organo::dimension(float ancho, float alto)
 {
 	this->_dimension(ancho, alto);
 	this->calcular_tamannos();
-	m_generador_particulas->escala(m_ancho_tecla_blanca);
-}
-
-void Organo::teclado(Teclado_Configuracion *teclado)
-{
-	m_teclado = teclado;
-	this->calcular_tamannos();
-	m_generador_particulas->escala(m_ancho_tecla_blanca);
 }
 
 void Organo::estado_teclas(std::array<Color, 128> *teclas)
