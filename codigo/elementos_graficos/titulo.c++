@@ -77,7 +77,7 @@ void Titulo::actualizar(unsigned int diferencia_tiempo)
 		m_autor.posicion(this->x()-m_posicion_texto, this->y()+this->alto()/2+20);
 	}
 	else
-		m_titulo.posicion(this->x()+m_posicion_texto, (this->y()+this->alto()/2));
+		m_titulo.posicion(this->x()+m_posicion_texto, (this->y()+this->alto()/2-10));
 }
 
 void Titulo::dibujar()

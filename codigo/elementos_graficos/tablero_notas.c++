@@ -217,12 +217,13 @@ void Tablero_Notas::dibujar_notas(unsigned int pista)
 	}
 }
 
-void Tablero_Notas::actualizar(unsigned int /*diferencia_tiempo*/)
+void Tablero_Notas::actualizar(unsigned int diferencia_tiempo)
 {
+	float tiempo = static_cast<float>(diferencia_tiempo)/1000000000.0f*(1.0f/0.0166f);
 	for(unsigned int i=0; i<128; i++)
 	{
 		if(m_tiempo_espera[i] > 0)
-			m_tiempo_espera[i] -= 1;
+			m_tiempo_espera[i] -= tiempo;
 	}
 }
 
