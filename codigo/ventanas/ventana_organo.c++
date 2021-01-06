@@ -150,7 +150,8 @@ void VentanaOrgano::actualizar(unsigned int diferencia_tiempo)
 				if(Texto::esta_vacio(m_subtitulo_texto) && m_subtitulo_texto.length() > 0)
 					m_subtitulo_texto = "";
 
-				m_subtitulos.texto(m_subtitulo_texto);
+				if(m_mostrar_subtitulo)
+					m_subtitulos.texto(m_subtitulo_texto);
 			}
 			//Midi karaoke
 			else if(i->second.HasText() && i->second.MetaType() == MidiMetaEvent_Text && i->second.GetDeltaPulses() > 0)
@@ -170,7 +171,8 @@ void VentanaOrgano::actualizar(unsigned int diferencia_tiempo)
 				if(Texto::esta_vacio(m_subtitulo_texto) && m_subtitulo_texto.length() > 0)
 					m_subtitulo_texto = "";
 
-				m_subtitulos.texto(m_subtitulo_texto);
+				if(m_mostrar_subtitulo)
+					m_subtitulos.texto(m_subtitulo_texto);
 			}
 			/*
 			if(i->second.MetaType() == MidiMetaEvent_Copyright)
@@ -339,6 +341,9 @@ void VentanaOrgano::evento_teclado(Tecla tecla, bool estado)
 	{
 		m_mostrar_subtitulo = !m_mostrar_subtitulo;
 		m_guardar_estado_subtitulo = !m_guardar_estado_subtitulo;
+		//Actualiza el subtitulo
+		if(m_mostrar_subtitulo)
+			m_subtitulos.texto(m_subtitulo_texto);
 	}
 	else if(tecla == TECLA_F5 && estado)
 	{
