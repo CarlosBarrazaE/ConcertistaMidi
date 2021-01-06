@@ -9,6 +9,7 @@ namespace Octava
 	unsigned int numero_blancas(unsigned int inicio, unsigned int largo);
 	unsigned int numero_negras(unsigned int inicio, unsigned int largo);
 	unsigned int nota_id_desde_blanca(unsigned int blanca_actual);
+	float desplazamiento_negra(unsigned int nota);
 }
 
 #endif

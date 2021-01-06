@@ -113,13 +113,8 @@ void Organo::dibujar_negras(float x, float y, unsigned int tecla_inicial, unsign
 			tecla_activa = false;
 		}
 
-		unsigned int nota_en_octava = n % 12;//Numero de la tecla dentro de la octava
-		if(nota_en_octava==1 || nota_en_octava == 6)
-			desplazamiento = x + static_cast<float>(numero_blancas) * m_ancho_tecla_blanca - m_ancho_tecla_negra * 0.667f;
-		else if(nota_en_octava==3 || nota_en_octava == 10)
-			desplazamiento = x + static_cast<float>(numero_blancas) * m_ancho_tecla_blanca - m_ancho_tecla_negra * 0.333f;
-		else if(nota_en_octava==8)
-			desplazamiento = x + static_cast<float>(numero_blancas) * m_ancho_tecla_blanca - m_ancho_tecla_negra * 0.5f;
+		//Numero de la tecla dentro de la octava
+		desplazamiento = x + static_cast<float>(numero_blancas) * m_ancho_tecla_blanca + m_ancho_tecla_negra * Octava::desplazamiento_negra(n);
 
 		//Fuera del ticlado de 88 teclas tiene otro color
 		//if(n < 21 || n > 108)
@@ -132,17 +127,6 @@ void Organo::dibujar_negras(float x, float y, unsigned int tecla_inicial, unsign
 		//El ancho de la tecla mas el ancho de la sombra
 		m_rectangulo->dibujar(desplazamiento, y, m_ancho_tecla_negra + m_ancho_tecla_negra * 0.22f, m_alto_tecla_negra);
 	}
-}
-
-float Organo::desplazamiento_x(unsigned int tecla)
-{
-	if(tecla==1 || tecla == 6)
-		return -0.667f;
-	else if(tecla==3 || tecla == 10)
-		return -0.333f;
-	else if(tecla==8)
-		return -0.5f;
-	return 0;
 }
 
 void Organo::actualizar(unsigned int diferencia_tiempo)
@@ -216,7 +200,7 @@ void Organo::evento_raton(Raton *raton)
 			if(nota_enviar > 0 && !Octava::es_blanca(nota_enviar-1))
 			{
 				//Numero de la tecla dentro de la octava
-				desplazamiento = this->x() + static_cast<float>(tecla_presionada) * m_ancho_tecla_blanca + m_ancho_tecla_negra * desplazamiento_x((nota_enviar-1) % 12);
+				desplazamiento = this->x() + static_cast<float>(tecla_presionada) * m_ancho_tecla_blanca + m_ancho_tecla_negra * Octava::desplazamiento_negra(nota_enviar-1);
 				//Se toco una tecla negra a la izquierda de la blanca
 				if(raton->esta_sobre(desplazamiento, this->y() - this->alto() + 10, m_ancho_tecla_negra, m_alto_tecla_negra))
 				{
@@ -227,7 +211,7 @@ void Organo::evento_raton(Raton *raton)
 			//Revisa si existe una tecla negra a la derecha
 			if(!negra_encontrada && nota_enviar < 127 && !Octava::es_blanca(nota_enviar+1))
 			{
-				desplazamiento = this->x() + static_cast<float>(tecla_presionada+1) * m_ancho_tecla_blanca + m_ancho_tecla_negra * desplazamiento_x((nota_enviar+1) % 12);
+				desplazamiento = this->x() + static_cast<float>(tecla_presionada+1) * m_ancho_tecla_blanca + m_ancho_tecla_negra * Octava::desplazamiento_negra(nota_enviar+1);
 				//Se toco una tecla negra a la derecha de la blanca
 				if(raton->esta_sobre(desplazamiento, this->y() - this->alto() + 10, m_ancho_tecla_negra, m_alto_tecla_negra))
 					nota_enviar++;

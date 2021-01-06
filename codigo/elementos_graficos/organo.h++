@@ -43,8 +43,6 @@ private:
 	void dibujar_blancas(float x, float y, unsigned int tecla_inicial, unsigned int numero_teclas);
 	void dibujar_negras(float x, float y, unsigned int tecla_inicial, unsigned int numero_teclas);
 
-	float desplazamiento_x(unsigned int tecla);
-
 public:
 	Organo(float x, float y, float ancho, Teclado_Organo *teclado, Administrador_Recursos *recursos);
 	~Organo();

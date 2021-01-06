@@ -63,4 +63,18 @@ namespace Octava
 		unsigned int octava_actual = blanca_actual / 7;
 		return octava_actual*12 + suma_id_nota[blanca_actual % 7];
 	}
+
+	float desplazamiento_negra(unsigned int nota)
+	{
+		//Retorna cuanto se tiene que desplazar la nota negra con respecto a la blanca
+		//dependiendo de su posicion dentro de la octava
+		nota = nota % 12;
+		if(nota==1 || nota == 6)
+			return -0.667f;
+		else if(nota==3 || nota == 10)
+			return -0.333f;
+		else if(nota==8)
+			return -0.5f;
+		return 0;
+	}
 }

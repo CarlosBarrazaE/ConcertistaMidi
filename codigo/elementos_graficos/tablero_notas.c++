@@ -184,13 +184,7 @@ void Tablero_Notas::dibujar_notas(unsigned int pista)
 			ancho_tecla = m_ancho_negra;
 
 			//Mueve la tecla un poco dependiendo de su posicion
-			unsigned int nota_en_octava = numero_nota % 12;//Numero de la tecla dentro de la octava
-			if(nota_en_octava==1 || nota_en_octava == 6)
-				ajuste_negra = m_ancho_blanca - (m_ancho_negra * 0.667f);
-			else if(nota_en_octava==3 || nota_en_octava == 10)
-				ajuste_negra = m_ancho_blanca - (m_ancho_negra * 0.333f);
-			else if(nota_en_octava==8)
-				ajuste_negra = m_ancho_blanca - (m_ancho_negra * 0.5f);
+			ajuste_negra = m_ancho_blanca + m_ancho_negra * Octava::desplazamiento_negra(numero_nota);
 
 			//La nota negra es un poco mas oscura
 			m_rectangulo->color(m_pistas->at(pista).color()-0.3f);
@@ -200,10 +194,8 @@ void Tablero_Notas::dibujar_notas(unsigned int pista)
 		if(numero_blancas > 0)
 			numero_blancas--;
 		else
-		{
-			//Esto ocurre cuando comienza con una negra, se le quita el ancho de la blanca
-			ajuste_negra -= m_ancho_blanca;
-		}
+			ajuste_negra -= m_ancho_blanca;//Esto ocurre cuando comienza con una negra, se le quita el ancho de la blanca
+
 		m_textura_nota->activar();
 		m_rectangulo->dibujar_estirable(this->x() + static_cast<float>(numero_blancas) * m_ancho_blanca + ajuste_negra, this->y()+this->alto()+posicion_y-largo_nota, ancho_tecla, largo_final_nota, 0, 10);
 
