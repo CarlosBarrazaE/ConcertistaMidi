@@ -157,6 +157,7 @@ void eventos_raton_rueda(Controlador_Juego *controlador, int desplazamiento_x, i
 	Raton *raton = controlador->raton();
 	raton->actualizar_desplazamiento(desplazamiento_x, desplazamiento_y);
 	controlador->eventos_raton();
+	raton->actualizar_desplazamiento(0, 0);//Elimina el evento
 }
 
 void eventos_taclado(Controlador_Juego *controlador, int tecla, bool estado)

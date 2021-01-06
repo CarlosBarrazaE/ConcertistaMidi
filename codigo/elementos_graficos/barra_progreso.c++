@@ -72,7 +72,6 @@ void Barra_Progreso::evento_raton(Raton *raton)
 {
 	if(raton->esta_sobre(this->x(), this->y(), this->ancho(), this->alto()))
 	{
-		int dy = raton->dy();
 		if(raton->activado(BotonIzquierdo) && m_sobre_barra)
 		{
 			if(m_x_anterior != raton->x() || m_tiempo_nuevo == -1)
@@ -86,14 +85,14 @@ void Barra_Progreso::evento_raton(Raton *raton)
 			m_sobre_barra = true;
 
 			//Cambio de tiempo con la ruedita del raton
-			if(dy < 0)
+			if(raton->dy() < 0)
 			{
 				if(m_tiempo_actual > 1000000)
 					m_tiempo_nuevo = m_tiempo_actual-1000000;
 				else
 					m_tiempo_nuevo = 0;
 			}
-			else if(dy > 0)
+			else if(raton->dy() > 0)
 			{
 				if(m_tiempo_actual+1000000 > m_tiempo_total)
 					m_tiempo_nuevo = m_tiempo_total;

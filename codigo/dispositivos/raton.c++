@@ -78,16 +78,12 @@ int Raton::y()
 
 int Raton::dx()
 {
-	int desplazamiento = m_desplazamiento_x;
-	m_desplazamiento_x = 0;
-	return desplazamiento;
+	return m_desplazamiento_x;
 }
 
 int Raton::dy()
 {
-	int desplazamiento = m_desplazamiento_y;
-	m_desplazamiento_y = 0;
-	return desplazamiento;
+	return m_desplazamiento_y;
 }
 
 bool Raton::esta_sobre(float x, float y, float ancho, float alto)

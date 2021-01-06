@@ -151,16 +151,15 @@ void Panel_Desplazamiento::evento_raton(Raton *raton)
 	if(evento_raton == &m_raton_ficticio)
 		m_enviar_evento = false;
 
-	int dy = evento_raton->dy();
 	float desplazamiento_nuevo_y = 0;
 	float desplazamiento_anterior_y = 0;
 	if(this->alto() < m_alto_actual)
 	{
 		desplazamiento_anterior_y = m_desplazamiento_y;
-		if(dy != 0)
+		if(evento_raton->dy() != 0)
 		{
 			//Desplazamiento con ruedita
-			m_desplazamiento_y += static_cast<float>(dy*20);
+			m_desplazamiento_y += static_cast<float>(evento_raton->dy()*20);
 		}
 		else if(raton->esta_sobre(this->x()+this->ancho()-10, this->y()+10, this->ancho(), this->alto()-20))
 		{
