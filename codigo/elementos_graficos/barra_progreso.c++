@@ -72,26 +72,40 @@ void Barra_Progreso::evento_raton(Raton *raton)
 {
 	if(raton->esta_sobre(this->x(), this->y(), this->ancho(), this->alto()))
 	{
+		int dy = raton->dy();
 		if(raton->activado(BotonIzquierdo) && m_sobre_barra)
 		{
-			if(m_x_anterior != raton->x())
+			if(m_x_anterior != raton->x() || m_tiempo_nuevo == -1)
 			{
 				m_x_anterior = raton->x();
 				m_tiempo_nuevo = static_cast<microseconds_t>((static_cast<float>(raton->x()) / static_cast<float>(this->ancho())) * static_cast<float>(m_tiempo_total));
 			}
-			else
-				m_tiempo_nuevo = -1;
 		}
 		else if(!raton->activado(BotonIzquierdo))
 		{
 			m_sobre_barra = true;
-			m_tiempo_nuevo = -1;
+
+			//Cambio de tiempo con la ruedita del raton
+			if(dy < 0)
+			{
+				if(m_tiempo_actual > 1000000)
+					m_tiempo_nuevo = m_tiempo_actual-1000000;
+				else
+					m_tiempo_nuevo = 0;
+			}
+			else if(dy > 0)
+			{
+				if(m_tiempo_actual+1000000 > m_tiempo_total)
+					m_tiempo_nuevo = m_tiempo_total;
+				else
+					m_tiempo_nuevo = m_tiempo_actual+1000000;
+			}
 		}
+
 	}
 	else
 	{
 		m_sobre_barra = false;
-		m_tiempo_nuevo = -1;
 	}
 }
 
@@ -111,5 +125,7 @@ void Barra_Progreso::tiempo(microseconds_t tiempo_actual)
 
 microseconds_t Barra_Progreso::tiempo_seleccionado()
 {
-	return m_tiempo_nuevo;
+	microseconds_t tiempo_actual = m_tiempo_nuevo;
+	m_tiempo_nuevo = -1;
+	return tiempo_actual;
 }
