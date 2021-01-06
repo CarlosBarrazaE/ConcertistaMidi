@@ -8,9 +8,12 @@
 #include "../control/pista.h++"
 #include "../control/teclado_organo.h++"
 #include "../libmidi/Midi.h++"
+#include "../libmidi/MidiComm.h++"
 
 #include <map>
 #include <vector>
+
+#define SIN_NOTA 130
 
 class Organo : public Elemento
 {
@@ -34,10 +37,13 @@ private:
 	float m_alto_tecla_blanca, m_alto_tecla_negra;
 
 	std::array<Color, 128> *m_teclas_activas;
+	unsigned char m_nota_enviada_anterior;
 
 	//Metodos
 	void dibujar_blancas(float x, float y, unsigned int tecla_inicial, unsigned int numero_teclas);
 	void dibujar_negras(float x, float y, unsigned int tecla_inicial, unsigned int numero_teclas);
+
+	float desplazamiento_x(unsigned int tecla);
 
 public:
 	Organo(float x, float y, float ancho, Teclado_Organo *teclado, Administrador_Recursos *recursos);

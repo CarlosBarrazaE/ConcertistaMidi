@@ -4,6 +4,8 @@ namespace Octava
 {
 	unsigned int numero_blanca_octava[12] = {1,1,2,2,3,4,4,5,5,6,6,7};//Numero de blancas hasta la posicion en octava
 	unsigned int numero_negras_octava[12] = {0,1,1,2,2,2,3,3,4,4,5,5};//Numero de negras hasta la posicion en octava
+	//Para agregar la cantidad de negras que faltan segun la posicion de la blanca en la octava
+	unsigned int suma_id_nota[7] = {0, 2, 4, 5, 7, 9, 11};
 
 	bool es_blanca(unsigned int id_nota)
 	{
@@ -53,5 +55,12 @@ namespace Octava
 			negras_omitidas = negras_desde_inicio(inicio-1);
 		unsigned int negras_totales = negras_desde_inicio(inicio+largo-1);
 		return negras_totales - negras_omitidas;
+	}
+
+	unsigned int nota_id_desde_blanca(unsigned int blanca_actual)
+	{
+		//Retorna el id de la nota (0-127) desde el numero de blancas hasta la actual
+		unsigned int octava_actual = blanca_actual / 7;
+		return octava_actual*12 + suma_id_nota[blanca_actual % 7];
 	}
 }

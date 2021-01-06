@@ -23,6 +23,8 @@
 
 #include "libmidi/MidiComm.h++"
 
+#include <SDL2/SDL.h>
+
 class Controlador_Juego
 {
 private:

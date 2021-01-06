@@ -1,5 +1,4 @@
 #include "controlador_juego.h++"
-#include <SDL2/SDL.h>
 
 Controlador_Juego::Controlador_Juego(Administrador_Recursos *recursos) : m_texto_fps(recursos), m_informacion(recursos), m_notificaciones(recursos)
 {

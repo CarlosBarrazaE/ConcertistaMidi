@@ -202,15 +202,12 @@ void VentanaOrgano::actualizar(unsigned int diferencia_tiempo)
 			m_configuracion->dispositivo_salida()->Write(evento);
 
 		//Almacena las notas tocadas por el jugador
-		if(evento.NoteNumber() != 0)
-		{
-			//Almacena la notas cuando recive el evento NoteOn
-			if(evento.Type() == MidiEventType_NoteOn)
-				m_notas_tocadas.insert(evento.NoteNumber());
-			//Elimina las notas cuando recive el evento NoteOff
-			else if(evento.Type() == MidiEventType_NoteOff)
-				m_notas_tocadas.erase(evento.NoteNumber());
-		}
+		//Almacena la notas cuando recive el evento NoteOn
+		if(evento.Type() == MidiEventType_NoteOn)
+			m_notas_tocadas.insert(evento.NoteNumber());
+		//Elimina las notas cuando recive el evento NoteOff
+		else if(evento.Type() == MidiEventType_NoteOff)
+			m_notas_tocadas.erase(evento.NoteNumber());
 	}
 
 	//Establece el color en gris para las notas tocadas por el jugador
