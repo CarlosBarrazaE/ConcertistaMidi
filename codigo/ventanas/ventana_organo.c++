@@ -384,6 +384,14 @@ void VentanaOrgano::evento_teclado(Tecla tecla, bool estado)
 		m_teclado_actual.numero_teclas(m_teclado_actual.numero_teclas()-1);
 		cambio_teclado = true;
 	}
+	else if(tecla == TECLA_INICIO && estado)
+	{
+		//Va al inicio de la canción
+		m_musica->reiniciar(2000000);
+		m_tablero->reiniciar();
+		if(m_configuracion->dispositivo_salida() != NULL)
+			m_configuracion->dispositivo_salida()->Reset();
+	}
 	if(cambio_teclado)
 	{
 		m_organo->calcular_tamannos();

@@ -24,6 +24,7 @@ public:
 	void autor(std::string autor);
 
 	void reiniciar();
+	void reiniciar(microseconds_t espera_inicio);
 
 	Midi *musica();
 	std::vector<Pista> *pistas();

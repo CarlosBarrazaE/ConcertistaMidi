@@ -54,6 +54,12 @@ void Datos_Musica::reiniciar()
 		m_musica->Reset(7000000, 1000000);
 }
 
+void Datos_Musica::reiniciar(microseconds_t espera_inicio)
+{
+	if(m_musica != NULL)
+		m_musica->Reset(espera_inicio, 1000000);
+}
+
 Midi *Datos_Musica::musica()
 {
 	return m_musica;
