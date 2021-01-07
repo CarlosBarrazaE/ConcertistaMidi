@@ -3,7 +3,7 @@
 float Generador_Particulas::Ultima_escala = 0;
 Color Generador_Particulas::Color_anterior = Color(0.0f, 0.0f, 0.0f);
 
-Generador_Particulas::Generador_Particulas(Sombreador *sombreador, Textura2D *textura, unsigned int particulas_maximas, float escala) : Figura(sombreador)
+Generador_Particulas::Generador_Particulas(Sombreador *sombreador, Textura2D *textura, unsigned int particulas_maximas, float escala_inicial) : Figura(sombreador)
 {
 	m_textura = textura;
 	m_particulas_maximas = particulas_maximas;
@@ -36,11 +36,12 @@ Generador_Particulas::Generador_Particulas(Sombreador *sombreador, Textura2D *te
 	m_particulas_activas = 0;
 
 	m_sombreador->activar();
-	m_sombreador->uniforme_float("escala", escala);
+	Registro::Aviso("Valor float: " + std::to_string(escala_inicial));
+	m_sombreador->uniforme_float("escala", escala_inicial);
 	m_sombreador->uniforme_vector4f("color", 0.0f, 0.0f, 0.0f, 0.0f);
 	Generador_Particulas::Color_anterior = Color(0.0f, 0.0f, 0.0f);
-	m_escala = escala;
-	Generador_Particulas::Ultima_escala = escala;
+	m_escala = escala_inicial;
+	Generador_Particulas::Ultima_escala = escala_inicial;
 }
 
 Generador_Particulas::~Generador_Particulas()
@@ -66,10 +67,10 @@ unsigned int Generador_Particulas::particula_inactiva()
 	return 0;
 }
 
-void Generador_Particulas::escala(float escala)
+void Generador_Particulas::escala(float escala_nueva)
 {
-	m_escala = escala;
-	m_sombreador->uniforme_float("escala", escala);
+	m_escala = escala_nueva;
+	m_sombreador->uniforme_float("escala", m_escala);
 }
 
 void Generador_Particulas::actualizar(float tiempo)

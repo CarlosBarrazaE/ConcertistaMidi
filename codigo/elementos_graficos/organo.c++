@@ -19,7 +19,7 @@ Organo::Organo(float x, float y, float ancho, Teclado_Organo *teclado, Administr
 
 	Sombreador *particulas = recursos->sombreador(S_Particula);
 	Textura2D *t_particula = recursos->textura(T_ParticulaNota);
-	m_generador_particulas = new Generador_Particulas(particulas, t_particula, 500, m_ancho_tecla_blanca);
+	m_generador_particulas = new Generador_Particulas(particulas, t_particula, 500, 0);//La escala se cambia al calcular los tamaños
 	m_tiempo = 0;
 	m_numero_particulas = 0;
 

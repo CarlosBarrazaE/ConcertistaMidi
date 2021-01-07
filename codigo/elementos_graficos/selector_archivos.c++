@@ -24,6 +24,8 @@ Selector_Archivos::Selector_Archivos(float x, float y, float ancho, float alto, 
 
 Selector_Archivos::~Selector_Archivos()
 {
+	delete m_cancelar;
+	delete m_aceptar;
 }
 
 void Selector_Archivos::cargar_tabla(std::string ruta_abrir)
