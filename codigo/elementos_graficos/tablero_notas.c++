@@ -7,16 +7,12 @@ Tablero_Notas::Tablero_Notas(float x, float y, float ancho, float alto, Teclado_
 	m_teclado = teclado;
 	this->calcular_tamannos();
 
-	m_textura_sombra = recursos->textura(T_Sombra);
 	m_textura_nota = recursos->textura(T_Nota);
 	m_textura_nota_resaltada = recursos->textura(T_NotaResaltada);
 
 	m_rectangulo = recursos->figura(F_Rectangulo);
 	m_tipografia = recursos->tipografia(LetraMuyChica);
 	m_recursos = recursos;
-
-	for(unsigned int i=0; i<128; i++)
-		m_tiempo_espera[i] = 0;
 }
 
 Tablero_Notas::~Tablero_Notas()
@@ -122,7 +118,6 @@ void Tablero_Notas::dibujar_notas(unsigned int pista)
 			continue;
 
 		posicion_y = static_cast<float>(m_tiempo_actual_midi - m_notas[pista][n].start) / static_cast<float>(m_duracion_nota);
-
 		//No se dibujan las notas que aun no entran en la pantalla
 		if(posicion_y < -this->alto())
 			break;
@@ -134,15 +129,6 @@ void Tablero_Notas::dibujar_notas(unsigned int pista)
 		{
 			if(n == m_ultima_nota[pista])
 				m_ultima_nota[pista] = n+1;
-			else if(n == m_ultima_nota[pista]+1)//Comprueba que la nota anterior haya terminado
-			{
-				float posicion_y_anterior = static_cast<float>(m_tiempo_actual_midi - m_notas[pista][m_ultima_nota[pista]].start) / static_cast<float>(m_duracion_nota);
-				float largo_nota_anterior = static_cast<float>(m_notas[pista][m_ultima_nota[pista]].end - m_notas[pista][m_ultima_nota[pista]].start) / static_cast<float>(m_duracion_nota);
-				if(posicion_y_anterior-largo_nota_anterior > 0)
-				{
-					m_ultima_nota[pista] = n+1;
-				}
-			}
 			//No se dibujan las notas que ya salieron de la pantalla o son invisibles (largo igual a cero)
 			continue;
 		}
@@ -160,15 +146,8 @@ void Tablero_Notas::dibujar_notas(unsigned int pista)
 			largo_final_nota = 20;
 		}
 
-		//Actualiza el tiempo de espera de las notas
-		if(posicion_y >= -5 && posicion_y < 0 && m_tiempo_espera[numero_nota] <= 0)
-			m_tiempo_espera[numero_nota] = (-posicion_y)-1;
-		else if(posicion_y >= 0)
-		{
-			if(m_tiempo_espera[numero_nota] <= 0)
-				m_teclas_activas[numero_nota] = m_pistas->at(pista).color();
-		}
-
+		//Notas tocadas por el jugador
+		Color color_nota_actual = m_pistas->at(pista).color();
 		if(Octava::es_blanca(m_notas[pista][n].note_id))
 		{
 			//Dibuja las notas blancas
@@ -176,7 +155,7 @@ void Tablero_Notas::dibujar_notas(unsigned int pista)
 			ajuste_negra = 0;
 
 			//Se establece el color de la nota
-			m_rectangulo->color(m_pistas->at(pista).color());
+			m_rectangulo->color(color_nota_actual);
 		}
 		else
 		{
@@ -187,7 +166,7 @@ void Tablero_Notas::dibujar_notas(unsigned int pista)
 			ajuste_negra = m_ancho_blanca + m_ancho_negra * Octava::desplazamiento_negra(numero_nota);
 
 			//La nota negra es un poco mas oscura
-			m_rectangulo->color(m_pistas->at(pista).color()-0.3f);
+			m_rectangulo->color(color_nota_actual-0.2f);
 		}
 
 		unsigned int numero_blancas = Octava::blancas_desde_inicio(numero_nota) - numero_notas_omitir;
@@ -198,25 +177,11 @@ void Tablero_Notas::dibujar_notas(unsigned int pista)
 
 		m_textura_nota->activar();
 		m_rectangulo->dibujar_estirable(this->x() + static_cast<float>(numero_blancas) * m_ancho_blanca + ajuste_negra, this->y()+this->alto()+posicion_y-largo_nota, ancho_tecla, largo_final_nota, 0, 10);
-
-		//Agrega una segunda textura a la nota tocada
-		if(posicion_y > 0)
-		{
-			m_textura_nota_resaltada->activar();
-			m_rectangulo->color(Color(1.0f, 1.0f, 1.0f));
-			m_rectangulo->dibujar_estirable(this->x() + static_cast<float>(numero_blancas) * m_ancho_blanca + ajuste_negra, this->y()+this->alto()+posicion_y-largo_nota, ancho_tecla, largo_final_nota, 0, 10);
-		}
 	}
 }
 
-void Tablero_Notas::actualizar(unsigned int diferencia_tiempo)
+void Tablero_Notas::actualizar(unsigned int /*diferencia_tiempo*/)
 {
-	float tiempo = static_cast<float>(diferencia_tiempo)/1000000000.0f*(1.0f/0.0166f);
-	for(unsigned int i=0; i<128; i++)
-	{
-		if(m_tiempo_espera[i] > 0)
-			m_tiempo_espera[i] -= tiempo;
-	}
 }
 
 void Tablero_Notas::dibujar()
@@ -244,11 +209,6 @@ void Tablero_Notas::dibujar()
 		}
 	}
 	m_rectangulo->extremos_fijos(false, false);
-
-	//Dibuja la sombra de la barra de progreso
-	m_textura_sombra->activar();
-	m_rectangulo->color(Color(0.7f, 0.7f, 0.7f));
-	m_rectangulo->dibujar(this->x(), this->y(), this->ancho(), 20);
 }
 
 void Tablero_Notas::evento_raton(Raton */*raton*/)
@@ -259,11 +219,6 @@ void Tablero_Notas::dimension(float ancho, float alto)
 {
 	this->_dimension(ancho, alto);
 	this->calcular_tamannos();
-}
-
-std::array<Color, 128> *Tablero_Notas::estado_teclas()
-{
-	return &m_teclas_activas;
 }
 
 void Tablero_Notas::tiempo(microseconds_t tiempo)
@@ -320,6 +275,4 @@ void Tablero_Notas::reiniciar()
 {
 	for(unsigned int i=0; i<m_ultima_nota.size(); i++)
 		m_ultima_nota[i] = 0;
-	for(unsigned int i=0; i<128; i++)
-		m_tiempo_espera[i] = 0;
 }

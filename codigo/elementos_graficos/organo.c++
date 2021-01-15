@@ -36,7 +36,6 @@ Organo::~Organo()
 void Organo::dibujar_blancas(float x, float y, unsigned int tecla_inicial, unsigned int numero_teclas)
 {
 	float desplazamiento = x;
-	Color negro;
 	bool tecla_presionada_anterior = false;
 	for(unsigned int n=tecla_inicial; n<tecla_inicial+numero_teclas; n++)
 	{
@@ -44,16 +43,15 @@ void Organo::dibujar_blancas(float x, float y, unsigned int tecla_inicial, unsig
 		if(!Octava::es_blanca(n))
 			continue;
 
-		if(m_teclas_activas->at(n) != negro)
+		Color color_actual = m_notas_activas->at(n);
+		if(color_actual != Color(0.0f, 0.0f, 0.0f))
 		{
 			//La tecla es tocada y la tecla se cambia de color
-			m_rectangulo->color(m_teclas_activas->at(n));
+			m_rectangulo->color(color_actual);
 
 			//Se agregan las particulas del mismo color que la nota
-			m_generador_particulas->agregar_particulas(desplazamiento + m_ancho_tecla_blanca/2.0f - m_ancho_tecla_blanca/2.0f, y, m_numero_particulas, m_teclas_activas->at(n));
-
-			//Se borra el color porque ya se mostro
-			m_teclas_activas->at(n) = negro;
+			m_generador_particulas->agregar_particulas(desplazamiento + m_ancho_tecla_blanca/2.0f - m_ancho_tecla_blanca/2.0f, y, m_numero_particulas, color_actual);
+			m_notas_activas->at(n) = Color(0.0f, 0.0f, 0.0f);
 
 			//Cambia el efectos de sombra
 			if(tecla_presionada_anterior)
@@ -82,8 +80,6 @@ void Organo::dibujar_blancas(float x, float y, unsigned int tecla_inicial, unsig
 void Organo::dibujar_negras(float x, float y, unsigned int tecla_inicial, unsigned int numero_teclas)
 {
 	float desplazamiento = 0;
-	Color negro, color_actual;
-	bool tecla_activa = false;
 	unsigned int numero_blancas = 0;
 	for(unsigned int n=tecla_inicial; n<tecla_inicial+numero_teclas; n++)
 	{
@@ -94,35 +90,29 @@ void Organo::dibujar_negras(float x, float y, unsigned int tecla_inicial, unsign
 			continue;
 		}
 
-		if(m_teclas_activas->at(n) != negro)
-		{
-			//La tecla es tocada y la tecla se cambia de color
-			m_rectangulo->color(m_teclas_activas->at(n));
-			color_actual = m_teclas_activas->at(n);
+		//Numero de la tecla dentro de la octava
+		desplazamiento = x + static_cast<float>(numero_blancas) * m_ancho_tecla_blanca + m_ancho_tecla_negra * Octava::desplazamiento_negra(n);
 
-			//Se borra el color porque ya se mostro
-			m_teclas_activas->at(n) = negro;
+		Color color_actual = m_notas_activas->at(n);
+		if(color_actual != Color(0.0f, 0.0f, 0.0f))
+		{
+			//La tecla es tocada, se cambia de color
+			m_rectangulo->color(color_actual);
 			m_tecla_negra_presionada->activar();
-			tecla_activa = true;
+
+			m_generador_particulas->agregar_particulas(desplazamiento + m_ancho_tecla_negra/2.0f - m_ancho_tecla_blanca/2.0f, y, m_numero_particulas, color_actual);
+			m_notas_activas->at(n) = Color(0.0f, 0.0f, 0.0f);
 		}
 		else
 		{
 			//La tecla no es tocada, color normal
 			m_rectangulo->color(Color(1.0f, 1.0f, 1.0f));
 			m_tecla_negra->activar();
-			tecla_activa = false;
 		}
-
-		//Numero de la tecla dentro de la octava
-		desplazamiento = x + static_cast<float>(numero_blancas) * m_ancho_tecla_blanca + m_ancho_tecla_negra * Octava::desplazamiento_negra(n);
 
 		//Fuera del ticlado de 88 teclas tiene otro color
 		//if(n < 21 || n > 108)
 		//	m_rectangulo->color(Color(0.5f, 0.7f, 0.3f));
-
-		//Se agregan las particulas del mismo color que la nota
-		if(tecla_activa)
-			m_generador_particulas->agregar_particulas(desplazamiento + m_ancho_tecla_negra/2.0f - m_ancho_tecla_blanca/2.0f, y, m_numero_particulas, color_actual-0.2f);
 
 		//El ancho de la tecla mas el ancho de la sombra
 		m_rectangulo->dibujar(desplazamiento, y, m_ancho_tecla_negra + m_ancho_tecla_negra * 0.22f, m_alto_tecla_negra);
@@ -242,9 +232,9 @@ void Organo::dimension(float ancho, float alto)
 	this->calcular_tamannos();
 }
 
-void Organo::estado_teclas(std::array<Color, 128> *teclas)
+void Organo::notas_activas(std::array<Color, 128> *notas)
 {
-	m_teclas_activas = teclas;
+	m_notas_activas = notas;
 }
 
 void Organo::calcular_tamannos()

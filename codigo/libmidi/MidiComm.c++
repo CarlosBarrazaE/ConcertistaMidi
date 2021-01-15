@@ -40,7 +40,7 @@ void midiInit()
 											SND_SEQ_PORT_CAP_READ | SND_SEQ_PORT_CAP_SUBS_READ,
 											SND_SEQ_PORT_TYPE_MIDI_GENERIC);
 
-	keybd_out = snd_seq_create_simple_port(alsa_seq, "Teclado",
+	keybd_out = snd_seq_create_simple_port(alsa_seq, "Teclado y Ratón",
 											SND_SEQ_PORT_CAP_READ | SND_SEQ_PORT_CAP_SUBS_READ,
 											SND_SEQ_PORT_TYPE_MIDI_GENERIC);
 

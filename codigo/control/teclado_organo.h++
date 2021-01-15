@@ -4,6 +4,7 @@
 #define PROPORCION_BLANCA 6.52941f
 #define PROPORCION_NEGRA 0.657f
 #define PROPORCION_ANCHO_NEGRA 0.666667f
+#define TIEMPO_DETECCION 165000
 
 #include "../util/texto.h++"
 #include <vector>

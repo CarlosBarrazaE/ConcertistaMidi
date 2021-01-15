@@ -10,14 +10,13 @@
 #include "../libmidi/Midi.h++"
 
 #include <vector>
-#include <array>
 #include <map>
 
 class Tablero_Notas : public Elemento
 {
 private:
 	Administrador_Recursos *m_recursos;
-	Textura2D *m_textura_sombra, *m_textura_nota, *m_textura_nota_resaltada;
+	Textura2D *m_textura_nota, *m_textura_nota_resaltada;
 	Rectangulo *m_rectangulo;
 	Tipografia *m_tipografia;
 	std::map<int, Etiqueta*> m_texto_numeros;
@@ -28,14 +27,12 @@ private:
 	int m_duracion_nota;
 	NotasPistas m_notas;
 	MidiEventMicrosecondList m_lineas;
-	std::array<Color, 128> m_teclas_activas;
-	std::array<float, 128> m_tiempo_espera;
 
 	std::vector<unsigned int> m_ultima_nota;//Ultima nota por cada pista
-
 	std::vector<Pista> *m_pistas;
 
 	void calcular_tamannos();
+
 	void dibujar_lineas_horizontales();
 	void dibujar_lineas_verticales();
 	void dibujar_notas(unsigned int pista);
@@ -49,8 +46,6 @@ public:
 	void evento_raton(Raton *raton) override;
 
 	void dimension(float ancho, float alto) override;
-
-	std::array<Color, 128> *estado_teclas();
 
 	void tiempo(microseconds_t tiempo);
 	void notas(NotasPistas notas);

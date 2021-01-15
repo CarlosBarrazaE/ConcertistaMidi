@@ -17,7 +17,7 @@ private:
 	float m_progreso;
 	bool m_sobre_barra;
 
-	Textura2D *m_frente;
+	Textura2D *m_frente, *m_textura_sombra;
 	Etiqueta m_texto_inicial, m_texto_final;
 	Rectangulo *m_rectangulo;
 

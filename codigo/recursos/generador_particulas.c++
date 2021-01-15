@@ -36,7 +36,7 @@ Generador_Particulas::Generador_Particulas(Sombreador *sombreador, Textura2D *te
 	m_particulas_activas = 0;
 
 	m_sombreador->activar();
-	Registro::Aviso("Valor float: " + std::to_string(escala_inicial));
+
 	m_sombreador->uniforme_float("escala", escala_inicial);
 	m_sombreador->uniforme_vector4f("color", 0.0f, 0.0f, 0.0f, 0.0f);
 	Generador_Particulas::Color_anterior = Color(0.0f, 0.0f, 0.0f);

@@ -7,10 +7,11 @@
 #include "../util/octava.h++"
 #include "../control/pista.h++"
 #include "../control/teclado_organo.h++"
+#include "../control/nota_activa.h++"
 #include "../libmidi/Midi.h++"
 #include "../libmidi/MidiComm.h++"
 
-#include <map>
+#include <array>
 #include <vector>
 
 #define SIN_NOTA 130
@@ -21,9 +22,9 @@ private:
 	Rectangulo *m_rectangulo;
 
 	Textura2D *m_tecla_blanca;
-	Textura2D *m_tecla_negra;
 	Textura2D *m_tecla_blanca_presionada;
 	Textura2D *m_tecla_blanca_presionada_doble;
+	Textura2D *m_tecla_negra;
 	Textura2D *m_tecla_negra_presionada;
 	Textura2D *m_borde_negro;
 	Textura2D *m_borde_rojo;
@@ -36,7 +37,7 @@ private:
 	float m_ancho_tecla_blanca, m_ancho_tecla_negra;
 	float m_alto_tecla_blanca, m_alto_tecla_negra;
 
-	std::array<Color, 128> *m_teclas_activas;
+	std::array<Color, 128> *m_notas_activas;
 	unsigned char m_nota_enviada_anterior;
 
 	//Metodos
@@ -53,7 +54,7 @@ public:
 
 	void dimension(float ancho, float alto) override;
 
-	void estado_teclas(std::array<Color, 128> *teclas);
+	void notas_activas(std::array<Color, 128> *notas);
 
 	void calcular_tamannos();
 };

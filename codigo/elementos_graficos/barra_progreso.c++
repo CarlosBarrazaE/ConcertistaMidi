@@ -11,6 +11,7 @@ Barra_Progreso::Barra_Progreso(float x, float y, float ancho, float alto, micros
 	m_x_anterior = 0;
 
 	m_frente = recursos->textura(T_FrenteBarraProgreso);
+	m_textura_sombra = recursos->textura(T_Sombra);
 	m_rectangulo = recursos->figura(F_Rectangulo);
 
 	m_texto_inicial.texto(Funciones::microsegundo_a_texto(m_tiempo_actual, true));
@@ -66,6 +67,11 @@ void Barra_Progreso::dibujar()
 	//Dibuja el tiempo inicial y el tiempo restante
 	m_texto_inicial.dibujar();
 	m_texto_final.dibujar();
+
+	//Dibuja la sombra
+	m_textura_sombra->activar();
+	m_rectangulo->color(Color(0.7f, 0.7f, 0.7f));
+	m_rectangulo->dibujar(this->x(), this->y()+this->alto(), this->ancho(), 20);
 }
 
 void Barra_Progreso::evento_raton(Raton *raton)

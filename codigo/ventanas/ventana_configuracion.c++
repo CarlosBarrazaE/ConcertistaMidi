@@ -254,8 +254,8 @@ void VentanaConfiguracion::evento_raton(Raton *raton)
 		if(m_solapa1_restablecer->esta_activado())
 		{
 			m_configuracion->escribir("velocidad_musica", "1.000000");
-			m_configuracion->escribir("duracion_nota", "6700");
-			m_configuracion->escribir("tipo_teclado", "88");
+			m_configuracion->escribir("duracion_nota", "6500");
+			m_configuracion->escribir("tipo_teclado", "21,88");
 			m_configuracion->escribir("estado_subtitulo", "activo");
 			Notificacion::Nota("Configuración restablecida", 5);
 		}

@@ -30,8 +30,8 @@ Configuracion_Pista::Configuracion_Pista(float x, float y, float ancho, float al
 	m_textura_sonido_desactivado = recursos->textura(T_SonidoDesactivado);
 
 	std::vector<std::string> opcion_modo;
-	opcion_modo.push_back("Mano Izquierza");
-	opcion_modo.push_back("Mano Derecha");
+	opcion_modo.push_back("Tocar");
+	opcion_modo.push_back("Aprender");
 	opcion_modo.push_back("Fondo");
 
 	std::vector<std::string> opcion_color;
@@ -95,9 +95,9 @@ Configuracion_Pista::Configuracion_Pista(float x, float y, float ancho, float al
 	}
 
 	//Se lee la configuracion del modo
-	if(m_datos_pista.modo() == ManoIzquierda)
+	if(m_datos_pista.modo() == Tocar)
 		m_seleccion_modo.opcion_predeterminada(0);
-	else if(m_datos_pista.modo() == ManoDerecha)
+	else if(m_datos_pista.modo() == Aprender)
 		m_seleccion_modo.opcion_predeterminada(1);
 	else if(m_datos_pista.modo() == Fondo)
 		m_seleccion_modo.opcion_predeterminada(2);
@@ -162,9 +162,9 @@ void Configuracion_Pista::evento_raton(Raton *raton)
 	{
 		unsigned long int modo_seleccionado = m_seleccion_modo.opcion_seleccionada();
 		if(modo_seleccionado == 0)
-			m_datos_pista.modo(ManoIzquierda);
+			m_datos_pista.modo(Tocar);
 		else if(modo_seleccionado == 1)
-			m_datos_pista.modo(ManoDerecha);
+			m_datos_pista.modo(Aprender);
 		else if(modo_seleccionado == 2)
 			m_datos_pista.modo(Fondo);
 	}

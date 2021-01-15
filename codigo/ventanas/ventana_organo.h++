@@ -1,6 +1,8 @@
 #ifndef VENTANAORGANO_H
 #define VENTANAORGANO_H
 
+#define COMBO_MINIMO_MOSTRAR 5
+
 #include "ventana.h++"
 #include "../elementos_graficos/barra_progreso.h++"
 #include "../elementos_graficos/etiqueta.h++"
@@ -11,10 +13,13 @@
 #include "../control/teclado_organo.h++"
 #include "../control/configuracion.h++"
 #include "../control/datos_musica.h++"
+#include "../control/nota_activa.h++"
 #include "../libmidi/Midi.h++"
 #include "../libmidi/MidiComm.h++"
 #include "../util/texto.h++"
+
 #include <map>
+#include <array>
 
 class VentanaOrgano : public Ventana
 {
@@ -31,6 +36,7 @@ private:
 	Etiqueta m_texto_velocidad;
 	Etiqueta m_texto_pausa;
 	Etiqueta m_subtitulos;
+	Etiqueta m_texto_combos;
 
 	//Controles
 	double m_velocidad_musica;
@@ -38,6 +44,7 @@ private:
 	bool m_pausa;
 	bool m_retorno_carro;
 	bool m_mostrar_subtitulo;
+	int m_duracion_nota;
 
 	//Para saver si es necesario guardar
 	bool m_guardar_velocidad;
@@ -49,11 +56,30 @@ private:
 	Teclado_Organo m_teclado_actual;
 	Configuracion *m_configuracion;
 	Datos_Musica *m_musica;
-	std::array<Color, 128> *m_teclas_activas;
-	std::set<unsigned int> m_notas_tocadas;
+	NotasPistas m_notas;
 	std::string m_subtitulo_texto;
+	std::map<unsigned char, Nota_Activa*> m_notas_activas;
+	std::array<Color, 128> m_color_teclas_teclas;
+	std::array<float, 128> m_tiempo_espera;
+	std::vector<unsigned char> m_notas_correctas;
+	std::vector<unsigned int> m_primera_nota;//Ultima nota por cada pista
+	std::vector<Pista> *m_pistas;
+	microseconds_t m_tiempo_actual_midi;
 
+	unsigned int m_combos;
+	int m_falla_combo;
+
+	void inicializar();
+	void reproducir_eventos(unsigned int microsegundos_actualizar);
+	void escuchar_eventos();
+	void reproducir_subtitulos(const MidiEvent &evento);
 	void guardar_configuracion();
+
+	void calcular_teclas_activas(unsigned int diferencia_tiempo);
+	void reiniciar();
+	void insertar_nota_activa(unsigned char id_nota, unsigned char canal, Color color, bool sonido, bool correcta);
+	bool esta_tocada(unsigned char id_nota);
+	void eliminar_nota_tocada(unsigned char id_nota);
 
 public:
 	VentanaOrgano(Configuracion *configuracion, Datos_Musica *musica, Administrador_Recursos *recursos);

@@ -8,8 +8,8 @@
 
 enum Modo
 {
-	ManoDerecha,
-	ManoIzquierda,
+	Tocar,
+	Aprender,
 	Fondo,
 };
 

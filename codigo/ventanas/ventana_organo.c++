@@ -1,6 +1,6 @@
 #include "ventana_organo.h++"
 
-VentanaOrgano::VentanaOrgano(Configuracion *configuracion, Datos_Musica *musica, Administrador_Recursos *recursos) : Ventana(), m_texto_velocidad(recursos), m_texto_pausa(recursos), m_subtitulos(recursos)
+VentanaOrgano::VentanaOrgano(Configuracion *configuracion, Datos_Musica *musica, Administrador_Recursos *recursos) : Ventana(), m_texto_velocidad(recursos), m_texto_pausa(recursos), m_subtitulos(recursos), m_texto_combos(recursos)
 {
 	m_configuracion = configuracion;
 	m_musica = musica;
@@ -54,17 +54,31 @@ VentanaOrgano::VentanaOrgano(Configuracion *configuracion, Datos_Musica *musica,
 	m_subtitulos.dimension(Pantalla::Ancho, 20);
 	m_subtitulos.centrado(true);
 
-	m_tablero->notas(m_musica->musica()->Notes());
-	m_tablero->pistas(m_musica->pistas());
-	m_tablero->lineas(m_musica->musica()->GetBarLines());
-	m_organo->estado_teclas(m_tablero->estado_teclas());
+	m_combos = 0;
+	m_texto_combos.texto("");
+	m_texto_combos.tipografia(recursos->tipografia(LetraTitulo));
+	m_texto_combos.color(Color(1.0f, 0.5f, 0.0f));
+	m_texto_combos.posicion(0, 150);
+	m_texto_combos.dimension(Pantalla::Ancho, 20);
+	m_texto_combos.centrado(true);
 
-	m_teclas_activas = m_tablero->estado_teclas();
+
+	m_notas = m_musica->musica()->Notes();
+	m_pistas = m_musica->pistas();
+	m_tablero->notas(m_notas);
+	m_tablero->pistas(m_pistas);
+	m_tablero->lineas(m_musica->musica()->GetBarLines());
+	m_organo->notas_activas(&m_color_teclas_teclas);
 
 	//Carga la configuracion de la base de datos de la duracion
 	std::string resultado_duracion = m_configuracion->leer("duracion_nota");
 	if(resultado_duracion != "")
-		m_tablero->modificar_duracion_nota(std::stoi(resultado_duracion));
+	{
+		m_duracion_nota = std::stoi(resultado_duracion);
+		m_tablero->modificar_duracion_nota(m_duracion_nota);
+	}
+	else
+		m_duracion_nota = 6500;
 
 	//Elimina las notas tocadas antes de esta ventana
 	m_configuracion->dispositivo_entrada()->Reset();
@@ -84,6 +98,7 @@ VentanaOrgano::VentanaOrgano(Configuracion *configuracion, Datos_Musica *musica,
 	m_guardar_duracion_nota = false;
 	m_guardar_tipo_teclado = false;
 	m_guardar_estado_subtitulo = false;
+	this->inicializar();
 }
 
 VentanaOrgano::~VentanaOrgano()
@@ -111,120 +126,25 @@ void VentanaOrgano::actualizar(unsigned int diferencia_tiempo)
 	//Se calculan los microsegundos entre fotogramas para actualizar el midi
 	unsigned int microsegundos_actualizar = static_cast<unsigned int>((static_cast<double>(diferencia_tiempo) / 1000.0) * m_velocidad_musica);
 
-	if(m_pausa)
-		microsegundos_actualizar = 0;
+	this->reproducir_eventos(microsegundos_actualizar);
+	this->calcular_teclas_activas(diferencia_tiempo);
+	this->escuchar_eventos();
 
-	MidiEventListWithTrackId eventos = m_musica->musica()->Update(microsegundos_actualizar);
+	//Agregar al organo el color de las teclas presionada
+	for(std::pair<unsigned char, Nota_Activa*> valor : m_notas_activas)
+		m_color_teclas_teclas[valor.second->id_nota] = valor.second->color;
 
-	if(m_configuracion->dispositivo_salida() != NULL)//Verifica que la salida midi este disponible
-	{
-		//Se escriben las notas
-		std::vector<Pista> *pistas = m_musica->pistas();
-		for (MidiEventListWithTrackId::const_iterator i = eventos.begin(); i != eventos.end(); i++)
-		{
-			//Solo se tocan las pistas que no estan en silencio y que no son tocadas por el jugador
-			if(pistas->at(i->first).sonido() && pistas->at(i->first).modo() == Fondo)
-			{
-				m_configuracion->dispositivo_salida()->Write(i->second);
-			}
-			//Letra de archivo midi
-			if(i->second.HasText() && i->second.MetaType() == MidiMetaEvent_Lyric)
-			{
-				std::string nuevo_texto = i->second.Text();
-				std::replace(nuevo_texto.begin(), nuevo_texto.end(), '_', ' ');
-
-				//Retorno de carro para la proxima linea
-				if(nuevo_texto.length() > 0 && (nuevo_texto[0] == '\r' || nuevo_texto[0] == '\n'))
-					m_retorno_carro = true;
-				else
-				{
-					if(m_subtitulo_texto.length() >= 80 || m_retorno_carro)
-					{
-						m_subtitulo_texto = nuevo_texto;
-						m_retorno_carro = false;
-					}
-					else
-						m_subtitulo_texto += nuevo_texto;
-				}
-
-				if(Texto::esta_vacio(m_subtitulo_texto) && m_subtitulo_texto.length() > 0)
-					m_subtitulo_texto = "";
-
-				if(m_mostrar_subtitulo)
-					m_subtitulos.texto(m_subtitulo_texto);
-			}
-			//Midi karaoke
-			else if(i->second.HasText() && i->second.MetaType() == MidiMetaEvent_Text && i->second.GetDeltaPulses() > 0)
-			{
-				std::string nuevo_texto = i->second.Text();
-				std::replace(nuevo_texto.begin(), nuevo_texto.end(), '_', ' ');
-
-				//Retorno de carro para la proxima linea
-				if(nuevo_texto.length() > 0 && (nuevo_texto[0] == '\\' || nuevo_texto[0] == '/'))
-				{
-					std::string recortado = nuevo_texto.substr(1);//Quita el primer caracter
-					m_subtitulo_texto = recortado;
-				}
-				else
-					m_subtitulo_texto += nuevo_texto;
-
-				if(Texto::esta_vacio(m_subtitulo_texto) && m_subtitulo_texto.length() > 0)
-					m_subtitulo_texto = "";
-
-				if(m_mostrar_subtitulo)
-					m_subtitulos.texto(m_subtitulo_texto);
-			}
-			/*
-			if(i->second.MetaType() == MidiMetaEvent_Copyright)
-				Registro::Depurar("Evento Meta: MidiMetaEvent_Copyright Contenido: " + i->second.Text() + " Largo: " + std::to_string(i->second.Text().length()));
-			else if(i->second.MetaType() == MidiMetaEvent_TrackName)
-				Registro::Depurar("Evento Meta: MidiMetaEvent_TrackName Contenido: " + i->second.Text() + " Largo: " + std::to_string(i->second.Text().length()));
-			else if(i->second.MetaType() == MidiMetaEvent_Instrument)
-				Registro::Depurar("Evento Meta: MidiMetaEvent_Instrument Contenido: " + i->second.Text() + " Largo: " + std::to_string(i->second.Text().length()));
-			else if(i->second.MetaType() == MidiMetaEvent_Marker)
-				Registro::Depurar("Evento Meta: MidiMetaEvent_Marker Contenido: " + i->second.Text() + " Largo: " + std::to_string(i->second.Text().length()));
-			else if(i->second.MetaType() == MidiMetaEvent_Cue)
-				Registro::Depurar("Evento Meta: MidiMetaEvent_Cue Contenido: " + i->second.Text() + " Largo: " + std::to_string(i->second.Text().length()));
-			else if(i->second.MetaType() == MidiMetaEvent_PatchName)
-				Registro::Depurar("Evento Meta: MidiMetaEvent_PatchName Contenido: " + i->second.Text() + " Largo: " + std::to_string(i->second.Text().length()));
-			else if(i->second.MetaType() == MidiMetaEvent_DeviceName)
-				Registro::Depurar("Evento Meta: MidiMetaEvent_DeviceName Contenido: " + i->second.Text() + " Largo: " + std::to_string(i->second.Text().length()));*/
-		}
-	}
-
-	//NOTE probando la entrada midi
-	while(m_configuracion->dispositivo_entrada() != NULL && m_configuracion->dispositivo_entrada()->KeepReading())
-	{
-		//Leer todos los eventos
-		MidiEvent evento = m_configuracion->dispositivo_entrada()->Read();
-		evento.SetChannel(1);
-		evento.SetVelocity(120);
-
-		if(m_configuracion->dispositivo_salida() != NULL)
-			m_configuracion->dispositivo_salida()->Write(evento);
-
-		//Almacena las notas tocadas por el jugador
-		//Almacena la notas cuando recive el evento NoteOn
-		if(evento.Type() == MidiEventType_NoteOn)
-			m_notas_tocadas.insert(evento.NoteNumber());
-		//Elimina las notas cuando recive el evento NoteOff
-		else if(evento.Type() == MidiEventType_NoteOff)
-			m_notas_tocadas.erase(evento.NoteNumber());
-	}
-
-	//Establece el color en gris para las notas tocadas por el jugador
-	//Sera sobreescrito por el tablero de notas en la etapa de dibujo si la nota tocada es correcta
- 	for(unsigned int id_nota : m_notas_tocadas)
- 		m_teclas_activas->at(id_nota) = Color(0.7f, 0.7f, 0.7f);
+	//Actualiza la etiqueta de combos
+	if(m_combos > COMBO_MINIMO_MOSTRAR)
+		m_texto_combos.texto("¡Combo " + std::to_string(m_combos) + "!");
 
 	//Si selecciono un nuevo tiempo en la barra de progreso, se cambia la posicion.
 	microseconds_t cambio_tiempo = m_barra->tiempo_seleccionado();
 	if(cambio_tiempo >= 0)
 	{
 		m_musica->musica()->GoTo(cambio_tiempo);
-		m_tablero->reiniciar();
-		if(m_configuracion->dispositivo_salida() != NULL)
-			m_configuracion->dispositivo_salida()->Reset();
+		m_tiempo_actual_midi = m_musica->musica()->GetSongPositionInMicroseconds();
+		this->reiniciar();
 	}
 
 	//Cambio de velocidad de la musica
@@ -234,14 +154,14 @@ void VentanaOrgano::actualizar(unsigned int diferencia_tiempo)
 		m_texto_velocidad.texto(std::to_string(static_cast<int>(m_velocidad_musica*100)) + "%");
 	}
 
+	m_barra->tiempo(m_tiempo_actual_midi);
+	m_tablero->tiempo(m_tiempo_actual_midi);
+
 	//Se actualizan los componentes
 	m_barra->actualizar(diferencia_tiempo);
 	m_tablero->actualizar(diferencia_tiempo);
 	m_organo->actualizar(diferencia_tiempo);
 	m_titulo_musica->actualizar(diferencia_tiempo);
-
-	m_barra->tiempo(m_musica->musica()->GetSongPositionInMicroseconds());
-	m_tablero->tiempo(m_musica->musica()->GetSongPositionInMicroseconds());
 }
 
 void VentanaOrgano::dibujar()
@@ -265,7 +185,261 @@ void VentanaOrgano::dibujar()
 		m_subtitulos.dibujar();
 		m_rectangulo->extremos_fijos(false, false);
 	}
+	if(m_combos > COMBO_MINIMO_MOSTRAR)
+		m_texto_combos.dibujar();
 	m_titulo_musica->dibujar();
+}
+
+void VentanaOrgano::inicializar()
+{
+	//Se inician todas las pistas en 0
+	for(unsigned int i=0; i<m_notas.size(); i++)
+		m_primera_nota.push_back(0);
+
+	//Inicializa todos los tiempos de espera a 0
+	for(unsigned int i=0; i<128; i++)
+		m_tiempo_espera[i] = 0;
+
+	m_tiempo_actual_midi = 0;
+}
+
+void VentanaOrgano::reproducir_eventos(unsigned int microsegundos_actualizar)
+{
+	if(m_pausa)
+		microsegundos_actualizar = 0;
+
+	MidiEventListWithTrackId eventos = m_musica->musica()->Update(microsegundos_actualizar);
+	m_tiempo_actual_midi = m_musica->musica()->GetSongPositionInMicroseconds();
+
+	//Se escriben las notas
+	for (MidiEventListWithTrackId::const_iterator i = eventos.begin(); i != eventos.end(); i++)
+	{
+		bool reproducir_evento = false;
+		//Muestra los subtitulos si los contiene
+		this->reproducir_subtitulos(i->second);
+
+		//Reproduce todos los eventos si es musica de Fondo
+		if(m_pistas->at(i->first).modo() == Fondo)
+			reproducir_evento = true;
+		//Reproduce todos los eventos que no sean NoteOn o NoteOff de todas las pistas
+		else if(i->second.Type() != MidiEventType_NoteOn && i->second.Type() != MidiEventType_NoteOff)
+			reproducir_evento = true;
+
+		//Solo son erroneas las notas que no se tocan correctamente en el noteon
+		if(i->second.Type() == MidiEventType_NoteOn && i->second.NoteVelocity() > 0)
+		{
+
+		}
+		else if((i->second.Type() == MidiEventType_NoteOn || i->second.Type() == MidiEventType_NoteOff) && i->second.NoteVelocity() == 0)
+		{
+			//Si nota activa y llega un noteoff apagar y cambiar a plomo
+			if(m_pistas->at(i->first).modo() != Fondo)
+			{
+				if(this->esta_tocada(i->second.NoteNumber()))
+					this->eliminar_nota_tocada(i->second.NoteNumber());
+				else
+					m_combos = 0;//La nota no fue tocada, pierde el combo
+				std::map<unsigned char, Nota_Activa*>::iterator nota = m_notas_activas.find(static_cast<unsigned char>(i->second.NoteNumber()));
+				if(nota != m_notas_activas.end())
+				{
+					//La nota si fue tocada pero ahora se paso de largo
+					//Asegurandome que no sea una nueva nota que empeso un momento antes
+					if(nota->second->correcta && !this->esta_tocada(i->second.NoteNumber()))
+						nota->second->color = Pista::Colores_pista[NUMERO_COLORES_PISTA];
+				}
+			}
+		}
+
+		//Omite los eventos si la pista esta en silencio
+		if(reproducir_evento && m_pistas->at(i->first).sonido())
+		{
+			if(m_configuracion->dispositivo_salida() != NULL)
+				m_configuracion->dispositivo_salida()->Write(i->second);
+		}
+	}
+}
+
+void VentanaOrgano::escuchar_eventos()
+{
+	//No hay nada que hacer si no hay dispositivo de entrada
+	if(m_configuracion->dispositivo_entrada() == NULL)
+		return;
+
+	//Lee todos los eventos
+	while(m_configuracion->dispositivo_entrada()->KeepReading())
+	{
+		MidiEvent evento = m_configuracion->dispositivo_entrada()->Read();
+
+		//Omitir eventos que no son NoteOn o NoteOff
+		if(evento.Type() != MidiEventType_NoteOn && evento.Type() != MidiEventType_NoteOff)
+			continue;
+
+		if(evento.Type() == MidiEventType_NoteOn && evento.NoteVelocity() > 0)
+		{
+			//Eventos NoteOn
+			TranslatedNote *nota_encontrada = NULL;
+			unsigned long int pista_encontrada = 0;
+			for(unsigned long int pista = 0; pista < m_notas.size(); pista++)
+			{
+				//Se salta las pistas que no corresponde tocar
+				if(m_pistas->at(pista).modo() == Fondo)
+					continue;
+
+				for(unsigned int n=m_primera_nota[pista]; n<m_notas[pista].size(); n++)
+				{
+					TranslatedNote *nota_actual = &m_notas[pista][n];
+					microseconds_t tiempo_inicio = nota_actual->start - TIEMPO_DETECCION;
+					microseconds_t tiempo_final = nota_actual->start + TIEMPO_DETECCION;
+
+					//Termina con esta pista si la nota aun no llega
+					if(tiempo_inicio > m_tiempo_actual_midi)
+						break;
+
+					//Nota dentro del rango
+					if(tiempo_final > m_tiempo_actual_midi && nota_actual->note_id == evento.NoteNumber())
+					{
+						//Primera coincidencia detectada
+						if(nota_encontrada == NULL)
+						{
+							nota_encontrada = &m_notas[pista][n];
+							pista_encontrada = pista;//Guarda la pista
+						}
+						else
+						{
+							microseconds_t distancia_actual = abs(m_tiempo_actual_midi - nota_encontrada->start);
+							microseconds_t distancia_anterior = abs(m_tiempo_actual_midi - nota_encontrada->start);
+
+							//Se encuentra una nota mas cercana al evento
+							if(distancia_actual < distancia_anterior)
+							{
+								nota_encontrada = &m_notas[pista][n];
+								pista_encontrada = pista;//Guarda la pista
+							}
+						}
+					}
+				}
+			}
+
+			//Se guarda la nota tocada por el jugador
+			if(nota_encontrada != NULL && !m_pausa)
+			{
+				//Nota correcta
+				this->insertar_nota_activa(nota_encontrada->note_id, nota_encontrada->channel, m_pistas->at(pista_encontrada).color(), m_pistas->at(pista_encontrada).sonido(), true);
+
+				//Se cambia el canal y la velocidad del evento
+				evento.SetChannel(nota_encontrada->channel);
+				evento.SetVelocity(nota_encontrada->velocity);
+
+				//Aumenta el contador de combos
+				m_combos++;
+				m_notas_correctas.push_back(nota_encontrada->note_id);
+
+				//Se envia el evento
+				if(m_configuracion->dispositivo_salida() != NULL && m_pistas->at(pista_encontrada).sonido())
+					m_configuracion->dispositivo_salida()->Write(evento);
+			}
+			else
+			{
+				//Notas plomas son notas erroneas
+				this->insertar_nota_activa(evento.NoteNumber(), evento.Channel(), Pista::Colores_pista[NUMERO_COLORES_PISTA], true, false);
+
+				//Se envia el evento
+				evento.SetVelocity(64);
+				if(m_configuracion->dispositivo_salida() != NULL)
+					m_configuracion->dispositivo_salida()->Write(evento);
+
+				//Pierde el combo
+				m_combos = 0;
+			}
+		}
+		else
+		{
+			//Eventos NoteOff
+			Nota_Activa *nota_encendida = m_notas_activas[static_cast<unsigned char>(evento.NoteNumber())];
+			if(!nota_encendida)
+			{
+				//La nota no existe
+				Registro::Error("Intento borrar una nota que no existe");
+			}
+			else
+			{
+				if(nota_encendida->contador_clic == 0)
+				{
+					//Se selecciona el canal
+					evento.SetChannel(nota_encendida->canal);
+
+					//Se envia el evento de apagado
+					if(m_configuracion->dispositivo_salida() != NULL && nota_encendida->sonido)
+						m_configuracion->dispositivo_salida()->Write(evento);
+
+					//Borra la nota
+					m_notas_activas.erase(static_cast<unsigned char>(nota_encendida->id_nota));
+					delete nota_encendida;
+				}
+				//Se puede activar dos veces (o mas) la misma tecla por ejemplo con el teclado y el raton
+				//no se borrara la nota hasta que se reciban la misma cantidad de NoteOff que NoteOn
+				//pero no se cambia nada.
+				else
+					nota_encendida->contador_clic--;
+			}
+		}
+	}
+}
+
+void VentanaOrgano::reproducir_subtitulos(const MidiEvent &evento)
+{
+	if(!evento.HasText())
+		return;
+	std::string nuevo_texto = evento.Text();
+	std::replace(nuevo_texto.begin(), nuevo_texto.end(), '_', ' ');
+	//Letra de archivo midi
+	if(evento.MetaType() == MidiMetaEvent_Lyric)
+	{
+		//Retorno de carro para la proxima linea
+		if(nuevo_texto.length() > 0 && (nuevo_texto[0] == '\r' || nuevo_texto[0] == '\n'))
+			m_retorno_carro = true;
+		else
+		{
+			if(m_subtitulo_texto.length() >= 80 || m_retorno_carro)
+			{
+				m_subtitulo_texto = nuevo_texto;
+				m_retorno_carro = false;
+			}
+			else
+				m_subtitulo_texto += nuevo_texto;
+		}
+	}
+	//Midi karaoke
+	else if(evento.MetaType() == MidiMetaEvent_Text && evento.GetDeltaPulses() > 0)
+	{
+		//Retorno de carro para la proxima linea
+		if(nuevo_texto.length() > 0 && (nuevo_texto[0] == '\\' || nuevo_texto[0] == '/'))
+		{
+			std::string recortado = nuevo_texto.substr(1);//Quita el primer caracter
+			m_subtitulo_texto = recortado;
+		}
+		else
+			m_subtitulo_texto += nuevo_texto;
+	}
+	if(Texto::esta_vacio(m_subtitulo_texto) && m_subtitulo_texto.length() > 0)
+		m_subtitulo_texto = "";
+	if(m_mostrar_subtitulo)
+		m_subtitulos.texto(m_subtitulo_texto);
+	/*
+	if(evento.MetaType() == MidiMetaEvent_Copyright)
+		Registro::Depurar("Evento Meta: MidiMetaEvent_Copyright Contenido: " + evento.Text() + " Largo: " + std::to_string(evento.Text().length()));
+	else if(evento.MetaType() == MidiMetaEvent_TrackName)
+		Registro::Depurar("Evento Meta: MidiMetaEvent_TrackName Contenido: " + evento.Text() + " Largo: " + std::to_string(evento.Text().length()));
+	else if(evento.MetaType() == MidiMetaEvent_Instrument)
+		Registro::Depurar("Evento Meta: MidiMetaEvent_Instrument Contenido: " + evento.Text() + " Largo: " + std::to_string(evento.Text().length()));
+	else if(evento.MetaType() == MidiMetaEvent_Marker)
+		Registro::Depurar("Evento Meta: MidiMetaEvent_Marker Contenido: " + evento.Text() + " Largo: " + std::to_string(evento.Text().length()));
+	else if(evento.MetaType() == MidiMetaEvent_Cue)
+		Registro::Depurar("Evento Meta: MidiMetaEvent_Cue Contenido: " + evento.Text() + " Largo: " + std::to_string(evento.Text().length()));
+	else if(evento.MetaType() == MidiMetaEvent_PatchName)
+		Registro::Depurar("Evento Meta: MidiMetaEvent_PatchName Contenido: " + evento.Text() + " Largo: " + std::to_string(evento.Text().length()));
+	else if(evento.MetaType() == MidiMetaEvent_DeviceName)
+		Registro::Depurar("Evento Meta: MidiMetaEvent_DeviceName Contenido: " + evento.Text() + " Largo: " + std::to_string(evento.Text().length()));*/
 }
 
 void VentanaOrgano::guardar_configuracion()
@@ -283,6 +457,144 @@ void VentanaOrgano::guardar_configuracion()
 			m_configuracion->escribir("estado_subtitulo", "activo");
 		else
 			m_configuracion->escribir("estado_subtitulo", "inactivo");
+	}
+}
+
+void VentanaOrgano::calcular_teclas_activas(unsigned int diferencia_tiempo)
+{
+	float posicion_y = 0;
+	float largo_nota = 0;
+	unsigned int numero_nota = 0;//Id de la nota desde 0 hasta 127
+	for(unsigned int pista=0; pista<m_notas.size(); pista++)
+	{
+		//Dibuja solo las pistas que tienen notas, hay pistas vacias
+		if(m_notas[pista].size() > 0 && m_pistas->at(pista).visible())
+		{
+			for(unsigned int n=m_primera_nota[pista]; n<m_notas[pista].size(); n++)
+			{
+				//Numero_nota incluye blancas y negras
+				numero_nota = m_notas[pista][n].note_id;
+
+				//Se salta las notas fuera de la pantalla
+				if(numero_nota < m_teclado_actual.tecla_inicial() || numero_nota >= m_teclado_actual.tecla_inicial() + m_teclado_actual.numero_teclas())
+					continue;
+
+				posicion_y = static_cast<float>(m_tiempo_actual_midi - m_notas[pista][n].start) / static_cast<float>(m_duracion_nota);
+
+				//Si la nota no esta sonando termina el recorrido por la pista actual
+				if(posicion_y < -5)
+					break;
+
+				largo_nota = static_cast<float>(m_notas[pista][n].end - m_notas[pista][n].start) / static_cast<float>(m_duracion_nota);
+
+				//El alto minimo de la nota es de 20 pixeles
+				if((posicion_y-largo_nota > 0 && largo_nota >= 20) || (posicion_y > 20 && largo_nota < 20) || largo_nota <= 0)//La nota n salio de la pantalla
+				{
+					//Almacena la posicion de la primera nota visible desde la posicion actual para no tener que recorrer todo de nuevo
+					if(n == m_primera_nota[pista])
+						m_primera_nota[pista] = n+1;
+					//No se dibujan las notas que ya salieron de la pantalla o son invisibles (largo igual a cero)
+					continue;
+				}
+
+				//Revisa las notas que debieron ser tocadas
+				if(posicion_y >= TIEMPO_DETECCION/static_cast<float>(m_duracion_nota) && m_pistas->at(pista).modo() != Fondo)
+				{
+
+					//Acelera la deteccion de teclas erroneas
+					//al no tener que esperar un NoteOff
+					//ya que se acabo el tiempo para tocar la nota
+					if(!this->esta_tocada(numero_nota))
+					{
+						m_combos = 0;
+						//Se inserta para que no vuelva a borrar el combo la misma nota
+						m_notas_correctas.push_back(numero_nota);
+					}
+				}
+
+				//Solo se actualiza el color de las pistas de Fondo
+				if(m_pistas->at(pista).modo() != Fondo)
+					continue;
+
+				//Cambia el tiempo de espera de las notas
+				if(posicion_y >= -5 && posicion_y < 0 && m_tiempo_espera[numero_nota] <= 0)
+					m_tiempo_espera[numero_nota] = (-posicion_y)-1;
+				else if(posicion_y >= 0)
+				{
+					if(m_tiempo_espera[numero_nota] <= 0)
+						m_color_teclas_teclas[numero_nota] = m_pistas->at(pista).color();
+				}
+			}
+		}
+	}
+
+	float tiempo = static_cast<float>(diferencia_tiempo)/1000000000.0f*(1.0f/0.0166f);
+	for(unsigned int i=0; i<128; i++)
+	{
+		if(m_tiempo_espera[i] > 0)
+			m_tiempo_espera[i] -= tiempo;
+	}
+}
+
+void VentanaOrgano::reiniciar()
+{
+	//Reinicia el tablero
+	m_tablero->reiniciar();
+
+	//Reinicia el contador de combos
+	m_combos = 0;
+
+	//Reinicia las notas tocadas
+	m_notas_correctas.clear();
+
+	//Reinicia la primera nota de cada pista a 0
+	for(unsigned int i=0; i<m_primera_nota.size(); i++)
+		m_primera_nota[i] = 0;
+
+	//Reinicia la salida
+	if(m_configuracion->dispositivo_salida() != NULL)
+		m_configuracion->dispositivo_salida()->Reset();
+}
+
+void VentanaOrgano::insertar_nota_activa(unsigned char id_nota, unsigned char canal, Color color, bool sonido, bool correcta)
+{
+	Nota_Activa *nota_nueva = m_notas_activas[id_nota];
+
+	if(nota_nueva == NULL)
+	{
+		nota_nueva = new Nota_Activa();
+		nota_nueva->id_nota = id_nota;
+		nota_nueva->canal = canal;
+		nota_nueva->color = color;
+		nota_nueva->sonido = sonido;
+		nota_nueva->correcta = correcta;
+		m_notas_activas[id_nota] = nota_nueva;
+	}
+	else
+		nota_nueva->contador_clic++;
+}
+
+bool VentanaOrgano::esta_tocada(unsigned char id_nota)
+{
+	for(unsigned long int x=0; x<m_notas_correctas.size(); x++)
+	{
+		if(m_notas_correctas[x] == id_nota)
+			return true;
+	}
+	return false;
+}
+
+void VentanaOrgano::eliminar_nota_tocada(unsigned char id_nota)
+{
+	for(unsigned long int x=0; x<m_notas_correctas.size(); x++)
+	{
+		if(m_notas_correctas[x] == id_nota)
+		{
+			//Elimina solo una intercambiandola por la ultima y borra la ultima
+			std::swap(m_notas_correctas[x], m_notas_correctas.back());
+			m_notas_correctas.pop_back();
+			return;
+		}
 	}
 }
 
@@ -307,11 +619,13 @@ void VentanaOrgano::evento_teclado(Tecla tecla, bool estado)
 	else if(tecla == TECLA_FLECHA_ARRIBA && estado)
 	{
 		m_tablero->duracion_nota(1);
+		m_duracion_nota = m_tablero->duracion_nota();
 		m_guardar_duracion_nota = true;
 	}
 	else if(tecla == TECLA_FLECHA_ABAJO && estado)
 	{
 		m_tablero->duracion_nota(-1);
+		m_duracion_nota = m_tablero->duracion_nota();
 		m_guardar_duracion_nota = true;
 	}
 	else if(tecla == TECLA_FLECHA_IZQUIERDA && estado)
@@ -394,9 +708,7 @@ void VentanaOrgano::evento_teclado(Tecla tecla, bool estado)
 	{
 		//Va al inicio de la canción
 		m_musica->reiniciar(2000000);
-		m_tablero->reiniciar();
-		if(m_configuracion->dispositivo_salida() != NULL)
-			m_configuracion->dispositivo_salida()->Reset();
+		this->reiniciar();
 	}
 	if(cambio_teclado)
 	{
@@ -419,4 +731,5 @@ void VentanaOrgano::evento_pantalla(float ancho, float alto)
 	m_texto_velocidad.dimension(ancho, 40);
 	m_texto_pausa.dimension(ancho, 40);
 	m_subtitulos.dimension(Pantalla::Ancho, 20);
+	m_texto_combos.dimension(Pantalla::Ancho, 20);
 }
