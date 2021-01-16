@@ -1,7 +1,7 @@
 #ifndef VENTANAORGANO_H
 #define VENTANAORGANO_H
 
-#define COMBO_MINIMO_MOSTRAR 5
+#define COMBO_MINIMO_MOSTRAR 4
 
 #include "ventana.h++"
 #include "../elementos_graficos/barra_progreso.h++"
@@ -62,6 +62,7 @@ private:
 	std::array<Color, 128> m_color_teclas_teclas;
 	std::array<float, 128> m_tiempo_espera;
 	std::vector<unsigned char> m_notas_correctas;
+	std::set<unsigned char> m_notas_requeridas;
 	std::vector<unsigned int> m_primera_nota;//Ultima nota por cada pista
 	std::vector<Pista> *m_pistas;
 	microseconds_t m_tiempo_actual_midi;
@@ -80,6 +81,10 @@ private:
 	void insertar_nota_activa(unsigned char id_nota, unsigned char canal, Color color, bool sonido, bool correcta);
 	bool esta_tocada(unsigned char id_nota);
 	void eliminar_nota_tocada(unsigned char id_nota);
+
+	void agregar_nota_requerida(unsigned char id_nota);
+	void borrar_notas_requeridas();
+	bool hay_notas_requeridas();
 
 public:
 	VentanaOrgano(Configuracion *configuracion, Datos_Musica *musica, Administrador_Recursos *recursos);

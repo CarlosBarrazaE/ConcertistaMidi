@@ -126,7 +126,8 @@ void VentanaOrgano::actualizar(unsigned int diferencia_tiempo)
 	//Se calculan los microsegundos entre fotogramas para actualizar el midi
 	unsigned int microsegundos_actualizar = static_cast<unsigned int>((static_cast<double>(diferencia_tiempo) / 1000.0) * m_velocidad_musica);
 
-	this->reproducir_eventos(microsegundos_actualizar);
+	if(!this->hay_notas_requeridas())
+		this->reproducir_eventos(microsegundos_actualizar);
 	this->calcular_teclas_activas(diferencia_tiempo);
 	this->escuchar_eventos();
 
@@ -212,6 +213,7 @@ void VentanaOrgano::reproducir_eventos(unsigned int microsegundos_actualizar)
 	m_tiempo_actual_midi = m_musica->musica()->GetSongPositionInMicroseconds();
 
 	//Se escriben las notas
+	bool notas_requeridas_nuevas = false;
 	for (MidiEventListWithTrackId::const_iterator i = eventos.begin(); i != eventos.end(); i++)
 	{
 		bool reproducir_evento = false;
@@ -228,7 +230,12 @@ void VentanaOrgano::reproducir_eventos(unsigned int microsegundos_actualizar)
 		//Solo son erroneas las notas que no se tocan correctamente en el noteon
 		if(i->second.Type() == MidiEventType_NoteOn && i->second.NoteVelocity() > 0)
 		{
-
+			//Agrega la nota actual a notas requeridas
+			if(m_pistas->at(i->first).modo() == Aprender)
+			{
+				this->agregar_nota_requerida(static_cast<unsigned char>(i->second.NoteNumber()));
+				notas_requeridas_nuevas = true;
+			}
 		}
 		else if((i->second.Type() == MidiEventType_NoteOn || i->second.Type() == MidiEventType_NoteOff) && i->second.NoteVelocity() == 0)
 		{
@@ -242,10 +249,14 @@ void VentanaOrgano::reproducir_eventos(unsigned int microsegundos_actualizar)
 				std::map<unsigned char, Nota_Activa*>::iterator nota = m_notas_activas.find(static_cast<unsigned char>(i->second.NoteNumber()));
 				if(nota != m_notas_activas.end())
 				{
-					//La nota si fue tocada pero ahora se paso de largo
-					//Asegurandome que no sea una nueva nota que empeso un momento antes
+					//La nota si fue tocada correctamente pero ahora se paso de largo
+					//y asegurandome que no sea una nueva nota que empezo un momento antes
+					//no se considera erroneo pero cambia el color a plomo
 					if(nota->second->correcta && !this->esta_tocada(i->second.NoteNumber()))
+					{
 						nota->second->color = Pista::Colores_pista[NUMERO_COLORES_PISTA];
+						nota->second->correcta = false;
+					}
 				}
 			}
 		}
@@ -257,6 +268,9 @@ void VentanaOrgano::reproducir_eventos(unsigned int microsegundos_actualizar)
 				m_configuracion->dispositivo_salida()->Write(i->second);
 		}
 	}
+	//Borra las notas requeridas si todas son tocadas a la vez
+	if(notas_requeridas_nuevas)
+		this->borrar_notas_requeridas();
 }
 
 void VentanaOrgano::escuchar_eventos()
@@ -266,6 +280,7 @@ void VentanaOrgano::escuchar_eventos()
 		return;
 
 	//Lee todos los eventos
+	bool nuevas_notas_tocadas = false;
 	while(m_configuracion->dispositivo_entrada()->KeepReading())
 	{
 		MidiEvent evento = m_configuracion->dispositivo_entrada()->Read();
@@ -331,8 +346,13 @@ void VentanaOrgano::escuchar_eventos()
 				evento.SetVelocity(nota_encontrada->velocity);
 
 				//Aumenta el contador de combos
-				m_combos++;
+				//El modo aprender cuenta los combos cuando todas las notas son tocadas correctamente
+				//en el metodo borrar_notas_requeridas()
+				if(m_pistas->at(pista_encontrada).modo() != Aprender)
+					m_combos++;
 				m_notas_correctas.push_back(nota_encontrada->note_id);
+
+				nuevas_notas_tocadas = true;
 
 				//Se envia el evento
 				if(m_configuracion->dispositivo_salida() != NULL && m_pistas->at(pista_encontrada).sonido())
@@ -384,6 +404,9 @@ void VentanaOrgano::escuchar_eventos()
 			}
 		}
 	}
+	//Borra las notas requeridas si todas son tocadas a la vez
+	if(nuevas_notas_tocadas)
+		this->borrar_notas_requeridas();
 }
 
 void VentanaOrgano::reproducir_subtitulos(const MidiEvent &evento)
@@ -547,6 +570,9 @@ void VentanaOrgano::reiniciar()
 	//Reinicia las notas tocadas
 	m_notas_correctas.clear();
 
+	//Elimina todas las notas requeridas
+	m_notas_requeridas.clear();
+
 	//Reinicia la primera nota de cada pista a 0
 	for(unsigned int i=0; i<m_primera_nota.size(); i++)
 		m_primera_nota[i] = 0;
@@ -596,6 +622,41 @@ void VentanaOrgano::eliminar_nota_tocada(unsigned char id_nota)
 			return;
 		}
 	}
+}
+
+void VentanaOrgano::agregar_nota_requerida(unsigned char id_nota)
+{
+	m_notas_requeridas.insert(id_nota);
+}
+
+void VentanaOrgano::borrar_notas_requeridas()
+{
+	//Borra las notas requerida solo si todas estan activas al mismo tiempo
+	if(m_notas_requeridas.size() > 0)
+	{
+		for(unsigned char id_nota : m_notas_requeridas)
+		{
+			//Si falta alguna nota o no se toco a tiempo, entonces no se borra nada
+			std::map<unsigned char, Nota_Activa*>::iterator respuesta = m_notas_activas.find(id_nota);
+			if(respuesta != m_notas_activas.end())
+			{
+				if(!respuesta->second->correcta)
+					return;//La nota se toco antes de tiempo (ploma)
+			}
+			else
+				return;//La nota no es tocada
+		}
+		//Todas son tocadas correctamente por lo que se suman al combo
+		m_combos += static_cast<unsigned int>(m_notas_requeridas.size());
+		m_notas_requeridas.clear();
+	}
+}
+
+bool VentanaOrgano::hay_notas_requeridas()
+{
+	if(m_notas_requeridas.size() > 0)
+		return true;
+	return false;
 }
 
 void VentanaOrgano::evento_raton(Raton *raton)
