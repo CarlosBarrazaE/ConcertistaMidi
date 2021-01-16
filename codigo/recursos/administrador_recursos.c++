@@ -14,6 +14,7 @@ Administrador_Recursos::Administrador_Recursos()
 	m_archivo_texturas[T_TeclaBlancaPresionada] = "../texturas/tecla_blanca_presionada.tga";
 	m_archivo_texturas[T_TeclaBlancaPresionadaDoble] = "../texturas/tecla_blanca_presionada_doble.tga";
 	m_archivo_texturas[T_TeclaNegraPresionada] = "../texturas/tecla_negra_presionada.tga";
+	m_archivo_texturas[T_Circulo] = "../texturas/circulo.tga";
 	m_archivo_texturas[T_BordeOrganoRojo] = "../texturas/borde_organo_rojo.tga";
 	m_archivo_texturas[T_BordeOrganoNegro] = "../texturas/borde_organo_negro.tga";
 	m_archivo_texturas[T_Nota] = "../texturas/nota.tga";
@@ -38,8 +39,8 @@ Administrador_Recursos::Administrador_Recursos()
 	m_archivo_texturas[T_Color_8] = "../texturas/color_8.tga";
 	m_archivo_texturas[T_Color_9] = "../texturas/color_9.tga";
 	m_archivo_texturas[T_Color_Invisible] = "../texturas/color_invisible.tga";
-	m_archivo_texturas[T_ManoIzquierda] = "../texturas/mano_izquierda.tga";
-	m_archivo_texturas[T_ManoDerecha] = "../texturas/mano_derecha.tga";
+	m_archivo_texturas[T_Tocar] = "../texturas/tocar.tga";
+	m_archivo_texturas[T_Aprender] = "../texturas/aprender.tga";
 	m_archivo_texturas[T_MusicaFondo] = "../texturas/musica_fondo.tga";
 	m_archivo_texturas[T_CasillaInactiva] = "../texturas/casilla_verificacion_inactiva.tga";
 	m_archivo_texturas[T_CasillaActiva] = "../texturas/casilla_verificacion_activa.tga";

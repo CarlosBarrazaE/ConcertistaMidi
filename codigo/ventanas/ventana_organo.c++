@@ -69,6 +69,7 @@ VentanaOrgano::VentanaOrgano(Configuracion *configuracion, Datos_Musica *musica,
 	m_tablero->pistas(m_pistas);
 	m_tablero->lineas(m_musica->musica()->GetBarLines());
 	m_organo->notas_activas(&m_color_teclas_teclas);
+	m_organo->notas_requeridas(&m_notas_requeridas);
 
 	//Carga la configuracion de la base de datos de la duracion
 	std::string resultado_duracion = m_configuracion->leer("duracion_nota");
@@ -233,7 +234,7 @@ void VentanaOrgano::reproducir_eventos(unsigned int microsegundos_actualizar)
 			//Agrega la nota actual a notas requeridas
 			if(m_pistas->at(i->first).modo() == Aprender)
 			{
-				this->agregar_nota_requerida(static_cast<unsigned char>(i->second.NoteNumber()));
+				this->agregar_nota_requerida(static_cast<unsigned char>(i->second.NoteNumber()), m_pistas->at(i->first).color());
 				notas_requeridas_nuevas = true;
 			}
 		}
@@ -624,9 +625,9 @@ void VentanaOrgano::eliminar_nota_tocada(unsigned char id_nota)
 	}
 }
 
-void VentanaOrgano::agregar_nota_requerida(unsigned char id_nota)
+void VentanaOrgano::agregar_nota_requerida(unsigned char id_nota, const Color &color)
 {
-	m_notas_requeridas.insert(id_nota);
+	m_notas_requeridas[id_nota] = color;
 }
 
 void VentanaOrgano::borrar_notas_requeridas()
@@ -634,10 +635,10 @@ void VentanaOrgano::borrar_notas_requeridas()
 	//Borra las notas requerida solo si todas estan activas al mismo tiempo
 	if(m_notas_requeridas.size() > 0)
 	{
-		for(unsigned char id_nota : m_notas_requeridas)
+		for(std::pair<unsigned char, Color> valor : m_notas_requeridas)
 		{
 			//Si falta alguna nota o no se toco a tiempo, entonces no se borra nada
-			std::map<unsigned char, Nota_Activa*>::iterator respuesta = m_notas_activas.find(id_nota);
+			std::map<unsigned char, Nota_Activa*>::iterator respuesta = m_notas_activas.find(valor.first);
 			if(respuesta != m_notas_activas.end())
 			{
 				if(!respuesta->second->correcta)

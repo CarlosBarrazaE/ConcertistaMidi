@@ -47,8 +47,8 @@ Configuracion_Pista::Configuracion_Pista(float x, float y, float ancho, float al
 	opcion_color.push_back("Invisible");
 
 	std::vector<Textura2D*> icono_modos;
-	icono_modos.push_back(recursos->textura(T_ManoIzquierda));
-	icono_modos.push_back(recursos->textura(T_ManoDerecha));
+	icono_modos.push_back(recursos->textura(T_Tocar));
+	icono_modos.push_back(recursos->textura(T_Aprender));
 	icono_modos.push_back(recursos->textura(T_MusicaFondo));
 
 	std::vector<Textura2D*> icono_color;

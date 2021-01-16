@@ -11,6 +11,7 @@ Organo::Organo(float x, float y, float ancho, Teclado_Organo *teclado, Administr
 	m_tecla_blanca_presionada = recursos->textura(T_TeclaBlancaPresionada);
 	m_tecla_blanca_presionada_doble = recursos->textura(T_TeclaBlancaPresionadaDoble);
 	m_tecla_negra_presionada = recursos->textura(T_TeclaNegraPresionada);
+	m_circulo = recursos->textura(T_Circulo);
 
 	m_borde_negro = recursos->textura(T_BordeOrganoNegro);
 	m_borde_rojo = recursos->textura(T_BordeOrganoRojo);
@@ -73,6 +74,16 @@ void Organo::dibujar_blancas(float x, float y, unsigned int tecla_inicial, unsig
 		//	m_rectangulo->color(Color(0.5f, 0.7f, 0.3f));
 
 		m_rectangulo->dibujar(desplazamiento, y, m_ancho_tecla_blanca - 1, m_alto_tecla_blanca);
+
+		//Dibuja un punto indicando que debe tocar la nota
+		std::map<unsigned char, Color>::iterator respuesta = m_notas_requeridas->find(static_cast<unsigned char>(n));
+		if(respuesta != m_notas_requeridas->end())
+		{
+			m_rectangulo->color(respuesta->second);
+			m_circulo->activar();
+			m_rectangulo->dibujar(desplazamiento+m_ancho_tecla_blanca/4.0f, y+m_alto_tecla_blanca-(m_ancho_tecla_blanca/2.0f)-10, (m_ancho_tecla_blanca/2.0f)-1, (m_ancho_tecla_blanca/2.0f)-1);
+		}
+
 		desplazamiento += m_ancho_tecla_blanca;
 	}
 }
@@ -116,6 +127,15 @@ void Organo::dibujar_negras(float x, float y, unsigned int tecla_inicial, unsign
 
 		//El ancho de la tecla mas el ancho de la sombra
 		m_rectangulo->dibujar(desplazamiento, y, m_ancho_tecla_negra + m_ancho_tecla_negra * 0.22f, m_alto_tecla_negra);
+
+		//Dibuja un punto indicando que debe tocar la nota
+		std::map<unsigned char, Color>::iterator respuesta = m_notas_requeridas->find(static_cast<unsigned char>(n));
+		if(respuesta != m_notas_requeridas->end())
+		{
+			m_rectangulo->color(respuesta->second);
+			m_circulo->activar();
+			m_rectangulo->dibujar(desplazamiento+m_ancho_tecla_negra/4.0f, y+m_alto_tecla_negra-(m_ancho_tecla_negra/2.0f)-20, (m_ancho_tecla_negra/2.0f)-1, (m_ancho_tecla_negra/2.0f)-1);
+		}
 	}
 }
 
@@ -235,6 +255,11 @@ void Organo::dimension(float ancho, float alto)
 void Organo::notas_activas(std::array<Color, 128> *notas)
 {
 	m_notas_activas = notas;
+}
+
+void Organo::notas_requeridas(std::map<unsigned char, Color> *notas_requeridas)
+{
+	m_notas_requeridas = notas_requeridas;
 }
 
 void Organo::calcular_tamannos()

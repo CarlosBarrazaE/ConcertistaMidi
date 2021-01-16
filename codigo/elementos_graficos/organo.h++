@@ -28,6 +28,7 @@ private:
 	Textura2D *m_tecla_negra_presionada;
 	Textura2D *m_borde_negro;
 	Textura2D *m_borde_rojo;
+	Textura2D *m_circulo;
 
 	Generador_Particulas *m_generador_particulas;
 	float m_tiempo;
@@ -38,6 +39,7 @@ private:
 	float m_alto_tecla_blanca, m_alto_tecla_negra;
 
 	std::array<Color, 128> *m_notas_activas;
+	std::map<unsigned char, Color> *m_notas_requeridas;
 	unsigned char m_nota_enviada_anterior;
 
 	//Metodos
@@ -55,6 +57,7 @@ public:
 	void dimension(float ancho, float alto) override;
 
 	void notas_activas(std::array<Color, 128> *notas);
+	void notas_requeridas(std::map<unsigned char, Color> *notas_requeridas);
 
 	void calcular_tamannos();
 };
