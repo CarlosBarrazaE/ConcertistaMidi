@@ -25,6 +25,8 @@ VentanaOrgano::VentanaOrgano(Configuracion *configuracion, Datos_Musica *musica,
 	std::string resultado_teclado = m_configuracion->leer("tipo_teclado");
 	if(resultado_teclado != "")
 		m_teclado_actual.cargar(resultado_teclado);
+	else
+		m_teclado_actual.cambiar(21, 88);//Teclado normal de 88 teclas
 
 	m_barra = new Barra_Progreso(0, 40, Pantalla::Ancho, 40, m_musica->musica()->GetSongLengthInMicroseconds(), m_musica->musica()->GetBarLines(), recursos);
 	m_organo = new Organo(0, Pantalla::Alto, Pantalla::Ancho, &m_teclado_actual, recursos);
