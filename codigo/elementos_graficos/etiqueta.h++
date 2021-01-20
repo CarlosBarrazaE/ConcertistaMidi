@@ -44,8 +44,8 @@ public:
 
 	void margen(float margen);
 
-	void texto(std::string texto);
-	void color(Color color);
+	void texto(const std::string &texto);
+	void color(const Color &color);
 	void tipografia(Tipografia *tipografia);
 	float largo_texto();
 	float alto_texto();

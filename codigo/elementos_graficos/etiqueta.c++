@@ -102,7 +102,7 @@ void Etiqueta::dibujar()
 	m_sombreador->uniforme_matriz4("modelo", modelo);
 	if(Etiqueta::Ultimo_color != m_color)
 	{
-		m_sombreador->uniforme_vector3f("color_texto", m_color.rojo(), m_color.verde(), m_color.azul());
+		m_sombreador->uniforme_vector4f("color_texto", m_color.rojo(), m_color.verde(), m_color.azul(), m_color.alfa());
 		Etiqueta::Ultimo_color = m_color;
 	}
 
@@ -136,7 +136,7 @@ void Etiqueta::margen(float margen)
 	m_margen = margen;
 }
 
-void Etiqueta::texto(std::string texto)
+void Etiqueta::texto(const std::string &texto)
 {
 	//No se vuelve a crear el mismo texto dos veces
 	if(m_texto_actual != texto)
@@ -147,7 +147,7 @@ void Etiqueta::texto(std::string texto)
 	this->actualizar_texto();
 }
 
-void Etiqueta::color(Color color)
+void Etiqueta::color(const Color &color)
 {
 	m_color = color;
 }
