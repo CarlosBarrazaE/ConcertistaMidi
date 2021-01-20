@@ -1,14 +1,13 @@
 #ifndef VENTANAORGANO_H
 #define VENTANAORGANO_H
 
-#define COMBO_MINIMO_MOSTRAR 4
-
 #include "ventana.h++"
 #include "../elementos_graficos/barra_progreso.h++"
 #include "../elementos_graficos/etiqueta.h++"
 #include "../elementos_graficos/tablero_notas.h++"
 #include "../elementos_graficos/organo.h++"
 #include "../elementos_graficos/titulo.h++"
+#include "../elementos_graficos/puntuacion.h++"
 #include "../control/pista.h++"
 #include "../control/teclado_organo.h++"
 #include "../control/configuracion.h++"
@@ -33,6 +32,7 @@ private:
 	Tablero_Notas *m_tablero;
 	Organo *m_organo;
 	Titulo *m_titulo_musica;
+	Puntuacion *m_puntaje;
 	Etiqueta m_texto_velocidad;
 	Etiqueta m_texto_pausa;
 	Etiqueta m_subtitulos;
@@ -66,9 +66,6 @@ private:
 	std::vector<unsigned int> m_primera_nota;//Ultima nota por cada pista
 	std::vector<Pista> *m_pistas;
 	microseconds_t m_tiempo_actual_midi;
-
-	unsigned int m_combos;
-	int m_falla_combo;
 
 	void inicializar();
 	void reproducir_eventos(unsigned int microsegundos_actualizar);

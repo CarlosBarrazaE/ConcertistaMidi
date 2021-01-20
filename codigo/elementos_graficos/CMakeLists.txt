@@ -11,6 +11,7 @@ set(elementos_graficos
 	${CMAKE_CURRENT_SOURCE_DIR}/fila.c++
 	${CMAKE_CURRENT_SOURCE_DIR}/tabla.c++
 	${CMAKE_CURRENT_SOURCE_DIR}/notificacion.c++
+	${CMAKE_CURRENT_SOURCE_DIR}/puntuacion.c++
 	${CMAKE_CURRENT_SOURCE_DIR}/ruta_exploracion.c++
 	${CMAKE_CURRENT_SOURCE_DIR}/casilla_verificacion.c++
 	${CMAKE_CURRENT_SOURCE_DIR}/entrada_texto.c++

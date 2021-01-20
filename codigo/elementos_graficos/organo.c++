@@ -132,7 +132,7 @@ void Organo::dibujar_negras(float x, float y, unsigned int tecla_inicial, unsign
 		std::map<unsigned char, Color>::iterator respuesta = m_notas_requeridas->find(static_cast<unsigned char>(n));
 		if(respuesta != m_notas_requeridas->end())
 		{
-			m_rectangulo->color(respuesta->second);
+			m_rectangulo->color(static_cast<Color>(respuesta->second)-0.2f);
 			m_circulo->activar();
 			m_rectangulo->dibujar(desplazamiento+m_ancho_tecla_negra/4.0f, y+m_alto_tecla_negra-(m_ancho_tecla_negra/2.0f)-20, (m_ancho_tecla_negra/2.0f)-1, (m_ancho_tecla_negra/2.0f)-1);
 		}

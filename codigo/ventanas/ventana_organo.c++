@@ -35,6 +35,8 @@ VentanaOrgano::VentanaOrgano(Configuracion *configuracion, Datos_Musica *musica,
 	m_titulo_musica = new Titulo(0, m_barra->alto()+40, Pantalla::Ancho, Pantalla::Alto - (m_organo->alto() + m_barra->alto() + 40), recursos);
 	m_titulo_musica->datos(musica);
 
+	m_puntaje = new Puntuacion(20, 100, 200, 84, recursos);
+
 	m_texto_velocidad.texto(std::to_string(static_cast<int>(m_velocidad_musica*100)) + "%");
 	m_texto_velocidad.tipografia(recursos->tipografia(LetraTitulo));
 	m_texto_velocidad.color(Color(1.0f, 1.0f, 1.0f));
@@ -56,7 +58,6 @@ VentanaOrgano::VentanaOrgano(Configuracion *configuracion, Datos_Musica *musica,
 	m_subtitulos.dimension(Pantalla::Ancho, 20);
 	m_subtitulos.centrado(true);
 
-	m_combos = 0;
 	m_texto_combos.texto("");
 	m_texto_combos.tipografia(recursos->tipografia(LetraTitulo));
 	m_texto_combos.color(Color(1.0f, 0.5f, 0.0f));
@@ -109,10 +110,11 @@ VentanaOrgano::~VentanaOrgano()
 	m_configuracion->dispositivo_entrada()->Reset();
 	if(m_configuracion->dispositivo_salida() != NULL)
 		m_configuracion->dispositivo_salida()->Reset();
-	delete m_titulo_musica;
 	delete m_barra;
 	delete m_tablero;
 	delete m_organo;
+	delete m_titulo_musica;
+	delete m_puntaje;
 }
 
 void VentanaOrgano::actualizar(unsigned int diferencia_tiempo)
@@ -139,8 +141,8 @@ void VentanaOrgano::actualizar(unsigned int diferencia_tiempo)
 		m_color_teclas_teclas[valor.second->id_nota] = valor.second->color;
 
 	//Actualiza la etiqueta de combos
-	if(m_combos > COMBO_MINIMO_MOSTRAR)
-		m_texto_combos.texto("¡Combo " + std::to_string(m_combos) + "!");
+	if(m_puntaje->combo() > COMBO_MINIMO_MOSTRAR)
+		m_texto_combos.texto("¡Combo " + std::to_string(m_puntaje->combo()) + "!");
 
 	//Si selecciono un nuevo tiempo en la barra de progreso, se cambia la posicion.
 	microseconds_t cambio_tiempo = m_barra->tiempo_seleccionado();
@@ -148,6 +150,7 @@ void VentanaOrgano::actualizar(unsigned int diferencia_tiempo)
 	{
 		m_musica->musica()->GoTo(cambio_tiempo);
 		m_tiempo_actual_midi = m_musica->musica()->GetSongPositionInMicroseconds();
+		m_tiempo_actual_midi = cambio_tiempo;
 		this->reiniciar();
 	}
 
@@ -189,8 +192,9 @@ void VentanaOrgano::dibujar()
 		m_subtitulos.dibujar();
 		m_rectangulo->extremos_fijos(false, false);
 	}
-	if(m_combos > COMBO_MINIMO_MOSTRAR)
+	if(m_puntaje->combo() > COMBO_MINIMO_MOSTRAR)
 		m_texto_combos.dibujar();
+	m_puntaje->dibujar();
 	m_titulo_musica->dibujar();
 }
 
@@ -205,6 +209,16 @@ void VentanaOrgano::inicializar()
 		m_tiempo_espera[i] = 0;
 
 	m_tiempo_actual_midi = 0;
+
+	//Cuenta el numero de notas totales que seran jugadas
+	std::vector<MidiTrack> pistas_midi = m_musica->musica()->Tracks();
+	unsigned int notas_jugables = 0;
+	for(unsigned int i=0; i<pistas_midi.size(); i++)
+	{
+		if(m_pistas->at(i).modo() != Fondo)
+			notas_jugables += pistas_midi[i].AggregateNoteCount();
+	}
+	m_puntaje->notas_totales(notas_jugables);
 }
 
 void VentanaOrgano::reproducir_eventos(unsigned int microsegundos_actualizar)
@@ -248,7 +262,7 @@ void VentanaOrgano::reproducir_eventos(unsigned int microsegundos_actualizar)
 				if(this->esta_tocada(i->second.NoteNumber()))
 					this->eliminar_nota_tocada(i->second.NoteNumber());
 				else
-					m_combos = 0;//La nota no fue tocada, pierde el combo
+					m_puntaje->reiniciar_combo();
 				std::map<unsigned char, Nota_Activa*>::iterator nota = m_notas_activas.find(static_cast<unsigned char>(i->second.NoteNumber()));
 				if(nota != m_notas_activas.end())
 				{
@@ -349,10 +363,13 @@ void VentanaOrgano::escuchar_eventos()
 				evento.SetVelocity(nota_encontrada->velocity);
 
 				//Aumenta el contador de combos
-				//El modo aprender cuenta los combos cuando todas las notas son tocadas correctamente
+				//El modo aprender cuenta el puntaje cuando todas las notas son tocadas correctamente
 				//en el metodo borrar_notas_requeridas()
 				if(m_pistas->at(pista_encontrada).modo() != Aprender)
-					m_combos++;
+				{
+					m_puntaje->combo(1);//Suma 1
+					m_puntaje->nota_correcta(1, m_tiempo_actual_midi, m_velocidad_musica);
+				}
 				m_notas_correctas.push_back(nota_encontrada->note_id);
 
 				nuevas_notas_tocadas = true;
@@ -372,7 +389,9 @@ void VentanaOrgano::escuchar_eventos()
 					m_configuracion->dispositivo_salida()->Write(evento);
 
 				//Pierde el combo
-				m_combos = 0;
+				m_puntaje->reiniciar_combo();
+				if(m_tiempo_actual_midi >= 0)
+					m_puntaje->sumar_error();//Solo cuenta el error cuando toca cuando no correspone
 			}
 		}
 		else
@@ -532,7 +551,7 @@ void VentanaOrgano::calcular_teclas_activas(unsigned int diferencia_tiempo)
 					//ya que se acabo el tiempo para tocar la nota
 					if(!this->esta_tocada(numero_nota))
 					{
-						m_combos = 0;
+						m_puntaje->reiniciar_combo();
 						//Se inserta para que no vuelva a borrar el combo la misma nota
 						m_notas_correctas.push_back(numero_nota);
 					}
@@ -568,7 +587,8 @@ void VentanaOrgano::reiniciar()
 	m_tablero->reiniciar();
 
 	//Reinicia el contador de combos
-	m_combos = 0;
+	m_puntaje->reiniciar_combo();
+	m_puntaje->cambiar_a(m_tiempo_actual_midi);
 
 	//Reinicia las notas tocadas
 	m_notas_correctas.clear();
@@ -650,7 +670,8 @@ void VentanaOrgano::borrar_notas_requeridas()
 				return;//La nota no es tocada
 		}
 		//Todas son tocadas correctamente por lo que se suman al combo
-		m_combos += static_cast<unsigned int>(m_notas_requeridas.size());
+		m_puntaje->combo(static_cast<unsigned int>(m_notas_requeridas.size()));
+		m_puntaje->nota_correcta(static_cast<unsigned int>(m_notas_requeridas.size()), m_tiempo_actual_midi, 0);
 		m_notas_requeridas.clear();
 	}
 }
@@ -772,6 +793,7 @@ void VentanaOrgano::evento_teclado(Tecla tecla, bool estado)
 	{
 		//Va al inicio de la canción
 		m_musica->reiniciar(2000000);
+		m_tiempo_actual_midi = m_musica->musica()->GetSongPositionInMicroseconds();
 		this->reiniciar();
 	}
 	if(cambio_teclado)
