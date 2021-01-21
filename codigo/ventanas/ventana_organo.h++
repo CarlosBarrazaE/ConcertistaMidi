@@ -44,6 +44,7 @@ private:
 	bool m_pausa;
 	bool m_retorno_carro;
 	bool m_mostrar_subtitulo;
+	bool m_descartar_texto_inicial;
 	int m_duracion_nota;
 
 	//Para saver si es necesario guardar

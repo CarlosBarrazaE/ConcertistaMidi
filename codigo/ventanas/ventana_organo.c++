@@ -97,6 +97,7 @@ VentanaOrgano::VentanaOrgano(Configuracion *configuracion, Datos_Musica *musica,
 		m_mostrar_subtitulo = false;
 	else
 		m_mostrar_subtitulo = true;
+	m_descartar_texto_inicial = true;
 
 	m_guardar_velocidad = false;
 	m_guardar_duracion_nota = false;
@@ -437,7 +438,7 @@ void VentanaOrgano::reproducir_subtitulos(const MidiEvent &evento)
 		return;
 	std::string nuevo_texto = evento.Text();
 	std::replace(nuevo_texto.begin(), nuevo_texto.end(), '_', ' ');
-	if(evento.MetaType() == MidiMetaEvent_Lyric || (evento.MetaType() == MidiMetaEvent_Text && evento.GetDeltaPulses() > 0))
+	if(evento.MetaType() == MidiMetaEvent_Lyric || (evento.MetaType() == MidiMetaEvent_Text && (evento.GetDeltaPulses() > 0 || !m_descartar_texto_inicial)))
 	{
 		//Retorno de carro para la proxima linea generalmente en MidiMetaEvent_Lyric
 		if(nuevo_texto.length() > 0 && (nuevo_texto[0] == '\r' || nuevo_texto[0] == '\n'))
@@ -458,6 +459,12 @@ void VentanaOrgano::reproducir_subtitulos(const MidiEvent &evento)
 			else
 				m_subtitulo_texto += nuevo_texto;
 		}
+
+		//Al comienzo de algunos midi se incluye texto que no corresponde a la letra de la cancion
+		//con GetDeltaPulses igual a cero se puede detectar, en cambio cuando es letra normalmente es mayor a 0 pero no siempre,
+		//por eso se espera a que al menos exista texto con GetDeltaPulses > 0 para asegurarse que no se muestra
+		//texto incorrecto, solo es valido para MidiMetaEvent_Text
+		m_descartar_texto_inicial = false;
 	}
 	//Limpia la cadena si contiene caracteres invisibles
 	if(Texto::esta_vacio(m_subtitulo_texto) && m_subtitulo_texto.length() > 0)
@@ -597,6 +604,9 @@ void VentanaOrgano::reiniciar()
 	//Reinicia la salida
 	if(m_configuracion->dispositivo_salida() != NULL)
 		m_configuracion->dispositivo_salida()->Reset();
+
+	//Descarta texto inicial de archivo midi
+	m_descartar_texto_inicial = true;
 }
 
 void VentanaOrgano::insertar_nota_activa(unsigned int id_nota, unsigned char canal, Color color, bool sonido, bool correcta)
