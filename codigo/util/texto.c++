@@ -95,4 +95,12 @@ namespace Texto
 
 		return resultado;
 	}
+
+	std::string quitar_espacios_en_extremos(std::string texto)
+	{
+		//Quita los espacios en blanco al principio y al final
+		texto.erase(0, texto.find_first_not_of(" \t\n\r"));//Limpia el comienzo
+		texto.erase(texto.find_last_not_of(" \t\n\r")+1);//Limpia el final
+		return texto;
+	}
 }

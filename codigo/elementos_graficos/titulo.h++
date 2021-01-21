@@ -17,6 +17,7 @@ private:
 	unsigned short int m_estado;
 	unsigned int m_tiempo = 0;
 	float m_posicion_texto;
+	float m_texto_largo;
 	float m_alfa;
 
 public:

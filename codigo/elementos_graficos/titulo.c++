@@ -17,6 +17,7 @@ Titulo::Titulo(float x, float y, float ancho, float alto, Administrador_Recursos
 
 	m_alfa = 0;
 	m_estado = 0;
+	m_texto_largo = 0;
 }
 
 Titulo::~Titulo()
@@ -58,7 +59,7 @@ void Titulo::actualizar(unsigned int diferencia_tiempo)
 	else if(m_estado == 3)//Salida
 	{
 		m_posicion_texto -= velocidad_pixeles;
-		if(m_posicion_texto < -(this->ancho() / 2 + m_titulo.largo_texto() / 2))
+		if(m_posicion_texto < -m_texto_largo)
 			m_estado = 4;
 	}
 	else if(m_estado == 4)//Desaparecer
@@ -118,5 +119,9 @@ void Titulo::datos(Datos_Musica *datos_musica)
 	m_datos = datos_musica;
 	m_titulo.texto(m_datos->nombre_musica());
 	m_autor.texto(m_datos->autor());
-	m_posicion_texto = this->ancho() / 2 + m_titulo.largo_texto() / 2;
+	if(m_titulo.largo_texto() > m_autor.largo_texto())
+		m_texto_largo = this->ancho() / 2 + m_titulo.largo_texto() / 2;
+	else
+		m_texto_largo = this->ancho() / 2 + m_autor.largo_texto() / 2;
+	m_posicion_texto = m_texto_largo;
 }

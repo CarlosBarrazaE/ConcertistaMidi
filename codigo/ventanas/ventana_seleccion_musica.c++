@@ -272,8 +272,35 @@ bool VentanaSeleccionMusica::abrir_archivo_seleccionado()
 				if(m_musica->musica()->GetSongLengthInMicroseconds() != archivo_abierto.duracion)
 					m_datos->actualizar_archivo(archivo_abierto.ruta, m_musica->musica()->GetSongLengthInMicroseconds());
 
-				m_musica->nombre_musica(archivo_abierto.nombre);
-				m_musica->autor("");
+				//El formato del nombre se considera: Nombre autor - Nombre musica
+				std::vector<std::string> nombres = Texto::dividir_texto(archivo_abierto.nombre, '-');
+				if(nombres.size() == 0)
+				{
+					//Archivo sin nombre, solo espacios
+					m_musica->nombre_musica("Sin Nombre");
+					m_musica->autor("");
+				}
+				if(nombres.size() == 1)
+				{
+					//Archivo con solo el nombre de la musica
+					m_musica->nombre_musica(Texto::quitar_espacios_en_extremos(nombres[0]));
+					m_musica->autor("");
+				}
+				else if(nombres.size() > 1)
+				{
+					//Archivo con el nombre de autor y nombre de la musica
+					m_musica->autor(Texto::quitar_espacios_en_extremos(nombres[0]));
+					//Unir todos los demas textos
+					std::string nombre_final;
+					for(unsigned long int x=1; x<nombres.size(); x++)
+					{
+						if(x==1)
+							nombre_final = nombres[x];
+						else
+							nombre_final += "-"+nombres[x];
+					}
+					m_musica->nombre_musica(Texto::quitar_espacios_en_extremos(nombre_final));
+				}
 				return true;
 			}
 			return false;

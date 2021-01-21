@@ -16,6 +16,7 @@ namespace Texto
 	bool esta_vacio(const std::string &texto);
 	std::string bytes_a_texto(unsigned long int tamanno);
 	std::string primera_letra_mayuscula(const std::string &texto);
+	std::string quitar_espacios_en_extremos(std::string texto);
 }
 
 #endif

@@ -463,7 +463,7 @@ void VentanaOrgano::reproducir_subtitulos(const MidiEvent &evento)
 	if(Texto::esta_vacio(m_subtitulo_texto) && m_subtitulo_texto.length() > 0)
 		m_subtitulo_texto = "";
 	if(m_mostrar_subtitulo)
-		m_subtitulos.texto(m_subtitulo_texto);
+		m_subtitulos.texto(Texto::quitar_espacios_en_extremos(m_subtitulo_texto));
 	/*
 	if(evento.MetaType() == MidiMetaEvent_Copyright)
 		Registro::Depurar("Evento Meta: MidiMetaEvent_Copyright Contenido: " + evento.Text() + " Largo: " + std::to_string(evento.Text().length()));
@@ -736,7 +736,7 @@ void VentanaOrgano::evento_teclado(Tecla tecla, bool estado)
 		m_guardar_estado_subtitulo = !m_guardar_estado_subtitulo;
 		//Actualiza el subtitulo
 		if(m_mostrar_subtitulo)
-			m_subtitulos.texto(m_subtitulo_texto);
+			m_subtitulos.texto(Texto::quitar_espacios_en_extremos(m_subtitulo_texto));
 	}
 	else if(tecla == TECLA_F5 && estado)
 	{
