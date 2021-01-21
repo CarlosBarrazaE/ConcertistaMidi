@@ -76,7 +76,7 @@ void Organo::dibujar_blancas(float x, float y, unsigned int tecla_inicial, unsig
 		m_rectangulo->dibujar(desplazamiento, y, m_ancho_tecla_blanca - 1, m_alto_tecla_blanca);
 
 		//Dibuja un punto indicando que debe tocar la nota
-		std::map<unsigned char, Color>::iterator respuesta = m_notas_requeridas->find(static_cast<unsigned char>(n));
+		std::map<unsigned int, Color>::iterator respuesta = m_notas_requeridas->find(n);
 		if(respuesta != m_notas_requeridas->end())
 		{
 			m_rectangulo->color(respuesta->second);
@@ -129,7 +129,7 @@ void Organo::dibujar_negras(float x, float y, unsigned int tecla_inicial, unsign
 		m_rectangulo->dibujar(desplazamiento, y, m_ancho_tecla_negra + m_ancho_tecla_negra * 0.22f, m_alto_tecla_negra);
 
 		//Dibuja un punto indicando que debe tocar la nota
-		std::map<unsigned char, Color>::iterator respuesta = m_notas_requeridas->find(static_cast<unsigned char>(n));
+		std::map<unsigned int, Color>::iterator respuesta = m_notas_requeridas->find(n);
 		if(respuesta != m_notas_requeridas->end())
 		{
 			m_rectangulo->color(static_cast<Color>(respuesta->second)-0.2f);
@@ -235,8 +235,8 @@ void Organo::evento_raton(Raton *raton)
 			if(m_nota_enviada_anterior != SIN_NOTA)
 				sendNote(m_nota_enviada_anterior, false);
 			//Envia la nueva nota
-			sendNote(static_cast<unsigned char>(nota_enviar), true);
-			m_nota_enviada_anterior = static_cast<unsigned char>(nota_enviar);
+			sendNote(nota_enviar, true);
+			m_nota_enviada_anterior = nota_enviar;
 		}
 	}
 	else if(m_nota_enviada_anterior != SIN_NOTA)
@@ -257,7 +257,7 @@ void Organo::notas_activas(std::array<Color, 128> *notas)
 	m_notas_activas = notas;
 }
 
-void Organo::notas_requeridas(std::map<unsigned char, Color> *notas_requeridas)
+void Organo::notas_requeridas(std::map<unsigned int, Color> *notas_requeridas)
 {
 	m_notas_requeridas = notas_requeridas;
 }

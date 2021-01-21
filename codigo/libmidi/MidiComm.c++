@@ -84,7 +84,7 @@ void midiStop()
 	snd_seq_close(alsa_seq);
 }
 
-void sendNote(const unsigned char note, bool on)
+void sendNote(const unsigned int note, bool on)
 {
 	if (emulate_kb)
 	{
@@ -97,9 +97,9 @@ void sendNote(const unsigned char note, bool on)
 
 		if (on)
 			// velocity ~ 60 for audio preview
-			snd_seq_ev_set_noteon(&ev, 0, note, 60);
+			snd_seq_ev_set_noteon(&ev, 0, static_cast<unsigned char>(note), 60);
 		else
-			snd_seq_ev_set_noteoff(&ev, 0, note, 0);
+			snd_seq_ev_set_noteoff(&ev, 0, static_cast<unsigned char>(note), 0);
 
 		snd_seq_event_output(alsa_seq, &ev);
 		snd_seq_drain_output(alsa_seq);

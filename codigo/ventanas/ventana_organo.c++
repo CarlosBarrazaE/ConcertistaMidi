@@ -137,7 +137,7 @@ void VentanaOrgano::actualizar(unsigned int diferencia_tiempo)
 	this->escuchar_eventos();
 
 	//Agregar al organo el color de las teclas presionada
-	for(std::pair<unsigned char, Nota_Activa*> valor : m_notas_activas)
+	for(std::pair<unsigned int, Nota_Activa*> valor : m_notas_activas)
 		m_color_teclas_teclas[valor.second->id_nota] = valor.second->color;
 
 	//Actualiza la etiqueta de combos
@@ -250,7 +250,7 @@ void VentanaOrgano::reproducir_eventos(unsigned int microsegundos_actualizar)
 			//Agrega la nota actual a notas requeridas
 			if(m_pistas->at(i->first).modo() == Aprender)
 			{
-				this->agregar_nota_requerida(static_cast<unsigned char>(i->second.NoteNumber()), m_pistas->at(i->first).color());
+				this->agregar_nota_requerida(i->second.NoteNumber(), m_pistas->at(i->first).color());
 				notas_requeridas_nuevas = true;
 			}
 		}
@@ -263,7 +263,7 @@ void VentanaOrgano::reproducir_eventos(unsigned int microsegundos_actualizar)
 					this->eliminar_nota_tocada(i->second.NoteNumber());
 				else
 					m_puntaje->reiniciar_combo();
-				std::map<unsigned char, Nota_Activa*>::iterator nota = m_notas_activas.find(static_cast<unsigned char>(i->second.NoteNumber()));
+				std::map<unsigned int, Nota_Activa*>::iterator nota = m_notas_activas.find(i->second.NoteNumber());
 				if(nota != m_notas_activas.end())
 				{
 					//La nota si fue tocada correctamente pero ahora se paso de largo
@@ -397,7 +397,7 @@ void VentanaOrgano::escuchar_eventos()
 		else
 		{
 			//Eventos NoteOff
-			Nota_Activa *nota_encendida = m_notas_activas[static_cast<unsigned char>(evento.NoteNumber())];
+			Nota_Activa *nota_encendida = m_notas_activas[evento.NoteNumber()];
 			if(!nota_encendida)
 			{
 				//La nota no existe
@@ -415,7 +415,7 @@ void VentanaOrgano::escuchar_eventos()
 						m_configuracion->dispositivo_salida()->Write(evento);
 
 					//Borra la nota
-					m_notas_activas.erase(static_cast<unsigned char>(nota_encendida->id_nota));
+					m_notas_activas.erase(nota_encendida->id_nota);
 					delete nota_encendida;
 				}
 				//Se puede activar dos veces (o mas) la misma tecla por ejemplo con el teclado y el raton
@@ -437,12 +437,17 @@ void VentanaOrgano::reproducir_subtitulos(const MidiEvent &evento)
 		return;
 	std::string nuevo_texto = evento.Text();
 	std::replace(nuevo_texto.begin(), nuevo_texto.end(), '_', ' ');
-	//Letra de archivo midi
-	if(evento.MetaType() == MidiMetaEvent_Lyric)
+	if(evento.MetaType() == MidiMetaEvent_Lyric || (evento.MetaType() == MidiMetaEvent_Text && evento.GetDeltaPulses() > 0))
 	{
-		//Retorno de carro para la proxima linea
+		//Retorno de carro para la proxima linea generalmente en MidiMetaEvent_Lyric
 		if(nuevo_texto.length() > 0 && (nuevo_texto[0] == '\r' || nuevo_texto[0] == '\n'))
 			m_retorno_carro = true;
+		else if(nuevo_texto.length() > 0 && (nuevo_texto[0] == '\\' || nuevo_texto[0] == '/'))
+		{
+			//Midi karaoke generalmente en MidiMetaEvent_Text
+			std::string recortado = nuevo_texto.substr(1);//Quita el primer caracter
+			m_subtitulo_texto = recortado;
+		}
 		else
 		{
 			if(m_subtitulo_texto.length() >= 80 || m_retorno_carro)
@@ -454,18 +459,7 @@ void VentanaOrgano::reproducir_subtitulos(const MidiEvent &evento)
 				m_subtitulo_texto += nuevo_texto;
 		}
 	}
-	//Midi karaoke
-	else if(evento.MetaType() == MidiMetaEvent_Text && evento.GetDeltaPulses() > 0)
-	{
-		//Retorno de carro para la proxima linea
-		if(nuevo_texto.length() > 0 && (nuevo_texto[0] == '\\' || nuevo_texto[0] == '/'))
-		{
-			std::string recortado = nuevo_texto.substr(1);//Quita el primer caracter
-			m_subtitulo_texto = recortado;
-		}
-		else
-			m_subtitulo_texto += nuevo_texto;
-	}
+	//Limpia la cadena si contiene caracteres invisibles
 	if(Texto::esta_vacio(m_subtitulo_texto) && m_subtitulo_texto.length() > 0)
 		m_subtitulo_texto = "";
 	if(m_mostrar_subtitulo)
@@ -605,7 +599,7 @@ void VentanaOrgano::reiniciar()
 		m_configuracion->dispositivo_salida()->Reset();
 }
 
-void VentanaOrgano::insertar_nota_activa(unsigned char id_nota, unsigned char canal, Color color, bool sonido, bool correcta)
+void VentanaOrgano::insertar_nota_activa(unsigned int id_nota, unsigned char canal, Color color, bool sonido, bool correcta)
 {
 	Nota_Activa *nota_nueva = m_notas_activas[id_nota];
 
@@ -623,7 +617,7 @@ void VentanaOrgano::insertar_nota_activa(unsigned char id_nota, unsigned char ca
 		nota_nueva->contador_clic++;
 }
 
-bool VentanaOrgano::esta_tocada(unsigned char id_nota)
+bool VentanaOrgano::esta_tocada(unsigned int id_nota)
 {
 	for(unsigned long int x=0; x<m_notas_correctas.size(); x++)
 	{
@@ -633,7 +627,7 @@ bool VentanaOrgano::esta_tocada(unsigned char id_nota)
 	return false;
 }
 
-void VentanaOrgano::eliminar_nota_tocada(unsigned char id_nota)
+void VentanaOrgano::eliminar_nota_tocada(unsigned int id_nota)
 {
 	for(unsigned long int x=0; x<m_notas_correctas.size(); x++)
 	{
@@ -647,7 +641,7 @@ void VentanaOrgano::eliminar_nota_tocada(unsigned char id_nota)
 	}
 }
 
-void VentanaOrgano::agregar_nota_requerida(unsigned char id_nota, const Color &color)
+void VentanaOrgano::agregar_nota_requerida(unsigned int id_nota, const Color &color)
 {
 	m_notas_requeridas[id_nota] = color;
 }
@@ -657,10 +651,10 @@ void VentanaOrgano::borrar_notas_requeridas()
 	//Borra las notas requerida solo si todas estan activas al mismo tiempo
 	if(m_notas_requeridas.size() > 0)
 	{
-		for(std::pair<unsigned char, Color> valor : m_notas_requeridas)
+		for(std::pair<unsigned int, Color> valor : m_notas_requeridas)
 		{
 			//Si falta alguna nota o no se toco a tiempo, entonces no se borra nada
-			std::map<unsigned char, Nota_Activa*>::iterator respuesta = m_notas_activas.find(valor.first);
+			std::map<unsigned int, Nota_Activa*>::iterator respuesta = m_notas_activas.find(valor.first);
 			if(respuesta != m_notas_activas.end())
 			{
 				if(!respuesta->second->correcta)

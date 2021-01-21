@@ -232,7 +232,7 @@ void Controlador_Juego::eventos_teclado(Tecla tecla, bool estado)
 	else
 	{
 		m_ventana_actual->evento_teclado(tecla, estado);
-		unsigned char nota = Teclado::Tecla_a_nota(tecla);
+		unsigned int nota = Teclado::Tecla_a_nota(tecla);
 		if(nota < 255)
 		{
 			if(estado)

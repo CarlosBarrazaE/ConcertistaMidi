@@ -58,11 +58,11 @@ private:
 	Datos_Musica *m_musica;
 	NotasPistas m_notas;
 	std::string m_subtitulo_texto;
-	std::map<unsigned char, Nota_Activa*> m_notas_activas;
+	std::map<unsigned int, Nota_Activa*> m_notas_activas;
 	std::array<Color, 128> m_color_teclas_teclas;
 	std::array<float, 128> m_tiempo_espera;
-	std::vector<unsigned char> m_notas_correctas;
-	std::map<unsigned char, Color> m_notas_requeridas;
+	std::vector<unsigned int> m_notas_correctas;
+	std::map<unsigned int, Color> m_notas_requeridas;
 	std::vector<unsigned int> m_primera_nota;//Ultima nota por cada pista
 	std::vector<Pista> *m_pistas;
 	microseconds_t m_tiempo_actual_midi;
@@ -75,11 +75,11 @@ private:
 
 	void calcular_teclas_activas(unsigned int diferencia_tiempo);
 	void reiniciar();
-	void insertar_nota_activa(unsigned char id_nota, unsigned char canal, Color color, bool sonido, bool correcta);
-	bool esta_tocada(unsigned char id_nota);
-	void eliminar_nota_tocada(unsigned char id_nota);
+	void insertar_nota_activa(unsigned int id_nota, unsigned char canal, Color color, bool sonido, bool correcta);
+	bool esta_tocada(unsigned int id_nota);
+	void eliminar_nota_tocada(unsigned int id_nota);
 
-	void agregar_nota_requerida(unsigned char id_nota, const Color &color);
+	void agregar_nota_requerida(unsigned int id_nota, const Color &color);
 	void borrar_notas_requeridas();
 	bool hay_notas_requeridas();
 

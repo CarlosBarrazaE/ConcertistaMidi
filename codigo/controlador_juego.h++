@@ -46,7 +46,7 @@ private:
 	bool m_modo_alambre;
 	bool m_finalizar;
 	bool m_guardar_cambios;
-	std::set<int> m_teclas_pulsadas;
+	std::set<unsigned int> m_teclas_pulsadas;
 
 	//Eventos
 	Raton m_raton;

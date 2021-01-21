@@ -29,9 +29,9 @@ private:
 
 public:
 	Etiqueta(Administrador_Recursos *recursos);
-	Etiqueta(float x, float y, bool centrado, std::string texto, ModeloLetra tipografia, Administrador_Recursos *recursos);
-	Etiqueta(float x, float y, bool centrado, std::string texto, Tipografia *tipografia, Administrador_Recursos *recursos);
-	Etiqueta(float x, float y, float ancho, float alto, bool centrado, std::string texto, ModeloLetra tipografia, Administrador_Recursos *recursos);
+	Etiqueta(float x, float y, bool centrado, const std::string &texto, ModeloLetra tipografia, Administrador_Recursos *recursos);
+	Etiqueta(float x, float y, bool centrado, const std::string &texto, Tipografia *tipografia, Administrador_Recursos *recursos);
+	Etiqueta(float x, float y, float ancho, float alto, bool centrado, const std::string &texto, ModeloLetra tipografia, Administrador_Recursos *recursos);
 	~Etiqueta();
 
 	void actualizar(unsigned int diferencia_tiempo) override;
@@ -49,7 +49,7 @@ public:
 	void tipografia(Tipografia *tipografia);
 	float largo_texto();
 	float alto_texto();
-	std::string texto();
+	std::string& texto();
 };
 
 #endif

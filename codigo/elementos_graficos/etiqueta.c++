@@ -6,7 +6,7 @@ Etiqueta::Etiqueta(Administrador_Recursos *recursos) : Elemento(0, 0, 0, 0), Fig
 {
 }
 
-Etiqueta::Etiqueta(float x, float y, bool centrado, std::string texto, ModeloLetra tipografia, Administrador_Recursos *recursos) : Elemento(x, y, 0, 0), Figura(recursos->sombreador(S_Texto))
+Etiqueta::Etiqueta(float x, float y, bool centrado, const std::string &texto, ModeloLetra tipografia, Administrador_Recursos *recursos) : Elemento(x, y, 0, 0), Figura(recursos->sombreador(S_Texto))
 {
 	m_centrado_horizontal = centrado;
 	m_texto_actual = texto;
@@ -15,7 +15,7 @@ Etiqueta::Etiqueta(float x, float y, bool centrado, std::string texto, ModeloLet
 	this->actualizar_texto();
 }
 
-Etiqueta::Etiqueta(float x, float y, bool centrado, std::string texto, Tipografia *tipografia, Administrador_Recursos *recursos) : Elemento(x, y, 0, 0), Figura(recursos->sombreador(S_Texto))
+Etiqueta::Etiqueta(float x, float y, bool centrado, const std::string &texto, Tipografia *tipografia, Administrador_Recursos *recursos) : Elemento(x, y, 0, 0), Figura(recursos->sombreador(S_Texto))
 {
 	m_centrado_horizontal = centrado;
 	m_texto_actual = texto;
@@ -24,7 +24,7 @@ Etiqueta::Etiqueta(float x, float y, bool centrado, std::string texto, Tipografi
 	this->actualizar_texto();
 }
 
-Etiqueta::Etiqueta(float x, float y, float ancho, float alto, bool centrado, std::string texto, ModeloLetra tipografia, Administrador_Recursos *recursos) : Elemento(x, y, ancho, alto), Figura(recursos->sombreador(S_Texto))
+Etiqueta::Etiqueta(float x, float y, float ancho, float alto, bool centrado, const std::string &texto, ModeloLetra tipografia, Administrador_Recursos *recursos) : Elemento(x, y, ancho, alto), Figura(recursos->sombreador(S_Texto))
 {
 	m_centrado_horizontal = centrado;
 	m_texto_actual = texto;
@@ -169,7 +169,7 @@ float Etiqueta::alto_texto()
 	return m_alto_texto;
 }
 
-std::string Etiqueta::texto()
+std::string& Etiqueta::texto()
 {
 	return m_texto_actual;
 }
