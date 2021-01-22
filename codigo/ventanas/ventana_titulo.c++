@@ -15,6 +15,7 @@ VentanaTitulo::VentanaTitulo(Administrador_Recursos *recursos) : Ventana(), m_te
 	m_boton_practicar = new Boton(Pantalla::Centro_horizontal(), 280, 250, 50, "Practicar", recursos);
 	m_boton_practicar->color_boton(Color(0.9f, 0.9f, 0.9f));
 	m_boton_practicar->centrado(true);
+	m_boton_practicar->habilitado(false);
 
 	m_boton_configurar = new Boton(Pantalla::Centro_horizontal(), 340, 250, 50, "Configuración", recursos);
 	m_boton_configurar->color_boton(Color(0.9f, 0.9f, 0.9f));
