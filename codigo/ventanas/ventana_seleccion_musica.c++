@@ -24,8 +24,8 @@ VentanaSeleccionMusica::VentanaSeleccionMusica(Configuracion *configuracion, Dat
 	//Fila titulo
 	m_tabla_archivos.agregar_columna("Nombre Archivo", false, 5);
 	m_tabla_archivos.agregar_columna("Duracion", true, 1);
-	m_tabla_archivos.agregar_columna("Tamaño", true, 1);
 	m_tabla_archivos.agregar_columna("Visitas", true, 1);
+	m_tabla_archivos.agregar_columna("Tamaño", true, 1);
 	m_tabla_archivos.agregar_columna("Fecha", true, 2);
 
 	m_es_carpeta_inicial = false;
@@ -118,13 +118,14 @@ void VentanaSeleccionMusica::cargar_contenido_carpeta(std::string ruta_abrir)
 			Datos_Archivos actual;
 			actual.ruta = elemento.path();
 			actual.es_carpeta = elemento.is_directory();
+			actual.fecha_acceso = "-";
 
 			if(!elemento.is_directory())
 			{
 				actual.nombre = Texto::primera_letra_mayuscula(nombre_archivo);
 				std::vector<std::string> datos_midi = m_datos->datos_archivo(actual.ruta);
 				actual.tamanno = elemento.file_size();
-				actual.fecha_acceso = "-";
+
 				if(datos_midi.size() > 0)
 				{
 					actual.visitas = static_cast<unsigned int>(std::stoi(datos_midi[0]));
@@ -225,7 +226,9 @@ void VentanaSeleccionMusica::crear_tabla(std::string ruta_abrir)
 
 		if(m_lista_archivos[i].es_carpeta)
 		{
-			fila_nueva.push_back("-");
+			fila_nueva.push_back("-");//Las carpetas no tienen duracion
+			fila_nueva.push_back("-");//No se cuentan las visitas a las carpetas
+
 			if(m_lista_archivos[i].tamanno == 0)
 				fila_nueva.push_back("Sin Archivos");
 			else if(m_lista_archivos[i].tamanno == 1)
@@ -236,11 +239,11 @@ void VentanaSeleccionMusica::crear_tabla(std::string ruta_abrir)
 		else
 		{
 			fila_nueva.push_back(Funciones::microsegundo_a_texto(m_lista_archivos[i].duracion, false));
+			fila_nueva.push_back(std::to_string(m_lista_archivos[i].visitas));
 			fila_nueva.push_back(Texto::bytes_a_texto(m_lista_archivos[i].tamanno));
 		}
-
-		fila_nueva.push_back(std::to_string(m_lista_archivos[i].visitas));
 		fila_nueva.push_back(m_lista_archivos[i].fecha_acceso);
+
 		m_tabla_archivos.insertar_fila(fila_nueva);
 	}
 }
